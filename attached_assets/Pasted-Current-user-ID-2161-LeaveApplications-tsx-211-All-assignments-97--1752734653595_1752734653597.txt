@@ -1,0 +1,29 @@
+Current user ID: 2161
+LeaveApplications.tsx:211 All assignments: (97) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:212 All variants: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:218 User assignments: (3) [{…}, {…}, {…}]
+LeaveApplications.tsx:221 Assigned variant IDs: (3) [57, 58, 60]
+LeaveApplications.tsx:227 Available leave variants: (3) [{…}, {…}, {…}]
+LeaveApplications.tsx:228 ===============================
+LeaveApplications.tsx:1016 === BALANCE CALCULATION DEBUG ===
+LeaveApplications.tsx:1017 Current user ID: 2161
+LeaveApplications.tsx:1018 User assignments: (3) [{…}, {…}, {…}]
+LeaveApplications.tsx:1019 Assigned variant IDs: (3) [57, 58, 60]
+LeaveApplications.tsx:1020 Available leave variants: (3) [{…}, {…}, {…}]
+LeaveApplications.tsx:1021 Leave balances for user 2161 : (3) [{…}, {…}, {…}]
+LeaveApplications.tsx:1022 Raw leaveBalances from API: (3) [{…}, {…}, {…}]
+LeaveApplications.tsx:1023 All assignments array from API: (97) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:1024 All assignments length: 97
+LeaveApplications.tsx:1028 Filtered balances for summary cards: (3) [{…}, {…}, {…}]
+LeaveApplications.tsx:1029 Total entitlement calculation: (3) [{…}, {…}, {…}]
+LeaveApplications.tsx:1035 Total entitlement sum: 251.5
+LeaveApplications.tsx:1045 === TOTAL BALANCE CALCULATION ===
+LeaveApplications.tsx:1046 Filtered balances used for total: (3) [{…}, {…}, {…}]
+LeaveApplications.tsx:1051 Step by step calculation:
+LeaveApplications.tsx:1055   1. Variant 57: 234.55 -> 234.55 (include: true)
+LeaveApplications.tsx:1055   2. Variant 58: 6.00 -> 6 (include: true)
+LeaveApplications.tsx:1055   3. Variant 60: 2.50 -> 2.5 (include: true)
+LeaveApplications.tsx:1057 Total balance result: 243.05
+LeaveApplications.tsx:1058 Should equal sum of visible balances: 13.5 + 4.0 + 9.0 = 26.5
+LeaveApplications.tsx:1059 ==================================
+LeaveApplications.tsx:1309 === CORREC

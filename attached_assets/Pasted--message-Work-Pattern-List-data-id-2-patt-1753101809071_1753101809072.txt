@@ -1,0 +1,133 @@
+{
+    "message": "Work Pattern List",
+    "data": [
+        {
+            "id": 2,
+            "patternName": "Pattern 2",
+            "startDate": "2025-01-01T05:30:00",
+            "endDate": "2025-12-31T05:30:00",
+            "numberOfWorkingDays": 52.00,
+            "numberOfNonWorkingDays": 301.00,
+            "totalHolidays": 12.00,
+            "selectedHolidays": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12
+            ],
+            "workType": "standard",
+            "nonWorkingDays": [
+                {
+                    "days": [
+                        "Monday",
+                        "Tuesday",
+                        "Wednesday",
+                        "Thursday",
+                        "Friday",
+                        "Saturday"
+                    ],
+                    "selectedInstance": [
+                        "first",
+                        "second",
+                        "third",
+                        "fourth",
+                        "fifth"
+                    ],
+                    "nonWorkingType": "fullDay",
+                    "comment": "'first, second, third, fourth, fifth' 'Monday, Tuesday, Wednesday, Thursday, Friday, Saturday' are 'fullDay' non working days."
+                }
+            ],
+            "maxHolidaysForEmp": 12,
+            "customDays": null,
+            "employees": [
+                2165,
+                2167,
+                2168,
+                2169,
+                2171,
+                2178,
+                2181,
+                64284,
+                64285,
+                64286,
+                64287
+            ]
+        },
+        {
+            "id": 1,
+            "patternName": "Pattern 1",
+            "startDate": "2025-01-01T05:30:00",
+            "endDate": "2025-12-31T05:30:00",
+            "numberOfWorkingDays": 104.00,
+            "numberOfNonWorkingDays": 249.00,
+            "totalHolidays": 12.00,
+            "selectedHolidays": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12
+            ],
+            "workType": "standard",
+            "nonWorkingDays": [
+                {
+                    "days": [
+                        "Monday",
+                        "Tuesday",
+                        "Wednesday",
+                        "Thursday",
+                        "Friday"
+                    ],
+                    "selectedInstance": [
+                        "first",
+                        "second",
+                        "third",
+                        "fourth",
+                        "fifth"
+                    ],
+                    "nonWorkingType": "fullDay",
+                    "comment": "'first, second, third, fourth, fifth' 'Monday, Tuesday, Wednesday, Thursday, Friday' are 'fullDay' non working days."
+                }
+            ],
+            "maxHolidaysForEmp": 12,
+            "customDays": null,
+            "employees": [
+                2161,
+                2162,
+                2163,
+                2164,
+                2166,
+                2172,
+                2173,
+                2176,
+                2177,
+                2376,
+                2545,
+                3571,
+                14616,
+                55998,
+                58011,
+                58976,
+                60285,
+                60838,
+                61161,
+                62632
+            ]
+        }
+    ]
+}

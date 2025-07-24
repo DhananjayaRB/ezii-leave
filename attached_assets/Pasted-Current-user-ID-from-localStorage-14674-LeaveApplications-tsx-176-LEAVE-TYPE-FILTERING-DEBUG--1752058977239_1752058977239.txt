@@ -1,0 +1,326 @@
+Current user ID from localStorage: 14674
+LeaveApplications.tsx:176 === LEAVE TYPE FILTERING DEBUG ===
+LeaveApplications.tsx:177 Current user ID: 14674
+LeaveApplications.tsx:178 All assignments: []
+LeaveApplications.tsx:179 All variants: (6) [{…}, {…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:185 User assignments: []
+LeaveApplications.tsx:188 Assigned variant IDs: []
+LeaveApplications.tsx:194 Available leave variants: []
+LeaveApplications.tsx:195 ===============================
+LeaveApplications.tsx:832 === BALANCE CALCULATION DEBUG ===
+LeaveApplications.tsx:833 Current user ID: 14674
+LeaveApplications.tsx:834 User assignments: []
+LeaveApplications.tsx:835 Assigned variant IDs: []
+LeaveApplications.tsx:836 Available leave variants: []
+LeaveApplications.tsx:837 Leave balances for user 14674 : []
+LeaveApplications.tsx:838 Raw leaveBalances from API: []
+LeaveApplications.tsx:842 Filtered balances for summary cards: []
+LeaveApplications.tsx:843 Total entitlement calculation: []
+LeaveApplications.tsx:849 Total entitlement sum: 0
+LeaveApplications.tsx:919 [TotalAvailed] Starting calculation
+LeaveApplications.tsx:920 [TotalAvailed] Available variants: 0
+LeaveApplications.tsx:921 [TotalAvailed] Leave transactions: 4
+LeaveApplications.tsx:922 [TotalAvailed] Leave requests: 0
+LeaveApplications.tsx:954 [TotalAvailed] Final total: 0
+2usePermissions.ts:137 Using cached permissions to prevent flickering
+useWorkPattern.ts:66 [WorkPattern] Fetching work patterns for user: 14674
+LeaveApplications.tsx:40 === LEAVE PERMISSION DEBUG ===
+LeaveApplications.tsx:41 Current role from localStorage: admin
+LeaveApplications.tsx:42 Current org_id from localStorage: 54
+LeaveApplications.tsx:43 Full permissions hook result: {permissions: {…}, loading: false, hasPermission: ƒ, canViewScreen: ƒ, canModifyScreen: ƒ, …}
+LeaveApplications.tsx:44 permissions.permissions: {pto: {…}, roles: {…}, adminPTO: {…}, holidays: {…}, approvals: {…}, …}
+LeaveApplications.tsx:45 allowOnBehalf from permissions.permissions: {pto: true, leave: true, compOff: true}
+LeaveApplications.tsx:46 allowOnBehalf.leave: true
+LeaveApplications.tsx:47 Should show checkbox? true
+LeaveApplications.tsx:48 ================================
+usePermissions.ts:280 Custom permissions change detected, invalidating cache
+usePermissions.ts:143 Loading permissions for role: admin
+usePermissions.ts:280 Custom permissions change detected, invalidating cache
+usePermissions.ts:143 Loading permissions for role: admin
+orgContext.ts:14 [OrgContext] Reading org_id from localStorage: 54
+queryClient.ts:61 [Query Request] Sending X-Org-Id header: 54 for GET /api/employee-assignments
+orgContext.ts:14 [OrgContext] Reading org_id from localStorage: 54
+queryClient.ts:61 [Query Request] Sending X-Org-Id header: 54 for GET /api/employee-leave-balances/14674
+orgContext.ts:14 [OrgContext] Reading org_id from localStorage: 54
+queryClient.ts:61 [Query Request] Sending X-Org-Id header: 54 for GET /api/leave-balance-transactions/14674
+LeaveApplications.tsx:100 Current user ID from localStorage: 14674
+LeaveApplications.tsx:176 === LEAVE TYPE FILTERING DEBUG ===
+LeaveApplications.tsx:177 Current user ID: 14674
+LeaveApplications.tsx:178 All assignments: []
+LeaveApplications.tsx:179 All variants: (6) [{…}, {…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:185 User assignments: []
+LeaveApplications.tsx:188 Assigned variant IDs: []
+LeaveApplications.tsx:194 Available leave variants: []
+LeaveApplications.tsx:195 ===============================
+LeaveApplications.tsx:832 === BALANCE CALCULATION DEBUG ===
+LeaveApplications.tsx:833 Current user ID: 14674
+LeaveApplications.tsx:834 User assignments: []
+LeaveApplications.tsx:835 Assigned variant IDs: []
+LeaveApplications.tsx:836 Available leave variants: []
+LeaveApplications.tsx:837 Leave balances for user 14674 : []
+LeaveApplications.tsx:838 Raw leaveBalances from API: []
+LeaveApplications.tsx:842 Filtered balances for summary cards: []
+LeaveApplications.tsx:843 Total entitlement calculation: []
+LeaveApplications.tsx:849 Total entitlement sum: 0
+LeaveApplications.tsx:919 [TotalAvailed] Starting calculation
+LeaveApplications.tsx:920 [TotalAvailed] Available variants: 0
+LeaveApplications.tsx:921 [TotalAvailed] Leave transactions: 4
+LeaveApplications.tsx:922 [TotalAvailed] Leave requests: 0
+LeaveApplications.tsx:954 [TotalAvailed] Final total: 0
+LeaveApplications.tsx:40 === LEAVE PERMISSION DEBUG ===
+LeaveApplications.tsx:41 Current role from localStorage: admin
+LeaveApplications.tsx:42 Current org_id from localStorage: 54
+LeaveApplications.tsx:43 Full permissions hook result: {permissions: {…}, loading: true, hasPermission: ƒ, canViewScreen: ƒ, canModifyScreen: ƒ, …}
+LeaveApplications.tsx:44 permissions.permissions: {pto: {…}, roles: {…}, adminPTO: {…}, holidays: {…}, approvals: {…}, …}
+LeaveApplications.tsx:45 allowOnBehalf from permissions.permissions: {pto: true, leave: true, compOff: true}
+LeaveApplications.tsx:46 allowOnBehalf.leave: true
+LeaveApplications.tsx:47 Should show checkbox? true
+LeaveApplications.tsx:48 ================================
+useWorkPattern.ts:69 
+            
+            
+           GET https://qa-api.resolveindia.com/organization/work-pattern/14674 404 (Not Found)
+fetchWorkPatternAndHolidays @ useWorkPattern.ts:69
+(anonymous) @ useWorkPattern.ts:143
+commitHookEffectListMount @ chunk-RPCDYKBN.js?v=47ee212a:16915
+commitPassiveMountOnFiber @ chunk-RPCDYKBN.js?v=47ee212a:18156
+commitPassiveMountEffects_complete @ chunk-RPCDYKBN.js?v=47ee212a:18129
+commitPassiveMountEffects_begin @ chunk-RPCDYKBN.js?v=47ee212a:18119
+commitPassiveMountEffects @ chunk-RPCDYKBN.js?v=47ee212a:18109
+flushPassiveEffectsImpl @ chunk-RPCDYKBN.js?v=47ee212a:19490
+flushPassiveEffects @ chunk-RPCDYKBN.js?v=47ee212a:19447
+commitRootImpl @ chunk-RPCDYKBN.js?v=47ee212a:19416
+commitRoot @ chunk-RPCDYKBN.js?v=47ee212a:19277
+performSyncWorkOnRoot @ chunk-RPCDYKBN.js?v=47ee212a:18895
+flushSyncCallbacks @ chunk-RPCDYKBN.js?v=47ee212a:9119
+(anonymous) @ chunk-RPCDYKBN.js?v=47ee212a:18627Understand this error
+useWorkPattern.ts:77 [WorkPattern] Work pattern API Response status: 404
+useWorkPattern.ts:130 [WorkPattern] Work pattern API Error: 404 
+LeaveApplications.tsx:100 Current user ID from localStorage: 14674
+LeaveApplications.tsx:176 === LEAVE TYPE FILTERING DEBUG ===
+LeaveApplications.tsx:177 Current user ID: 14674
+LeaveApplications.tsx:178 All assignments: []
+LeaveApplications.tsx:179 All variants: (6) [{…}, {…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:185 User assignments: []
+LeaveApplications.tsx:188 Assigned variant IDs: []
+LeaveApplications.tsx:194 Available leave variants: []
+LeaveApplications.tsx:195 ===============================
+LeaveApplications.tsx:832 === BALANCE CALCULATION DEBUG ===
+LeaveApplications.tsx:833 Current user ID: 14674
+LeaveApplications.tsx:834 User assignments: []
+LeaveApplications.tsx:835 Assigned variant IDs: []
+LeaveApplications.tsx:836 Available leave variants: []
+LeaveApplications.tsx:837 Leave balances for user 14674 : []
+LeaveApplications.tsx:838 Raw leaveBalances from API: []
+LeaveApplications.tsx:842 Filtered balances for summary cards: []
+LeaveApplications.tsx:843 Total entitlement calculation: []
+LeaveApplications.tsx:849 Total entitlement sum: 0
+LeaveApplications.tsx:919 [TotalAvailed] Starting calculation
+LeaveApplications.tsx:920 [TotalAvailed] Available variants: 0
+LeaveApplications.tsx:921 [TotalAvailed] Leave transactions: 4
+LeaveApplications.tsx:922 [TotalAvailed] Leave requests: 0
+LeaveApplications.tsx:954 [TotalAvailed] Final total: 0
+LeaveApplications.tsx:40 === LEAVE PERMISSION DEBUG ===
+LeaveApplications.tsx:41 Current role from localStorage: admin
+LeaveApplications.tsx:42 Current org_id from localStorage: 54
+LeaveApplications.tsx:43 Full permissions hook result: {permissions: {…}, loading: true, hasPermission: ƒ, canViewScreen: ƒ, canModifyScreen: ƒ, …}
+LeaveApplications.tsx:44 permissions.permissions: {pto: {…}, roles: {…}, adminPTO: {…}, holidays: {…}, approvals: {…}, …}
+LeaveApplications.tsx:45 allowOnBehalf from permissions.permissions: {pto: true, leave: true, compOff: true}
+LeaveApplications.tsx:46 allowOnBehalf.leave: true
+LeaveApplications.tsx:47 Should show checkbox? true
+LeaveApplications.tsx:48 ================================
+LeaveApplications.tsx:100 Current user ID from localStorage: 14674
+LeaveApplications.tsx:176 === LEAVE TYPE FILTERING DEBUG ===
+LeaveApplications.tsx:177 Current user ID: 14674
+LeaveApplications.tsx:178 All assignments: []
+LeaveApplications.tsx:179 All variants: (6) [{…}, {…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:185 User assignments: []
+LeaveApplications.tsx:188 Assigned variant IDs: []
+LeaveApplications.tsx:194 Available leave variants: []
+LeaveApplications.tsx:195 ===============================
+LeaveApplications.tsx:832 === BALANCE CALCULATION DEBUG ===
+LeaveApplications.tsx:833 Current user ID: 14674
+LeaveApplications.tsx:834 User assignments: []
+LeaveApplications.tsx:835 Assigned variant IDs: []
+LeaveApplications.tsx:836 Available leave variants: []
+LeaveApplications.tsx:837 Leave balances for user 14674 : []
+LeaveApplications.tsx:838 Raw leaveBalances from API: []
+LeaveApplications.tsx:842 Filtered balances for summary cards: []
+LeaveApplications.tsx:843 Total entitlement calculation: []
+LeaveApplications.tsx:849 Total entitlement sum: 0
+LeaveApplications.tsx:919 [TotalAvailed] Starting calculation
+LeaveApplications.tsx:920 [TotalAvailed] Available variants: 0
+LeaveApplications.tsx:921 [TotalAvailed] Leave transactions: 4
+LeaveApplications.tsx:922 [TotalAvailed] Leave requests: 0
+LeaveApplications.tsx:954 [TotalAvailed] Final total: 0
+LeaveApplications.tsx:40 === LEAVE PERMISSION DEBUG ===
+LeaveApplications.tsx:41 Current role from localStorage: admin
+LeaveApplications.tsx:42 Current org_id from localStorage: 54
+LeaveApplications.tsx:43 Full permissions hook result: {permissions: {…}, loading: true, hasPermission: ƒ, canViewScreen: ƒ, canModifyScreen: ƒ, …}
+LeaveApplications.tsx:44 permissions.permissions: {pto: {…}, roles: {…}, adminPTO: {…}, holidays: {…}, approvals: {…}, …}
+LeaveApplications.tsx:45 allowOnBehalf from permissions.permissions: {pto: true, leave: true, compOff: true}
+LeaveApplications.tsx:46 allowOnBehalf.leave: true
+LeaveApplications.tsx:47 Should show checkbox? true
+LeaveApplications.tsx:48 ================================
+useExternalEmployeeData.ts:38 [ExternalEmployee] Using existing working API...
+externalApi.ts:48 [ExternalAPI] Starting fetchEmployeeData...
+externalApi.ts:53 [ExternalAPI] Using JWT token for API call
+externalApi.ts:68 [ExternalAPI] Making request to worker-master-leave endpoint...
+externalApi.ts:69 [ExternalAPI] Payload: {userBlocks: Array(3), userWise: 0, workerType: 0, attribute: 0, subAttributeId: 0}
+LeaveApplications.tsx:100 Current user ID from localStorage: 14674
+LeaveApplications.tsx:176 === LEAVE TYPE FILTERING DEBUG ===
+LeaveApplications.tsx:177 Current user ID: 14674
+LeaveApplications.tsx:178 All assignments: (739) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, …]
+LeaveApplications.tsx:179 All variants: (6) [{…}, {…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:185 User assignments: (5) [{…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:188 Assigned variant IDs: (5) [51, 52, 55, 56, 53]
+LeaveApplications.tsx:194 Available leave variants: (5) [{…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:195 ===============================
+LeaveApplications.tsx:832 === BALANCE CALCULATION DEBUG ===
+LeaveApplications.tsx:833 Current user ID: 14674
+LeaveApplications.tsx:834 User assignments: (5) [{…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:835 Assigned variant IDs: (5) [51, 52, 55, 56, 53]
+LeaveApplications.tsx:836 Available leave variants: (5) [{…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:837 Leave balances for user 14674 : []
+LeaveApplications.tsx:838 Raw leaveBalances from API: []
+LeaveApplications.tsx:842 Filtered balances for summary cards: []
+LeaveApplications.tsx:843 Total entitlement calculation: []
+LeaveApplications.tsx:849 Total entitlement sum: 0
+LeaveApplications.tsx:919 [TotalAvailed] Starting calculation
+LeaveApplications.tsx:920 [TotalAvailed] Available variants: 5
+LeaveApplications.tsx:921 [TotalAvailed] Leave transactions: 4
+LeaveApplications.tsx:922 [TotalAvailed] Leave requests: 0
+LeaveApplications.tsx:936 [TotalAvailed] Variant Bereavement Leave: 0 transactions
+LeaveApplications.tsx:942 [TotalAvailed] Variant Bereavement Leave: 0 usage transactions
+LeaveApplications.tsx:950 [TotalAvailed] Variant Bereavement Leave: requests=0, transactions=0
+LeaveApplications.tsx:936 [TotalAvailed] Variant Maternity Leave: 0 transactions
+LeaveApplications.tsx:942 [TotalAvailed] Variant Maternity Leave: 0 usage transactions
+LeaveApplications.tsx:950 [TotalAvailed] Variant Maternity Leave: requests=0, transactions=0
+LeaveApplications.tsx:936 [TotalAvailed] Variant Privilege Leave: 4 transactions
+LeaveApplications.tsx:942 [TotalAvailed] Variant Privilege Leave: 0 usage transactions
+LeaveApplications.tsx:950 [TotalAvailed] Variant Privilege Leave: requests=0, transactions=0
+LeaveApplications.tsx:936 [TotalAvailed] Variant Sick Leave: 0 transactions
+LeaveApplications.tsx:942 [TotalAvailed] Variant Sick Leave: 0 usage transactions
+LeaveApplications.tsx:950 [TotalAvailed] Variant Sick Leave: requests=0, transactions=0
+LeaveApplications.tsx:936 [TotalAvailed] Variant Special Leave: 0 transactions
+LeaveApplications.tsx:942 [TotalAvailed] Variant Special Leave: 0 usage transactions
+LeaveApplications.tsx:950 [TotalAvailed] Variant Special Leave: requests=0, transactions=0
+LeaveApplications.tsx:954 [TotalAvailed] Final total: 0
+LeaveApplications.tsx:1061 🔍 Privilege Leave Eligibility Debug: {isAfterEarning: true, currentBalance: 0, openingBalance: 15, earnedTransactions: Array(1), eligibilityFromTransactions: 10.5, …}
+LeaveApplications.tsx:1110 🔍 Privilege Leave Calculation Debug: {leaveTypeId: 47, leaveVariantId: 51, approvedRequests: 0, availedFromRequests: 0, usageTransactions: 0, …}
+LeaveApplications.tsx:1110 🔍 Sick Leave Calculation Debug: {leaveTypeId: 48, leaveVariantId: 52, approvedRequests: 0, availedFromRequests: 0, usageTransactions: 0, …}
+LeaveApplications.tsx:40 === LEAVE PERMISSION DEBUG ===
+LeaveApplications.tsx:41 Current role from localStorage: admin
+LeaveApplications.tsx:42 Current org_id from localStorage: 54
+LeaveApplications.tsx:43 Full permissions hook result: {permissions: {…}, loading: true, hasPermission: ƒ, canViewScreen: ƒ, canModifyScreen: ƒ, …}
+LeaveApplications.tsx:44 permissions.permissions: {pto: {…}, roles: {…}, adminPTO: {…}, holidays: {…}, approvals: {…}, …}
+LeaveApplications.tsx:45 allowOnBehalf from permissions.permissions: {pto: true, leave: true, compOff: true}
+LeaveApplications.tsx:46 allowOnBehalf.leave: true
+LeaveApplications.tsx:47 Should show checkbox? true
+LeaveApplications.tsx:48 ================================
+LeaveApplications.tsx:100 Current user ID from localStorage: 14674
+LeaveApplications.tsx:176 === LEAVE TYPE FILTERING DEBUG ===
+LeaveApplications.tsx:177 Current user ID: 14674
+LeaveApplications.tsx:178 All assignments: (739) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, …]
+LeaveApplications.tsx:179 All variants: (6) [{…}, {…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:185 User assignments: (5) [{…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:188 Assigned variant IDs: (5) [51, 52, 55, 56, 53]
+LeaveApplications.tsx:194 Available leave variants: (5) [{…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:195 ===============================
+LeaveApplications.tsx:832 === BALANCE CALCULATION DEBUG ===
+LeaveApplications.tsx:833 Current user ID: 14674
+LeaveApplications.tsx:834 User assignments: (5) [{…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:835 Assigned variant IDs: (5) [51, 52, 55, 56, 53]
+LeaveApplications.tsx:836 Available leave variants: (5) [{…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:837 Leave balances for user 14674 : (5) [{…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:838 Raw leaveBalances from API: (5) [{…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:842 Filtered balances for summary cards: (5) [{…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:843 Total entitlement calculation: (5) [{…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:849 Total entitlement sum: 242
+LeaveApplications.tsx:919 [TotalAvailed] Starting calculation
+LeaveApplications.tsx:920 [TotalAvailed] Available variants: 5
+LeaveApplications.tsx:921 [TotalAvailed] Leave transactions: 4
+LeaveApplications.tsx:922 [TotalAvailed] Leave requests: 0
+LeaveApplications.tsx:936 [TotalAvailed] Variant Bereavement Leave: 0 transactions
+LeaveApplications.tsx:942 [TotalAvailed] Variant Bereavement Leave: 0 usage transactions
+LeaveApplications.tsx:950 [TotalAvailed] Variant Bereavement Leave: requests=0, transactions=0
+LeaveApplications.tsx:936 [TotalAvailed] Variant Maternity Leave: 0 transactions
+LeaveApplications.tsx:942 [TotalAvailed] Variant Maternity Leave: 0 usage transactions
+LeaveApplications.tsx:950 [TotalAvailed] Variant Maternity Leave: requests=0, transactions=0
+LeaveApplications.tsx:936 [TotalAvailed] Variant Privilege Leave: 4 transactions
+LeaveApplications.tsx:942 [TotalAvailed] Variant Privilege Leave: 0 usage transactions
+LeaveApplications.tsx:950 [TotalAvailed] Variant Privilege Leave: requests=0, transactions=0
+LeaveApplications.tsx:936 [TotalAvailed] Variant Sick Leave: 0 transactions
+LeaveApplications.tsx:942 [TotalAvailed] Variant Sick Leave: 0 usage transactions
+LeaveApplications.tsx:950 [TotalAvailed] Variant Sick Leave: requests=0, transactions=0
+LeaveApplications.tsx:936 [TotalAvailed] Variant Special Leave: 0 transactions
+LeaveApplications.tsx:942 [TotalAvailed] Variant Special Leave: 0 usage transactions
+LeaveApplications.tsx:950 [TotalAvailed] Variant Special Leave: requests=0, transactions=0
+LeaveApplications.tsx:954 [TotalAvailed] Final total: 0
+LeaveApplications.tsx:1061 🔍 Privilege Leave Eligibility Debug: {isAfterEarning: true, currentBalance: 33, openingBalance: 15, earnedTransactions: Array(1), eligibilityFromTransactions: 10.5, …}
+LeaveApplications.tsx:1110 🔍 Privilege Leave Calculation Debug: {leaveTypeId: 47, leaveVariantId: 51, approvedRequests: 0, availedFromRequests: 0, usageTransactions: 0, …}
+LeaveApplications.tsx:1110 🔍 Sick Leave Calculation Debug: {leaveTypeId: 48, leaveVariantId: 52, approvedRequests: 0, availedFromRequests: 0, usageTransactions: 0, …}
+LeaveApplications.tsx:40 === LEAVE PERMISSION DEBUG ===
+LeaveApplications.tsx:41 Current role from localStorage: admin
+LeaveApplications.tsx:42 Current org_id from localStorage: 54
+LeaveApplications.tsx:43 Full permissions hook result: {permissions: {…}, loading: true, hasPermission: ƒ, canViewScreen: ƒ, canModifyScreen: ƒ, …}
+LeaveApplications.tsx:44 permissions.permissions: {pto: {…}, roles: {…}, adminPTO: {…}, holidays: {…}, approvals: {…}, …}
+LeaveApplications.tsx:45 allowOnBehalf from permissions.permissions: {pto: true, leave: true, compOff: true}
+LeaveApplications.tsx:46 allowOnBehalf.leave: true
+LeaveApplications.tsx:47 Should show checkbox? true
+LeaveApplications.tsx:48 ================================
+usePermissions.ts:166 Using database role permissions for admin : {pto: {…}, roles: {…}, adminPTO: {…}, holidays: {…}, approvals: {…}, …}
+usePermissions.ts:167 Workflows permission: {view: true, modify: true}
+usePermissions.ts:166 Using database role permissions for admin : {pto: {…}, roles: {…}, adminPTO: {…}, holidays: {…}, approvals: {…}, …}
+usePermissions.ts:167 Workflows permission: {view: true, modify: true}
+LeaveApplications.tsx:100 Current user ID from localStorage: 14674
+LeaveApplications.tsx:176 === LEAVE TYPE FILTERING DEBUG ===
+LeaveApplications.tsx:177 Current user ID: 14674
+LeaveApplications.tsx:178 All assignments: (739) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, …]
+LeaveApplications.tsx:179 All variants: (6) [{…}, {…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:185 User assignments: (5) [{…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:188 Assigned variant IDs: (5) [51, 52, 55, 56, 53]
+LeaveApplications.tsx:194 Available leave variants: (5) [{…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:195 ===============================
+LeaveApplications.tsx:832 === BALANCE CALCULATION DEBUG ===
+LeaveApplications.tsx:833 Current user ID: 14674
+LeaveApplications.tsx:834 User assignments: (5) [{…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:835 Assigned variant IDs: (5) [51, 52, 55, 56, 53]
+LeaveApplications.tsx:836 Available leave variants: (5) [{…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:837 Leave balances for user 14674 : (5) [{…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:838 Raw leaveBalances from API: (5) [{…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:842 Filtered balances for summary cards: (5) [{…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:843 Total entitlement calculation: (5) [{…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:849 Total entitlement sum: 242
+LeaveApplications.tsx:919 [TotalAvailed] Starting calculation
+LeaveApplications.tsx:920 [TotalAvailed] Available variants: 5
+LeaveApplications.tsx:921 [TotalAvailed] Leave transactions: 4
+LeaveApplications.tsx:922 [TotalAvailed] Leave requests: 0
+LeaveApplications.tsx:936 [TotalAvailed] Variant Bereavement Leave: 0 transactions
+LeaveApplications.tsx:942 [TotalAvailed] Variant Bereavement Leave: 0 usage transactions
+LeaveApplications.tsx:950 [TotalAvailed] Variant Bereavement Leave: requests=0, transactions=0
+LeaveApplications.tsx:936 [TotalAvailed] Variant Maternity Leave: 0 transactions
+LeaveApplications.tsx:942 [TotalAvailed] Variant Maternity Leave: 0 usage transactions
+LeaveApplications.tsx:950 [TotalAvailed] Variant Maternity Leave: requests=0, transactions=0
+LeaveApplications.tsx:936 [TotalAvailed] Variant Privilege Leave: 4 transactions
+LeaveApplications.tsx:942 [TotalAvailed] Variant Privilege Leave: 0 usage transactions
+LeaveApplications.tsx:950 [TotalAvailed] Variant Privilege Leave: requests=0, transactions=0
+LeaveApplications.tsx:936 [TotalAvailed] Variant Sick Leave: 0 transactions
+LeaveApplications.tsx:942 [TotalAvailed] Variant Sick Leave: 0 usage transactions
+LeaveApplications.tsx:950 [TotalAvailed] Variant Sick Leave: requests=0, transactions=0
+LeaveApplications.tsx:936 [TotalAvailed] Variant Special Leave: 0 transactions
+LeaveApplications.tsx:942 [TotalAvailed] Variant Special Leave: 0 usage transactions
+LeaveApplications.tsx:950 [TotalAvailed] Variant Special Leave: requests=0, transactions=0
+LeaveApplications.tsx:954 [TotalAvailed] Final total: 0
+LeaveApplications.tsx:1061 🔍 Privilege Leave Eligibility Debug: {isAfterEarning: true, currentBalance: 33, openingBalance: 15, earnedTransactions: Array(1), eligibilityFromTransactions: 10.5, …}
+LeaveApplications.tsx:1110 🔍 Privilege Leave Calculation Debug: {leaveTypeId: 47, leaveVariantId: 51, approvedRequests: 0, availedFromRequests: 0, usageTransactions: 0, …}
+LeaveApplications.tsx:1110 🔍 Sick Leave Calculation Debug: {leaveTypeId: 48, leaveVariantId: 52, approvedRequests: 0, availedFromRequests: 0, usageTransactions: 0, …}
+LeaveApplications.tsx:40 === LEAVE PERMISSION DEBUG ===
+LeaveApplications.tsx:41 Current role from localStorage: admin
+LeaveApplications.tsx:42 Current org_id from localStorage: 54
+LeaveApplications.tsx:43 Full permissions hook result: {permissions: {…}, loading: false, hasPermission: ƒ, canViewScreen: ƒ, canModifyScreen: ƒ, …}
+LeaveApplications.tsx:44 permissions.permissions: {pto: {…}, roles: {…}, adminPTO: {…}, holidays: {…}, approvals: {…}, …}
+LeaveApplications.tsx:45 allowOnBehalf from permissions.permissions: {pto: true, leave: true, compOff: true}
+LeaveApplications.tsx:46 allowOnBehalf.leave: true
+LeaveApplications.tsx:47 Should show checkbox? true
+LeaveApplications.tsx:48 ================================

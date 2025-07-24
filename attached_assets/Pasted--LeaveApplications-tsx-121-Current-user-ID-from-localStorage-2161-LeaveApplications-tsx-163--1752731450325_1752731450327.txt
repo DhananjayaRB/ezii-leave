@@ -1,0 +1,92 @@
+
+﻿
+LeaveApplications.tsx:121 Current user ID from localStorage: 2161
+LeaveApplications.tsx:163 📋 [Transaction Debug] User 2161: 
+{transactionCount: 110, pendingDeductions: 7, samplePendingTransactions: Array(3)}
+LeaveApplications.tsx:209 === LEAVE TYPE FILTERING DEBUG ===
+LeaveApplications.tsx:210 Current user ID: 2161
+LeaveApplications.tsx:211 All assignments: 
+(97) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:212 All variants: 
+(4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:218 User assignments: 
+(3) [{…}, {…}, {…}]
+LeaveApplications.tsx:221 Assigned variant IDs: 
+(3) [57, 58, 60]
+LeaveApplications.tsx:227 Available leave variants: 
+(3) [{…}, {…}, {…}]
+LeaveApplications.tsx:228 ===============================
+LeaveApplications.tsx:939 === BALANCE CALCULATION DEBUG ===
+LeaveApplications.tsx:940 Current user ID: 2161
+LeaveApplications.tsx:941 User assignments: 
+(3) [{…}, {…}, {…}]
+LeaveApplications.tsx:942 Assigned variant IDs: 
+(3) [57, 58, 60]
+LeaveApplications.tsx:943 Available leave variants: 
+(3) [{…}, {…}, {…}]
+LeaveApplications.tsx:944 Leave balances for user 2161 : 
+(3) [{…}, {…}, {…}]
+LeaveApplications.tsx:945 Raw leaveBalances from API: 
+(3) [{…}, {…}, {…}]
+LeaveApplications.tsx:946 All assignments array from API: 
+(97) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:947 All assignments length: 97
+LeaveApplications.tsx:951 Filtered balances for summary cards: 
+(3) [{…}, {…}, {…}]
+LeaveApplications.tsx:952 Total entitlement calculation: 
+(3) [{…}, {…}, {…}]
+LeaveApplications.tsx:958 Total entitlement sum: 251.5
+LeaveApplications.tsx:968 === TOTAL BALANCE CALCULATION ===
+LeaveApplications.tsx:969 Filtered balances used for total: 
+(3) [{…}, {…}, {…}]
+LeaveApplications.tsx:974 Step by step calculation:
+LeaveApplications.tsx:978   1. Variant 57: 234.55 -> 234.55 (include: true)
+LeaveApplications.tsx:978   2. Variant 58: 6.00 -> 6 (include: true)
+LeaveApplications.tsx:978   3. Variant 60: 2.50 -> 2.5 (include: true)
+LeaveApplications.tsx:980 Total balance result: 243.05
+LeaveApplications.tsx:981 Should equal sum of visible balances: 13.5 + 4.0 + 9.0 = 26.5
+LeaveApplications.tsx:982 ==================================
+LeaveApplications.tsx:1232 === CORRECTED BALANCE CALCULATION ===
+LeaveApplications.tsx:1233 Total Leaves: 251.5
+LeaveApplications.tsx:1234 Total Availed: 16.5
+LeaveApplications.tsx:1235 Calculated Balance (Total Leaves - Total Availed): 235
+LeaveApplications.tsx:1236 ====================================
+LeaveApplications.tsx:1389 🔍 [AVAILED CALCULATION] User 2161, Earned Leave: 
+{variantId: 57, isBeforeWorkflow: true, leaveBalanceDeductionBefore: true, totalTransactions: 40, pendingDeductions: 3, …}
+LeaveApplications.tsx:1430 [Leave Applications] Pending deduction analysis: 
+{transactionId: 16181, amount: '-5.00', description: 'Pending leave deduction: 5.0 days (Before Workflow) - Request 2300', isBeforeWorkflow: true, shouldInclude: true}
+LeaveApplications.tsx:1430 [Leave Applications] Pending deduction analysis: 
+{transactionId: 16183, amount: '-4.00', description: 'Pending leave deduction: 4.0 days (Before Workflow) - Request 2213', isBeforeWorkflow: true, shouldInclude: true}
+LeaveApplications.tsx:1430 [Leave Applications] Pending deduction analysis: 
+{transactionId: 16185, amount: '-3.00', description: 'Pending leave deduction: 3.0 days (Before Workflow) - Request 2215', isBeforeWorkflow: true, shouldInclude: true}
+LeaveApplications.tsx:1450 💯 [FINAL AVAILED] Earned Leave: 
+{variantId: 57, usageTransactionsCount: 3, usageTransactions: Array(3), finalAvailed: 12}
+LeaveApplications.tsx:1389 🔍 [AVAILED CALCULATION] User 2161, Sick Leave/ Casual Leave: 
+{variantId: 58, isBeforeWorkflow: true, leaveBalanceDeductionBefore: true, totalTransactions: 37, pendingDeductions: 4, …}
+LeaveApplications.tsx:1430 [Leave Applications] Pending deduction analysis: 
+{transactionId: 16182, amount: '-1.00', description: 'Pending leave deduction: 1.0 days (Before Workflow) - Request 2301', isBeforeWorkflow: true, shouldInclude: true}
+LeaveApplications.tsx:1430 [Leave Applications] Pending deduction analysis: 
+{transactionId: 16184, amount: '-1.00', description: 'Pending leave deduction: 1.0 days (Before Workflow) - Request 2214', isBeforeWorkflow: true, shouldInclude: true}
+LeaveApplications.tsx:1430 [Leave Applications] Pending deduction analysis: 
+{transactionId: 16186, amount: '-2.00', description: 'Pending leave deduction: 2.0 days (Before Workflow) - Request 2216', isBeforeWorkflow: true, shouldInclude: true}
+LeaveApplications.tsx:1430 [Leave Applications] Pending deduction analysis: 
+{transactionId: 16187, amount: '-0.50', description: 'Pending leave deduction: 0.5 days (Before Workflow) - Request 2217', isBeforeWorkflow: true, shouldInclude: true}
+LeaveApplications.tsx:1450 💯 [FINAL AVAILED] Sick Leave/ Casual Leave: 
+{variantId: 58, usageTransactionsCount: 4, usageTransactions: Array(4), finalAvailed: 4.5}
+LeaveApplications.tsx:1675 🔍 [TABLE AVAILED] Variant 57 (Earned Leave): 
+{isBeforeWorkflow: true, totalTransactions: 40, usageTransactions: 3, pendingDeductions: 3, finalAvailed: 12}
+LeaveApplications.tsx:1675 🔍 [TABLE AVAILED] Variant 60 (Paternity Leave): 
+{isBeforeWorkflow: true, totalTransactions: 33, usageTransactions: 0, pendingDeductions: 0, finalAvailed: 0}
+LeaveApplications.tsx:1675 🔍 [TABLE AVAILED] Variant 58 (Sick Leave/Casual Leave): 
+{isBeforeWorkflow: true, totalTransactions: 37, usageTransactions: 4, pendingDeductions: 4, finalAvailed: 4.5}
+LeaveApplications.tsx:60 === LEAVE PERMISSION DEBUG ===
+LeaveApplications.tsx:61 Current role from localStorage: admin
+LeaveApplications.tsx:62 Current org_id from localStorage: 38
+LeaveApplications.tsx:63 Full permissions hook result: 
+{permissions: {…}, loading: false, hasPermission: ƒ, canViewScreen: ƒ, canModifyScreen: ƒ, …}
+LeaveApplications.tsx:64 permissions.permissions: 
+{pto: {…}, roles: {…}, adminPTO: {…}, holidays: {…}, approvals: {…}, …}
+LeaveApplications.tsx:65 allowOnBehalf from permissions.permissions: 
+{pto: true, leave: true, compOff: true}
+LeaveApplications.tsx:66 allowOnBehalf.leave: true
+﻿

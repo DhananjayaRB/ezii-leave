@@ -1,0 +1,291 @@
+Current user ID from localStorage: IN2005002
+LeaveApplications.tsx:170 === LEAVE TYPE FILTERING DEBUG ===
+LeaveApplications.tsx:171 Current user ID: IN2005002
+LeaveApplications.tsx:172 All assignments: (1144) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, …]
+LeaveApplications.tsx:173 All variants: (6) [{…}, {…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:179 User assignments: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:182 Assigned variant IDs: (4) [51, 52, 55, 56]
+LeaveApplications.tsx:188 Available leave variants: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:189 ===============================
+LeaveApplications.tsx:796 === BALANCE CALCULATION DEBUG ===
+LeaveApplications.tsx:797 Current user ID: IN2005002
+LeaveApplications.tsx:798 User assignments: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:799 Assigned variant IDs: (4) [51, 52, 55, 56]
+LeaveApplications.tsx:800 Available leave variants: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:801 Leave balances for user IN2005002 : (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:802 Raw leaveBalances from API: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:40 === LEAVE PERMISSION DEBUG ===
+LeaveApplications.tsx:41 Current role from localStorage: admin
+LeaveApplications.tsx:42 Current org_id from localStorage: 54
+LeaveApplications.tsx:43 Full permissions hook result: {permissions: {…}, loading: false, hasPermission: ƒ, canViewScreen: ƒ, canModifyScreen: ƒ, …}
+LeaveApplications.tsx:44 permissions.permissions: {pto: {…}, roles: {…}, adminPTO: {…}, holidays: {…}, approvals: {…}, …}
+LeaveApplications.tsx:45 allowOnBehalf from permissions.permissions: {pto: true, leave: true, compOff: true}
+LeaveApplications.tsx:46 allowOnBehalf.leave: true
+LeaveApplications.tsx:47 Should show checkbox? true
+LeaveApplications.tsx:48 ================================
+LeaveApplications.tsx:307 🔥 validateDates CALLED! {selectedLeaveType: 'All Employees', startDate: '2025-08-14', endDate: '2025-08-19'}
+LeaveApplications.tsx:320 Raw form data: {startDate: '2025-08-14', endDate: '2025-08-19', startDateType: 'string', endDateType: 'string'}
+LeaveApplications.tsx:349 Parsed dates: {originalStart: '2025-08-14', originalEnd: '2025-08-19', correctedStart: '2025-08-14', correctedEnd: '2025-08-19', startDate: '2025-08-13T18:30:00.000Z', …}
+useWorkPattern.ts:249 🔥 calculateWorkingDays called with: 2025-08-13 to 2025-08-18
+useWorkPattern.ts:213 🔍 isHoliday called for: 2025-08-13 holidays array length: 10
+useWorkPattern.ts:229 🎯 isHoliday result for 2025-08-13 : false
+useWorkPattern.ts:262 2025-08-13 (Thu): working=true, holiday=false
+useWorkPattern.ts:213 🔍 isHoliday called for: 2025-08-14 holidays array length: 10
+useWorkPattern.ts:229 🎯 isHoliday result for 2025-08-14 : false
+useWorkPattern.ts:262 2025-08-14 (Fri): working=true, holiday=false
+useWorkPattern.ts:213 🔍 isHoliday called for: 2025-08-15 holidays array length: 10
+useWorkPattern.ts:229 🎯 isHoliday result for 2025-08-15 : false
+useWorkPattern.ts:262 2025-08-15 (Sat): working=false, holiday=false
+useWorkPattern.ts:213 🔍 isHoliday called for: 2025-08-16 holidays array length: 10
+useWorkPattern.ts:229 🎯 isHoliday result for 2025-08-16 : false
+useWorkPattern.ts:262 2025-08-16 (Sun): working=false, holiday=false
+useWorkPattern.ts:213 🔍 isHoliday called for: 2025-08-17 holidays array length: 10
+useWorkPattern.ts:229 🎯 isHoliday result for 2025-08-17 : false
+useWorkPattern.ts:262 2025-08-17 (Mon): working=true, holiday=false
+useWorkPattern.ts:213 🔍 isHoliday called for: 2025-08-18 holidays array length: 10
+useWorkPattern.ts:229 🎯 isHoliday result for 2025-08-18 : false
+useWorkPattern.ts:262 2025-08-18 (Tue): working=true, holiday=false
+useWorkPattern.ts:271 🔥 Final working days count: 4
+LeaveApplications.tsx:376 === VALIDATION WORKING DAYS DEBUG ===
+LeaveApplications.tsx:377 Start Date: 2025-08-13
+LeaveApplications.tsx:378 End Date: 2025-08-18
+LeaveApplications.tsx:379 Work Pattern Loading: false
+LeaveApplications.tsx:380 Work Pattern: null
+LeaveApplications.tsx:381 Holidays from useWorkPattern: 10
+LeaveApplications.tsx:382 Calculated Working Days: 4
+LeaveApplications.tsx:387 Aug 15th is in range - checking holiday status
+useWorkPattern.ts:213 🔍 isHoliday called for: 2025-08-15 holidays array length: 10
+useWorkPattern.ts:229 🎯 isHoliday result for 2025-08-15 : false
+LeaveApplications.tsx:388 Aug 15th is holiday: false
+LeaveApplications.tsx:389 Aug 15th holiday details: null
+LeaveApplications.tsx:393 === DAY BY DAY ANALYSIS ===
+useWorkPattern.ts:213 🔍 isHoliday called for: 2025-08-13 holidays array length: 10
+useWorkPattern.ts:229 🎯 isHoliday result for 2025-08-13 : false
+LeaveApplications.tsx:397 2025-08-13: Working Day=true, Holiday=false
+useWorkPattern.ts:213 🔍 isHoliday called for: 2025-08-14 holidays array length: 10
+useWorkPattern.ts:229 🎯 isHoliday result for 2025-08-14 : false
+LeaveApplications.tsx:397 2025-08-14: Working Day=true, Holiday=false
+useWorkPattern.ts:213 🔍 isHoliday called for: 2025-08-15 holidays array length: 10
+useWorkPattern.ts:229 🎯 isHoliday result for 2025-08-15 : false
+LeaveApplications.tsx:397 2025-08-15: Working Day=false, Holiday=false
+useWorkPattern.ts:213 🔍 isHoliday called for: 2025-08-16 holidays array length: 10
+useWorkPattern.ts:229 🎯 isHoliday result for 2025-08-16 : false
+LeaveApplications.tsx:397 2025-08-16: Working Day=false, Holiday=false
+useWorkPattern.ts:213 🔍 isHoliday called for: 2025-08-17 holidays array length: 10
+useWorkPattern.ts:229 🎯 isHoliday result for 2025-08-17 : false
+LeaveApplications.tsx:397 2025-08-17: Working Day=true, Holiday=false
+useWorkPattern.ts:213 🔍 isHoliday called for: 2025-08-18 holidays array length: 10
+useWorkPattern.ts:229 🎯 isHoliday result for 2025-08-18 : false
+LeaveApplications.tsx:397 2025-08-18: Working Day=true, Holiday=false
+LeaveApplications.tsx:400 ============================
+useWorkPattern.ts:249 🔥 calculateWorkingDays called with: 2025-08-13 to 2025-08-18
+useWorkPattern.ts:213 🔍 isHoliday called for: 2025-08-13 holidays array length: 10
+useWorkPattern.ts:229 🎯 isHoliday result for 2025-08-13 : false
+useWorkPattern.ts:262 2025-08-13 (Thu): working=true, holiday=false
+useWorkPattern.ts:213 🔍 isHoliday called for: 2025-08-14 holidays array length: 10
+useWorkPattern.ts:229 🎯 isHoliday result for 2025-08-14 : false
+useWorkPattern.ts:262 2025-08-14 (Fri): working=true, holiday=false
+useWorkPattern.ts:213 🔍 isHoliday called for: 2025-08-15 holidays array length: 10
+useWorkPattern.ts:229 🎯 isHoliday result for 2025-08-15 : false
+useWorkPattern.ts:262 2025-08-15 (Sat): working=false, holiday=false
+useWorkPattern.ts:213 🔍 isHoliday called for: 2025-08-16 holidays array length: 10
+useWorkPattern.ts:229 🎯 isHoliday result for 2025-08-16 : false
+useWorkPattern.ts:262 2025-08-16 (Sun): working=false, holiday=false
+useWorkPattern.ts:213 🔍 isHoliday called for: 2025-08-17 holidays array length: 10
+useWorkPattern.ts:229 🎯 isHoliday result for 2025-08-17 : false
+useWorkPattern.ts:262 2025-08-17 (Mon): working=true, holiday=false
+useWorkPattern.ts:213 🔍 isHoliday called for: 2025-08-18 holidays array length: 10
+useWorkPattern.ts:229 🎯 isHoliday result for 2025-08-18 : false
+useWorkPattern.ts:262 2025-08-18 (Tue): working=true, holiday=false
+useWorkPattern.ts:271 🔥 Final working days count: 4
+LeaveApplications.tsx:203 Validation Debug: {startDate: '2025-08-13', endDate: '2025-08-18', actualWorkingDays: 4, variantMaxDays: 0, variantName: 'All Employees'}
+LeaveApplications.tsx:100 Current user ID from localStorage: IN2005002
+LeaveApplications.tsx:170 === LEAVE TYPE FILTERING DEBUG ===
+LeaveApplications.tsx:171 Current user ID: IN2005002
+LeaveApplications.tsx:172 All assignments: (1144) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, …]
+LeaveApplications.tsx:173 All variants: (6) [{…}, {…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:179 User assignments: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:182 Assigned variant IDs: (4) [51, 52, 55, 56]
+LeaveApplications.tsx:188 Available leave variants: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:189 ===============================
+LeaveApplications.tsx:796 === BALANCE CALCULATION DEBUG ===
+LeaveApplications.tsx:797 Current user ID: IN2005002
+LeaveApplications.tsx:798 User assignments: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:799 Assigned variant IDs: (4) [51, 52, 55, 56]
+LeaveApplications.tsx:800 Available leave variants: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:801 Leave balances for user IN2005002 : (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:802 Raw leaveBalances from API: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:40 === LEAVE PERMISSION DEBUG ===
+LeaveApplications.tsx:41 Current role from localStorage: admin
+LeaveApplications.tsx:42 Current org_id from localStorage: 54
+LeaveApplications.tsx:43 Full permissions hook result: {permissions: {…}, loading: false, hasPermission: ƒ, canViewScreen: ƒ, canModifyScreen: ƒ, …}
+LeaveApplications.tsx:44 permissions.permissions: {pto: {…}, roles: {…}, adminPTO: {…}, holidays: {…}, approvals: {…}, …}
+LeaveApplications.tsx:45 allowOnBehalf from permissions.permissions: {pto: true, leave: true, compOff: true}
+LeaveApplications.tsx:46 allowOnBehalf.leave: true
+LeaveApplications.tsx:47 Should show checkbox? true
+LeaveApplications.tsx:48 ================================
+useWorkPattern.ts:249 🔥 calculateWorkingDays called with: 2025-08-13 to 2025-08-17
+useWorkPattern.ts:213 🔍 isHoliday called for: 2025-08-13 holidays array length: 10
+useWorkPattern.ts:229 🎯 isHoliday result for 2025-08-13 : false
+useWorkPattern.ts:262 2025-08-13 (Thu): working=true, holiday=false
+useWorkPattern.ts:213 🔍 isHoliday called for: 2025-08-14 holidays array length: 10
+useWorkPattern.ts:229 🎯 isHoliday result for 2025-08-14 : false
+useWorkPattern.ts:262 2025-08-14 (Fri): working=true, holiday=false
+useWorkPattern.ts:213 🔍 isHoliday called for: 2025-08-15 holidays array length: 10
+useWorkPattern.ts:229 🎯 isHoliday result for 2025-08-15 : false
+useWorkPattern.ts:262 2025-08-15 (Sat): working=false, holiday=false
+useWorkPattern.ts:213 🔍 isHoliday called for: 2025-08-16 holidays array length: 10
+useWorkPattern.ts:229 🎯 isHoliday result for 2025-08-16 : false
+useWorkPattern.ts:262 2025-08-16 (Sun): working=false, holiday=false
+useWorkPattern.ts:213 🔍 isHoliday called for: 2025-08-17 holidays array length: 10
+useWorkPattern.ts:229 🎯 isHoliday result for 2025-08-17 : false
+useWorkPattern.ts:262 2025-08-17 (Mon): working=true, holiday=false
+useWorkPattern.ts:271 🔥 Final working days count: 3
+LeaveApplications.tsx:627 === WORKING DAYS CALCULATION DEBUG ===
+LeaveApplications.tsx:628 Start Date: 2025-08-13
+LeaveApplications.tsx:629 End Date: 2025-08-17
+LeaveApplications.tsx:630 Calculated Working Days: 3
+LeaveApplications.tsx:631 Work Pattern Loading Status: false
+LeaveApplications.tsx:632 Work Pattern Data: null
+LeaveApplications.tsx:633 Available Holidays from useWorkPattern: 10
+LeaveApplications.tsx:634 Holidays Array Length: 10
+LeaveApplications.tsx:635 Full Holidays Array: (10) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:640 Aug 15th is in range - checking if holiday
+useWorkPattern.ts:213 🔍 isHoliday called for: 2025-08-15 holidays array length: 10
+useWorkPattern.ts:229 🎯 isHoliday result for 2025-08-15 : false
+LeaveApplications.tsx:641 Aug 15th is holiday (useWorkPattern): false
+LeaveApplications.tsx:642 Aug 15th holiday details (useWorkPattern): null
+LeaveApplications.tsx:651 Manual Aug 15th holiday search result: undefined
+LeaveApplications.tsx:655 === DAY BY DAY ANALYSIS ===
+useWorkPattern.ts:213 🔍 isHoliday called for: 2025-08-13 holidays array length: 10
+useWorkPattern.ts:229 🎯 isHoliday result for 2025-08-13 : false
+LeaveApplications.tsx:659 2025-08-13: Working Day=true, Holiday=false
+useWorkPattern.ts:213 🔍 isHoliday called for: 2025-08-14 holidays array length: 10
+useWorkPattern.ts:229 🎯 isHoliday result for 2025-08-14 : false
+LeaveApplications.tsx:659 2025-08-14: Working Day=true, Holiday=false
+useWorkPattern.ts:213 🔍 isHoliday called for: 2025-08-15 holidays array length: 10
+useWorkPattern.ts:229 🎯 isHoliday result for 2025-08-15 : false
+LeaveApplications.tsx:659 2025-08-15: Working Day=false, Holiday=false
+useWorkPattern.ts:213 🔍 isHoliday called for: 2025-08-16 holidays array length: 10
+useWorkPattern.ts:229 🎯 isHoliday result for 2025-08-16 : false
+LeaveApplications.tsx:659 2025-08-16: Working Day=false, Holiday=false
+useWorkPattern.ts:213 🔍 isHoliday called for: 2025-08-17 holidays array length: 10
+useWorkPattern.ts:229 🎯 isHoliday result for 2025-08-17 : false
+LeaveApplications.tsx:659 2025-08-17: Working Day=true, Holiday=false
+LeaveApplications.tsx:662 ===============================
+useWorkPattern.ts:249 🔥 calculateWorkingDays called with: 2025-08-13 to 2025-08-17
+useWorkPattern.ts:213 🔍 isHoliday called for: 2025-08-13 holidays array length: 10
+useWorkPattern.ts:229 🎯 isHoliday result for 2025-08-13 : false
+useWorkPattern.ts:262 2025-08-13 (Thu): working=true, holiday=false
+useWorkPattern.ts:213 🔍 isHoliday called for: 2025-08-14 holidays array length: 10
+useWorkPattern.ts:229 🎯 isHoliday result for 2025-08-14 : false
+useWorkPattern.ts:262 2025-08-14 (Fri): working=true, holiday=false
+useWorkPattern.ts:213 🔍 isHoliday called for: 2025-08-15 holidays array length: 10
+useWorkPattern.ts:229 🎯 isHoliday result for 2025-08-15 : false
+useWorkPattern.ts:262 2025-08-15 (Sat): working=false, holiday=false
+useWorkPattern.ts:213 🔍 isHoliday called for: 2025-08-16 holidays array length: 10
+useWorkPattern.ts:229 🎯 isHoliday result for 2025-08-16 : false
+useWorkPattern.ts:262 2025-08-16 (Sun): working=false, holiday=false
+useWorkPattern.ts:213 🔍 isHoliday called for: 2025-08-17 holidays array length: 10
+useWorkPattern.ts:229 🎯 isHoliday result for 2025-08-17 : false
+useWorkPattern.ts:262 2025-08-17 (Mon): working=true, holiday=false
+useWorkPattern.ts:271 🔥 Final working days count: 3
+LeaveApplications.tsx:203 Validation Debug: {startDate: '2025-08-13', endDate: '2025-08-17', actualWorkingDays: 3, variantMaxDays: 0, variantName: 'All Employees'}
+LeaveApplications.tsx:700 Validation errors: []
+LeaveApplications.tsx:100 Current user ID from localStorage: IN2005002
+LeaveApplications.tsx:170 === LEAVE TYPE FILTERING DEBUG ===
+LeaveApplications.tsx:171 Current user ID: IN2005002
+LeaveApplications.tsx:172 All assignments: (1144) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, …]
+LeaveApplications.tsx:173 All variants: (6) [{…}, {…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:179 User assignments: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:182 Assigned variant IDs: (4) [51, 52, 55, 56]
+LeaveApplications.tsx:188 Available leave variants: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:189 ===============================
+LeaveApplications.tsx:796 === BALANCE CALCULATION DEBUG ===
+LeaveApplications.tsx:797 Current user ID: IN2005002
+LeaveApplications.tsx:798 User assignments: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:799 Assigned variant IDs: (4) [51, 52, 55, 56]
+LeaveApplications.tsx:800 Available leave variants: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:801 Leave balances for user IN2005002 : (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:802 Raw leaveBalances from API: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:40 === LEAVE PERMISSION DEBUG ===
+LeaveApplications.tsx:41 Current role from localStorage: admin
+LeaveApplications.tsx:42 Current org_id from localStorage: 54
+LeaveApplications.tsx:43 Full permissions hook result: {permissions: {…}, loading: false, hasPermission: ƒ, canViewScreen: ƒ, canModifyScreen: ƒ, …}
+LeaveApplications.tsx:44 permissions.permissions: {pto: {…}, roles: {…}, adminPTO: {…}, holidays: {…}, approvals: {…}, …}
+LeaveApplications.tsx:45 allowOnBehalf from permissions.permissions: {pto: true, leave: true, compOff: true}
+LeaveApplications.tsx:46 allowOnBehalf.leave: true
+LeaveApplications.tsx:47 Should show checkbox? true
+LeaveApplications.tsx:48 ================================
+orgContext.ts:14 [OrgContext] Reading org_id from localStorage: 54
+queryClient.ts:17 [API Request] Sending X-Org-Id header: 54 for POST /api/leave-requests
+orgContext.ts:14 [OrgContext] Reading org_id from localStorage: 54
+queryClient.ts:54 [Query Request] Sending X-Org-Id header: 54 for GET /api/leave-requests?userId=IN2005002
+orgContext.ts:14 [OrgContext] Reading org_id from localStorage: 54
+queryClient.ts:54 [Query Request] Sending X-Org-Id header: 54 for GET /api/employee-leave-balances/IN2005002
+LeaveApplications.tsx:100 Current user ID from localStorage: IN2005002
+LeaveApplications.tsx:170 === LEAVE TYPE FILTERING DEBUG ===
+LeaveApplications.tsx:171 Current user ID: IN2005002
+LeaveApplications.tsx:172 All assignments: (1144) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, …]
+LeaveApplications.tsx:173 All variants: (6) [{…}, {…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:179 User assignments: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:182 Assigned variant IDs: (4) [51, 52, 55, 56]
+LeaveApplications.tsx:188 Available leave variants: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:189 ===============================
+LeaveApplications.tsx:796 === BALANCE CALCULATION DEBUG ===
+LeaveApplications.tsx:797 Current user ID: IN2005002
+LeaveApplications.tsx:798 User assignments: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:799 Assigned variant IDs: (4) [51, 52, 55, 56]
+LeaveApplications.tsx:800 Available leave variants: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:801 Leave balances for user IN2005002 : (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:802 Raw leaveBalances from API: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:40 === LEAVE PERMISSION DEBUG ===
+LeaveApplications.tsx:41 Current role from localStorage: admin
+LeaveApplications.tsx:42 Current org_id from localStorage: 54
+LeaveApplications.tsx:43 Full permissions hook result: {permissions: {…}, loading: false, hasPermission: ƒ, canViewScreen: ƒ, canModifyScreen: ƒ, …}
+LeaveApplications.tsx:44 permissions.permissions: {pto: {…}, roles: {…}, adminPTO: {…}, holidays: {…}, approvals: {…}, …}
+LeaveApplications.tsx:45 allowOnBehalf from permissions.permissions: {pto: true, leave: true, compOff: true}
+LeaveApplications.tsx:46 allowOnBehalf.leave: true
+LeaveApplications.tsx:47 Should show checkbox? true
+LeaveApplications.tsx:48 ================================
+LeaveApplications.tsx:100 Current user ID from localStorage: IN2005002
+LeaveApplications.tsx:170 === LEAVE TYPE FILTERING DEBUG ===
+LeaveApplications.tsx:171 Current user ID: IN2005002
+LeaveApplications.tsx:172 All assignments: (1144) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, …]
+LeaveApplications.tsx:173 All variants: (6) [{…}, {…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:179 User assignments: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:182 Assigned variant IDs: (4) [51, 52, 55, 56]
+LeaveApplications.tsx:188 Available leave variants: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:189 ===============================
+LeaveApplications.tsx:796 === BALANCE CALCULATION DEBUG ===
+LeaveApplications.tsx:797 Current user ID: IN2005002
+LeaveApplications.tsx:798 User assignments: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:799 Assigned variant IDs: (4) [51, 52, 55, 56]
+LeaveApplications.tsx:800 Available leave variants: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:801 Leave balances for user IN2005002 : (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:802 Raw leaveBalances from API: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:100 Current user ID from localStorage: IN2005002
+LeaveApplications.tsx:170 === LEAVE TYPE FILTERING DEBUG ===
+LeaveApplications.tsx:171 Current user ID: IN2005002
+LeaveApplications.tsx:172 All assignments: (1144) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, …]
+LeaveApplications.tsx:173 All variants: (6) [{…}, {…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:179 User assignments: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:182 Assigned variant IDs: (4) [51, 52, 55, 56]
+LeaveApplications.tsx:188 Available leave variants: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:189 ===============================
+LeaveApplications.tsx:796 === BALANCE CALCULATION DEBUG ===
+LeaveApplications.tsx:797 Current user ID: IN2005002
+LeaveApplications.tsx:798 User assignments: (4) [{…}, {…}, {…}, {…}]0: {id: 2294, userId: 'IN2005002', leaveVariantId: 51, assignmentType: 'leave_variant', orgId: 54, …}1: {id: 2295, userId: 'IN2005002', leaveVariantId: 52, assignmentType: 'leave_variant', orgId: 54, …}2: {id: 2296, userId: 'IN2005002', leaveVariantId: 55, assignmentType: 'leave_variant', orgId: 54, …}3: {id: 2297, userId: 'IN2005002', leaveVariantId: 56, assignmentType: 'leave_variant', orgId: 54, …}length: 4[[Prototype]]: Array(0)
+LeaveApplications.tsx:799 Assigned variant IDs: (4) [51, 52, 55, 56]0: 511: 522: 553: 56length: 4[[Prototype]]: Array(0)
+LeaveApplications.tsx:800 Available leave variants: (4) [{…}, {…}, {…}, {…}]0: {id: 55, leaveTypeId: 51, leaveTypeName: 'Bereavement Leave', leaveVariantName: 'All Employees', description: 'All Employees', …}1: {id: 51, leaveTypeId: 47, leaveTypeName: 'Privilege Leave', leaveVariantName: 'All Employees', description: 'Applicable to all employees however after probationary period completion', …}2: {id: 52, leaveTypeId: 48, leaveTypeName: 'Sick Leave', leaveVariantName: 'All Employees', description: 'Applicable to all employees', …}3: {id: 56, leaveTypeId: 52, leaveTypeName: 'Special Leave', leaveVariantName: 'All Employees', description: 'All employees', …}length: 4[[Prototype]]: Array(0)
+LeaveApplications.tsx:801 Leave balances for user IN2005002 : (4) [{…}, {…}, {…}, {…}]0: {id: 1066, userId: 'IN2005002', leaveVariantId: 51, totalEntitlement: 120, currentBalance: 120, …}1: {id: 1320, userId: 'IN2005002', leaveVariantId: 52, totalEntitlement: 24, currentBalance: 24, …}2: {id: 1321, userId: 'IN2005002', leaveVariantId: 55, totalEntitlement: 10, currentBalance: 10, …}3: {id: 1322, userId: 'IN2005002', leaveVariantId: 56, totalEntitlement: 20, currentBalance: 20, …}length: 4[[Prototype]]: Array(0)
+LeaveApplications.tsx:802 Raw leaveBalances from API: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:40 === LEAVE PERMISSION DEBUG ===
+LeaveApplications.tsx:41 Current role from localStorage: admin
+LeaveApplications.tsx:42 Current org_id from localStorage: 54
+LeaveApplications.tsx:43 Full permissions hook result: {permissions: {…}, loading: false, hasPermission: ƒ, canViewScreen: ƒ, canModifyScreen: ƒ, …}canModifyScreen: (screen) => {…}canViewScreen: (screen) => {     return hasPermission(screen, "view");   }hasPermission: (screen, action = "view") => {…}loading: falsepermissions: {pto: {…}, roles: {…}, adminPTO: {…}, holidays: {…}, approvals: {…}, …}updatePermissions: (newPermissions) => {…}[[Prototype]]: Object
+LeaveApplications.tsx:44 permissions.permissions: {pto: {…}, roles: {…}, adminPTO: {…}, holidays: {…}, approvals: {…}, …}adminCompOff: {view: true, modify: true}adminLeaveTypes: {view: true, modify: true}adminOverview: {view: true, modify: true}adminPTO: {view: true, modify: true}adminReports: {view: true, modify: true}allowOnBehalf: {pto: true, leave: true, compOff: true}approvals: {view: true, modify: true}compensatoryOff: {view: true, modify: true}employeeOverview: {view: true, modify: true}employees: {view: true, modify: true}holidays: {view: true, modify: true}importLeaveData: {view: true, modify: true}leaveApplications: {view: true, modify: true}pto: {view: true, modify: true}roles: {view: true, modify: true}workflows: {view: true, modify: true}[[Prototype]]: Object
+LeaveApplications.tsx:45 allowOnBehalf from permissions.permissions: {pto: true, leave: true, compOff: true}compOff: trueleave: truepto: true[[Prototype]]: Object
+LeaveApplications.tsx:46 allowOnBehalf.leave: true
+LeaveApplications.tsx:47 Should show checkbox? true
+LeaveApplications.tsx:48 ================================

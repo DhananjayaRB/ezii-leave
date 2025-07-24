@@ -1,0 +1,106 @@
+[DEBUG] Current org_id from localStorage: 38
+Home.tsx:65 [DEBUG] Company orgId from API: 38
+Home.tsx:118 [DEBUG] Setup wizard check: {currentOrgId: '38', companyOrgId: 38, isSetupCompleted: true, isOrgIdMismatch: false, isNewOrganization: false, …}
+Home.tsx:156 [HOME] Setup wizard condition NOT met - rendering dashboard
+Home.tsx:157 [HOME] Condition check: userRole= null needsSetup= false
+TestEmployeeOverview.tsx:4 [TestEmployeeOverview] Component loaded - SHOULD BE VISIBLE
+usePermissions.ts:137 Using cached permissions to prevent flickering
+Home.tsx:25 [HOME] Role debugging: {localStorage.role: 'admin', localStorage.role_name: 'admin'}
+Home.tsx:34 [HOME] Final role selected: admin
+Home.tsx:61 [DEBUG] Current org_id from localStorage: 38
+Home.tsx:65 [DEBUG] Company orgId from API: 38
+Home.tsx:118 [DEBUG] Setup wizard check: {currentOrgId: '38', companyOrgId: 38, isSetupCompleted: true, isOrgIdMismatch: false, isNewOrganization: false, …}
+Home.tsx:156 [HOME] Setup wizard condition NOT met - rendering dashboard
+Home.tsx:157 [HOME] Condition check: userRole= admin needsSetup= false
+useReportingManagerData.ts:27 [ReportingManager] Hook called - isAuthenticated: true user: true
+useReportingManagerData.ts:113 [ReportingManager] Effect triggered - isAuthenticated: true user: true
+useReportingManagerData.ts:116 [ReportingManager] User authenticated, calling reporting manager API for user_id: 2167
+useReportingManagerData.ts:117 [ReportingManager] localStorage contents: (10) ['org_id', 'role_name', 'jwt_token', 'user_id', 'currentView', 'leave_year', 'role', 'role_id', 'user_type_id', 'replitDevBannerClosed-f1ff95f5-c5e9-4a48-8b7d-e5003e7e46b5-00-2ouzfopqowui7.kirk.replit.dev']
+useReportingManagerData.ts:118 [ReportingManager] Available tokens: {jwtToken: false, jwt_token: true, token: false}
+useReportingManagerData.ts:30 [ReportingManager] Fetching reportees for user_id: 2167
+useReportingManagerData.ts:36 [ReportingManager] JWT token found: true
+useReportingManagerData.ts:37 [ReportingManager] JWT token length: 321
+useReportingManagerData.ts:51 [ReportingManager] Making API call to: https://qa-api.resolveindia.com/organization/reporting-manager/2167/reportees
+useReportingManagerData.ts:52 [ReportingManager] Using JWT token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdfaWQiO...
+useReportingManagerData.ts:132 [ReportingManager] Force calling API immediately for testing with user_id: 2167
+useReportingManagerData.ts:133 [ReportingManager] Current localStorage keys: (10) ['org_id', 'role_name', 'jwt_token', 'user_id', 'currentView', 'leave_year', 'role', 'role_id', 'user_type_id', 'replitDevBannerClosed-f1ff95f5-c5e9-4a48-8b7d-e5003e7e46b5-00-2ouzfopqowui7.kirk.replit.dev']
+useReportingManagerData.ts:30 [ReportingManager] Fetching reportees for user_id: 2167
+useReportingManagerData.ts:36 [ReportingManager] JWT token found: true
+useReportingManagerData.ts:37 [ReportingManager] JWT token length: 321
+useReportingManagerData.ts:51 [ReportingManager] Making API call to: https://qa-api.resolveindia.com/organization/reporting-manager/2167/reportees
+useReportingManagerData.ts:52 [ReportingManager] Using JWT token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdfaWQiO...
+useReportingManagerData.ts:139 [ReportingManager] Hook mounted - forcing API call
+useWorkPattern.ts:66 [WorkPattern] Fetching work patterns for user: 2167
+useReportingManagerData.ts:27 [ReportingManager] Hook called - isAuthenticated: true user: true
+useReportingManagerData.ts:54  GET https://qa-api.resolveindia.com/organization/reporting-manager/2167/reportees 404 (Not Found)
+fetchReportees @ useReportingManagerData.ts:54
+(anonymous) @ useReportingManagerData.ts:123
+commitHookEffectListMount @ chunk-RPCDYKBN.js?v=0dec60a6:16915
+commitPassiveMountOnFiber @ chunk-RPCDYKBN.js?v=0dec60a6:18156
+commitPassiveMountEffects_complete @ chunk-RPCDYKBN.js?v=0dec60a6:18129
+commitPassiveMountEffects_begin @ chunk-RPCDYKBN.js?v=0dec60a6:18119
+commitPassiveMountEffects @ chunk-RPCDYKBN.js?v=0dec60a6:18109
+flushPassiveEffectsImpl @ chunk-RPCDYKBN.js?v=0dec60a6:19490
+flushPassiveEffects @ chunk-RPCDYKBN.js?v=0dec60a6:19447
+(anonymous) @ chunk-RPCDYKBN.js?v=0dec60a6:19328
+workLoop @ chunk-RPCDYKBN.js?v=0dec60a6:197
+flushWork @ chunk-RPCDYKBN.js?v=0dec60a6:176
+performWorkUntilDeadline @ chunk-RPCDYKBN.js?v=0dec60a6:384Understand this error
+useReportingManagerData.ts:62 [ReportingManager] API Response status: 404
+useReportingManagerData.ts:65 [ReportingManager] API call failed with status: 404
+useReportingManagerData.ts:67 [ReportingManager] Error response: 
+useReportingManagerData.ts:27 [ReportingManager] Hook called - isAuthenticated: true user: true
+useReportingManagerData.ts:54  GET https://qa-api.resolveindia.com/organization/reporting-manager/2167/reportees 404 (Not Found)
+fetchReportees @ useReportingManagerData.ts:54
+(anonymous) @ useReportingManagerData.ts:134
+commitHookEffectListMount @ chunk-RPCDYKBN.js?v=0dec60a6:16915
+commitPassiveMountOnFiber @ chunk-RPCDYKBN.js?v=0dec60a6:18156
+commitPassiveMountEffects_complete @ chunk-RPCDYKBN.js?v=0dec60a6:18129
+commitPassiveMountEffects_begin @ chunk-RPCDYKBN.js?v=0dec60a6:18119
+commitPassiveMountEffects @ chunk-RPCDYKBN.js?v=0dec60a6:18109
+flushPassiveEffectsImpl @ chunk-RPCDYKBN.js?v=0dec60a6:19490
+flushPassiveEffects @ chunk-RPCDYKBN.js?v=0dec60a6:19447
+(anonymous) @ chunk-RPCDYKBN.js?v=0dec60a6:19328
+workLoop @ chunk-RPCDYKBN.js?v=0dec60a6:197
+flushWork @ chunk-RPCDYKBN.js?v=0dec60a6:176
+performWorkUntilDeadline @ chunk-RPCDYKBN.js?v=0dec60a6:384Understand this error
+useReportingManagerData.ts:62 [ReportingManager] API Response status: 404
+useReportingManagerData.ts:65 [ReportingManager] API call failed with status: 404
+useWorkPattern.ts:77 [WorkPattern] Work pattern API Response status: 200
+useReportingManagerData.ts:67 [ReportingManager] Error response: 
+useReportingManagerData.ts:27 [ReportingManager] Hook called - isAuthenticated: true user: true
+useWorkPattern.ts:81 [WorkPattern] Work pattern data: {message: 'Work Pattern List', data: Array(2)}
+useWorkPattern.ts:85 [WorkPattern] Found user work pattern: {id: 2, patternName: 'Pattern 2', startDate: '2025-01-01T05:30:00', endDate: '2025-12-31T05:30:00', numberOfWorkingDays: 52, …}
+useWorkPattern.ts:89 [WorkPattern] Fetching external holidays...
+useReportingManagerData.ts:27 [ReportingManager] Hook called - isAuthenticated: true user: true
+useWorkPattern.ts:98 [WorkPattern] External holidays API response status: 200
+useWorkPattern.ts:102 [WorkPattern] External holidays data: {message: 'Holiday List', data: Array(12)}
+useWorkPattern.ts:112 [WorkPattern] Filtered holidays matching work pattern: (12) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+useReportingManagerData.ts:27 [ReportingManager] Hook called - isAuthenticated: true user: true
+useReportingManagerData.ts:142 [ReportingManager] Delayed API call with user_id: 2167
+useReportingManagerData.ts:30 [ReportingManager] Fetching reportees for user_id: 2167
+useReportingManagerData.ts:36 [ReportingManager] JWT token found: true
+useReportingManagerData.ts:37 [ReportingManager] JWT token length: 321
+useReportingManagerData.ts:51 [ReportingManager] Making API call to: https://qa-api.resolveindia.com/organization/reporting-manager/2167/reportees
+useReportingManagerData.ts:52 [ReportingManager] Using JWT token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdfaWQiO...
+useReportingManagerData.ts:27 [ReportingManager] Hook called - isAuthenticated: true user: true
+useReportingManagerData.ts:54  GET https://qa-api.resolveindia.com/organization/reporting-manager/2167/reportees 404 (Not Found)
+fetchReportees @ useReportingManagerData.ts:54
+(anonymous) @ useReportingManagerData.ts:143
+setTimeout
+(anonymous) @ useReportingManagerData.ts:141
+commitHookEffectListMount @ chunk-RPCDYKBN.js?v=0dec60a6:16915
+commitPassiveMountOnFiber @ chunk-RPCDYKBN.js?v=0dec60a6:18156
+commitPassiveMountEffects_complete @ chunk-RPCDYKBN.js?v=0dec60a6:18129
+commitPassiveMountEffects_begin @ chunk-RPCDYKBN.js?v=0dec60a6:18119
+commitPassiveMountEffects @ chunk-RPCDYKBN.js?v=0dec60a6:18109
+flushPassiveEffectsImpl @ chunk-RPCDYKBN.js?v=0dec60a6:19490
+flushPassiveEffects @ chunk-RPCDYKBN.js?v=0dec60a6:19447
+(anonymous) @ chunk-RPCDYKBN.js?v=0dec60a6:19328
+workLoop @ chunk-RPCDYKBN.js?v=0dec60a6:197
+flushWork @ chunk-RPCDYKBN.js?v=0dec60a6:176
+performWorkUntilDeadline @ chunk-RPCDYKBN.js?v=0dec60a6:384Understand this error
+useReportingManagerData.ts:62 [ReportingManager] API Response status: 404
+useReportingManagerData.ts:65 [ReportingManager] API call failed with status: 404
+useReportingManagerData.ts:67 [ReportingManager] Error response: 
+useReportingManagerData.ts:27 [ReportingManager] Hook called - isAuthenticated: true user: true

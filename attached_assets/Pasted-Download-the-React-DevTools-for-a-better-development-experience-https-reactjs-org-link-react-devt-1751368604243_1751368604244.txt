@@ -1,0 +1,75 @@
+Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+orgContext.ts:83 [OrgContext] Found existing data - org_id: 54 role: admin
+orgContext.ts:14 [OrgContext] Reading org_id from localStorage: 54
+queryClient.ts:54 [Query Request] Sending X-Org-Id header: 54 for GET /api/auth/user
+App.tsx:90 === LOCALSTORAGE DEBUG ===
+App.tsx:91 Keys in localStorage: (10) ['org_id', 'role_name', 'jwt_token', 'user_id', 'currentView', 'leave_year', 'role', 'role_id', 'user_type_id', 'replitDevBannerClosed-f1ff95f5-c5e9-4a48-8b7d-e5003e7e46b5-00-2ouzfopqowui7.kirk.replit.dev']
+App.tsx:92 org_id: 54
+App.tsx:93 leave_year: January-2025-December 2025
+App.tsx:94 user_id: 1
+App.tsx:95 jwt_token: exists
+App.tsx:96 role_name: admin
+App.tsx:97 ========================
+App.tsx:98 ======================
+Home.tsx:50 [DEBUG] Current org_id from localStorage: 54
+Home.tsx:54 [DEBUG] Company orgId from API: null
+usePermissions.ts:143 Loading permissions for role: admin
+externalApi.ts:48 [ExternalAPI] Starting fetchEmployeeData...
+externalApi.ts:53 [ExternalAPI] Using JWT token for API call
+externalApi.ts:68 [ExternalAPI] Making request to worker-master-leave endpoint...
+externalApi.ts:69 [ExternalAPI] Payload: {userBlocks: Array(3), userWise: 0, workerType: 0, attribute: 0, subAttributeId: 0}
+orgContext.ts:14 [OrgContext] Reading org_id from localStorage: 54
+queryClient.ts:54 [Query Request] Sending X-Org-Id header: 54 for GET /api/company
+Home.tsx:50 [DEBUG] Current org_id from localStorage: 54
+Home.tsx:54 [DEBUG] Company orgId from API: null
+usePermissions.ts:166 Using database role permissions for admin : {pto: {…}, roles: {…}, adminPTO: {…}, holidays: {…}, approvals: {…}, …}
+usePermissions.ts:167 Workflows permission: {view: true, modify: true}
+chunk-RPCDYKBN.js?v=47ee212a:521 Warning: validateDOMNesting(...): <a> cannot appear as a descendant of <a>.
+    at a
+    at a
+    at https://f1ff95f5-c5e9-4a48-8b7d-e5003e7e46b5-00-2ouzfopqowui7.kirk.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=47ee212a:337:18
+    at div
+    at nav
+    at div
+    at div
+    at Layout (https://f1ff95f5-c5e9-4a48-8b7d-e5003e7e46b5-00-2ouzfopqowui7.kirk.replit.dev/src/components/Layout.tsx:37:34)
+    at Home (https://f1ff95f5-c5e9-4a48-8b7d-e5003e7e46b5-00-2ouzfopqowui7.kirk.replit.dev/src/pages/Home.tsx:31:20)
+    at Route (https://f1ff95f5-c5e9-4a48-8b7d-e5003e7e46b5-00-2ouzfopqowui7.kirk.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=47ee212a:323:16)
+    at Switch (https://f1ff95f5-c5e9-4a48-8b7d-e5003e7e46b5-00-2ouzfopqowui7.kirk.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=47ee212a:379:17)
+    at Router (https://f1ff95f5-c5e9-4a48-8b7d-e5003e7e46b5-00-2ouzfopqowui7.kirk.replit.dev/src/App.tsx?v=_QLFWG-XeP-MT4kOdXKPZ:49:42)
+    at Provider (https://f1ff95f5-c5e9-4a48-8b7d-e5003e7e46b5-00-2ouzfopqowui7.kirk.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-M3NVYRND.js?v=47ee212a:48:15)
+    at TooltipProvider (https://f1ff95f5-c5e9-4a48-8b7d-e5003e7e46b5-00-2ouzfopqowui7.kirk.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=47ee212a:59:5)
+    at QueryClientProvider (https://f1ff95f5-c5e9-4a48-8b7d-e5003e7e46b5-00-2ouzfopqowui7.kirk.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=47ee212a:2805:3)
+    at App
+printWarning @ chunk-RPCDYKBN.js?v=47ee212a:521
+error @ chunk-RPCDYKBN.js?v=47ee212a:505
+validateDOMNesting @ chunk-RPCDYKBN.js?v=47ee212a:8256
+createInstance @ chunk-RPCDYKBN.js?v=47ee212a:8328
+completeWork @ chunk-RPCDYKBN.js?v=47ee212a:16290
+completeUnitOfWork @ chunk-RPCDYKBN.js?v=47ee212a:19224
+performUnitOfWork @ chunk-RPCDYKBN.js?v=47ee212a:19206
+workLoopSync @ chunk-RPCDYKBN.js?v=47ee212a:19137
+renderRootSync @ chunk-RPCDYKBN.js?v=47ee212a:19116
+performConcurrentWorkOnRoot @ chunk-RPCDYKBN.js?v=47ee212a:18678
+workLoop @ chunk-RPCDYKBN.js?v=47ee212a:197
+flushWork @ chunk-RPCDYKBN.js?v=47ee212a:176
+performWorkUntilDeadline @ chunk-RPCDYKBN.js?v=47ee212a:384Understand this error
+Home.tsx:50 [DEBUG] Current org_id from localStorage: 54
+Home.tsx:54 [DEBUG] Company orgId from API: 54
+Home.tsx:107 [DEBUG] Setup wizard check: {currentOrgId: '54', companyOrgId: 54, isSetupCompleted: false, isOrgIdMismatch: false, isNewOrganization: false, …}
+Home.tsx:145 [HOME] Setup wizard condition NOT met - rendering dashboard
+Home.tsx:146 [HOME] Condition check: userRole= employee needsSetup= true
+orgContext.ts:14 [OrgContext] Reading org_id from localStorage: 54
+queryClient.ts:54 [Query Request] Sending X-Org-Id header: 54 for GET /api/leave-requests
+orgContext.ts:14 [OrgContext] Reading org_id from localStorage: 54
+queryClient.ts:54 [Query Request] Sending X-Org-Id header: 54 for GET /api/leave-types
+orgContext.ts:14 [OrgContext] Reading org_id from localStorage: 54
+queryClient.ts:54 [Query Request] Sending X-Org-Id header: 54 for GET /api/employee-leave-balances/1
+orgContext.ts:14 [OrgContext] Reading org_id from localStorage: 54
+queryClient.ts:54 [Query Request] Sending X-Org-Id header: 54 for GET /api/comp-off-config
+orgContext.ts:14 [OrgContext] Reading org_id from localStorage: 54
+queryClient.ts:54 [Query Request] Sending X-Org-Id header: 54 for GET /api/pto-config
+orgContext.ts:14 [OrgContext] Reading org_id from localStorage: 54
+queryClient.ts:54 [Query Request] Sending X-Org-Id header: 54 for GET /api/pto-requests?userId=1
+orgContext.ts:14 [OrgContext] Reading org_id from localStorage: 54
+queryClient.ts:54 [Query Request] Sending X-Org-Id header: 54 for GET /api/comp-off-requests?userId=1

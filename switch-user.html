@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Switch User Context</title>
+</head>
+<body>
+    <h2>Switch User to See Imported Data</h2>
+    <p>Click the button below to switch your user_id to one of the imported employees so you can see the transaction data.</p>
+    
+    <button onclick="switchUser()" style="padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">
+        Switch to Employee IN90004335 (17 transactions)
+    </button>
+    
+    <script>
+        function switchUser() {
+            localStorage.setItem('user_id', 'IN90004335');
+            alert('User switched to IN90004335! The page will reload to show imported data.');
+            window.location.href = '/leave-applications';
+        }
+    </script>
+</body>
+</html>

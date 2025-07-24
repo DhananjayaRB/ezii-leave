@@ -1,0 +1,257 @@
+[DEBUG] Current org_id from localStorage: 54
+Home.tsx:65 [DEBUG] Company orgId from API: 54
+Home.tsx:118 [DEBUG] Setup wizard check: {currentOrgId: '54', companyOrgId: 54, isSetupCompleted: true, isOrgIdMismatch: false, isNewOrganization: false, …}
+Home.tsx:156 [HOME] Setup wizard condition NOT met - rendering dashboard
+Home.tsx:157 [HOME] Condition check: userRole= null needsSetup= false
+EmployeeDashboard.tsx:35 🟢 EmployeeDashboard component rendered!
+EmployeeDashboard.tsx:36 🔍 Current User ID: 14674
+EmployeeDashboard.tsx:37 🔍 Query URL will be: /api/leave-requests?userId=14674
+EmployeeDashboard.tsx:46 📊 Employee Dashboard - Leave requests count: 17
+EmployeeDashboard.tsx:47 📊 Current user ID: 14674
+EmployeeDashboard.tsx:89 [EmployeeDashboard] Testing date 2025-08-14 against holidays: (4) [{…}, {…}, {…}, {…}]
+EmployeeDashboard.tsx:105 [EmployeeDashboard] Work Pattern Holiday Debug: {workPattern: 'Not available', workPatternHolidayCount: 0, effectiveHolidayCount: 4, currentUserId: '14674', usingFallback: true, …}
+EmployeeDashboard.tsx:148 🗓️ [CALENDAR DEBUG] User Leave Data: {currentUserId: '14674', totalLeaveRequests: 17, userFilteredRequests: 17, finalUserLeaveRequests: 17, approvedApplications: 11, …}
+EmployeeDashboard.tsx:160 🟢 APPROVED LEAVES FOUND: 11 requests
+EmployeeDashboard.tsx:162 Leave 1: {startDate: '2025-04-08T00:00:00.000Z', endDate: '2025-04-08T00:00:00.000Z', status: 'approved', userId: '14674'}
+EmployeeDashboard.tsx:162 Leave 2: {startDate: '2025-03-27T00:00:00.000Z', endDate: '2025-03-27T00:00:00.000Z', status: 'approved', userId: '14674'}
+EmployeeDashboard.tsx:162 Leave 3: {startDate: '2025-03-24T00:00:00.000Z', endDate: '2025-03-25T00:00:00.000Z', status: 'approved', userId: '14674'}
+EmployeeDashboard.tsx:89 [EmployeeDashboard] Testing date 2024-12-31 against holidays: (4) [{…}, {…}, {…}, {…}]
+EmployeeDashboard.tsx:89 [EmployeeDashboard] Testing date 2024-12-31 against holidays: (4) [{…}, {…}, {…}, {…}]
+EmployeeDashboard.tsx:805 [EmployeeDashboard] Calendar Day 1: {date: '2024-12-31', isHoliday: false, isNonWorking: false, workPatternAvailable: false, effectiveHolidaysCount: 4, …}
+EmployeeDashboard.tsx:89 [EmployeeDashboard] Testing date 2025-01-01 against holidays: (4) [{…}, {…}, {…}, {…}]
+EmployeeDashboard.tsx:94 [EmployeeDashboard] HOLIDAY MATCH found for 2025-01-01: New Year's Day
+EmployeeDashboard.tsx:89 [EmployeeDashboard] Testing date 2025-01-01 against holidays: (4) [{…}, {…}, {…}, {…}]
+EmployeeDashboard.tsx:94 [EmployeeDashboard] HOLIDAY MATCH found for 2025-01-01: New Year's Day
+EmployeeDashboard.tsx:805 [EmployeeDashboard] Calendar Day 2: {date: '2025-01-01', isHoliday: true, isNonWorking: false, workPatternAvailable: false, effectiveHolidaysCount: 4, …}
+EmployeeDashboard.tsx:89 [EmployeeDashboard] Testing date 2025-01-02 against holidays: (4) [{…}, {…}, {…}, {…}]
+EmployeeDashboard.tsx:89 [EmployeeDashboard] Testing date 2025-01-02 against holidays: (4) [{…}, {…}, {…}, {…}]
+EmployeeDashboard.tsx:805 [EmployeeDashboard] Calendar Day 3: {date: '2025-01-02', isHoliday: false, isNonWorking: false, workPatternAvailable: false, effectiveHolidaysCount: 4, …}
+EmployeeDashboard.tsx:89 [EmployeeDashboard] Testing date 2025-01-03 against holidays: (4) [{…}, {…}, {…}, {…}]
+EmployeeDashboard.tsx:89 [EmployeeDashboard] Testing date 2025-01-04 against holidays: (4) [{…}, {…}, {…}, {…}]
+EmployeeDashboard.tsx:89 [EmployeeDashboard] Testing date 2025-01-05 against holidays: (4) [{…}, {…}, {…}, {…}]
+EmployeeDashboard.tsx:89 [EmployeeDashboard] Testing date 2025-01-06 against holidays: (4) [{…}, {…}, {…}, {…}]
+EmployeeDashboard.tsx:89 [EmployeeDashboard] Testing date 2025-01-07 against holidays: (4) [{…}, {…}, {…}, {…}]
+EmployeeDashboard.tsx:89 [EmployeeDashboard] Testing date 2025-01-08 against holidays: (4) [{…}, {…}, {…}, {…}]
+EmployeeDashboard.tsx:89 [EmployeeDashboard] Testing date 2025-01-09 against holidays: (4) [{…}, {…}, {…}, {…}]
+EmployeeDashboard.tsx:822 🗓️ Checking day 10: {currentDate: '2025-01-09', requestStartDate: '2025-04-08', requestEndDate: '2025-04-08', isInRange: false, requestStatus: 'approved'}
+EmployeeDashboard.tsx:822 🗓️ Checking day 10: {currentDate: '2025-01-09', requestStartDate: '2025-03-27', requestEndDate: '2025-03-27', isInRange: false, requestStatus: 'approved'}
+EmployeeDashboard.tsx:822 🗓️ Checking day 10: {currentDate: '2025-01-09', requestStartDate: '2025-03-24', requestEndDate: '2025-03-25', isInRange: false, requestStatus: 'approved'}
+EmployeeDashboard.tsx:822 🗓️ Checking day 10: {currentDate: '2025-01-09', requestStartDate: '2025-03-13', requestEndDate: '2025-03-13', isInRange: false, requestStatus: 'approved'}
+EmployeeDashboard.tsx:822 🗓️ Checking day 10: {currentDate: '2025-01-09', requestStartDate: '2025-03-06', requestEndDate: '2025-03-07', isInRange: false, requestStatus: 'approved'}
+EmployeeDashboard.tsx:822 🗓️ Checking day 10: {currentDate: '2025-01-09', requestStartDate: '2025-02-25', requestEndDate: '2025-02-25', isInRange: false, requestStatus: 'approved'}
+EmployeeDashboard.tsx:822 🗓️ Checking day 10: {currentDate: '2025-01-09', requestStartDate: '2025-02-17', requestEndDate: '2025-02-17', isInRange: false, requestStatus: 'approved'}
+EmployeeDashboard.tsx:822 🗓️ Checking day 10: {currentDate: '2025-01-09', requestStartDate: '2025-02-03', requestEndDate: '2025-02-03', isInRange: false, requestStatus: 'approved'}
+EmployeeDashboard.tsx:822 🗓️ Checking day 10: {currentDate: '2025-01-09', requestStartDate: '2025-01-10', requestEndDate: '2025-01-10', isInRange: false, requestStatus: 'approved'}
+EmployeeDashboard.tsx:822 🗓️ Checking day 10: {currentDate: '2025-01-09', requestStartDate: '2025-01-24', requestEndDate: '2025-01-27', isInRange: false, requestStatus: 'approved'}
+EmployeeDashboard.tsx:822 🗓️ Checking day 10: {currentDate: '2025-01-09', requestStartDate: '2025-01-15', requestEndDate: '2025-01-15', isInRange: false, requestStatus: 'approved'}
+EmployeeDashboard.tsx:89 [EmployeeDashboard] Testing date 2025-01-10 against holidays: (4) [{…}, {…}, {…}, {…}]
+EmployeeDashboard.tsx:89 [EmployeeDashboard] Testing date 2025-01-11 against holidays: (4) [{…}, {…}, {…}, {…}]
+EmployeeDashboard.tsx:89 [EmployeeDashboard] Testing date 2025-01-12 against holidays: (4) [{…}, {…}, {…}, {…}]
+EmployeeDashboard.tsx:89 [EmployeeDashboard] Testing date 2025-01-13 against holidays: (4) [{…}, {…}, {…}, {…}]
+EmployeeDashboard.tsx:89 [EmployeeDashboard] Testing date 2025-01-14 against holidays: (4) [{…}, {…}, {…}, {…}]
+EmployeeDashboard.tsx:89 [EmployeeDashboard] Testing date 2025-01-14 against holidays: (4) [{…}, {…}, {…}, {…}]
+EmployeeDashboard.tsx:805 [EmployeeDashboard] Calendar Day 15: {date: '2025-01-14', isHoliday: false, isNonWorking: false, workPatternAvailable: false, effectiveHolidaysCount: 4, …}
+EmployeeDashboard.tsx:822 🗓️ Checking day 15: {currentDate: '2025-01-14', requestStartDate: '2025-04-08', requestEndDate: '2025-04-08', isInRange: false, requestStatus: 'approved'}
+EmployeeDashboard.tsx:822 🗓️ Checking day 15: {currentDate: '2025-01-14', requestStartDate: '2025-03-27', requestEndDate: '2025-03-27', isInRange: false, requestStatus: 'approved'}
+EmployeeDashboard.tsx:822 🗓️ Checking day 15: {currentDate: '2025-01-14', requestStartDate: '2025-03-24', requestEndDate: '2025-03-25', isInRange: false, requestStatus: 'approved'}
+EmployeeDashboard.tsx:822 🗓️ Checking day 15: {currentDate: '2025-01-14', requestStartDate: '2025-03-13', requestEndDate: '2025-03-13', isInRange: false, requestStatus: 'approved'}
+EmployeeDashboard.tsx:822 🗓️ Checking day 15: {currentDate: '2025-01-14', requestStartDate: '2025-03-06', requestEndDate: '2025-03-07', isInRange: false, requestStatus: 'approved'}
+EmployeeDashboard.tsx:822 🗓️ Checking day 15: {currentDate: '2025-01-14', requestStartDate: '2025-02-25', requestEndDate: '2025-02-25', isInRange: false, requestStatus: 'approved'}
+EmployeeDashboard.tsx:822 🗓️ Checking day 15: {currentDate: '2025-01-14', requestStartDate: '2025-02-17', requestEndDate: '2025-02-17', isInRange: false, requestStatus: 'approved'}
+EmployeeDashboard.tsx:822 🗓️ Checking day 15: {currentDate: '2025-01-14', requestStartDate: '2025-02-03', requestEndDate: '2025-02-03', isInRange: false, requestStatus: 'approved'}
+EmployeeDashboard.tsx:822 🗓️ Checking day 15: {currentDate: '2025-01-14', requestStartDate: '2025-01-10', requestEndDate: '2025-01-10', isInRange: false, requestStatus: 'approved'}
+EmployeeDashboard.tsx:822 🗓️ Checking day 15: {currentDate: '2025-01-14', requestStartDate: '2025-01-24', requestEndDate: '2025-01-27', isInRange: false, requestStatus: 'approved'}
+EmployeeDashboard.tsx:822 🗓️ Checking day 15: {currentDate: '2025-01-14', requestStartDate: '2025-01-15', requestEndDate: '2025-01-15', isInRange: false, requestStatus: 'approved'}
+EmployeeDashboard.tsx:89 [EmployeeDashboard] Testing date 2025-01-15 against holidays: (4) [{…}, {…}, {…}, {…}]
+EmployeeDashboard.tsx:89 [EmployeeDashboard] Testing date 2025-01-16 against holidays: (4) [{…}, {…}, {…}, {…}]
+EmployeeDashboard.tsx:89 [EmployeeDashboard] Testing date 2025-01-17 against holidays: (4) [{…}, {…}, {…}, {…}]
+EmployeeDashboard.tsx:89 [EmployeeDashboard] Testing date 2025-01-18 against holidays: (4) [{…}, {…}, {…}, {…}]
+EmployeeDashboard.tsx:89 [EmployeeDashboard] Testing date 2025-01-18 against holidays: (4) [{…}, {…}, {…}, {…}]
+EmployeeDashboard.tsx:805 [EmployeeDashboard] Calendar Day 19: {date: '2025-01-18', isHoliday: false, isNonWorking: true, workPatternAvailable: false, effectiveHolidaysCount: 4, …}
+EmployeeDashboard.tsx:89 [EmployeeDashboard] Testing date 2025-01-19 against holidays: (4) [{…}, {…}, {…}, {…}]
+EmployeeDashboard.tsx:89 [EmployeeDashboard] Testing date 2025-01-20 against holidays: (4) [{…}, {…}, {…}, {…}]
+EmployeeDashboard.tsx:89 [EmployeeDashboard] Testing date 2025-01-21 against holidays: (4) [{…}, {…}, {…}, {…}]
+EmployeeDashboard.tsx:89 [EmployeeDashboard] Testing date 2025-01-22 against holidays: (4) [{…}, {…}, {…}, {…}]
+EmployeeDashboard.tsx:89 [EmployeeDashboard] Testing date 2025-01-23 against holidays: (4) [{…}, {…}, {…}, {…}]
+EmployeeDashboard.tsx:822 🗓️ Checking day 24: {currentDate: '2025-01-23', requestStartDate: '2025-04-08', requestEndDate: '2025-04-08', isInRange: false, requestStatus: 'approved'}
+EmployeeDashboard.tsx:822 🗓️ Checking day 24: {currentDate: '2025-01-23', requestStartDate: '2025-03-27', requestEndDate: '2025-03-27', isInRange: false, requestStatus: 'approved'}
+EmployeeDashboard.tsx:822 🗓️ Checking day 24: {currentDate: '2025-01-23', requestStartDate: '2025-03-24', requestEndDate: '2025-03-25', isInRange: false, requestStatus: 'approved'}
+EmployeeDashboard.tsx:822 🗓️ Checking day 24: {currentDate: '2025-01-23', requestStartDate: '2025-03-13', requestEndDate: '2025-03-13', isInRange: false, requestStatus: 'approved'}
+EmployeeDashboard.tsx:822 🗓️ Checking day 24: {currentDate: '2025-01-23', requestStartDate: '2025-03-06', requestEndDate: '2025-03-07', isInRange: false, requestStatus: 'approved'}
+EmployeeDashboard.tsx:822 🗓️ Checking day 24: {currentDate: '2025-01-23', requestStartDate: '2025-02-25', requestEndDate: '2025-02-25', isInRange: false, requestStatus: 'approved'}
+EmployeeDashboard.tsx:822 🗓️ Checking day 24: {currentDate: '2025-01-23', requestStartDate: '2025-02-17', requestEndDate: '2025-02-17', isInRange: false, requestStatus: 'approved'}
+EmployeeDashboard.tsx:822 🗓️ Checking day 24: {currentDate: '2025-01-23', requestStartDate: '2025-02-03', requestEndDate: '2025-02-03', isInRange: false, requestStatus: 'approved'}
+EmployeeDashboard.tsx:822 🗓️ Checking day 24: {currentDate: '2025-01-23', requestStartDate: '2025-01-10', requestEndDate: '2025-01-10', isInRange: false, requestStatus: 'approved'}
+EmployeeDashboard.tsx:822 🗓️ Checking day 24: {currentDate: '2025-01-23', requestStartDate: '2025-01-24', requestEndDate: '2025-01-27', isInRange: false, requestStatus: 'approved'}
+EmployeeDashboard.tsx:822 🗓️ Checking day 24: {currentDate: '2025-01-23', requestStartDate: '2025-01-15', requestEndDate: '2025-01-15', isInRange: false, requestStatus: 'approved'}
+EmployeeDashboard.tsx:89 [EmployeeDashboard] Testing date 2025-01-24 against holidays: (4) [{…}, {…}, {…}, {…}]
+EmployeeDashboard.tsx:89 [EmployeeDashboard] Testing date 2025-01-25 against holidays: (4) [{…}, {…}, {…}, {…}]
+EmployeeDashboard.tsx:89 [EmployeeDashboard] Testing date 2025-01-26 against holidays: (4) [{…}, {…}, {…}, {…}]
+EmployeeDashboard.tsx:822 🗓️ Checking day 27: {currentDate: '2025-01-26', requestStartDate: '2025-04-08', requestEndDate: '2025-04-08', isInRange: false, requestStatus: 'approved'}
+EmployeeDashboard.tsx:822 🗓️ Checking day 27: {currentDate: '2025-01-26', requestStartDate: '2025-03-27', requestEndDate: '2025-03-27', isInRange: false, requestStatus: 'approved'}
+EmployeeDashboard.tsx:822 🗓️ Checking day 27: {currentDate: '2025-01-26', requestStartDate: '2025-03-24', requestEndDate: '2025-03-25', isInRange: false, requestStatus: 'approved'}
+EmployeeDashboard.tsx:822 🗓️ Checking day 27: {currentDate: '2025-01-26', requestStartDate: '2025-03-13', requestEndDate: '2025-03-13', isInRange: false, requestStatus: 'approved'}
+EmployeeDashboard.tsx:822 🗓️ Checking day 27: {currentDate: '2025-01-26', requestStartDate: '2025-03-06', requestEndDate: '2025-03-07', isInRange: false, requestStatus: 'approved'}
+EmployeeDashboard.tsx:822 🗓️ Checking day 27: {currentDate: '2025-01-26', requestStartDate: '2025-02-25', requestEndDate: '2025-02-25', isInRange: false, requestStatus: 'approved'}
+EmployeeDashboard.tsx:822 🗓️ Checking day 27: {currentDate: '2025-01-26', requestStartDate: '2025-02-17', requestEndDate: '2025-02-17', isInRange: false, requestStatus: 'approved'}
+EmployeeDashboard.tsx:822 🗓️ Checking day 27: {currentDate: '2025-01-26', requestStartDate: '2025-02-03', requestEndDate: '2025-02-03', isInRange: false, requestStatus: 'approved'}
+EmployeeDashboard.tsx:822 🗓️ Checking day 27: {currentDate: '2025-01-26', requestStartDate: '2025-01-10', requestEndDate: '2025-01-10', isInRange: false, requestStatus: 'approved'}
+EmployeeDashboard.tsx:822 🗓️ Checking day 27: {currentDate: '2025-01-26', requestStartDate: '2025-01-24', requestEndDate: '2025-01-27', isInRange: true, requestStatus: 'approved'}
+EmployeeDashboard.tsx:89 [EmployeeDashboard] Testing date 2025-01-27 against holidays: (4) [{…}, {…}, {…}, {…}]
+EmployeeDashboard.tsx:89 [EmployeeDashboard] Testing date 2025-01-28 against holidays: (4) [{…}, {…}, {…}, {…}]
+EmployeeDashboard.tsx:89 [EmployeeDashboard] Testing date 2025-01-29 against holidays: (4) [{…}, {…}, {…}, {…}]
+EmployeeDashboard.tsx:89 [EmployeeDashboard] Testing date 2025-01-30 against holidays: (4) [{…}, {…}, {…}, {…}]
+EmployeeDashboard.tsx:30 🔄 Invalidating leave requests cache for user: 14674
+orgContext.ts:14 [OrgContext] Reading org_id from localStorage: 54
+queryClient.ts:54 [Query Request] Sending X-Org-Id header: 54 for GET /api/leave-requests?userId=14674
+orgContext.ts:14 [OrgContext] Reading org_id from localStorage: 54
+queryClient.ts:54 [Query Request] Sending X-Org-Id header: 54 for GET /api/employee-leave-balances/14674
+orgContext.ts:14 [OrgContext] Reading org_id from localStorage: 54
+queryClient.ts:54 [Query Request] Sending X-Org-Id header: 54 for GET /api/comp-off-config
+orgContext.ts:14 [OrgContext] Reading org_id from localStorage: 54
+queryClient.ts:54 [Query Request] Sending X-Org-Id header: 54 for GET /api/pto-config
+useWorkPattern.ts:66 [WorkPattern] Fetching work patterns for user: 14674
+EmployeeDashboard.tsx:72 [EmployeeDashboard] Current user_id in localStorage: 14674
+orgContext.ts:14 [OrgContext] Reading org_id from localStorage: 54
+queryClient.ts:54 [Query Request] Sending X-Org-Id header: 54 for GET /api/pto-requests?userId=14674
+orgContext.ts:14 [OrgContext] Reading org_id from localStorage: 54
+queryClient.ts:54 [Query Request] Sending X-Org-Id header: 54 for GET /api/comp-off-requests?userId=14674
+usePermissions.ts:137 Using cached permissions to prevent flickering
+Home.tsx:25 [HOME] Role debugging: {localStorage.role: 'admin', localStorage.role_name: 'admin'}
+Home.tsx:34 [HOME] Final role selected: admin
+Home.tsx:61 [DEBUG] Current org_id from localStorage: 54
+Home.tsx:65 [DEBUG] Company orgId from API: 54
+Home.tsx:118 [DEBUG] Setup wizard check: {currentOrgId: '54', companyOrgId: 54, isSetupCompleted: true, isOrgIdMismatch: false, isNewOrganization: false, …}
+Home.tsx:156 [HOME] Setup wizard condition NOT met - rendering dashboard
+Home.tsx:157 [HOME] Condition check: userRole= admin needsSetup= false
+useReportingManagerData.ts:27 [ReportingManager] Hook called - isAuthenticated: true user: true
+useWorkPattern.ts:69 
+            
+            
+           GET https://qa-api.resolveindia.com/organization/work-pattern/14674 404 (Not Found)
+fetchWorkPatternAndHolidays @ useWorkPattern.ts:69
+(anonymous) @ useWorkPattern.ts:143
+commitHookEffectListMount @ chunk-RPCDYKBN.js?v=47ee212a:16915
+commitPassiveMountOnFiber @ chunk-RPCDYKBN.js?v=47ee212a:18156
+commitPassiveMountEffects_complete @ chunk-RPCDYKBN.js?v=47ee212a:18129
+commitPassiveMountEffects_begin @ chunk-RPCDYKBN.js?v=47ee212a:18119
+commitPassiveMountEffects @ chunk-RPCDYKBN.js?v=47ee212a:18109
+flushPassiveEffectsImpl @ chunk-RPCDYKBN.js?v=47ee212a:19490
+flushPassiveEffects @ chunk-RPCDYKBN.js?v=47ee212a:19447
+commitRootImpl @ chunk-RPCDYKBN.js?v=47ee212a:19416
+commitRoot @ chunk-RPCDYKBN.js?v=47ee212a:19277
+performSyncWorkOnRoot @ chunk-RPCDYKBN.js?v=47ee212a:18895
+flushSyncCallbacks @ chunk-RPCDYKBN.js?v=47ee212a:9119
+(anonymous) @ chunk-RPCDYKBN.js?v=47ee212a:18627Understand this error
+useWorkPattern.ts:77 [WorkPattern] Work pattern API Response status: 404
+useReportingManagerData.ts:113 [ReportingManager] Effect triggered - isAuthenticated: true user: true
+useReportingManagerData.ts:116 [ReportingManager] User authenticated, calling reporting manager API for user_id: 14674
+useReportingManagerData.ts:117 [ReportingManager] localStorage contents: (10) ['org_id', 'role_name', 'jwt_token', 'user_id', 'currentView', 'leave_year', 'role', 'role_id', 'user_type_id', 'replitDevBannerClosed-f1ff95f5-c5e9-4a48-8b7d-e5003e7e46b5-00-2ouzfopqowui7.kirk.replit.dev']
+useReportingManagerData.ts:118 [ReportingManager] Available tokens: {jwtToken: false, jwt_token: true, token: false}
+useReportingManagerData.ts:30 [ReportingManager] Fetching reportees for user_id: 14674
+useReportingManagerData.ts:36 [ReportingManager] JWT token found: true
+useReportingManagerData.ts:37 [ReportingManager] JWT token length: 321
+useReportingManagerData.ts:51 [ReportingManager] Making API call to: https://qa-api.resolveindia.com/organization/reporting-manager/14674/reportees
+useReportingManagerData.ts:52 [ReportingManager] Using JWT token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdfaWQiO...
+useReportingManagerData.ts:132 [ReportingManager] Force calling API immediately for testing with user_id: 14674
+useReportingManagerData.ts:133 [ReportingManager] Current localStorage keys: (10) ['org_id', 'role_name', 'jwt_token', 'user_id', 'currentView', 'leave_year', 'role', 'role_id', 'user_type_id', 'replitDevBannerClosed-f1ff95f5-c5e9-4a48-8b7d-e5003e7e46b5-00-2ouzfopqowui7.kirk.replit.dev']
+useReportingManagerData.ts:30 [ReportingManager] Fetching reportees for user_id: 14674
+useReportingManagerData.ts:36 [ReportingManager] JWT token found: true
+useReportingManagerData.ts:37 [ReportingManager] JWT token length: 321
+useReportingManagerData.ts:51 [ReportingManager] Making API call to: https://qa-api.resolveindia.com/organization/reporting-manager/14674/reportees
+useReportingManagerData.ts:52 [ReportingManager] Using JWT token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdfaWQiO...
+useReportingManagerData.ts:139 [ReportingManager] Hook mounted - forcing API call
+useWorkPattern.ts:66 [WorkPattern] Fetching work patterns for user: 14674
+useReportingManagerData.ts:27 [ReportingManager] Hook called - isAuthenticated: true user: true
+useWorkPattern.ts:130 [WorkPattern] Work pattern API Error: 404 
+useReportingManagerData.ts:54 
+            
+            
+           GET https://qa-api.resolveindia.com/organization/reporting-manager/14674/reportees 404 (Not Found)
+fetchReportees @ useReportingManagerData.ts:54
+(anonymous) @ useReportingManagerData.ts:123
+commitHookEffectListMount @ chunk-RPCDYKBN.js?v=47ee212a:16915
+commitPassiveMountOnFiber @ chunk-RPCDYKBN.js?v=47ee212a:18156
+commitPassiveMountEffects_complete @ chunk-RPCDYKBN.js?v=47ee212a:18129
+commitPassiveMountEffects_begin @ chunk-RPCDYKBN.js?v=47ee212a:18119
+commitPassiveMountEffects @ chunk-RPCDYKBN.js?v=47ee212a:18109
+flushPassiveEffectsImpl @ chunk-RPCDYKBN.js?v=47ee212a:19490
+flushPassiveEffects @ chunk-RPCDYKBN.js?v=47ee212a:19447
+(anonymous) @ chunk-RPCDYKBN.js?v=47ee212a:19328
+workLoop @ chunk-RPCDYKBN.js?v=47ee212a:197
+flushWork @ chunk-RPCDYKBN.js?v=47ee212a:176
+performWorkUntilDeadline @ chunk-RPCDYKBN.js?v=47ee212a:384Understand this error
+useReportingManagerData.ts:62 [ReportingManager] API Response status: 404
+useReportingManagerData.ts:65 [ReportingManager] API call failed with status: 404
+useWorkPattern.ts:69 
+            
+            
+           GET https://qa-api.resolveindia.com/organization/work-pattern/14674 404 (Not Found)
+fetchWorkPatternAndHolidays @ useWorkPattern.ts:69
+(anonymous) @ useWorkPattern.ts:143
+commitHookEffectListMount @ chunk-RPCDYKBN.js?v=47ee212a:16915
+commitPassiveMountOnFiber @ chunk-RPCDYKBN.js?v=47ee212a:18156
+commitPassiveMountEffects_complete @ chunk-RPCDYKBN.js?v=47ee212a:18129
+commitPassiveMountEffects_begin @ chunk-RPCDYKBN.js?v=47ee212a:18119
+commitPassiveMountEffects @ chunk-RPCDYKBN.js?v=47ee212a:18109
+flushPassiveEffectsImpl @ chunk-RPCDYKBN.js?v=47ee212a:19490
+flushPassiveEffects @ chunk-RPCDYKBN.js?v=47ee212a:19447
+(anonymous) @ chunk-RPCDYKBN.js?v=47ee212a:19328
+workLoop @ chunk-RPCDYKBN.js?v=47ee212a:197
+flushWork @ chunk-RPCDYKBN.js?v=47ee212a:176
+performWorkUntilDeadline @ chunk-RPCDYKBN.js?v=47ee212a:384Understand this error
+useWorkPattern.ts:77 [WorkPattern] Work pattern API Response status: 404
+useReportingManagerData.ts:67 [ReportingManager] Error response: 
+useWorkPattern.ts:130 [WorkPattern] Work pattern API Error: 404 
+useReportingManagerData.ts:27 [ReportingManager] Hook called - isAuthenticated: true user: true
+useReportingManagerData.ts:54 
+            
+            
+           GET https://qa-api.resolveindia.com/organization/reporting-manager/14674/reportees 404 (Not Found)
+fetchReportees @ useReportingManagerData.ts:54
+(anonymous) @ useReportingManagerData.ts:134
+commitHookEffectListMount @ chunk-RPCDYKBN.js?v=47ee212a:16915
+commitPassiveMountOnFiber @ chunk-RPCDYKBN.js?v=47ee212a:18156
+commitPassiveMountEffects_complete @ chunk-RPCDYKBN.js?v=47ee212a:18129
+commitPassiveMountEffects_begin @ chunk-RPCDYKBN.js?v=47ee212a:18119
+commitPassiveMountEffects @ chunk-RPCDYKBN.js?v=47ee212a:18109
+flushPassiveEffectsImpl @ chunk-RPCDYKBN.js?v=47ee212a:19490
+flushPassiveEffects @ chunk-RPCDYKBN.js?v=47ee212a:19447
+(anonymous) @ chunk-RPCDYKBN.js?v=47ee212a:19328
+workLoop @ chunk-RPCDYKBN.js?v=47ee212a:197
+flushWork @ chunk-RPCDYKBN.js?v=47ee212a:176
+performWorkUntilDeadline @ chunk-RPCDYKBN.js?v=47ee212a:384Understand this error
+useReportingManagerData.ts:62 [ReportingManager] API Response status: 404
+useReportingManagerData.ts:65 [ReportingManager] API call failed with status: 404
+useReportingManagerData.ts:67 [ReportingManager] Error response: 
+useReportingManagerData.ts:27 [ReportingManager] Hook called - isAuthenticated: true user: true
+useReportingManagerData.ts:142 [ReportingManager] Delayed API call with user_id: 14674
+useReportingManagerData.ts:30 [ReportingManager] Fetching reportees for user_id: 14674
+useReportingManagerData.ts:36 [ReportingManager] JWT token found: true
+useReportingManagerData.ts:37 [ReportingManager] JWT token length: 321
+useReportingManagerData.ts:51 [ReportingManager] Making API call to: https://qa-api.resolveindia.com/organization/reporting-manager/14674/reportees
+useReportingManagerData.ts:52 [ReportingManager] Using JWT token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdfaWQiO...
+useReportingManagerData.ts:27 [ReportingManager] Hook called - isAuthenticated: true user: true
+useReportingManagerData.ts:54 
+            
+            
+           GET https://qa-api.resolveindia.com/organization/reporting-manager/14674/reportees 404 (Not Found)
+fetchReportees @ useReportingManagerData.ts:54
+(anonymous) @ useReportingManagerData.ts:143
+setTimeout
+(anonymous) @ useReportingManagerData.ts:141
+commitHookEffectListMount @ chunk-RPCDYKBN.js?v=47ee212a:16915
+commitPassiveMountOnFiber @ chunk-RPCDYKBN.js?v=47ee212a:18156
+commitPassiveMountEffects_complete @ chunk-RPCDYKBN.js?v=47ee212a:18129
+commitPassiveMountEffects_begin @ chunk-RPCDYKBN.js?v=47ee212a:18119
+commitPassiveMountEffects @ chunk-RPCDYKBN.js?v=47ee212a:18109
+flushPassiveEffectsImpl @ chunk-RPCDYKBN.js?v=47ee212a:19490
+flushPassiveEffects @ chunk-RPCDYKBN.js?v=47ee212a:19447
+(anonymous) @ chunk-RPCDYKBN.js?v=47ee212a:19328
+workLoop @ chunk-RPCDYKBN.js?v=47ee212a:197
+flushWork @ chunk-RPCDYKBN.js?v=47ee212a:176
+performWorkUntilDeadline @ chunk-RPCDYKBN.js?v=47ee212a:384Understand this error
+useReportingManagerData.ts:62 [ReportingManager] API Response status: 404
+useReportingManagerData.ts:65 [ReportingManager] API call failed with status: 404
+useReportingManagerData.ts:67 [ReportingManager] Error response: 
+useReportingManagerData.ts:27 [ReportingManager] Hook called - isAuthenticated: true user: true

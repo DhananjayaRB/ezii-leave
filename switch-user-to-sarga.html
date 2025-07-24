@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Switch to Sarga Joseph (IN90004335)</title>
+</head>
+<body>
+    <h1>Switch User Context</h1>
+    <p>Current user_id: <span id="current-user"></span></p>
+    <button onclick="switchUser()">Switch to Sarga Joseph (IN90004335)</button>
+    <p id="result"></p>
+
+    <script>
+        // Display current user
+        document.getElementById('current-user').textContent = localStorage.getItem('user_id') || 'not set';
+        
+        function switchUser() {
+            // Set user_id to IN90004335 (Sarga Joseph from Excel)
+            localStorage.setItem('user_id', 'IN90004335');
+            
+            document.getElementById('result').innerHTML = `
+                <p style="color: green;">✓ User switched to IN90004335 (Sarga Joseph)</p>
+                <p>Please refresh the Leave Applications page to see the correct Excel data.</p>
+                <p>Expected data:
+                <br>• Total Availed: 28 days (22 Privilege + 6 Sick)
+                <br>• Privilege Leave: 18.5 days availed
+                <br>• Sick Leave: 8 days availed</p>
+            `;
+        }
+    </script>
+</body>
+</html>

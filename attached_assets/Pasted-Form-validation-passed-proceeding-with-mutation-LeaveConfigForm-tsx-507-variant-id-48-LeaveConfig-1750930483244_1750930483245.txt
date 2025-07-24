@@ -1,0 +1,156 @@
+Form validation passed, proceeding with mutation
+LeaveConfigForm.tsx:507 variant?.id: 48
+LeaveConfigForm.tsx:508 mutation.isPending: false
+LeaveConfigForm.tsx:509 Form errors: {}
+LeaveConfigForm.tsx:510 Form isValid: false
+LeaveConfigForm.tsx:511 Form isSubmitting: false
+LeaveConfigForm.tsx:512 Form isDirty: false
+LeaveConfigForm.tsx:526 BYPASS: This is an update operation, proceeding directly to mutation
+LeaveConfigForm.tsx:527 About to call mutation.mutate with data: {
+  "leaveVariantName": "Test 1",
+  "description": "This is a test",
+  "minimumLeaveUnit": [
+    "full_day"
+  ],
+  "leavesGrantedOn": "calendar_days",
+  "paidDaysInYear": 18,
+  "complianceGrantDays": 1,
+  "complianceForEveryDays": 20,
+  "grantLeaves": "after_earning",
+  "grantFrequency": "per_month",
+  "proRataCalculation": "slab_system",
+  "slabs": [],
+  "onboardingSlabs": [
+    {
+      "toDay": 31,
+      "fromDay": 1,
+      "earnDays": 1.5
+    }
+  ],
+  "exitSlabs": [
+    {
+      "toDay": 31,
+      "fromDay": 1,
+      "earnDays": 0
+    }
+  ],
+  "fractionalLeaves": "normal_rounding",
+  "applicableGenders": [
+    "male",
+    "female"
+  ],
+  "applicableAfter": 0,
+  "applicableAfterType": "days",
+  "mustBePlannedInAdvance": 0,
+  "maxDaysInStretch": 5,
+  "minDaysRequired": 0,
+  "maxInstances": 3,
+  "maxInstancesPeriod": "month",
+  "allowLeavesBeforeWeekend": true,
+  "allowLeavesAfterWeekend": true,
+  "allowLeavesBeforeHoliday": true,
+  "allowLeavesAfterHoliday": true,
+  "allowClubbing": true,
+  "supportingDocuments": true,
+  "supportingDocumentsText": "",
+  "allowDuringNotice": true,
+  "requiresWorkflow": true,
+  "leaveBalanceDeduction": "before_workflow",
+  "gracePeriod": 1,
+  "allowWithdrawalBeforeApproval": true,
+  "allowWithdrawalAfterApproval": false,
+  "allowWithdrawalNotAllowed": false,
+  "negativeLeaveBalance": 0,
+  "carryForwardLimit": 0,
+  "carryForwardPeriod": "month",
+  "encashment": false,
+  "encashmentCalculation": "basic_da",
+  "maxEncashmentDays": 0,
+  "encashmentTiming": "exit_retirement",
+  "allowApplicationsOnBehalf": true,
+  "showAvailedLeaves": false,
+  "showBalanceLeaves": false,
+  "maximumBalance": 0
+}
+LeaveConfigForm.tsx:322 === MUTATION FUNCTION STARTED ===
+LeaveConfigForm.tsx:323 Mutation data received: {leaveVariantName: 'Test 1', description: 'This is a test', minimumLeaveUnit: Array(1), leavesGrantedOn: 'calendar_days', paidDaysInYear: 18, …}
+LeaveConfigForm.tsx:324 variant?.id: 48
+LeaveConfigForm.tsx:325 Is this an update? true
+LeaveConfigForm.tsx:415 About to make API request...
+LeaveConfigForm.tsx:416 Request type: PATCH
+LeaveConfigForm.tsx:417 URL: /api/leave-variants/48
+LeaveConfigForm.tsx:418 Variant data being sent: {
+  "leaveTypeId": 45,
+  "leaveTypeName": "Sick Leave",
+  "leaveVariantName": "Test 1",
+  "description": "This is a test",
+  "minimumLeaveUnit": [
+    "full_day"
+  ],
+  "leavesGrantedOn": "calendar_days",
+  "paidDaysInYear": 18,
+  "complianceGrantDays": 1,
+  "complianceForEveryDays": 20,
+  "grantLeaves": "after_earning",
+  "grantFrequency": "per_month",
+  "proRataCalculation": "slab_system",
+  "onboardingSlabs": [
+    {
+      "toDay": 31,
+      "fromDay": 1,
+      "earnDays": 1.5
+    }
+  ],
+  "exitSlabs": [
+    {
+      "toDay": 31,
+      "fromDay": 1,
+      "earnDays": 0
+    }
+  ],
+  "fractionalLeaves": "normal_rounding",
+  "applicableGenders": [
+    "male",
+    "female"
+  ],
+  "applicableAfter": 0,
+  "applicableAfterType": "days",
+  "mustBePlannedInAdvance": 0,
+  "maxDaysInStretch": 5,
+  "minDaysRequired": 0,
+  "maxInstances": 3,
+  "maxInstancesPeriod": "month",
+  "allowLeavesBeforeWeekend": true,
+  "allowLeavesBeforeHoliday": true,
+  "allowClubbing": true,
+  "supportingDocuments": true,
+  "supportingDocumentsText": "",
+  "allowDuringNotice": true,
+  "requiresWorkflow": true,
+  "leaveBalanceDeductionBefore": true,
+  "leaveBalanceDeductionAfter": false,
+  "leaveBalanceDeductionNotAllowed": false,
+  "gracePeriod": 1,
+  "allowWithdrawalBeforeApproval": true,
+  "allowWithdrawalAfterApproval": false,
+  "allowWithdrawalNotAllowed": false,
+  "negativeLeaveBalance": 0,
+  "carryForwardLimit": 0,
+  "carryForwardPeriod": "month",
+  "encashment": false,
+  "encashmentCalculation": "basic_da",
+  "maxEncashmentDays": 0,
+  "encashmentTiming": "exit_retirement",
+  "allowApplicationsOnBehalf": true,
+  "showAvailedLeaves": false,
+  "showBalanceLeaves": false,
+  "maximumBalance": 0
+}
+orgContext.ts:14 [OrgContext] Reading org_id from localStorage: 18
+queryClient.ts:17 [API Request] Sending X-Org-Id header: 18 for PATCH /api/leave-variants/48
+LeaveConfigForm.tsx:424 API request completed successfully
+LeaveConfigForm.tsx:425 Response: Response {type: 'basic', url: 'https://f1ff95f5-c5e9-4a48-8b7d-e5003e7e46b5-00-2ouzfopqowui7.kirk.replit.dev/api/leave-variants/48', redirected: false, status: 200, ok: true, …}
+orgContext.ts:14 [OrgContext] Reading org_id from localStorage: 18
+queryClient.ts:45 [Query Request] Sending X-Org-Id header: 18 for GET /api/leave-types
+orgContext.ts:14 [OrgContext] Reading org_id from localStorage: 18
+queryClient.ts:45 [Query Request] Sending X-Org-Id header: 18 for GET /api/leave-variants

@@ -1,0 +1,111 @@
+🧪 [MANUAL TEST] Testing validation with current form data
+LeaveApplications.tsx:1886 🧪 [MANUAL TEST] Current formData: {startDate: '2025-07-10', endDate: '2025-07-10', reason: '', description: '', halfDay: false, …}
+LeaveApplications.tsx:1887 🧪 [MANUAL TEST] Selected leave type: undefined
+LeaveApplications.tsx:1888 🧪 [MANUAL TEST] Current user ID: 2161
+LeaveApplications.tsx:1889 🧪 [MANUAL TEST] Leave requests count: 7
+LeaveApplications.tsx:121 Current user ID from localStorage: 2161
+LeaveApplications.tsx:163 📋 [Transaction Debug] User 2161: {transactionCount: 103, pendingDeductions: 0, samplePendingTransactions: Array(0)}
+LeaveApplications.tsx:209 === LEAVE TYPE FILTERING DEBUG ===
+LeaveApplications.tsx:210 Current user ID: 2161
+LeaveApplications.tsx:211 All assignments: (97) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:212 All variants: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:218 User assignments: (3) [{…}, {…}, {…}]
+LeaveApplications.tsx:221 Assigned variant IDs: (3) [57, 58, 60]
+LeaveApplications.tsx:227 Available leave variants: (3) [{…}, {…}, {…}]
+LeaveApplications.tsx:228 ===============================
+LeaveApplications.tsx:1021 === BALANCE CALCULATION DEBUG ===
+LeaveApplications.tsx:1022 Current user ID: 2161
+LeaveApplications.tsx:1023 User assignments: (3) [{…}, {…}, {…}]
+LeaveApplications.tsx:1024 Assigned variant IDs: (3) [57, 58, 60]
+LeaveApplications.tsx:1025 Available leave variants: (3) [{…}, {…}, {…}]
+LeaveApplications.tsx:1026 Leave balances for user 2161 : (3) [{…}, {…}, {…}]
+LeaveApplications.tsx:1027 Raw leaveBalances from API: (3) [{…}, {…}, {…}]
+LeaveApplications.tsx:1028 All assignments array from API: (97) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:1029 All assignments length: 97
+LeaveApplications.tsx:1033 Filtered balances for summary cards: (3) [{…}, {…}, {…}]
+LeaveApplications.tsx:1034 Total entitlement calculation: (3) [{…}, {…}, {…}]
+LeaveApplications.tsx:1040 Total entitlement sum: 251.5
+LeaveApplications.tsx:1050 === TOTAL BALANCE CALCULATION ===
+LeaveApplications.tsx:1051 Filtered balances used for total: (3) [{…}, {…}, {…}]
+LeaveApplications.tsx:1056 Step by step calculation:
+LeaveApplications.tsx:1060   1. Variant 57: 234.55 -> 234.55 (include: true)
+LeaveApplications.tsx:1060   2. Variant 58: 6.00 -> 6 (include: true)
+LeaveApplications.tsx:1060   3. Variant 60: 2.50 -> 2.5 (include: true)
+LeaveApplications.tsx:1062 Total balance result: 243.05
+LeaveApplications.tsx:1063 Should equal sum of visible balances: 13.5 + 4.0 + 9.0 = 26.5
+LeaveApplications.tsx:1064 ==================================
+LeaveApplications.tsx:1314 === CORRECTED BALANCE CALCULATION ===
+LeaveApplications.tsx:1315 Total Leaves: 251.5
+LeaveApplications.tsx:1316 Total Availed: 0
+LeaveApplications.tsx:1317 Calculated Balance (Total Leaves - Total Availed): 251.5
+LeaveApplications.tsx:1318 ====================================
+LeaveApplications.tsx:1471 🔍 [AVAILED CALCULATION] User 2161, Earned Leave: {variantId: 57, isBeforeWorkflow: true, leaveBalanceDeductionBefore: true, totalTransactions: 37, pendingDeductions: 0, …}
+LeaveApplications.tsx:1532 💯 [FINAL AVAILED] Earned Leave: {variantId: 57, usageTransactionsCount: 0, usageTransactions: Array(0), finalAvailed: 0}
+LeaveApplications.tsx:1471 🔍 [AVAILED CALCULATION] User 2161, Sick Leave/ Casual Leave: {variantId: 58, isBeforeWorkflow: true, leaveBalanceDeductionBefore: true, totalTransactions: 33, pendingDeductions: 0, …}
+LeaveApplications.tsx:1532 💯 [FINAL AVAILED] Sick Leave/ Casual Leave: {variantId: 58, usageTransactionsCount: 0, usageTransactions: Array(0), finalAvailed: 0}
+LeaveApplications.tsx:1757 🔍 [TABLE AVAILED] Variant 57 (Earned Leave): {isBeforeWorkflow: true, totalTransactions: 37, usageTransactions: 0, pendingDeductions: 0, finalAvailed: 0}
+LeaveApplications.tsx:1757 🔍 [TABLE AVAILED] Variant 60 (Paternity Leave): {isBeforeWorkflow: true, totalTransactions: 33, usageTransactions: 0, pendingDeductions: 0, finalAvailed: 0}
+LeaveApplications.tsx:1757 🔍 [TABLE AVAILED] Variant 58 (Sick Leave/Casual Leave): {isBeforeWorkflow: true, totalTransactions: 33, usageTransactions: 0, pendingDeductions: 0, finalAvailed: 0}
+LeaveApplications.tsx:60 === LEAVE PERMISSION DEBUG ===
+LeaveApplications.tsx:61 Current role from localStorage: admin
+LeaveApplications.tsx:62 Current org_id from localStorage: 38
+LeaveApplications.tsx:63 Full permissions hook result: {permissions: {…}, loading: false, hasPermission: ƒ, canViewScreen: ƒ, canModifyScreen: ƒ, …}
+LeaveApplications.tsx:64 permissions.permissions: {pto: {…}, roles: {…}, adminPTO: {…}, holidays: {…}, approvals: {…}, …}
+LeaveApplications.tsx:65 allowOnBehalf from permissions.permissions: {pto: true, leave: true, compOff: true}
+LeaveApplications.tsx:66 allowOnBehalf.leave: true
+LeaveApplications.tsx:67 Should show checkbox? true
+LeaveApplications.tsx:68 ================================
+LeaveApplications.tsx:421 🔥 validateDates CALLED! {selectedLeaveType: undefined, startDate: '2025-07-10', endDate: '2025-07-10', currentUserId: '2161'}
+LeaveApplications.tsx:429 Early return - missing data
+LeaveApplications.tsx:121 Current user ID from localStorage: 2161
+LeaveApplications.tsx:163 📋 [Transaction Debug] User 2161: {transactionCount: 103, pendingDeductions: 0, samplePendingTransactions: Array(0)}
+LeaveApplications.tsx:209 === LEAVE TYPE FILTERING DEBUG ===
+LeaveApplications.tsx:210 Current user ID: 2161
+LeaveApplications.tsx:211 All assignments: (97) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:212 All variants: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:218 User assignments: (3) [{…}, {…}, {…}]
+LeaveApplications.tsx:221 Assigned variant IDs: (3) [57, 58, 60]
+LeaveApplications.tsx:227 Available leave variants: (3) [{…}, {…}, {…}]
+LeaveApplications.tsx:228 ===============================
+LeaveApplications.tsx:1021 === BALANCE CALCULATION DEBUG ===
+LeaveApplications.tsx:1022 Current user ID: 2161
+LeaveApplications.tsx:1023 User assignments: (3) [{…}, {…}, {…}]
+LeaveApplications.tsx:1024 Assigned variant IDs: (3) [57, 58, 60]
+LeaveApplications.tsx:1025 Available leave variants: (3) [{…}, {…}, {…}]
+LeaveApplications.tsx:1026 Leave balances for user 2161 : (3) [{…}, {…}, {…}]
+LeaveApplications.tsx:1027 Raw leaveBalances from API: (3) [{…}, {…}, {…}]
+LeaveApplications.tsx:1028 All assignments array from API: (97) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:1029 All assignments length: 97
+LeaveApplications.tsx:1033 Filtered balances for summary cards: (3) [{…}, {…}, {…}]
+LeaveApplications.tsx:1034 Total entitlement calculation: (3) [{…}, {…}, {…}]
+LeaveApplications.tsx:1040 Total entitlement sum: 251.5
+LeaveApplications.tsx:1050 === TOTAL BALANCE CALCULATION ===
+LeaveApplications.tsx:1051 Filtered balances used for total: (3) [{…}, {…}, {…}]
+LeaveApplications.tsx:1056 Step by step calculation:
+LeaveApplications.tsx:1060   1. Variant 57: 234.55 -> 234.55 (include: true)
+LeaveApplications.tsx:1060   2. Variant 58: 6.00 -> 6 (include: true)
+LeaveApplications.tsx:1060   3. Variant 60: 2.50 -> 2.5 (include: true)
+LeaveApplications.tsx:1062 Total balance result: 243.05
+LeaveApplications.tsx:1063 Should equal sum of visible balances: 13.5 + 4.0 + 9.0 = 26.5
+LeaveApplications.tsx:1064 ==================================
+LeaveApplications.tsx:1314 === CORRECTED BALANCE CALCULATION ===
+LeaveApplications.tsx:1315 Total Leaves: 251.5
+LeaveApplications.tsx:1316 Total Availed: 0
+LeaveApplications.tsx:1317 Calculated Balance (Total Leaves - Total Availed): 251.5
+LeaveApplications.tsx:1318 ====================================
+LeaveApplications.tsx:1471 🔍 [AVAILED CALCULATION] User 2161, Earned Leave: {variantId: 57, isBeforeWorkflow: true, leaveBalanceDeductionBefore: true, totalTransactions: 37, pendingDeductions: 0, …}
+LeaveApplications.tsx:1532 💯 [FINAL AVAILED] Earned Leave: {variantId: 57, usageTransactionsCount: 0, usageTransactions: Array(0), finalAvailed: 0}
+LeaveApplications.tsx:1471 🔍 [AVAILED CALCULATION] User 2161, Sick Leave/ Casual Leave: {variantId: 58, isBeforeWorkflow: true, leaveBalanceDeductionBefore: true, totalTransactions: 33, pendingDeductions: 0, …}
+LeaveApplications.tsx:1532 💯 [FINAL AVAILED] Sick Leave/ Casual Leave: {variantId: 58, usageTransactionsCount: 0, usageTransactions: Array(0), finalAvailed: 0}
+LeaveApplications.tsx:1757 🔍 [TABLE AVAILED] Variant 57 (Earned Leave): {isBeforeWorkflow: true, totalTransactions: 37, usageTransactions: 0, pendingDeductions: 0, finalAvailed: 0}
+LeaveApplications.tsx:1757 🔍 [TABLE AVAILED] Variant 60 (Paternity Leave): {isBeforeWorkflow: true, totalTransactions: 33, usageTransactions: 0, pendingDeductions: 0, finalAvailed: 0}
+LeaveApplications.tsx:1757 🔍 [TABLE AVAILED] Variant 58 (Sick Leave/Casual Leave): {isBeforeWorkflow: true, totalTransactions: 33, usageTransactions: 0, pendingDeductions: 0, finalAvailed: 0}
+LeaveApplications.tsx:60 === LEAVE PERMISSION DEBUG ===
+LeaveApplications.tsx:61 Current role from localStorage: admin
+LeaveApplications.tsx:62 Current org_id from localStorage: 38
+LeaveApplications.tsx:63 Full permissions hook result: {permissions: {…}, loading: false, hasPermission: ƒ, canViewScreen: ƒ, canModifyScreen: ƒ, …}
+LeaveApplications.tsx:64 permissions.permissions: {pto: {…}, roles: {…}, adminPTO: {…}, holidays: {…}, approvals: {…}, …}
+LeaveApplications.tsx:65 allowOnBehalf from permissions.permissions: {pto: true, leave: true, compOff: true}
+LeaveApplications.tsx:66 allowOnBehalf.leave: true
+LeaveApplications.tsx:67 Should show checkbox? true
+LeaveApplications.tsx:68 ================================

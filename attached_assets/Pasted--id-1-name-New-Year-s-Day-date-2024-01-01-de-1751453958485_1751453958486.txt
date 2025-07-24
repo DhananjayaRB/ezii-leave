@@ -1,0 +1,102 @@
+[
+    {
+        "id": 1,
+        "name": "New Year's Day",
+        "date": "2024-01-01",
+        "description": "First day of the year",
+        "isRecurring": true,
+        "orgId": 60,
+        "createdAt": "2025-06-13T04:17:15.839Z",
+        "updatedAt": "2025-06-13T04:17:15.839Z"
+    },
+    {
+        "id": 2,
+        "name": "Martin Luther King Jr. Day",
+        "date": "2024-01-15",
+        "description": "Federal holiday honoring civil rights leader",
+        "isRecurring": true,
+        "orgId": 60,
+        "createdAt": "2025-06-13T04:17:15.839Z",
+        "updatedAt": "2025-06-13T04:17:15.839Z"
+    },
+    {
+        "id": 3,
+        "name": "Presidents' Day",
+        "date": "2024-02-19",
+        "description": "Federal holiday honoring US presidents",
+        "isRecurring": true,
+        "orgId": 60,
+        "createdAt": "2025-06-13T04:17:15.839Z",
+        "updatedAt": "2025-06-13T04:17:15.839Z"
+    },
+    {
+        "id": 4,
+        "name": "Memorial Day",
+        "date": "2024-05-27",
+        "description": "Day to honor military personnel who died in service",
+        "isRecurring": true,
+        "orgId": 60,
+        "createdAt": "2025-06-13T04:17:15.839Z",
+        "updatedAt": "2025-06-13T04:17:15.839Z"
+    },
+    {
+        "id": 5,
+        "name": "Independence Day",
+        "date": "2024-07-04",
+        "description": "US Independence Day",
+        "isRecurring": true,
+        "orgId": 60,
+        "createdAt": "2025-06-13T04:17:15.839Z",
+        "updatedAt": "2025-06-13T04:17:15.839Z"
+    },
+    {
+        "id": 6,
+        "name": "Labor Day",
+        "date": "2024-09-02",
+        "description": "Federal holiday celebrating workers",
+        "isRecurring": true,
+        "orgId": 60,
+        "createdAt": "2025-06-13T04:17:15.839Z",
+        "updatedAt": "2025-06-13T04:17:15.839Z"
+    },
+    {
+        "id": 7,
+        "name": "Columbus Day",
+        "date": "2024-10-14",
+        "description": "Federal holiday commemorating Christopher Columbus",
+        "isRecurring": true,
+        "orgId": 60,
+        "createdAt": "2025-06-13T04:17:15.839Z",
+        "updatedAt": "2025-06-13T04:17:15.839Z"
+    },
+    {
+        "id": 8,
+        "name": "Veterans Day",
+        "date": "2024-11-11",
+        "description": "Day to honor military veterans",
+        "isRecurring": true,
+        "orgId": 60,
+        "createdAt": "2025-06-13T04:17:15.839Z",
+        "updatedAt": "2025-06-13T04:17:15.839Z"
+    },
+    {
+        "id": 9,
+        "name": "Thanksgiving Day",
+        "date": "2024-11-28",
+        "description": "Day of thanksgiving and gratitude",
+        "isRecurring": true,
+        "orgId": 60,
+        "createdAt": "2025-06-13T04:17:15.839Z",
+        "updatedAt": "2025-06-13T04:17:15.839Z"
+    },
+    {
+        "id": 10,
+        "name": "Christmas Day",
+        "date": "2024-12-25",
+        "description": "Christian holiday celebrating birth of Jesus",
+        "isRecurring": true,
+        "orgId": 60,
+        "createdAt": "2025-06-13T04:17:15.839Z",
+        "updatedAt": "2025-06-13T04:17:15.839Z"
+    }
+]

@@ -1,0 +1,137 @@
+
+﻿
+HRLeaveBalanceReport.tsx:58 [HR Report] Debug data:
+HRLeaveBalanceReport.tsx:59 All balances: 93 
+(93) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+HRLeaveBalanceReport.tsx:60 All transactions: 399 
+(399) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, …]
+HRLeaveBalanceReport.tsx:61 All assignments: 93 
+(93) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+HRLeaveBalanceReport.tsx:62 Leave variants: 4
+HRLeaveBalanceReport.tsx:63 External employees: 0
+HRLeaveBalanceReport.tsx:67 [HR Report] DB061 Employee found: undefined
+HRLeaveBalanceReport.tsx:71 [HR Report] User 2162 balances: 
+(3) [{…}, {…}, {…}]
+HRLeaveBalanceReport.tsx:77 [HR Report] Employee IDs from assignments: 
+(93) ['2161', '2162', '2163', '2164', '2165', '2166', '2167', '2168', '2169', '2170', '2171', '2172', '2173', '2174', '2175', '2176', '2177', '2178', '2179', '2180', '2181', '2376', '2545', '3571', '14616', '14757', '55998', '58011', '58976', '60285', '60838', '2161', '2162', '2163', '2164', '2165', '2166', '2167', '2168', '2169', '2170', '2171', '2172', '2173', '2174', '2175', '2176', '2177', '2178', '2179', '2180', '2181', '2376', '2545', '3571', '14616', '14757', '55998', '58011', '58976', '60285', '60838', '2162', '2176', '2180', '2161', '2163', '2164', '2165', '2166', '2167', '2168', '2169', '2170', '2171', '2172', '2173', '2174', '2175', '2177', '2178', '2179', '2181', '2376', '2545', '3571', '14616', '14757', '55998', '58011', '58976', '60285', '60838']
+HRLeaveBalanceReport.tsx:78 [HR Report] Employee IDs from balances: 
+(93) ['2163', '2165', '2172', '2167', '2168', '2169', '2164', '2162', '2170', '2171', '2165', '2166', '2174', '2180', '2167', '2168', '2169', '2170', '2171', '2174', '14757', '2175', '2178', '2179', '2180', '3571', '60285', '14616', '14757', '55998', '58011', '60285', '60838', '2161', '2163', '2173', '2376', '2545', '2176', '2177', '2181', '58976', '2161', '2162', '2164', '2161', '2175', '2178', '2179', '2181', '60838', '2162', '2176', '2180', '2163', '2164', '2165', '2166', '2167', '2168', '2169', '2170', '2171', '2172', '2173', '2174', '2175', '2177', '2178', '2179', '2181', '2376', '2545', '3571', '2166', '2172', '2173', '2176', '2177', '2376', '2545', '3571', '14616', '14757', '55998', '58011', '58976', '60285', '60838', '14616', '55998', '58011', '58976']
+HRLeaveBalanceReport.tsx:79 [HR Report] Combined employee IDs: 
+(31) ['2161', '2162', '2163', '2164', '2165', '2166', '2167', '2168', '2169', '2170', '2171', '2172', '2173', '2174', '2175', '2176', '2177', '2178', '2179', '2180', '2181', '2376', '2545', '3571', '14616', '14757', '55998', '58011', '58976', '60285', '60838']
+HRLeaveBalanceReport.tsx:190 [HR Report AVAILED Debug] User 2161, Variant 57 (Earned Leave): 
+{variantName: 'Earned Leave', isBeforeWorkflow: true, leaveBalanceDeductionBefore: true, totalTransactions: 8, pendingDeductions: 2, …}
+HRLeaveBalanceReport.tsx:233 [HR Report] Transaction analysis: 
+{id: 9462, type: 'pending_deduction', amount: '-4.00', description: 'Pending leave deduction: 4.0 days (Before Workflow)', isBeforeWorkflow: true, …}
+HRLeaveBalanceReport.tsx:233 [HR Report] Transaction analysis: 
+{id: 9464, type: 'pending_deduction', amount: '-3.00', description: 'Pending leave deduction: 3.0 days (Before Workflow)', isBeforeWorkflow: true, …}
+HRLeaveBalanceReport.tsx:255 [HR Report AVAILED Result] User 2161, Variant 57: 
+{usageTransactionsCount: 2, availedAmount: 7, usageTransactions: Array(2)}
+HRLeaveBalanceReport.tsx:190 [HR Report AVAILED Debug] User 2161, Variant 58 (Sick Leave/ Casual Leave): 
+{variantName: 'Sick Leave/ Casual Leave', isBeforeWorkflow: true, leaveBalanceDeductionBefore: true, totalTransactions: 5, pendingDeductions: 3, …}
+HRLeaveBalanceReport.tsx:233 [HR Report] Transaction analysis: 
+{id: 9463, type: 'pending_deduction', amount: '-1.00', description: 'Pending leave deduction: 1.0 days (Before Workflow)', isBeforeWorkflow: true, …}
+HRLeaveBalanceReport.tsx:233 [HR Report] Transaction analysis: 
+{id: 9465, type: 'pending_deduction', amount: '-2.00', description: 'Pending leave deduction: 2.0 days (Before Workflow)', isBeforeWorkflow: true, …}
+HRLeaveBalanceReport.tsx:233 [HR Report] Transaction analysis: 
+{id: 9466, type: 'pending_deduction', amount: '-0.50', description: 'Pending leave deduction: 0.5 days (Before Workflow)', isBeforeWorkflow: true, …}
+HRLeaveBalanceReport.tsx:255 [HR Report AVAILED Result] User 2161, Variant 58: 
+{usageTransactionsCount: 3, availedAmount: 3.5, usageTransactions: Array(3)}
+HRLeaveBalanceReport.tsx:190 [HR Report AVAILED Debug] User 2161, Variant 60 (Paternity Leave): 
+{variantName: 'Paternity Leave', isBeforeWorkflow: true, leaveBalanceDeductionBefore: true, totalTransactions: 2, pendingDeductions: 0, …}
+HRLeaveBalanceReport.tsx:255 [HR Report AVAILED Result] User 2161, Variant 60: 
+{usageTransactionsCount: 0, availedAmount: 0, usageTransactions: Array(0)}
+HRLeaveBalanceReport.tsx:183 [HR Report DB061 Debug] Found user 2162 with employee_number: undefined
+HRLeaveBalanceReport.tsx:184 [HR Report DB061 Debug] Variant transactions for user 2162: 
+(7) [{…}, {…}, {…}, {…}, {…}, {…}, {…}]
+HRLeaveBalanceReport.tsx:185 [HR Report DB061 Debug] Variant data for user 2162: 
+{id: 57, leaveTypeId: 53, leaveTypeName: 'Earned Leave', leaveVariantName: 'Earned Leave', description: 'Earned Leave All Employees', …}
+HRLeaveBalanceReport.tsx:186 [HR Report DB061 Debug] Leave type data for user 2162: 
+{id: 53, name: 'Earned Leave', description: null, icon: 'smile', color: '#3b82f6', …}
+HRLeaveBalanceReport.tsx:190 [HR Report AVAILED Debug] User 2162, Variant 57 (Earned Leave): 
+{variantName: 'Earned Leave', isBeforeWorkflow: true, leaveBalanceDeductionBefore: true, totalTransactions: 7, pendingDeductions: 1, …}
+HRLeaveBalanceReport.tsx:233 [HR Report] Transaction analysis: 
+{id: 9467, type: 'pending_deduction', amount: '-4.00', description: 'Pending leave deduction: 4.0 days (Before Workflow)', isBeforeWorkflow: true, …}
+HRLeaveBalanceReport.tsx:255 [HR Report AVAILED Result] User 2162, Variant 57: 
+{usageTransactionsCount: 1, availedAmount: 4, usageTransactions: Array(1)}
+HRLeaveBalanceReport.tsx:183 [HR Report DB061 Debug] Found user 2162 with employee_number: undefined
+HRLeaveBalanceReport.tsx:184 [HR Report DB061 Debug] Variant transactions for user 2162: 
+(7) [{…}, {…}, {…}, {…}, {…}, {…}, {…}]
+HRLeaveBalanceReport.tsx:185 [HR Report DB061 Debug] Variant data for user 2162: 
+{id: 58, leaveTypeId: 54, leaveTypeName: 'Sick Leave/ Casual Leave', leaveVariantName: 'Sick Leave/Casual Leave', description: 'Sick Leave/Casual Leave All Employees', …}
+HRLeaveBalanceReport.tsx:186 [HR Report DB061 Debug] Leave type data for user 2162: 
+{id: 54, name: 'Sick Leave/ Casual Leave', description: 'Sick Leave/ Casual Leave All Employees', icon: 'umbrella', color: '#3b82f6', …}
+HRLeaveBalanceReport.tsx:190 [HR Report AVAILED Debug] User 2162, Variant 58 (Sick Leave/ Casual Leave): 
+{variantName: 'Sick Leave/ Casual Leave', isBeforeWorkflow: true, leaveBalanceDeductionBefore: true, totalTransactions: 7, pendingDeductions: 0, …}
+HRLeaveBalanceReport.tsx:233 [HR Report] Transaction analysis: 
+{id: 9255, type: 'deduction', amount: '-1.00', description: 'Imported leave transaction: 13-01-2025 to 13-01-2025 (1 days) - Status: approved', isBeforeWorkflow: true, …}
+HRLeaveBalanceReport.tsx:233 [HR Report] Transaction analysis: 
+{id: 9256, type: 'deduction', amount: '-1.00', description: 'Imported leave transaction: 04-03-2025 to 04-03-2025 (1 days) - Status: approved', isBeforeWorkflow: true, …}
+HRLeaveBalanceReport.tsx:233 [HR Report] Transaction analysis: 
+{id: 9257, type: 'deduction', amount: '-1.00', description: 'Imported leave transaction: 17-03-2025 to 17-03-2025 (1 days) - Status: approved', isBeforeWorkflow: true, …}
+HRLeaveBalanceReport.tsx:233 [HR Report] Transaction analysis: 
+{id: 9258, type: 'deduction', amount: '-1.00', description: 'Imported leave transaction: 18-03-2025 to 18-03-2025 (1 days) - Status: approved', isBeforeWorkflow: true, …}
+HRLeaveBalanceReport.tsx:233 [HR Report] Transaction analysis: 
+{id: 9259, type: 'deduction', amount: '-1.00', description: 'Imported leave transaction: 23-05-2025 to 23-05-2025 (1 days) - Status: approved', isBeforeWorkflow: true, …}
+HRLeaveBalanceReport.tsx:255 [HR Report AVAILED Result] User 2162, Variant 58: 
+{usageTransactionsCount: 5, availedAmount: 5, usageTransactions: Array(5)}
+HRLeaveBalanceReport.tsx:183 [HR Report DB061 Debug] Found user 2162 with employee_number: undefined
+HRLeaveBalanceReport.tsx:184 [HR Report DB061 Debug] Variant transactions for user 2162: 
+(2) [{…}, {…}]
+HRLeaveBalanceReport.tsx:185 [HR Report DB061 Debug] Variant data for user 2162: 
+{id: 59, leaveTypeId: 55, leaveTypeName: 'Maternity Leave', leaveVariantName: 'Maternity Leave', description: 'Maternity Leave (Women Employees)', …}
+HRLeaveBalanceReport.tsx:186 [HR Report DB061 Debug] Leave type data for user 2162: 
+{id: 55, name: 'Maternity Leave', description: null, icon: 'baby', color: '#ec4899', …}
+HRLeaveBalanceReport.tsx:190 [HR Report AVAILED Debug] User 2162, Variant 59 (Maternity Leave): 
+{variantName: 'Maternity Leave', isBeforeWorkflow: true, leaveBalanceDeductionBefore: true, totalTransactions: 2, pendingDeductions: 0, …}
+HRLeaveBalanceReport.tsx:255 [HR Report AVAILED Result] User 2162, Variant 59: 
+{usageTransactionsCount: 0, availedAmount: 0, usageTransactions: Array(0)}
+HRLeaveBalanceReport.tsx:183 [HR Report DB061 Debug] Found user 2176 with employee_number: undefined
+HRLeaveBalanceReport.tsx:184 [HR Report DB061 Debug] Variant transactions for user 2176: 
+(7) [{…}, {…}, {…}, {…}, {…}, {…}, {…}]
+HRLeaveBalanceReport.tsx:185 [HR Report DB061 Debug] Variant data for user 2176: 
+{id: 57, leaveTypeId: 53, leaveTypeName: 'Earned Leave', leaveVariantName: 'Earned Leave', description: 'Earned Leave All Employees', …}
+HRLeaveBalanceReport.tsx:186 [HR Report DB061 Debug] Leave type data for user 2176: 
+{id: 53, name: 'Earned Leave', description: null, icon: 'smile', color: '#3b82f6', …}
+HRLeaveBalanceReport.tsx:190 [HR Report AVAILED Debug] User 2176, Variant 57 (Earned Leave): 
+{variantName: 'Earned Leave', isBeforeWorkflow: true, leaveBalanceDeductionBefore: true, totalTransactions: 7, pendingDeductions: 1, …}
+HRLeaveBalanceReport.tsx:233 [HR Report] Transaction analysis: 
+{id: 9473, type: 'pending_deduction', amount: '-3.00', description: 'Pending leave deduction: 3.0 days (Before Workflow)', isBeforeWorkflow: true, …}
+HRLeaveBalanceReport.tsx:255 [HR Report AVAILED Result] User 2176, Variant 57: 
+{usageTransactionsCount: 1, availedAmount: 3, usageTransactions: Array(1)}
+HRLeaveBalanceReport.tsx:183 [HR Report DB061 Debug] Found user 2176 with employee_number: undefined
+HRLeaveBalanceReport.tsx:184 [HR Report DB061 Debug] Variant transactions for user 2176: 
+(4) [{…}, {…}, {…}, {…}]
+HRLeaveBalanceReport.tsx:185 [HR Report DB061 Debug] Variant data for user 2176: 
+{id: 58, leaveTypeId: 54, leaveTypeName: 'Sick Leave/ Casual Leave', leaveVariantName: 'Sick Leave/Casual Leave', description: 'Sick Leave/Casual Leave All Employees', …}
+HRLeaveBalanceReport.tsx:186 [HR Report DB061 Debug] Leave type data for user 2176: 
+{id: 54, name: 'Sick Leave/ Casual Leave', description: 'Sick Leave/ Casual Leave All Employees', icon: 'umbrella', color: '#3b82f6', …}
+HRLeaveBalanceReport.tsx:190 [HR Report AVAILED Debug] User 2176, Variant 58 (Sick Leave/ Casual Leave): 
+{variantName: 'Sick Leave/ Casual Leave', isBeforeWorkflow: true, leaveBalanceDeductionBefore: true, totalTransactions: 4, pendingDeductions: 1, …}
+HRLeaveBalanceReport.tsx:233 [HR Report] Transaction analysis: 
+{id: 9284, type: 'deduction', amount: '-2.00', description: 'Imported leave transaction: 13-03-2025 to 14-03-2025 (2 days) - Status: approved', isBeforeWorkflow: true, …}
+HRLeaveBalanceReport.tsx:233 [HR Report] Transaction analysis: 
+{id: 9474, type: 'pending_deduction', amount: '-1.00', description: 'Pending leave deduction: 1.0 days (Before Workflow)', isBeforeWorkflow: true, …}
+HRLeaveBalanceReport.tsx:255 [HR Report AVAILED Result] User 2176, Variant 58: 
+{usageTransactionsCount: 2, availedAmount: 3, usageTransactions: Array(2)}
+HRLeaveBalanceReport.tsx:183 [HR Report DB061 Debug] Found user 2176 with employee_number: undefined
+HRLeaveBalanceReport.tsx:184 [HR Report DB061 Debug] Variant transactions for user 2176: 
+(2) [{…}, {…}]
+HRLeaveBalanceReport.tsx:185 [HR Report DB061 Debug] Variant data for user 2176: 
+{id: 59, leaveTypeId: 55, leaveTypeName: 'Maternity Leave', leaveVariantName: 'Maternity Leave', description: 'Maternity Leave (Women Employees)', …}
+HRLeaveBalanceReport.tsx:186 [HR Report DB061 Debug] Leave type data for user 2176: 
+{id: 55, name: 'Maternity Leave', description: null, icon: 'baby', color: '#ec4899', …}
+HRLeaveBalanceReport.tsx:190 [HR Report AVAILED Debug] User 2176, Variant 59 (Maternity Leave): 
+{variantName: 'Maternity Leave', isBeforeWorkflow: true, leaveBalanceDeductionBefore: true, totalTransactions: 2, pendingDeductions: 0, …}
+HRLeaveBalanceReport.tsx:255 [HR Report AVAILED Result] User 2176, Variant 59: 
+{usageTransactionsCount: 0, availedAmount: 0, usageTransactions: Array(0)}
+usePermissions.ts:137 Using cached permissions to prevent flickering
+HRLeaveBalanceReport.tsx:58 [HR Report] Debug data:
+HRLeaveBalanceReport.tsx:59 All balances: 93 
+(93) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+HRLeaveBalanceReport.tsx:60 All transactions: 399 
+(399) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, …]
+HRLeaveBalanceReport.tsx:61 All assignments: 93 
+(93) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+HRLeaveBalanceReport.tsx:62 Leave variants: 4
+HRLeaveBalanceReport.tsx:63 External employees: 0
+﻿

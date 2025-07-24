@@ -1,0 +1,72 @@
+[AdminOverview] Calculating analytics from: {transactionCount: 0, requestCount: 132, sampleTransaction: undefined, sampleRequest: {…}, requestStatuses: Array(3), …}
+AdminOverview.tsx:122 [AdminOverview] Request status counts: {pending: 18, approved: 107, rejected: 0, total: 132}
+AdminOverview.tsx:137 [AdminOverview] Transaction analysis: {totalTransactions: 0, sampleTransactions: Array(0), transactionTypes: Array(0), descriptions: Array(0)}
+AdminOverview.tsx:164 [AdminOverview] Analytics breakdown: {deductionCount: 0, additionCount: 0, totalGrantedHalfDays: 0, totalAvailedHalfDays: 0, encashed: 0, …}
+AdminOverview.tsx:181 [AdminOverview] Final analytics result: {pending: 18, approved: 107, rejected: 0, onLeave: 0, workingDaysAvailed: 138, …}
+AdminOverview.tsx:211 [AdminOverview] Raw data analysis: {transactionCount: 0, requestCount: 132, selectedYear: '2025', sampleTransaction: undefined, sampleRequest: {…}, …}
+AdminOverview.tsx:244 [AdminOverview] Jan calculation: {monthRequests: 16, totalWorkingDays: 16.5, earnedLeave: 8, casualLeave: 4, sickLeave: 4.5, …}
+AdminOverview.tsx:244 [AdminOverview] Feb calculation: {monthRequests: 23, totalWorkingDays: 29, earnedLeave: 14, casualLeave: 8, sickLeave: 7, …}
+AdminOverview.tsx:265 [AdminOverview] Monthly data calculated: (12) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+AdminOverview.tsx:781 [AdminOverview] Month Jan chart data: {total: 16.5, maxValue: 50, heightPercentage: 33, earnedLeave: 8, casualLeave: 4, …}
+AdminOverview.tsx:781 [AdminOverview] Month Feb chart data: {total: 29, maxValue: 50, heightPercentage: 57.99999999999999, earnedLeave: 14, casualLeave: 8, …}
+AdminOverview.tsx:781 [AdminOverview] Month Mar chart data: {total: 29, maxValue: 50, heightPercentage: 57.99999999999999, earnedLeave: 14, casualLeave: 8, …}
+usePermissions.ts:137 Using cached permissions to prevent flickering
+useWorkPattern.ts:66 [WorkPattern] Fetching work patterns for user: 60838
+orgContext.ts:14 [OrgContext] Reading org_id from localStorage: 38
+queryClient.ts:61 [Query Request] Sending X-Org-Id header: 38 for GET /api/employee-leave-balances
+orgContext.ts:14 [OrgContext] Reading org_id from localStorage: 38
+queryClient.ts:61 [Query Request] Sending X-Org-Id header: 38 for GET /api/leave-balance-transactions
+externalApi.ts:48 [ExternalAPI] Starting fetchEmployeeData...
+externalApi.ts:53 [ExternalAPI] JWT token available: true
+externalApi.ts:54 [ExternalAPI] Token length: 321
+externalApi.ts:55 [ExternalAPI] Token preview: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdfaWQiO...
+externalApi.ts:56 [ExternalAPI] Full Authorization header: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdfaWQiOiIzOCIsInVzZXJfaWQiOiIxIiwicm9sZV9pZCI6IjIyOSIsInVzZXJfdHlwZV9pZCI6IjMiLCJyb2xlX25hbWUiOiJhZG1pbiIsIm5iZiI6MTc1MjgxNDI5NCwiZXhwIjoxNzUyODQ0Mjk0LCJpc3MiOiJodHRwczovL2xvY2FsaG9zdDo1MDAzIiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMyJ9.6-EF8CfAO70nQY_fApW61MjQafGLm0pixg1MQeMDeQU
+externalApi.ts:73 [ExternalAPI] Making request to worker-master-leave endpoint...
+externalApi.ts:74 [ExternalAPI] Payload: {userBlocks: Array(3), userWise: 0, workerType: 0, attribute: 0, subAttributeId: 0}
+useWorkPattern.ts:69 
+            
+            
+           GET https://qa-api.resolveindia.com/organization/work-pattern/60838 404 (Not Found)
+fetchWorkPatternAndHolidays @ useWorkPattern.ts:69
+(anonymous) @ useWorkPattern.ts:143
+commitHookEffectListMount @ chunk-RPCDYKBN.js?v=1ecf7195:16915
+commitPassiveMountOnFiber @ chunk-RPCDYKBN.js?v=1ecf7195:18156
+commitPassiveMountEffects_complete @ chunk-RPCDYKBN.js?v=1ecf7195:18129
+commitPassiveMountEffects_begin @ chunk-RPCDYKBN.js?v=1ecf7195:18119
+commitPassiveMountEffects @ chunk-RPCDYKBN.js?v=1ecf7195:18109
+flushPassiveEffectsImpl @ chunk-RPCDYKBN.js?v=1ecf7195:19490
+flushPassiveEffects @ chunk-RPCDYKBN.js?v=1ecf7195:19447
+commitRootImpl @ chunk-RPCDYKBN.js?v=1ecf7195:19416
+commitRoot @ chunk-RPCDYKBN.js?v=1ecf7195:19277
+performSyncWorkOnRoot @ chunk-RPCDYKBN.js?v=1ecf7195:18895
+flushSyncCallbacks @ chunk-RPCDYKBN.js?v=1ecf7195:9119
+(anonymous) @ chunk-RPCDYKBN.js?v=1ecf7195:18627Understand this error
+useWorkPattern.ts:77 [WorkPattern] Work pattern API Response status: 404
+useWorkPattern.ts:130 [WorkPattern] Work pattern API Error: 404 
+AdminOverview.tsx:109 [AdminOverview] Calculating analytics from: {transactionCount: 0, requestCount: 132, sampleTransaction: undefined, sampleRequest: {…}, requestStatuses: Array(3), …}
+AdminOverview.tsx:122 [AdminOverview] Request status counts: {pending: 18, approved: 107, rejected: 0, total: 132}
+AdminOverview.tsx:137 [AdminOverview] Transaction analysis: {totalTransactions: 0, sampleTransactions: Array(0), transactionTypes: Array(0), descriptions: Array(0)}
+AdminOverview.tsx:164 [AdminOverview] Analytics breakdown: {deductionCount: 0, additionCount: 0, totalGrantedHalfDays: 0, totalAvailedHalfDays: 0, encashed: 0, …}
+AdminOverview.tsx:181 [AdminOverview] Final analytics result: {pending: 18, approved: 107, rejected: 0, onLeave: 0, workingDaysAvailed: 138, …}
+AdminOverview.tsx:211 [AdminOverview] Raw data analysis: {transactionCount: 0, requestCount: 132, selectedYear: '2025', sampleTransaction: undefined, sampleRequest: {…}, …}
+AdminOverview.tsx:244 [AdminOverview] Jan calculation: {monthRequests: 16, totalWorkingDays: 16.5, earnedLeave: 8, casualLeave: 4, sickLeave: 4.5, …}
+AdminOverview.tsx:244 [AdminOverview] Feb calculation: {monthRequests: 23, totalWorkingDays: 29, earnedLeave: 14, casualLeave: 8, sickLeave: 7, …}
+AdminOverview.tsx:265 [AdminOverview] Monthly data calculated: (12) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+AdminOverview.tsx:781 [AdminOverview] Month Jan chart data: {total: 16.5, maxValue: 50, heightPercentage: 33, earnedLeave: 8, casualLeave: 4, …}
+AdminOverview.tsx:781 [AdminOverview] Month Feb chart data: {total: 29, maxValue: 50, heightPercentage: 57.99999999999999, earnedLeave: 14, casualLeave: 8, …}
+AdminOverview.tsx:781 [AdminOverview] Month Mar chart data: {total: 29, maxValue: 50, heightPercentage: 57.99999999999999, earnedLeave: 14, casualLeave: 8, …}
+externalApi.ts:85 [ExternalAPI] Response status: 200
+externalApi.ts:94 [ExternalAPI] Response data: {result: 'Success', statuscode: 200, message: ' Worker Master Request ', data: {…}}
+externalApi.ts:101 [ExternalAPI] Successfully fetched 39 employees from external API
+AdminOverview.tsx:109 [AdminOverview] Calculating analytics from: {transactionCount: 0, requestCount: 132, sampleTransaction: undefined, sampleRequest: {…}, requestStatuses: Array(3), …}
+AdminOverview.tsx:122 [AdminOverview] Request status counts: {pending: 18, approved: 107, rejected: 0, total: 132}
+AdminOverview.tsx:137 [AdminOverview] Transaction analysis: {totalTransactions: 0, sampleTransactions: Array(0), transactionTypes: Array(0), descriptions: Array(0)}
+AdminOverview.tsx:164 [AdminOverview] Analytics breakdown: {deductionCount: 0, additionCount: 0, totalGrantedHalfDays: 0, totalAvailedHalfDays: 0, encashed: 0, …}
+AdminOverview.tsx:181 [AdminOverview] Final analytics result: {pending: 18, approved: 107, rejected: 0, onLeave: 0, workingDaysAvailed: 138, …}
+AdminOverview.tsx:211 [AdminOverview] Raw data analysis: {transactionCount: 0, requestCount: 132, selectedYear: '2025', sampleTransaction: undefined, sampleRequest: {…}, …}
+AdminOverview.tsx:244 [AdminOverview] Jan calculation: {monthRequests: 16, totalWorkingDays: 16.5, earnedLeave: 8, casualLeave: 4, sickLeave: 4.5, …}
+AdminOverview.tsx:244 [AdminOverview] Feb calculation: {monthRequests: 23, totalWorkingDays: 29, earnedLeave: 14, casualLeave: 8, sickLeave: 7, …}
+AdminOverview.tsx:265 [AdminOverview] Monthly data calculated: (12) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+AdminOverview.tsx:781 [AdminOverview] Month Jan chart data: {total: 16.5, maxValue: 50, heightPercentage: 33, earnedLeave: 8, casualLeave: 4, …}
+AdminOverview.tsx:781 [AdminOverview] Month Feb chart data: {total: 29, maxValue: 50, heightPercentage: 57.99999999999999, earnedLeave: 14, casualLeave: 8, …}
+AdminOverview.tsx:781 [AdminOverview] Month Mar chart data: {total: 29, maxValue: 50, heightPercentage: 57.99999999999999, earnedLeave: 14, casualLeave: 8, …}

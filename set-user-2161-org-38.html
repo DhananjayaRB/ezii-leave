@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set User Context - 2161/38</title>
+</head>
+<body>
+    <h1>Set User Context to 2161/38</h1>
+    <button id="setContext">Set User 2161, Org 38</button>
+    <div id="status"></div>
+    
+    <script>
+        document.getElementById('setContext').addEventListener('click', function() {
+            // Set user context for user 2161 in org 38
+            localStorage.setItem('user_id', '2161');
+            localStorage.setItem('org_id', '38');
+            localStorage.setItem('role', 'admin');
+            
+            // Add a valid JWT token (you may need to get this from the user)
+            const sampleJWT = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyMTYxIiwib3JnX2lkIjoiMzgiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE2ODk2MTIwMDB9.sample_token';
+            localStorage.setItem('jwt_token', sampleJWT);
+            
+            document.getElementById('status').innerHTML = `
+                <h3>Context Set Successfully:</h3>
+                <p>User ID: ${localStorage.getItem('user_id')}</p>
+                <p>Org ID: ${localStorage.getItem('org_id')}</p>
+                <p>Role: ${localStorage.getItem('role')}</p>
+                <p>JWT Token: Set</p>
+                <p><strong>Now reload the Leave Applications page to test the AVAILED calculation fix.</strong></p>
+            `;
+        });
+    </script>
+</body>
+</html>

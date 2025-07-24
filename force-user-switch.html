@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Force User Switch to 1435</title>
+</head>
+<body>
+    <h1>Switching user_id to 1435 (Manjesh Mohite)</h1>
+    <p>Click the button to force switch to user 1435:</p>
+    <button onclick="switchUser()">Switch to User 1435</button>
+    <p id="status"></p>
+    
+    <script>
+        function switchUser() {
+            localStorage.setItem('user_id', '1435');
+            document.getElementById('status').innerHTML = 'User ID set to: ' + localStorage.getItem('user_id');
+            
+            // Reload the main application
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 1000);
+        }
+        
+        // Show current user ID
+        document.getElementById('status').innerHTML = 'Current user ID: ' + localStorage.getItem('user_id');
+    </script>
+</body>
+</html>

@@ -1,0 +1,237 @@
+{
+    "message": "Work Pattern List",
+    "data": [
+        {
+            "id": 94,
+            "patternName": "Maharastra",
+            "startDate": "2025-01-01T05:30:00",
+            "endDate": "2025-12-31T05:30:00",
+            "numberOfWorkingDays": 249.00,
+            "numberOfNonWorkingDays": 103.00,
+            "totalHolidays": 13.00,
+            "selectedHolidays": [
+                172,
+                173,
+                174,
+                175,
+                188,
+                176,
+                178,
+                179,
+                180,
+                181,
+                182,
+                183,
+                185
+            ],
+            "workType": "standard",
+            "nonWorkingDays": [
+                {
+                    "days": [
+                        "Saturday",
+                        "Sunday"
+                    ],
+                    "selectedInstance": [
+                        "first",
+                        "second",
+                        "third",
+                        "fourth",
+                        "fifth"
+                    ],
+                    "nonWorkingType": "fullDay",
+                    "comment": "'first, second, third, fourth, fifth' 'Saturday, Sunday' are 'fullDay' non working days."
+                }
+            ],
+            "maxHolidaysForEmp": 13,
+            "customDays": null,
+            "employees": null
+        },
+        {
+            "id": 93,
+            "patternName": "Kerala",
+            "startDate": "2025-01-01T05:30:00",
+            "endDate": "2025-12-31T05:30:00",
+            "numberOfWorkingDays": 249.00,
+            "numberOfNonWorkingDays": 103.00,
+            "totalHolidays": 13.00,
+            "selectedHolidays": [
+                172,
+                173,
+                174,
+                186,
+                187,
+                188,
+                176,
+                178,
+                180,
+                181,
+                182,
+                183,
+                185
+            ],
+            "workType": "standard",
+            "nonWorkingDays": [
+                {
+                    "days": [
+                        "Sunday",
+                        "Saturday"
+                    ],
+                    "selectedInstance": [
+                        "first",
+                        "second",
+                        "third",
+                        "fourth",
+                        "fifth"
+                    ],
+                    "nonWorkingType": "fullDay",
+                    "comment": "'first, second, third, fourth, fifth' 'Sunday, Saturday' are 'fullDay' non working days."
+                }
+            ],
+            "maxHolidaysForEmp": 13,
+            "customDays": null,
+            "employees": [
+                1467,
+                1659,
+                1662,
+                1663,
+                14669,
+                14674,
+                14767
+            ]
+        },
+        {
+            "id": 92,
+            "patternName": "Delhi",
+            "startDate": "2025-01-01T05:30:00",
+            "endDate": "2025-12-31T05:30:00",
+            "numberOfWorkingDays": 249.00,
+            "numberOfNonWorkingDays": 103.00,
+            "totalHolidays": 13.00,
+            "selectedHolidays": [
+                172,
+                173,
+                174,
+                186,
+                175,
+                176,
+                178,
+                179,
+                180,
+                181,
+                182,
+                183,
+                185
+            ],
+            "workType": "standard",
+            "nonWorkingDays": [
+                {
+                    "days": [
+                        "Saturday",
+                        "Sunday"
+                    ],
+                    "selectedInstance": [
+                        "first",
+                        "second",
+                        "third",
+                        "fourth",
+                        "fifth"
+                    ],
+                    "nonWorkingType": "fullDay",
+                    "comment": "'first, second, third, fourth, fifth' 'Saturday, Sunday' are 'fullDay' non working days."
+                }
+            ],
+            "maxHolidaysForEmp": 13,
+            "customDays": null,
+            "employees": null
+        },
+        {
+            "id": 91,
+            "patternName": "Bengaluru",
+            "startDate": "2025-01-01T05:30:00",
+            "endDate": "2025-12-31T05:30:00",
+            "numberOfWorkingDays": 249.00,
+            "numberOfNonWorkingDays": 102.00,
+            "totalHolidays": 14.00,
+            "selectedHolidays": [
+                172,
+                173,
+                174,
+                175,
+                176,
+                177,
+                178,
+                179,
+                180,
+                181,
+                182,
+                183,
+                184,
+                185
+            ],
+            "workType": "standard",
+            "nonWorkingDays": [
+                {
+                    "days": [
+                        "Saturday",
+                        "Sunday"
+                    ],
+                    "selectedInstance": [
+                        "first",
+                        "second",
+                        "third",
+                        "fourth",
+                        "fifth"
+                    ],
+                    "nonWorkingType": "fullDay",
+                    "comment": "'first, second, third, fourth, fifth' 'Saturday, Sunday' are 'fullDay' non working days."
+                }
+            ],
+            "maxHolidaysForEmp": 14,
+            "customDays": null,
+            "employees": [
+                1439,
+                1440,
+                1442,
+                1443,
+                1449,
+                1451,
+                1464,
+                1465,
+                1466,
+                1473,
+                1474,
+                1475,
+                1477,
+                1478,
+                1479,
+                1483,
+                1484,
+                1485,
+                1489,
+                1490,
+                1492,
+                1499,
+                1500,
+                1501,
+                1504,
+                1507,
+                1510,
+                1513,
+                1514,
+                1520,
+                1524,
+                1576,
+                14641,
+                14646,
+                14647,
+                14649,
+                14651,
+                14668,
+                14670,
+                14765,
+                54738,
+                1435
+            ]
+        }
+    ]
+}

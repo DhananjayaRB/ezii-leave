@@ -1,0 +1,221 @@
+[AdminOverview] Calculating analytics from: {transactionCount: 0, requestCount: 0, sampleTransaction: undefined, sampleRequest: undefined, requestStatuses: Array(0), …}
+AdminOverview.tsx:182 [AdminOverview] Request status counts: {pending: 0, approved: 0, rejected: 0, total: 0}
+AdminOverview.tsx:197 [AdminOverview] Transaction analysis: {totalTransactions: 0, sampleTransactions: Array(0), transactionTypes: Array(0), descriptions: Array(0)}
+AdminOverview.tsx:224 [AdminOverview] Analytics breakdown: {deductionCount: 0, additionCount: 0, totalGrantedHalfDays: 0, totalAvailedHalfDays: 0, encashed: 0, …}
+AdminOverview.tsx:239 [AdminOverview] Working days calculation debug: {totalRequests: 0, approvedCount: 0, sampleApproved: Array(0)}
+AdminOverview.tsx:257 [AdminOverview] Working days total calculation: {totalWorkingDays: 0, approvedRequestCount: 0, averageDaysPerRequest: 0}
+AdminOverview.tsx:263 [AdminOverview] Final analytics result: {pending: 0, approved: 0, rejected: 0, onLeave: 0, workingDaysAvailed: 0, …}
+AdminOverview.tsx:293 [AdminOverview] Raw data analysis: {transactionCount: 0, requestCount: 0, selectedYear: '2025', sampleTransaction: undefined, sampleRequest: undefined, …}
+AdminOverview.tsx:343 [AdminOverview] Monthly data calculated: (12) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+AdminOverview.tsx:359 [AdminOverview] Debug leave types analysis: {totalRequests: 0, configuredLeaveTypes: Array(4), usedLeaveTypes: Array(0), allLeaveTypes: Array(4), leaveTypeCount: 4, …}
+AdminOverview.tsx:1032 [AdminOverview] Work Pattern Holidays data: []
+AdminOverview.tsx:1033 [AdminOverview] First work pattern holiday: undefined
+usePermissions.ts:143 Loading permissions for role: admin
+useWorkPattern.ts:41 [WorkPattern] Hook starting execution...
+useWorkPattern.ts:48 [WorkPattern] Initial values - JWT exists: true User ID: 2161
+useWorkPattern.ts:69 [WorkPattern] Fetching work patterns for user: 2161
+AdminOverview.tsx:31 [AdminOverview] useWorkPattern results:
+AdminOverview.tsx:32 - workPattern: null
+AdminOverview.tsx:33 - workPatternHolidays: []
+AdminOverview.tsx:34 - workPatternHolidays length: 0
+AdminOverview.tsx:40 [AdminOverview] AUTH CHECK:
+AdminOverview.tsx:41 - JWT Token exists: true
+AdminOverview.tsx:42 - JWT Token preview: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdfaWQiO...
+AdminOverview.tsx:43 - User ID: 2161
+AdminOverview.tsx:44 - Org ID: 38
+AdminOverview.tsx:48 [AdminOverview] JWT exists, testing external API manually...
+AdminOverview.tsx:53 [AdminOverview] JWT Payload org_id: 38
+AdminOverview.tsx:54 [AdminOverview] Current localStorage org_id: 38
+AdminOverview.tsx:55 [AdminOverview] JWT vs Current org match: true
+orgContext.ts:14 [OrgContext] Reading org_id from localStorage: 38
+queryClient.ts:61 [Query Request] Sending X-Org-Id header: 38 for GET /api/holidays
+orgContext.ts:14 [OrgContext] Reading org_id from localStorage: 38
+queryClient.ts:61 [Query Request] Sending X-Org-Id header: 38 for GET /api/leave-requests
+orgContext.ts:14 [OrgContext] Reading org_id from localStorage: 38
+queryClient.ts:61 [Query Request] Sending X-Org-Id header: 38 for GET /api/comp-off-requests
+orgContext.ts:14 [OrgContext] Reading org_id from localStorage: 38
+queryClient.ts:61 [Query Request] Sending X-Org-Id header: 38 for GET /api/pto-requests
+orgContext.ts:14 [OrgContext] Reading org_id from localStorage: 38
+queryClient.ts:61 [Query Request] Sending X-Org-Id header: 38 for GET /api/employee-leave-balances
+orgContext.ts:14 [OrgContext] Reading org_id from localStorage: 38
+queryClient.ts:61 [Query Request] Sending X-Org-Id header: 38 for GET /api/leave-balance-transactions
+externalApi.ts:48 [ExternalAPI] Starting fetchEmployeeData...
+externalApi.ts:53 [ExternalAPI] JWT token available: true
+externalApi.ts:54 [ExternalAPI] Token length: 321
+externalApi.ts:55 [ExternalAPI] Token preview: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdfaWQiO...
+externalApi.ts:56 [ExternalAPI] Full Authorization header: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdfaWQiOiIzOCIsInVzZXJfaWQiOiIxIiwicm9sZV9pZCI6IjIyOSIsInVzZXJfdHlwZV9pZCI6IjMiLCJyb2xlX25hbWUiOiJhZG1pbiIsIm5iZiI6MTc1MzA3MzM5MSwiZXhwIjoxNzUzMTAzMzkxLCJpc3MiOiJodHRwczovL2xvY2FsaG9zdDo1MDAzIiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMyJ9.NE68RlQnQur0XIFSG1ZnXE5jALy8NfxEX7StSjAWdsY
+externalApi.ts:73 [ExternalAPI] Making request to worker-master-leave endpoint...
+externalApi.ts:74 [ExternalAPI] Payload: {userBlocks: Array(3), userWise: 0, workerType: 0, attribute: 0, subAttributeId: 0}
+useWorkPattern.ts:80 [WorkPattern] Work pattern API Response status: 200
+useWorkPattern.ts:84 [WorkPattern] Work pattern data: {message: 'Work Pattern List', data: Array(2)}
+useWorkPattern.ts:88 [WorkPattern] Found user work pattern: {id: 2, patternName: 'Pattern 2', startDate: '2025-01-01T05:30:00', endDate: '2025-12-31T05:30:00', numberOfWorkingDays: 52, …}
+useWorkPattern.ts:92 [WorkPattern] Fetching external holidays...
+AdminOverview.tsx:169 [AdminOverview] Calculating analytics from: {transactionCount: 0, requestCount: 0, sampleTransaction: undefined, sampleRequest: undefined, requestStatuses: Array(0), …}
+AdminOverview.tsx:182 [AdminOverview] Request status counts: {pending: 0, approved: 0, rejected: 0, total: 0}
+AdminOverview.tsx:197 [AdminOverview] Transaction analysis: {totalTransactions: 0, sampleTransactions: Array(0), transactionTypes: Array(0), descriptions: Array(0)}
+AdminOverview.tsx:224 [AdminOverview] Analytics breakdown: {deductionCount: 0, additionCount: 0, totalGrantedHalfDays: 0, totalAvailedHalfDays: 0, encashed: 0, …}
+AdminOverview.tsx:239 [AdminOverview] Working days calculation debug: {totalRequests: 0, approvedCount: 0, sampleApproved: Array(0)}
+AdminOverview.tsx:257 [AdminOverview] Working days total calculation: {totalWorkingDays: 0, approvedRequestCount: 0, averageDaysPerRequest: 0}
+AdminOverview.tsx:263 [AdminOverview] Final analytics result: {pending: 0, approved: 0, rejected: 0, onLeave: 0, workingDaysAvailed: 0, …}
+AdminOverview.tsx:293 [AdminOverview] Raw data analysis: {transactionCount: 0, requestCount: 0, selectedYear: '2025', sampleTransaction: undefined, sampleRequest: undefined, …}
+AdminOverview.tsx:343 [AdminOverview] Monthly data calculated: (12) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+AdminOverview.tsx:359 [AdminOverview] Debug leave types analysis: {totalRequests: 0, configuredLeaveTypes: Array(4), usedLeaveTypes: Array(0), allLeaveTypes: Array(4), leaveTypeCount: 4, …}
+AdminOverview.tsx:1032 [AdminOverview] Work Pattern Holidays data: []
+AdminOverview.tsx:1033 [AdminOverview] First work pattern holiday: undefined
+AdminOverview.tsx:31 [AdminOverview] useWorkPattern results:
+AdminOverview.tsx:32 - workPattern: {id: 2, patternName: 'Pattern 2', startDate: '2025-01-01T05:30:00', endDate: '2025-12-31T05:30:00', numberOfWorkingDays: 52, …}
+AdminOverview.tsx:33 - workPatternHolidays: []
+AdminOverview.tsx:34 - workPatternHolidays length: 0
+AdminOverview.tsx:40 [AdminOverview] AUTH CHECK:
+AdminOverview.tsx:41 - JWT Token exists: true
+AdminOverview.tsx:42 - JWT Token preview: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdfaWQiO...
+AdminOverview.tsx:43 - User ID: 2161
+AdminOverview.tsx:44 - Org ID: 38
+AdminOverview.tsx:48 [AdminOverview] JWT exists, testing external API manually...
+AdminOverview.tsx:53 [AdminOverview] JWT Payload org_id: 38
+AdminOverview.tsx:54 [AdminOverview] Current localStorage org_id: 38
+AdminOverview.tsx:55 [AdminOverview] JWT vs Current org match: true
+useWorkPattern.ts:101 [WorkPattern] External holidays API response status: 200
+AdminOverview.tsx:68 [AdminOverview] Manual work-patterns API response status: 200
+useWorkPattern.ts:105 [WorkPattern] External holidays data: {message: 'Holiday List', data: Array(12)}
+useWorkPattern.ts:115 [WorkPattern] Filtered holidays matching work pattern: (12) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+AdminOverview.tsx:169 [AdminOverview] Calculating analytics from: {transactionCount: 0, requestCount: 0, sampleTransaction: undefined, sampleRequest: undefined, requestStatuses: Array(0), …}
+AdminOverview.tsx:182 [AdminOverview] Request status counts: {pending: 0, approved: 0, rejected: 0, total: 0}
+AdminOverview.tsx:197 [AdminOverview] Transaction analysis: {totalTransactions: 0, sampleTransactions: Array(0), transactionTypes: Array(0), descriptions: Array(0)}
+AdminOverview.tsx:224 [AdminOverview] Analytics breakdown: {deductionCount: 0, additionCount: 0, totalGrantedHalfDays: 0, totalAvailedHalfDays: 0, encashed: 0, …}
+AdminOverview.tsx:239 [AdminOverview] Working days calculation debug: {totalRequests: 0, approvedCount: 0, sampleApproved: Array(0)}
+AdminOverview.tsx:257 [AdminOverview] Working days total calculation: {totalWorkingDays: 0, approvedRequestCount: 0, averageDaysPerRequest: 0}
+AdminOverview.tsx:263 [AdminOverview] Final analytics result: {pending: 0, approved: 0, rejected: 0, onLeave: 0, workingDaysAvailed: 0, …}
+AdminOverview.tsx:293 [AdminOverview] Raw data analysis: {transactionCount: 0, requestCount: 0, selectedYear: '2025', sampleTransaction: undefined, sampleRequest: undefined, …}
+AdminOverview.tsx:343 [AdminOverview] Monthly data calculated: (12) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+AdminOverview.tsx:359 [AdminOverview] Debug leave types analysis: {totalRequests: 0, configuredLeaveTypes: Array(4), usedLeaveTypes: Array(0), allLeaveTypes: Array(4), leaveTypeCount: 4, …}
+AdminOverview.tsx:1032 [AdminOverview] Work Pattern Holidays data: (12) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+AdminOverview.tsx:1033 [AdminOverview] First work pattern holiday: {id: 1, holidayName: 'New Year', selectedDate: '2025-01-01T00:00:00', holidayType: 'Festival', holidayStatus: 1}
+AdminOverview.tsx:1081 [AdminOverview] Processing work pattern holiday: undefined date string: 2025-08-15T00:00:00 parsed date: Fri Aug 15 2025 00:00:00 GMT+0530 (India Standard Time)
+AdminOverview.tsx:1081 [AdminOverview] Processing work pattern holiday: undefined date string: 2025-08-27T00:00:00 parsed date: Wed Aug 27 2025 00:00:00 GMT+0530 (India Standard Time)
+AdminOverview.tsx:1081 [AdminOverview] Processing work pattern holiday: undefined date string: 2025-10-01T00:00:00 parsed date: Wed Oct 01 2025 00:00:00 GMT+0530 (India Standard Time)
+AdminOverview.tsx:1081 [AdminOverview] Processing work pattern holiday: undefined date string: 2025-10-02T00:00:00 parsed date: Thu Oct 02 2025 00:00:00 GMT+0530 (India Standard Time)
+AdminOverview.tsx:1081 [AdminOverview] Processing work pattern holiday: undefined date string: 2025-10-20T00:00:00 parsed date: Mon Oct 20 2025 00:00:00 GMT+0530 (India Standard Time)
+AdminOverview.tsx:31 [AdminOverview] useWorkPattern results:
+AdminOverview.tsx:32 - workPattern: {id: 2, patternName: 'Pattern 2', startDate: '2025-01-01T05:30:00', endDate: '2025-12-31T05:30:00', numberOfWorkingDays: 52, …}
+AdminOverview.tsx:33 - workPatternHolidays: (12) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+AdminOverview.tsx:34 - workPatternHolidays length: 12
+AdminOverview.tsx:40 [AdminOverview] AUTH CHECK:
+AdminOverview.tsx:41 - JWT Token exists: true
+AdminOverview.tsx:42 - JWT Token preview: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdfaWQiO...
+AdminOverview.tsx:43 - User ID: 2161
+AdminOverview.tsx:44 - Org ID: 38
+AdminOverview.tsx:48 [AdminOverview] JWT exists, testing external API manually...
+AdminOverview.tsx:53 [AdminOverview] JWT Payload org_id: 38
+AdminOverview.tsx:54 [AdminOverview] Current localStorage org_id: 38
+AdminOverview.tsx:55 [AdminOverview] JWT vs Current org match: true
+AdminOverview.tsx:76 [AdminOverview] Manual work-patterns API data: {message: 'Work Pattern List', data: Array(2)}
+AdminOverview.tsx:68 [AdminOverview] Manual work-patterns API response status: 200
+AdminOverview.tsx:76 [AdminOverview] Manual work-patterns API data: {message: 'Work Pattern List', data: Array(2)}
+AdminOverview.tsx:68 [AdminOverview] Manual work-patterns API response status: 200
+AdminOverview.tsx:76 [AdminOverview] Manual work-patterns API data: {message: 'Work Pattern List', data: Array(2)}
+AdminOverview.tsx:169 [AdminOverview] Calculating analytics from: {transactionCount: 0, requestCount: 0, sampleTransaction: undefined, sampleRequest: undefined, requestStatuses: Array(0), …}
+AdminOverview.tsx:182 [AdminOverview] Request status counts: {pending: 0, approved: 0, rejected: 0, total: 0}
+AdminOverview.tsx:197 [AdminOverview] Transaction analysis: {totalTransactions: 0, sampleTransactions: Array(0), transactionTypes: Array(0), descriptions: Array(0)}
+AdminOverview.tsx:224 [AdminOverview] Analytics breakdown: {deductionCount: 0, additionCount: 0, totalGrantedHalfDays: 0, totalAvailedHalfDays: 0, encashed: 0, …}
+AdminOverview.tsx:239 [AdminOverview] Working days calculation debug: {totalRequests: 0, approvedCount: 0, sampleApproved: Array(0)}
+AdminOverview.tsx:257 [AdminOverview] Working days total calculation: {totalWorkingDays: 0, approvedRequestCount: 0, averageDaysPerRequest: 0}
+AdminOverview.tsx:263 [AdminOverview] Final analytics result: {pending: 0, approved: 0, rejected: 0, onLeave: 0, workingDaysAvailed: 0, …}
+AdminOverview.tsx:293 [AdminOverview] Raw data analysis: {transactionCount: 0, requestCount: 0, selectedYear: '2025', sampleTransaction: undefined, sampleRequest: undefined, …}
+AdminOverview.tsx:343 [AdminOverview] Monthly data calculated: (12) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+AdminOverview.tsx:359 [AdminOverview] Debug leave types analysis: {totalRequests: 0, configuredLeaveTypes: Array(4), usedLeaveTypes: Array(0), allLeaveTypes: Array(4), leaveTypeCount: 4, …}
+AdminOverview.tsx:1032 [AdminOverview] Work Pattern Holidays data: (12) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+AdminOverview.tsx:1033 [AdminOverview] First work pattern holiday: {id: 1, holidayName: 'New Year', selectedDate: '2025-01-01T00:00:00', holidayType: 'Festival', holidayStatus: 1}
+AdminOverview.tsx:1081 [AdminOverview] Processing work pattern holiday: undefined date string: 2025-08-15T00:00:00 parsed date: Fri Aug 15 2025 00:00:00 GMT+0530 (India Standard Time)
+AdminOverview.tsx:1081 [AdminOverview] Processing work pattern holiday: undefined date string: 2025-08-27T00:00:00 parsed date: Wed Aug 27 2025 00:00:00 GMT+0530 (India Standard Time)
+AdminOverview.tsx:1081 [AdminOverview] Processing work pattern holiday: undefined date string: 2025-10-01T00:00:00 parsed date: Wed Oct 01 2025 00:00:00 GMT+0530 (India Standard Time)
+AdminOverview.tsx:1081 [AdminOverview] Processing work pattern holiday: undefined date string: 2025-10-02T00:00:00 parsed date: Thu Oct 02 2025 00:00:00 GMT+0530 (India Standard Time)
+AdminOverview.tsx:1081 [AdminOverview] Processing work pattern holiday: undefined date string: 2025-10-20T00:00:00 parsed date: Mon Oct 20 2025 00:00:00 GMT+0530 (India Standard Time)
+usePermissions.ts:166 Using database role permissions for admin : {pto: {…}, roles: {…}, adminPTO: {…}, holidays: {…}, approvals: {…}, …}
+usePermissions.ts:167 Workflows permission: {view: true, modify: true}
+AdminOverview.tsx:169 [AdminOverview] Calculating analytics from: {transactionCount: 0, requestCount: 0, sampleTransaction: undefined, sampleRequest: undefined, requestStatuses: Array(0), …}
+AdminOverview.tsx:182 [AdminOverview] Request status counts: {pending: 0, approved: 0, rejected: 0, total: 0}
+AdminOverview.tsx:197 [AdminOverview] Transaction analysis: {totalTransactions: 0, sampleTransactions: Array(0), transactionTypes: Array(0), descriptions: Array(0)}
+AdminOverview.tsx:224 [AdminOverview] Analytics breakdown: {deductionCount: 0, additionCount: 0, totalGrantedHalfDays: 0, totalAvailedHalfDays: 0, encashed: 0, …}
+AdminOverview.tsx:239 [AdminOverview] Working days calculation debug: {totalRequests: 0, approvedCount: 0, sampleApproved: Array(0)}
+AdminOverview.tsx:257 [AdminOverview] Working days total calculation: {totalWorkingDays: 0, approvedRequestCount: 0, averageDaysPerRequest: 0}
+AdminOverview.tsx:263 [AdminOverview] Final analytics result: {pending: 0, approved: 0, rejected: 0, onLeave: 0, workingDaysAvailed: 0, …}
+AdminOverview.tsx:293 [AdminOverview] Raw data analysis: {transactionCount: 0, requestCount: 0, selectedYear: '2025', sampleTransaction: undefined, sampleRequest: undefined, …}
+AdminOverview.tsx:343 [AdminOverview] Monthly data calculated: (12) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+AdminOverview.tsx:359 [AdminOverview] Debug leave types analysis: {totalRequests: 0, configuredLeaveTypes: Array(4), usedLeaveTypes: Array(0), allLeaveTypes: Array(4), leaveTypeCount: 4, …}
+AdminOverview.tsx:1032 [AdminOverview] Work Pattern Holidays data: (12) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+AdminOverview.tsx:1033 [AdminOverview] First work pattern holiday: {id: 1, holidayName: 'New Year', selectedDate: '2025-01-01T00:00:00', holidayType: 'Festival', holidayStatus: 1}
+AdminOverview.tsx:1081 [AdminOverview] Processing work pattern holiday: undefined date string: 2025-08-15T00:00:00 parsed date: Fri Aug 15 2025 00:00:00 GMT+0530 (India Standard Time)
+AdminOverview.tsx:1081 [AdminOverview] Processing work pattern holiday: undefined date string: 2025-08-27T00:00:00 parsed date: Wed Aug 27 2025 00:00:00 GMT+0530 (India Standard Time)
+AdminOverview.tsx:1081 [AdminOverview] Processing work pattern holiday: undefined date string: 2025-10-01T00:00:00 parsed date: Wed Oct 01 2025 00:00:00 GMT+0530 (India Standard Time)
+AdminOverview.tsx:1081 [AdminOverview] Processing work pattern holiday: undefined date string: 2025-10-02T00:00:00 parsed date: Thu Oct 02 2025 00:00:00 GMT+0530 (India Standard Time)
+AdminOverview.tsx:1081 [AdminOverview] Processing work pattern holiday: undefined date string: 2025-10-20T00:00:00 parsed date: Mon Oct 20 2025 00:00:00 GMT+0530 (India Standard Time)
+AdminOverview.tsx:169 [AdminOverview] Calculating analytics from: {transactionCount: 0, requestCount: 132, sampleTransaction: undefined, sampleRequest: {…}, requestStatuses: Array(3), …}
+AdminOverview.tsx:182 [AdminOverview] Request status counts: {pending: 18, approved: 107, rejected: 0, total: 132}
+AdminOverview.tsx:197 [AdminOverview] Transaction analysis: {totalTransactions: 0, sampleTransactions: Array(0), transactionTypes: Array(0), descriptions: Array(0)}
+AdminOverview.tsx:224 [AdminOverview] Analytics breakdown: {deductionCount: 0, additionCount: 0, totalGrantedHalfDays: 0, totalAvailedHalfDays: 0, encashed: 0, …}
+AdminOverview.tsx:239 [AdminOverview] Working days calculation debug: {totalRequests: 132, approvedCount: 107, sampleApproved: Array(10)}
+AdminOverview.tsx:257 [AdminOverview] Working days total calculation: {totalWorkingDays: 138, approvedRequestCount: 107, averageDaysPerRequest: 1.2897196261682242}
+AdminOverview.tsx:263 [AdminOverview] Final analytics result: {pending: 18, approved: 107, rejected: 0, onLeave: 0, workingDaysAvailed: 138, …}
+AdminOverview.tsx:293 [AdminOverview] Raw data analysis: {transactionCount: 0, requestCount: 132, selectedYear: '2025', sampleTransaction: undefined, sampleRequest: {…}, …}
+AdminOverview.tsx:323 [AdminOverview] Processing Jan request: {id: 2288, leaveTypeName: 'Earned Leave', workingDays: '1.0', startDate: '2025-01-23T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:323 [AdminOverview] Processing Jan request: {id: 2287, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-20T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:323 [AdminOverview] Processing Jan request: {id: 2277, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '0.5', startDate: '2025-01-30T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:323 [AdminOverview] Processing Jan request: {id: 2261, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-13T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:323 [AdminOverview] Processing Jan request: {id: 2246, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-31T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:323 [AdminOverview] Processing Jan request: {id: 2242, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-27T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:323 [AdminOverview] Processing Jan request: {id: 2241, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '2.0', startDate: '2025-01-23T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:323 [AdminOverview] Processing Jan request: {id: 2219, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-13T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:323 [AdminOverview] Processing Jan request: {id: 2209, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-17T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:323 [AdminOverview] Processing Jan request: {id: 2202, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-31T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:323 [AdminOverview] Processing Jan request: {id: 2201, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-06T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:323 [AdminOverview] Processing Jan request: {id: 2193, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-20T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:323 [AdminOverview] Processing Jan request: {id: 2192, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-18T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:323 [AdminOverview] Processing Jan request: {id: 2182, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-13T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:323 [AdminOverview] Processing Jan request: {id: 2177, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-18T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:323 [AdminOverview] Processing Jan request: {id: 2169, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-13T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:343 [AdminOverview] Monthly data calculated: (12) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+AdminOverview.tsx:359 [AdminOverview] Debug leave types analysis: {totalRequests: 132, configuredLeaveTypes: Array(4), usedLeaveTypes: Array(3), allLeaveTypes: Array(4), leaveTypeCount: 4, …}
+AdminOverview.tsx:1032 [AdminOverview] Work Pattern Holidays data: (12) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+AdminOverview.tsx:1033 [AdminOverview] First work pattern holiday: {id: 1, holidayName: 'New Year', selectedDate: '2025-01-01T00:00:00', holidayType: 'Festival', holidayStatus: 1}
+AdminOverview.tsx:1081 [AdminOverview] Processing work pattern holiday: undefined date string: 2025-08-15T00:00:00 parsed date: Fri Aug 15 2025 00:00:00 GMT+0530 (India Standard Time)
+AdminOverview.tsx:1081 [AdminOverview] Processing work pattern holiday: undefined date string: 2025-08-27T00:00:00 parsed date: Wed Aug 27 2025 00:00:00 GMT+0530 (India Standard Time)
+AdminOverview.tsx:1081 [AdminOverview] Processing work pattern holiday: undefined date string: 2025-10-01T00:00:00 parsed date: Wed Oct 01 2025 00:00:00 GMT+0530 (India Standard Time)
+AdminOverview.tsx:1081 [AdminOverview] Processing work pattern holiday: undefined date string: 2025-10-02T00:00:00 parsed date: Thu Oct 02 2025 00:00:00 GMT+0530 (India Standard Time)
+AdminOverview.tsx:1081 [AdminOverview] Processing work pattern holiday: undefined date string: 2025-10-20T00:00:00 parsed date: Mon Oct 20 2025 00:00:00 GMT+0530 (India Standard Time)
+externalApi.ts:85 [ExternalAPI] Response status: 200
+externalApi.ts:94 [ExternalAPI] Response data: {result: 'Success', statuscode: 200, message: ' Worker Master Request ', data: {…}}
+externalApi.ts:101 [ExternalAPI] Successfully fetched 39 employees from external API
+AdminOverview.tsx:169 [AdminOverview] Calculating analytics from: {transactionCount: 0, requestCount: 132, sampleTransaction: undefined, sampleRequest: {…}, requestStatuses: Array(3), …}
+AdminOverview.tsx:182 [AdminOverview] Request status counts: {pending: 18, approved: 107, rejected: 0, total: 132}
+AdminOverview.tsx:197 [AdminOverview] Transaction analysis: {totalTransactions: 0, sampleTransactions: Array(0), transactionTypes: Array(0), descriptions: Array(0)}
+AdminOverview.tsx:224 [AdminOverview] Analytics breakdown: {deductionCount: 0, additionCount: 0, totalGrantedHalfDays: 0, totalAvailedHalfDays: 0, encashed: 0, …}
+AdminOverview.tsx:239 [AdminOverview] Working days calculation debug: {totalRequests: 132, approvedCount: 107, sampleApproved: Array(10)}
+AdminOverview.tsx:257 [AdminOverview] Working days total calculation: {totalWorkingDays: 138, approvedRequestCount: 107, averageDaysPerRequest: 1.2897196261682242}
+AdminOverview.tsx:263 [AdminOverview] Final analytics result: {pending: 18, approved: 107, rejected: 0, onLeave: 0, workingDaysAvailed: 138, …}
+AdminOverview.tsx:293 [AdminOverview] Raw data analysis: {transactionCount: 0, requestCount: 132, selectedYear: '2025', sampleTransaction: undefined, sampleRequest: {…}, …}
+AdminOverview.tsx:323 [AdminOverview] Processing Jan request: {id: 2288, leaveTypeName: 'Earned Leave', workingDays: '1.0', startDate: '2025-01-23T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:323 [AdminOverview] Processing Jan request: {id: 2287, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-20T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:323 [AdminOverview] Processing Jan request: {id: 2277, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '0.5', startDate: '2025-01-30T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:323 [AdminOverview] Processing Jan request: {id: 2261, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-13T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:323 [AdminOverview] Processing Jan request: {id: 2246, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-31T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:323 [AdminOverview] Processing Jan request: {id: 2242, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-27T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:323 [AdminOverview] Processing Jan request: {id: 2241, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '2.0', startDate: '2025-01-23T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:323 [AdminOverview] Processing Jan request: {id: 2219, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-13T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:323 [AdminOverview] Processing Jan request: {id: 2209, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-17T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:323 [AdminOverview] Processing Jan request: {id: 2202, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-31T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:323 [AdminOverview] Processing Jan request: {id: 2201, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-06T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:323 [AdminOverview] Processing Jan request: {id: 2193, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-20T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:323 [AdminOverview] Processing Jan request: {id: 2192, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-18T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:323 [AdminOverview] Processing Jan request: {id: 2182, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-13T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:323 [AdminOverview] Processing Jan request: {id: 2177, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-18T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:323 [AdminOverview] Processing Jan request: {id: 2169, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-13T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:343 [AdminOverview] Monthly data calculated: (12) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+AdminOverview.tsx:359 [AdminOverview] Debug leave types analysis: {totalRequests: 132, configuredLeaveTypes: Array(4), usedLeaveTypes: Array(3), allLeaveTypes: Array(4), leaveTypeCount: 4, …}
+AdminOverview.tsx:1032 [AdminOverview] Work Pattern Holidays data: (12) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+AdminOverview.tsx:1033 [AdminOverview] First work pattern holiday: {id: 1, holidayName: 'New Year', selectedDate: '2025-01-01T00:00:00', holidayType: 'Festival', holidayStatus: 1}
+AdminOverview.tsx:1081 [AdminOverview] Processing work pattern holiday: undefined date string: 2025-08-15T00:00:00 parsed date: Fri Aug 15 2025 00:00:00 GMT+0530 (India Standard Time)
+AdminOverview.tsx:1081 [AdminOverview] Processing work pattern holiday: undefined date string: 2025-08-27T00:00:00 parsed date: Wed Aug 27 2025 00:00:00 GMT+0530 (India Standard Time)
+AdminOverview.tsx:1081 [AdminOverview] Processing work pattern holiday: undefined date string: 2025-10-01T00:00:00 parsed date: Wed Oct 01 2025 00:00:00 GMT+0530 (India Standard Time)
+AdminOverview.tsx:1081 [AdminOverview] Processing work pattern holiday: undefined date string: 2025-10-02T00:00:00 parsed date: Thu Oct 02 2025 00:00:00 GMT+0530 (India Standard Time)
+AdminOverview.tsx:1081 [AdminOverview] Processing work pattern holiday: undefined date string: 2025-10-20T00:00:00 parsed date: Mon Oct 20 2025 00:00:00 GMT+0530 (India Standard Time)

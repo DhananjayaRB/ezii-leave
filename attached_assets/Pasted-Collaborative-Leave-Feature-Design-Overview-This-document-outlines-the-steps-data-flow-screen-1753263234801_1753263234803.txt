@@ -1,0 +1,307 @@
+Collaborative Leave Feature: Design Overview 
+
+This document outlines the steps, data flow, screens, dashboards, and reports required to incorporate the Collaborative Leave feature into your SaaS leave application. This optional feature allows leave applicants to assign tasks to colleagues, external contacts, or vendors during their leave period, ensuring business continuity and providing a structured follow-up process upon their return. 
+
+Shape 
+
+Steps and Data Flow 
+
+1. Feature Opt-In 
+
+Step: Client opts for the "Collaborative Leave" feature within their subscription plan. 
+
+Data Flow:  
+
+Client subscription status updated in your system's Subscription table. 
+
+A flag (e.g., collaborative_leave_enabled = true) is set for the client's organization in the OrganizationSettings table. 
+
+2. Leave Application with Task Assignment 
+
+Step: Employee applies for leave and, if the feature is enabled for their organization, can access the collaborative leave section. 
+
+Data Flow:  
+
+Employee initiates a leave application in LeaveApplications table. 
+
+On the leave application screen, the employee provides:  
+
+Assignee Details: Name, Email, (Optional: Phone for WhatsApp). This could be stored in a LeaveTaskAssignees table. 
+
+Task Description: Text field. 
+
+Expected Support Date: Date picker (must be within the leave period). 
+
+Notification Preference: Email/WhatsApp checkbox. 
+
+These details are linked to the LeaveApplication record. 
+
+3. Task Notification and Acceptance/Rejection 
+
+Step: System sends a notification to assignees. Assignees respond to the request. 
+
+Data Flow:  
+
+Upon leave application submission (or approval), a cron job or real-time trigger processes the task assignments. 
+
+Notification Service: Integrates with Email API (e.g., SendGrid, Mailgun) and WhatsApp API (e.g., Twilio) to send notifications. 
+
+Notification Content: Includes applicant's name, task description, expected support date, and a unique link to accept/reject the task. 
+
+Assignee Response: When an assignee clicks the link, they are taken to a simple public-facing page (no login required for external users). 
+
+Their response (Accept/Reject) is captured and updated in the LeaveTaskAssignees table (e.g., status: 'Accepted' or status: 'Rejected'). 
+
+Internal Notification: Applicant and their manager receive an internal notification about task acceptance/rejection. 
+
+4. Task Status Updates (During Leave) 
+
+Step: Assignees update the status of their assigned tasks. 
+
+Data Flow:  
+
+Assignees (internal or external) can access their assigned tasks through a dedicated link (or login for internal users). 
+
+They can update the status field in the LeaveTaskAssignees table to: Done, WIP (Work In Progress), Not Done, or Abandoned. 
+
+Optional: Assignees can add comments to the task status update. 
+
+5. Leave Closure Report and Manager Review 
+
+Step: Upon returning to work, the employee reviews task statuses and submits a leave closure report. The manager reviews and rates the leave management. 
+
+Data Flow:  
+
+Employee Access: When the employee's leave ends, they are prompted to create a "Leave Closure Report" for the specific leave application. 
+
+Data Retrieval: The system fetches all associated tasks from LeaveTaskAssignees for that leave application. 
+
+Employee Input: Employee adds comments on each task's outcome and overall leave management. This is stored in a LeaveClosureReports table, linked to the LeaveApplication. 
+
+Manager Notification: The reporting manager is notified that a "Leave Closure Report" is awaiting their review. 
+
+Manager Input: Manager reviews the report and rates the employee's leave management (Responsible, OK, Needs Improvement). This rating is stored in LeaveClosureReports and potentially linked to the EmployeePerformance record. 
+
+Performance Record: The manager's rating automatically updates a relevant field in the employee's PerformanceRecords table. 
+
+Shape 
+
+Screens Required 
+
+1. Client Settings / Subscription Management Screen 
+
+Purpose: To enable/disable the Collaborative Leave feature for an organization. 
+
+Elements: Toggle switch or checkbox for "Enable Collaborative Leave Feature." 
+
+2. Leave Application Screen (Employee) 
+
+Purpose: To allow employees to apply for leave and assign collaborative tasks. 
+
+Elements:  
+
+Standard leave application fields (start date, end date, leave type, reason). 
+
+New section: "Collaborative Leave Tasks" (only visible if feature enabled).  
+
+"Add Task" Button: Opens a modal/sub-form. 
+
+Task Assignment Form (within modal/sub-form):  
+
+Assignee Name: Text input. 
+
+Assignee Email: Email input (validation for valid email format). 
+
+Assignee Phone (Optional): Phone input (for WhatsApp). 
+
+Task Description: Multi-line text area. 
+
+Expected Support Date: Date picker (constrained to leave period). 
+
+Notification Method: Radio buttons/checkboxes for Email, WhatsApp. 
+
+Add/Cancel Buttons. 
+
+List of added tasks (editable/deletable before submission). 
+
+3. Public Task Acceptance/Rejection Page (External Assignees) 
+
+Purpose: For external assignees to accept or reject tasks without logging in. 
+
+Elements:  
+
+Display of task details (applicant name, task description, expected date). 
+
+"Accept Task" Button. 
+
+"Reject Task" Button. 
+
+(Optional) Text area for a short comment on rejection. 
+
+Confirmation message after action. 
+
+4. Task Update Screen (All Assignees) 
+
+Purpose: For assignees (internal and external) to update task status. 
+
+Elements:  
+
+List of tasks assigned to the current user (if logged in) or specific task details (if accessed via a unique link). 
+
+Task Status Dropdown: Options: Done, WIP, Not Done, Abandoned. 
+
+Comments Text Area: For additional notes. 
+
+"Update Status" Button. 
+
+5. Leave Closure Report Screen (Employee) 
+
+Purpose: To allow employees to review tasks and provide comments after leave. 
+
+Elements:  
+
+List of all tasks assigned during the specific leave period, showing original description, assignee, and their current status. 
+
+Employee Comments Text Area (per task or overall): For employee's remarks on the task outcome. 
+
+Overall Leave Management Comments Text Area: For general comments. 
+
+"Submit Closure Report" Button. 
+
+6. Manager Review Screen (Manager) 
+
+Purpose: For managers to review leave closure reports and rate employee's leave management. 
+
+Elements:  
+
+Details of the original leave application. 
+
+List of assigned tasks with their final status and assignee comments. 
+
+Employee's comments from the Leave Closure Report. 
+
+Manager Rating Dropdown/Radio Buttons: Options: Responsible, OK, Needs Improvement. 
+
+Manager Comments Text Area: For manager's remarks. 
+
+"Submit Rating" Button. 
+
+Shape 
+
+Leave Management Dashboard (Enhanced) 
+
+The existing leave management dashboard will need to be enhanced to incorporate collaborative leave metrics. 
+
+Dashboard Sections: 
+
+Overall Leave Overview: 
+
+Standard leave metrics (total leaves, approved, pending, etc.). 
+
+New Metric: Total Collaborative Leaves (leaves with tasks assigned). 
+
+My Assigned Tasks (For Employees & Managers): 
+
+List of tasks assigned to the logged-in user. 
+
+Columns: Task Description, Assigned By, Expected Date, Current Status, Action (Link to update status). 
+
+My Collaborative Leave Tasks (For Leave Applicants): 
+
+List of tasks assigned by the logged-in user for their past/current leaves. 
+
+Columns: Leave Period, Task Description, Assignee, Expected Date, Current Status, Link to Leave Closure Report (if applicable). 
+
+Team Collaborative Leave Performance (For Managers): 
+
+Overview of collaborative leave usage within the manager's team. 
+
+Metrics:  
+
+Number of tasks assigned by team members. 
+
+Average task completion rate. 
+
+Breakdown of manager ratings for leave management (Responsible, OK, Needs Improvement). 
+
+Drill-down capability to view individual employee collaborative leave details. 
+
+Organizational Collaborative Leave Trends (For Admins/HR): 
+
+Total collaborative leaves taken across the organization. 
+
+Overall task acceptance/rejection rates. 
+
+Average time to task completion. 
+
+Distribution of manager ratings for collaborative leave management across the organization. 
+
+Shape 
+
+List of Reports Required and By Whom 
+
+1. Collaborative Task Summary Report 
+
+Purpose: To get an overview of all collaborative tasks. 
+
+Audience: Managers, HR, Admins. 
+
+Details:  
+
+Filterable by date range, employee, assignee, task status. 
+
+Columns: Leave Applicant, Leave Period, Task Description, Assignee, Expected Date, Current Status, Acceptance Status, Last Updated By, Last Updated Date. 
+
+Metrics: Total tasks, accepted tasks, rejected tasks, completed tasks, tasks WIP, abandoned tasks. 
+
+2. Employee Collaborative Leave Performance Report 
+
+Purpose: To assess individual employee's responsibility in managing their leave collaboratively. 
+
+Audience: Managers, HR. 
+
+Details:  
+
+Filterable by employee, date range. 
+
+Columns: Employee Name, Leave Period, Number of Tasks Assigned, Number of Tasks Completed (by assignees), Manager Rating, Manager Comments. 
+
+Metrics: Average manager rating for the employee. 
+
+3. Assignee Performance Report (Internal) 
+
+Purpose: To understand which internal team members are frequently assigned tasks and their completion rates. 
+
+Audience: Managers, HR. 
+
+Details:  
+
+Filterable by assignee, date range. 
+
+Columns: Assignee Name, Total Tasks Assigned To, Number of Tasks Completed, Number of Tasks WIP, Number of Tasks Abandoned. 
+
+Metrics: Individual task completion rate. 
+
+4. Rejected/Abandoned Tasks Report 
+
+Purpose: To identify trends in task rejections or abandonment and potential bottlenecks. 
+
+Audience: Managers, HR, Admins. 
+
+Details:  
+
+Filterable by date range, reason (if provided), assignee, applicant. 
+
+Columns: Leave Applicant, Task Description, Assignee, Status (Rejected/Abandoned), Date of Status Change, Comments (if any). 
+
+5. Leave Management Audit Report 
+
+Purpose: To provide a comprehensive audit trail of collaborative leave activities. 
+
+Audience: Admins, HR. 
+
+Details:  
+
+Log of all actions related to collaborative leave: task creation, notification sent, acceptance/rejection, status updates, leave closure report submission, manager review. 
+
+Columns: Timestamp, User, Action Type, Related Leave/Task ID, Old Value, New Value. 

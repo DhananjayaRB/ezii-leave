@@ -1,0 +1,107 @@
+
+﻿
+LeaveApplications.tsx:121 Current user ID from localStorage: 60838
+LeaveApplications.tsx:200 === LEAVE TYPE FILTERING DEBUG ===
+LeaveApplications.tsx:201 Current user ID: 60838
+LeaveApplications.tsx:202 All assignments: 
+[]
+LeaveApplications.tsx:203 All variants: 
+(4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:209 User assignments: 
+[]
+LeaveApplications.tsx:212 Assigned variant IDs: 
+[]
+LeaveApplications.tsx:218 Available leave variants: 
+[]
+LeaveApplications.tsx:219 ===============================
+LeaveApplications.tsx:855 === BALANCE CALCULATION DEBUG ===
+LeaveApplications.tsx:856 Current user ID: 60838
+LeaveApplications.tsx:857 User assignments: 
+[]
+LeaveApplications.tsx:858 Assigned variant IDs: 
+[]
+LeaveApplications.tsx:859 Available leave variants: 
+[]
+LeaveApplications.tsx:860 Leave balances for user 60838 : 
+[]
+LeaveApplications.tsx:861 Raw leaveBalances from API: 
+[]
+LeaveApplications.tsx:865 Filtered balances for summary cards: 
+[]
+LeaveApplications.tsx:866 Total entitlement calculation: 
+[]
+LeaveApplications.tsx:872 Total entitlement sum: 0
+LeaveApplications.tsx:882 === TOTAL BALANCE CALCULATION ===
+LeaveApplications.tsx:883 Filtered balances used for total: 
+[]
+LeaveApplications.tsx:888 Step by step calculation:
+LeaveApplications.tsx:894 Total balance result: 0
+LeaveApplications.tsx:895 Should equal sum of visible balances: 13.5 + 4.0 + 9.0 = 26.5
+LeaveApplications.tsx:896 ==================================
+LeaveApplications.tsx:1104 === BALANCE CARD DEBUG ===
+LeaveApplications.tsx:1105 totalBalance value: 0
+LeaveApplications.tsx:1106 filteredBalances for card: 
+[]
+LeaveApplications.tsx:1107 Raw balancesArray: 
+[]
+LeaveApplications.tsx:1108 assignedVariantIds: 
+[]
+LeaveApplications.tsx:1109 ============================
+2
+usePermissions.ts:137 Using cached permissions to prevent flickering
+useWorkPattern.ts:66 [WorkPattern] Fetching work patterns for user: 60838
+LeaveApplications.tsx:43 === EXTERNAL EMPLOYEE DATA DEBUG ===
+LeaveApplications.tsx:44 External employees loaded: 0
+LeaveApplications.tsx:45 Current user ID: 60838
+LeaveApplications.tsx:55 ===================================
+LeaveApplications.tsx:60 === LEAVE PERMISSION DEBUG ===
+LeaveApplications.tsx:61 Current role from localStorage: admin
+LeaveApplications.tsx:62 Current org_id from localStorage: 38
+LeaveApplications.tsx:63 Full permissions hook result: 
+{permissions: {…}, loading: false, hasPermission: ƒ, canViewScreen: ƒ, canModifyScreen: ƒ, …}
+LeaveApplications.tsx:64 permissions.permissions: 
+{pto: {…}, roles: {…}, adminPTO: {…}, holidays: {…}, approvals: {…}, …}
+LeaveApplications.tsx:65 allowOnBehalf from permissions.permissions: 
+{pto: true, leave: true, compOff: true}
+LeaveApplications.tsx:66 allowOnBehalf.leave: true
+LeaveApplications.tsx:67 Should show checkbox? true
+LeaveApplications.tsx:68 ================================
+usePermissions.ts:280 Custom permissions change detected, invalidating cache
+usePermissions.ts:143 Loading permissions for role: admin
+usePermissions.ts:280 Custom permissions change detected, invalidating cache
+usePermissions.ts:143 Loading permissions for role: admin
+orgContext.ts:14 [OrgContext] Reading org_id from localStorage: 38
+queryClient.ts:61 [Query Request] Sending X-Org-Id header: 38 for GET /api/employee-assignments
+orgContext.ts:14 [OrgContext] Reading org_id from localStorage: 38
+queryClient.ts:61 [Query Request] Sending X-Org-Id header: 38 for GET /api/employee-leave-balances/60838
+orgContext.ts:14 [OrgContext] Reading org_id from localStorage: 38
+queryClient.ts:61 [Query Request] Sending X-Org-Id header: 38 for GET /api/leave-balance-transactions/60838
+LeaveApplications.tsx:121 Current user ID from localStorage: 60838
+LeaveApplications.tsx:200 === LEAVE TYPE FILTERING DEBUG ===
+LeaveApplications.tsx:201 Current user ID: 60838
+LeaveApplications.tsx:202 All assignments: 
+[]
+LeaveApplications.tsx:203 All variants: 
+(4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:209 User assignments: 
+[]
+LeaveApplications.tsx:212 Assigned variant IDs: 
+[]
+LeaveApplications.tsx:218 Available leave variants: 
+[]
+LeaveApplications.tsx:219 ===============================
+LeaveApplications.tsx:855 === BALANCE CALCULATION DEBUG ===
+LeaveApplications.tsx:856 Current user ID: 60838
+LeaveApplications.tsx:857 User assignments: 
+[]
+LeaveApplications.tsx:858 Assigned variant IDs: 
+[]
+LeaveApplications.tsx:859 Available leave variants: 
+[]
+LeaveApplications.tsx:860 Leave balances for user 60838 : 
+[]
+LeaveApplications.tsx:861 Raw leaveBalances from API: 
+[]
+LeaveApplications.tsx:865 Filtered balances for summary cards: 
+[]
+﻿

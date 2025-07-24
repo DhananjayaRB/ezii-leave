@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug AVAILED Calculation</title>
+</head>
+<body>
+    <h2>Set Context for Debugging</h2>
+    <script>
+        // Set correct context for Anant
+        localStorage.setItem('user_id', '2161');
+        localStorage.setItem('org_id', '38');
+        localStorage.setItem('role', 'employee');
+        
+        console.log('✅ Context set:', {
+            user_id: localStorage.getItem('user_id'),
+            org_id: localStorage.getItem('org_id'),
+            role: localStorage.getItem('role')
+        });
+        
+        // Redirect to Leave Applications page after setting context
+        setTimeout(() => {
+            window.location.href = '/leave-applications';
+        }, 1000);
+    </script>
+    <p>Setting context for user 2161, org 38... redirecting in 1 second.</p>
+</body>
+</html>

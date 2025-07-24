@@ -1,0 +1,158 @@
+=== BUTTON CLICKED ===
+LeaveConfigForm.tsx:2093 Button type: submit
+LeaveConfigForm.tsx:2094 Form valid: false
+LeaveConfigForm.tsx:2095 Form errors: 
+{}
+[[Prototype]]
+: 
+Object
+LeaveConfigForm.tsx:2096 Form values: 
+{leaveVariantName: 'Test Update', description: 'Leave', minimumLeaveUnit: Array(2), leavesGrantedOn: 'calendar_days', paidDaysInYear: 18, …}
+allowApplicationsOnBehalf
+: 
+true
+allowClubbing
+: 
+true
+allowDuringNotice
+: 
+true
+allowLeavesAfterHoliday
+: 
+true
+allowLeavesAfterWeekend
+: 
+true
+allowLeavesBeforeHoliday
+: 
+true
+allowLeavesBeforeWeekend
+: 
+true
+allowWithdrawalAfterApproval
+: 
+false
+allowWithdrawalBeforeApproval
+: 
+true
+allowWithdrawalNotAllowed
+: 
+false
+applicableAfter
+: 
+0
+applicableGenders
+: 
+(2) ['male', 'female']
+carryForwardLimit
+: 
+0
+carryForwardPeriod
+: 
+"month"
+complianceForEveryDays
+: 
+20
+complianceGrantDays
+: 
+1
+description
+: 
+"Leave"
+encashment
+: 
+false
+encashmentCalculation
+: 
+"basic_da"
+encashmentTiming
+: 
+"exit_retirement"
+fractionalLeaves
+: 
+"normal_rounding"
+gracePeriod
+: 
+0
+grantFrequency
+: 
+"per_month"
+grantLeaves
+: 
+"after_earning"
+leaveBalanceDeduction
+: 
+"before_workflow"
+leaveVariantName
+: 
+"Test Update"
+leavesGrantedOn
+: 
+"calendar_days"
+maxDaysInStretch
+: 
+0
+maxEncashmentDays
+: 
+0
+maxInstances
+: 
+0
+maxInstancesPeriod
+: 
+"month"
+maximumBalance
+: 
+0
+minDaysRequired
+: 
+0
+minimumLeaveUnit
+: 
+(2) ['full_day', 'half_day']
+mustBePlannedInAdvance
+: 
+0
+negativeLeaveBalance
+: 
+0
+onboardingSlabs
+: 
+(2) [{…}, {…}]
+paidDaysInYear
+: 
+18
+proRataCalculation
+: 
+"slab_system"
+requiresWorkflow
+: 
+true
+showAvailedLeaves
+: 
+false
+showBalanceLeaves
+: 
+false
+slabs
+: 
+(3) [{…}, {…}, {…}]
+supportingDocuments
+: 
+false
+supportingDocumentsText
+: 
+""
+[[Prototype]]
+: 
+Object
+LeaveConfigForm.tsx:2097 Mutation pending: false
+LeaveConfigForm.tsx:2101 After trigger - Form valid: false
+LeaveConfigForm.tsx:2102 After trigger - Form errors: 
+{slabs: {…}}
+slabs
+: 
+{message: 'Total earned days in slabs cannot exceed allocation based on selected grant frequency', type: 'custom', ref: undefined}
+[[Prototype]]
+: 
+Object

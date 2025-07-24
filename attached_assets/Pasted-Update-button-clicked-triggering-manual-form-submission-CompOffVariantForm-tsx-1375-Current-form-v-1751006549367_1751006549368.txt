@@ -1,0 +1,13 @@
+Update button clicked - triggering manual form submission
+CompOffVariantForm.tsx:1375 Current form values: {leaveVariantName: 'Test', description: 'test', workflowRequired: true, approvalAdvanceDays: 2, availWithinDays: 0, …}
+CompOffVariantForm.tsx:365 === FORM SUBMISSION TRIGGERED ===
+CompOffVariantForm.tsx:366 Form submission triggered with data: {leaveVariantName: 'Test', description: 'test', workflowRequired: true, approvalAdvanceDays: 2, availWithinDays: 0, …}
+CompOffVariantForm.tsx:367 Form errors: {}
+CompOffVariantForm.tsx:368 Form is valid: false
+CompOffVariantForm.tsx:280 === FORM SUBMISSION DEBUG ===
+CompOffVariantForm.tsx:281 Raw form data: {leaveVariantName: 'Test', description: 'test', workflowRequired: true, approvalAdvanceDays: 2, availWithinDays: 0, …}allowFullDay: trueallowHalfDay: trueallowNonWorkingDays: trueallowQuarterDay: trueallowedDuringNotice: trueapprovalAdvanceDays: 2availWithinDays: 0carryForwardDays: 0convertToLeavesOption: trueconvertibleLeaveTypes: (2) [45, 44]description: "test"enableCarryForward: trueenableCompensation: trueenableLapse: trueencashmentBasedOn: "basic_pay"encashmentOption: falsefullDayHours: "8.00"halfDayHours: "4.00"lapsePeriod: 2lapsePeriodUnit: "Month"leaveVariantName: "Test"maxApplications: 2maxApplicationsPeriod: "Month"maxEncashmentDays: 2maxEncashmentHours: "0.00"quarterDayHours: "2.00"withdrawalAfterApproval: truewithdrawalBeforeApproval: truewithdrawalNotAllowed: falseworkflowRequired: true[[Prototype]]: Object
+CompOffVariantForm.tsx:339 Payload being sent to API: {name: 'Test', description: 'test', enabled: true, allowFullDay: true, fullDayHours: '8.00', …}allowFullDay: trueallowHalfDay: trueallowNonWorkingDays: trueallowQuarterDay: trueallowedDuringNotice: trueapplicableAfter: 0approvalDays: 2carryForwardDays: 0convertToLeavesOption: trueconvertibleLeaveTypes: (2) [45, 44]description: "test"documentsRequired: falseenableCarryForward: trueenableCompensation: trueenableLapse: trueenabled: trueencashmentBasedOn: "basic_pay"encashmentOption: falseexpiryDays: 365fullDayHours: "8.00"halfDayHours: "4.00"lapsePeriod: 2lapsePeriodUnit: "Month"maxApplications: 2maxApplicationsPeriod: "Month"maxBalance: 2maxEncashmentDays: 2maxEncashmentHours: "0.00"name: "Test"quarterDayHours: "2.00"withdrawalAfterApproval: truewithdrawalBeforeApproval: truewithdrawalNotAllowed: trueworkflowRequired: true[[Prototype]]: Object
+orgContext.ts:14 [OrgContext] Reading org_id from localStorage: 18
+queryClient.ts:17 [API Request] Sending X-Org-Id header: 18 for PATCH /api/comp-off-variants/10
+orgContext.ts:14 [OrgContext] Reading org_id from localStorage: 18
+queryClient.ts:45 [Query Request] Sending X-Org-Id header: 18 for GET /api/comp-off-variants

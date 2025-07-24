@@ -1,0 +1,103 @@
+{
+    "message": "Holiday List",
+    "data": [
+        {
+            "id": 157,
+            "holidayName": "New Year's Day",
+            "selectedDate": "2025-01-01T00:00:00",
+            "holidayType": "Company Specific",
+            "holidayStatus": 1
+        },
+        {
+            "id": 159,
+            "holidayName": "Makara Sankranthi ",
+            "selectedDate": "2025-01-14T00:00:00",
+            "holidayType": "Festival",
+            "holidayStatus": 1
+        },
+        {
+            "id": 158,
+            "holidayName": "Republic Day",
+            "selectedDate": "2025-01-26T00:00:00",
+            "holidayType": "National Mandatory",
+            "holidayStatus": 1
+        },
+        {
+            "id": 160,
+            "holidayName": "Ugadi",
+            "selectedDate": "2025-03-30T00:00:00",
+            "holidayType": "Festival",
+            "holidayStatus": 1
+        },
+        {
+            "id": 161,
+            "holidayName": "May Day",
+            "selectedDate": "2025-05-01T00:00:00",
+            "holidayType": "National Mandatory",
+            "holidayStatus": 1
+        },
+        {
+            "id": 169,
+            "holidayName": "Test Optional",
+            "selectedDate": "2025-06-12T00:00:00",
+            "holidayType": "Other",
+            "holidayStatus": 0
+        },
+        {
+            "id": 162,
+            "holidayName": "Independence Day",
+            "selectedDate": "2025-08-15T00:00:00",
+            "holidayType": "National Mandatory",
+            "holidayStatus": 1
+        },
+        {
+            "id": 163,
+            "holidayName": "Ganesh Chaturthi",
+            "selectedDate": "2025-08-27T00:00:00",
+            "holidayType": "Festival",
+            "holidayStatus": 1
+        },
+        {
+            "id": 170,
+            "holidayName": "Mukund Test",
+            "selectedDate": "2025-09-10T00:00:00",
+            "holidayType": "Other",
+            "holidayStatus": 0
+        },
+        {
+            "id": 164,
+            "holidayName": "Ayudha Pooje",
+            "selectedDate": "2025-10-01T00:00:00",
+            "holidayType": "Festival",
+            "holidayStatus": 1
+        },
+        {
+            "id": 165,
+            "holidayName": "Gandhi Jayanthi",
+            "selectedDate": "2025-10-02T00:00:00",
+            "holidayType": "Festival",
+            "holidayStatus": 1
+        },
+        {
+            "id": 166,
+            "holidayName": "Bali Padyami",
+            "selectedDate": "2025-10-22T00:00:00",
+            "holidayType": "Festival",
+            "holidayStatus": 1
+        },
+        {
+            "id": 167,
+            "holidayName": "Kannada Rajyotsava",
+            "selectedDate": "2025-11-01T00:00:00",
+            "holidayType": "State Mandatory",
+            "holidayStatus": 1
+        },
+        {
+            "id": 168,
+            "holidayName": "Christmas",
+            "selectedDate": "2025-12-25T00:00:00",
+            "holidayType": "Festival",
+            "holidayStatus": 1
+        }
+    ]
+}

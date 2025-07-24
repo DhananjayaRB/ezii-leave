@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Set User ID to 14674</title>
+</head>
+<body>
+    <h2>Set User ID to 14674</h2>
+    <p>Click the button below to set your user_id to 14674 and see their empty data state.</p>
+    
+    <button onclick="setUser()" style="padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">
+        Set User ID to 14674
+    </button>
+    
+    <script>
+        function setUser() {
+            localStorage.setItem('user_id', '14674');
+            alert('User ID set to 14674! The page will navigate to Employee Overview.');
+            window.location.href = '/overview';
+        }
+    </script>
+</body>
+</html>

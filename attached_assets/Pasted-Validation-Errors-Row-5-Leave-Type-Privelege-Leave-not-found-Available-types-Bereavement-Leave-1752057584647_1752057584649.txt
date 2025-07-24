@@ -1,0 +1,21 @@
+Validation Errors
+Row 5: Leave Type "Privelege Leave" not found. Available types: Bereavement Leave, Maternity Leave, Paternity Leave, Privilege Leave, Sick Leave, Special Leave
+Row 6: Leave Type "Privelege Leave" not found. Available types: Bereavement Leave, Maternity Leave, Paternity Leave, Privilege Leave, Sick Leave, Special Leave
+Row 7: Leave Type "Privelege Leave" not found. Available types: Bereavement Leave, Maternity Leave, Paternity Leave, Privilege Leave, Sick Leave, Special Leave
+Row 8: Leave Type "Privelege Leave" not found. Available types: Bereavement Leave, Maternity Leave, Paternity Leave, Privilege Leave, Sick Leave, Special Leave
+Row 9: Leave Type "Privelege Leave" not found. Available types: Bereavement Leave, Maternity Leave, Paternity Leave, Privilege Leave, Sick Leave, Special Leave
+Row 10: Leave Type "Privelege Leave" not found. Available types: Bereavement Leave, Maternity Leave, Paternity Leave, Privilege Leave, Sick Leave, Special Leave
+Row 11: Leave Type "Privelege Leave" not found. Available types: Bereavement Leave, Maternity Leave, Paternity Leave, Privilege Leave, Sick Leave, Special Leave
+Row 12: Leave Type "Privelege Leave" not found. Available types: Bereavement Leave, Maternity Leave, Paternity Leave, Privilege Leave, Sick Leave, Special Leave
+Row 13: Leave Type "Privelege Leave" not found. Available types: Bereavement Leave, Maternity Leave, Paternity Leave, Privilege Leave, Sick Leave, Special Leave
+Row 14: LeaveLapsed must be a valid positive number
+Row 14: Leave Type "Privelege Leave" not found. Available types: Bereavement Leave, Maternity Leave, Paternity Leave, Privilege Leave, Sick Leave, Special Leave
+Row 15: Leave Type "Privelege Leave" not found. Available types: Bereavement Leave, Maternity Leave, Paternity Leave, Privilege Leave, Sick Leave, Special Leave
+Row 16: Leave Type "Privelege Leave" not found. Available types: Bereavement Leave, Maternity Leave, Paternity Leave, Privilege Leave, Sick Leave, Special Leave
+Row 17: Leave Type "Privelege Leave" not found. Available types: Bereavement Leave, Maternity Leave, Paternity Leave, Privilege Leave, Sick Leave, Special Leave
+Row 18: Leave Type "Privelege Leave" not found. Available types: Bereavement Leave, Maternity Leave, Paternity Leave, Privilege Leave, Sick Leave, Special Leave
+Row 19: Leave Type "Privelege Leave" not found. Available types: Bereavement Leave, Maternity Leave, Paternity Leave, Privilege Leave, Sick Leave, Special Leave
+Row 22: Leave Type "Privelege Leave" not found. Available types: Bereavement Leave, Maternity Leave, Paternity Leave, Privilege Leave, Sick Leave, Special Leave
+Row 24: Leave Type "Privelege Leave" not found. Available types: Bereavement Leave, Maternity Leave, Paternity Leave, Privilege Leave, Sick Leave, Special Leave
+Row 29: LeaveAvailed must be a valid positive number
+Row 30: LeaveAvailed must be a valid positive number

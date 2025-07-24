@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Set User ID</title>
+</head>
+<body>
+    <h1>Set User ID for Testing</h1>
+    <button onclick="setUser()">Set User to Sarga Joseph (IN90004335)</button>
+    
+    <script>
+        function setUser() {
+            localStorage.setItem('user_id', 'IN90004335');
+            alert('User ID set to IN90004335 (Sarga Joseph)');
+            window.location.reload();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+Get Employees Under the Reporting Manager
+ 
+https://qa-api.resolveindia.com/organization/reporting-manager/225/reportees
+ 
+{
+    "result": "Success",
+    "statuscode": 200,
+    "message": "Reporting Relationship Change Summary",
+    "data": [
+        {
+            "user_id": 227,
+            "empnumber": "120",
+            "empname": "Chandrashekar B Krishnamurthy",
+            "email": "chandra.shekar@fundermax.biz"
+        },
+        {
+            "user_id": 244,
+            "empnumber": "110",
+            "empname": "Srikanth Jayasimha",
+            "email": "srikanth.jayasimha@fundermax.biz"
+        },
+        {
+            "user_id": 230,
+            "empnumber": "119",
+            "empname": "Mallampalli Sriharsha",
+            "email": "harsha.mallampalli@fundermax.biz"
+        },
+        {
+            "user_id": 240,
+            "empnumber": "108",
+            "empname": "Radhika Maheshwari",
+            "email": "radhika.maheshwari@fundermax.biz"
+        },
+        {
+            "user_id": 469,
+            "empnumber": "129",
+            "empname": "Pankaj Patil",
+            "email": "pankaj.patil@fundermax.biz"
+        },
+        {
+            "user_id": 800,
+            "empnumber": "133",
+            "empname": "Paul P Alias",
+            "email": "paul.palias@fundermax.biz"
+        },
+        {
+            "user_id": 245,
+            "empnumber": "136",
+            "empname": "Sripathi Venkatesh",
+            "email": "sripathi.venkatesh@fundermax.biz"
+        },
+        {
+            "user_id": 14712,
+            "empnumber": "137",
+            "empname": "Ajay Roul",
+            "email": "ajay.roul@fundermax.biz"
+        },
+        {
+            "user_id": 14713,
+            "empnumber": "138",
+            "empname": "Niranjan Deepak Desai",
+            "email": "niranjan.desai@fundermax.biz"
+        },
+        {
+            "user_id": 14812,
+            "empnumber": "139",
+            "empname": "JOSHUA DEVAKUMAR MOSES",
+            "email": "joshua.moses@fundermax.biz"
+        },
+        {
+            "user_id": 15040,
+            "empnumber": "140",
+            "empname": "Krishan",
+            "email": "krishan.tanwar@fundermax.biz"
+        },
+        {
+            "user_id": 243,
+            "empnumber": "134",
+            "empname": "SHRIDHAR",
+            "email": "shridhar.rao@fundermax.biz"
+        },
+        {
+            "user_id": 232,
+            "empnumber": "118",
+            "empname": "MOHANARYA S S",
+            "email": "mohan.arya@fundermax.biz"
+        },
+        {
+            "user_id": 19434,
+            "empnumber": "141",
+            "empname": "Raj Kumar",
+            "email": "rajkumar.k@fundermax.biz"
+        },
+        {
+            "user_id": 58104,
+            "empnumber": "144",
+            "empname": "Shubham Gajendra Raut",
+            "email": "shubham.raut@fundermax.biz"
+        },
+        {
+            "user_id": 54731,
+            "empnumber": "142",
+            "empname": "Tom Bruce",
+            "email": "tombruce.av@fundermax.biz"
+        },
+        {
+            "user_id": 57702,
+            "empnumber": "143",
+            "empname": "Suresh Kumar Krishnan",
+            "email": "suresh.kumar@fundermax.biz"
+        }
+    ]
+}

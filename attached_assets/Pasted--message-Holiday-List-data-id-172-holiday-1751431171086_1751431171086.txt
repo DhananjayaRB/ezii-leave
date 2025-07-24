@@ -1,0 +1,124 @@
+{
+    "message": "Holiday List",
+    "data": [
+        {
+            "id": 172,
+            "holidayName": "New Year",
+            "selectedDate": "2025-01-01T00:00:00",
+            "holidayType": "Company Specific",
+            "holidayStatus": 1
+        },
+        {
+            "id": 173,
+            "holidayName": "Makara Sankranti",
+            "selectedDate": "2025-01-14T00:00:00",
+            "holidayType": "Festival",
+            "holidayStatus": 1
+        },
+        {
+            "id": 174,
+            "holidayName": "Republic Day",
+            "selectedDate": "2025-01-26T00:00:00",
+            "holidayType": "National Mandatory",
+            "holidayStatus": 1
+        },
+        {
+            "id": 186,
+            "holidayName": "Maha Shivarathri",
+            "selectedDate": "2025-02-26T00:00:00",
+            "holidayType": "Festival",
+            "holidayStatus": 1
+        },
+        {
+            "id": 175,
+            "holidayName": "Holi",
+            "selectedDate": "2025-03-14T00:00:00",
+            "holidayType": "Festival",
+            "holidayStatus": 1
+        },
+        {
+            "id": 187,
+            "holidayName": "Vishu",
+            "selectedDate": "2025-04-14T00:00:00",
+            "holidayType": "Festival",
+            "holidayStatus": 1
+        },
+        {
+            "id": 188,
+            "holidayName": "Good Friday",
+            "selectedDate": "2025-04-18T00:00:00",
+            "holidayType": "Festival",
+            "holidayStatus": 1
+        },
+        {
+            "id": 176,
+            "holidayName": "May Day / Labour Day",
+            "selectedDate": "2025-05-01T00:00:00",
+            "holidayType": "National Mandatory",
+            "holidayStatus": 1
+        },
+        {
+            "id": 177,
+            "holidayName": "Varmahalakshmi Pooja",
+            "selectedDate": "2025-08-08T00:00:00",
+            "holidayType": "Festival",
+            "holidayStatus": 1
+        },
+        {
+            "id": 178,
+            "holidayName": "Independence Day",
+            "selectedDate": "2025-08-15T00:00:00",
+            "holidayType": "National Mandatory",
+            "holidayStatus": 1
+        },
+        {
+            "id": 179,
+            "holidayName": "Ganesh Chaturthi",
+            "selectedDate": "2025-08-27T00:00:00",
+            "holidayType": "Festival",
+            "holidayStatus": 1
+        },
+        {
+            "id": 180,
+            "holidayName": "Eid Milad",
+            "selectedDate": "2025-09-05T00:00:00",
+            "holidayType": "Festival",
+            "holidayStatus": 1
+        },
+        {
+            "id": 181,
+            "holidayName": "Gandhi Jayanthi/ Dushera",
+            "selectedDate": "2025-10-02T00:00:00",
+            "holidayType": "Festival",
+            "holidayStatus": 1
+        },
+        {
+            "id": 182,
+            "holidayName": "Diwali",
+            "selectedDate": "2025-10-21T00:00:00",
+            "holidayType": "Festival",
+            "holidayStatus": 1
+        },
+        {
+            "id": 183,
+            "holidayName": "Diwal",
+            "selectedDate": "2025-10-22T00:00:00",
+            "holidayType": "Festival",
+            "holidayStatus": 1
+        },
+        {
+            "id": 184,
+            "holidayName": "Kannada Rajyotsava",
+            "selectedDate": "2025-11-01T00:00:00",
+            "holidayType": "State Mandatory",
+            "holidayStatus": 1
+        },
+        {
+            "id": 185,
+            "holidayName": "Christmas Day",
+            "selectedDate": "2025-12-25T00:00:00",
+            "holidayType": "Festival",
+            "holidayStatus": 1
+        }
+    ]
+}

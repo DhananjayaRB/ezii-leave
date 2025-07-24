@@ -1,0 +1,233 @@
+Current user ID from localStorage: IN2005002
+LeaveApplications.tsx:170 === LEAVE TYPE FILTERING DEBUG ===
+LeaveApplications.tsx:171 Current user ID: IN2005002
+LeaveApplications.tsx:172 All assignments: (1144) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, …]
+LeaveApplications.tsx:173 All variants: (6) [{…}, {…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:179 User assignments: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:182 Assigned variant IDs: (4) [51, 52, 55, 56]
+LeaveApplications.tsx:188 Available leave variants: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:189 ===============================
+LeaveApplications.tsx:796 === BALANCE CALCULATION DEBUG ===
+LeaveApplications.tsx:797 Current user ID: IN2005002
+LeaveApplications.tsx:798 User assignments: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:799 Assigned variant IDs: (4) [51, 52, 55, 56]
+LeaveApplications.tsx:800 Available leave variants: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:801 Leave balances for user IN2005002 : (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:802 Raw leaveBalances from API: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:40 === LEAVE PERMISSION DEBUG ===
+LeaveApplications.tsx:41 Current role from localStorage: admin
+LeaveApplications.tsx:42 Current org_id from localStorage: 54
+LeaveApplications.tsx:43 Full permissions hook result: {permissions: {…}, loading: false, hasPermission: ƒ, canViewScreen: ƒ, canModifyScreen: ƒ, …}
+LeaveApplications.tsx:44 permissions.permissions: {pto: {…}, roles: {…}, adminPTO: {…}, holidays: {…}, approvals: {…}, …}
+LeaveApplications.tsx:45 allowOnBehalf from permissions.permissions: {pto: true, leave: true, compOff: true}
+LeaveApplications.tsx:46 allowOnBehalf.leave: true
+LeaveApplications.tsx:47 Should show checkbox? true
+LeaveApplications.tsx:48 ================================
+LeaveApplications.tsx:100 Current user ID from localStorage: IN2005002
+LeaveApplications.tsx:170 === LEAVE TYPE FILTERING DEBUG ===
+LeaveApplications.tsx:171 Current user ID: IN2005002
+LeaveApplications.tsx:172 All assignments: (1144) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, …]
+LeaveApplications.tsx:173 All variants: (6) [{…}, {…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:179 User assignments: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:182 Assigned variant IDs: (4) [51, 52, 55, 56]
+LeaveApplications.tsx:188 Available leave variants: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:189 ===============================
+LeaveApplications.tsx:796 === BALANCE CALCULATION DEBUG ===
+LeaveApplications.tsx:797 Current user ID: IN2005002
+LeaveApplications.tsx:798 User assignments: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:799 Assigned variant IDs: (4) [51, 52, 55, 56]
+LeaveApplications.tsx:800 Available leave variants: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:801 Leave balances for user IN2005002 : (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:802 Raw leaveBalances from API: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:40 === LEAVE PERMISSION DEBUG ===
+LeaveApplications.tsx:41 Current role from localStorage: admin
+LeaveApplications.tsx:42 Current org_id from localStorage: 54
+LeaveApplications.tsx:43 Full permissions hook result: {permissions: {…}, loading: false, hasPermission: ƒ, canViewScreen: ƒ, canModifyScreen: ƒ, …}
+LeaveApplications.tsx:44 permissions.permissions: {pto: {…}, roles: {…}, adminPTO: {…}, holidays: {…}, approvals: {…}, …}
+LeaveApplications.tsx:45 allowOnBehalf from permissions.permissions: {pto: true, leave: true, compOff: true}
+LeaveApplications.tsx:46 allowOnBehalf.leave: true
+LeaveApplications.tsx:47 Should show checkbox? true
+LeaveApplications.tsx:48 ================================
+LeaveApplications.tsx:307 🔥 validateDates CALLED! {selectedLeaveType: 'All Employees', startDate: '', endDate: ''}
+LeaveApplications.tsx:314 Early return - missing data
+LeaveApplications.tsx:100 Current user ID from localStorage: IN2005002
+LeaveApplications.tsx:170 === LEAVE TYPE FILTERING DEBUG ===
+LeaveApplications.tsx:171 Current user ID: IN2005002
+LeaveApplications.tsx:172 All assignments: (1144) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, …]
+LeaveApplications.tsx:173 All variants: (6) [{…}, {…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:179 User assignments: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:182 Assigned variant IDs: (4) [51, 52, 55, 56]
+LeaveApplications.tsx:188 Available leave variants: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:189 ===============================
+LeaveApplications.tsx:796 === BALANCE CALCULATION DEBUG ===
+LeaveApplications.tsx:797 Current user ID: IN2005002
+LeaveApplications.tsx:798 User assignments: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:799 Assigned variant IDs: (4) [51, 52, 55, 56]
+LeaveApplications.tsx:800 Available leave variants: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:801 Leave balances for user IN2005002 : (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:802 Raw leaveBalances from API: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:40 === LEAVE PERMISSION DEBUG ===
+LeaveApplications.tsx:41 Current role from localStorage: admin
+LeaveApplications.tsx:42 Current org_id from localStorage: 54
+LeaveApplications.tsx:43 Full permissions hook result: {permissions: {…}, loading: false, hasPermission: ƒ, canViewScreen: ƒ, canModifyScreen: ƒ, …}
+LeaveApplications.tsx:44 permissions.permissions: {pto: {…}, roles: {…}, adminPTO: {…}, holidays: {…}, approvals: {…}, …}
+LeaveApplications.tsx:45 allowOnBehalf from permissions.permissions: {pto: true, leave: true, compOff: true}
+LeaveApplications.tsx:46 allowOnBehalf.leave: true
+LeaveApplications.tsx:47 Should show checkbox? true
+LeaveApplications.tsx:48 ================================
+LeaveApplications.tsx:100 Current user ID from localStorage: IN2005002
+LeaveApplications.tsx:170 === LEAVE TYPE FILTERING DEBUG ===
+LeaveApplications.tsx:171 Current user ID: IN2005002
+LeaveApplications.tsx:172 All assignments: (1144) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, …]
+LeaveApplications.tsx:173 All variants: (6) [{…}, {…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:179 User assignments: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:182 Assigned variant IDs: (4) [51, 52, 55, 56]
+LeaveApplications.tsx:188 Available leave variants: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:189 ===============================
+LeaveApplications.tsx:796 === BALANCE CALCULATION DEBUG ===
+LeaveApplications.tsx:797 Current user ID: IN2005002
+LeaveApplications.tsx:798 User assignments: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:799 Assigned variant IDs: (4) [51, 52, 55, 56]
+LeaveApplications.tsx:800 Available leave variants: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:801 Leave balances for user IN2005002 : (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:802 Raw leaveBalances from API: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:40 === LEAVE PERMISSION DEBUG ===
+LeaveApplications.tsx:41 Current role from localStorage: admin
+LeaveApplications.tsx:42 Current org_id from localStorage: 54
+LeaveApplications.tsx:43 Full permissions hook result: {permissions: {…}, loading: false, hasPermission: ƒ, canViewScreen: ƒ, canModifyScreen: ƒ, …}
+LeaveApplications.tsx:44 permissions.permissions: {pto: {…}, roles: {…}, adminPTO: {…}, holidays: {…}, approvals: {…}, …}
+LeaveApplications.tsx:45 allowOnBehalf from permissions.permissions: {pto: true, leave: true, compOff: true}
+LeaveApplications.tsx:46 allowOnBehalf.leave: true
+LeaveApplications.tsx:47 Should show checkbox? true
+LeaveApplications.tsx:48 ================================
+LeaveApplications.tsx:307 🔥 validateDates CALLED! {selectedLeaveType: 'All Employees', startDate: '2025-08-02', endDate: ''}
+LeaveApplications.tsx:314 Early return - missing data
+LeaveApplications.tsx:100 Current user ID from localStorage: IN2005002
+LeaveApplications.tsx:170 === LEAVE TYPE FILTERING DEBUG ===
+LeaveApplications.tsx:171 Current user ID: IN2005002
+LeaveApplications.tsx:172 All assignments: (1144) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, …]
+LeaveApplications.tsx:173 All variants: (6) [{…}, {…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:179 User assignments: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:182 Assigned variant IDs: (4) [51, 52, 55, 56]
+LeaveApplications.tsx:188 Available leave variants: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:189 ===============================
+LeaveApplications.tsx:796 === BALANCE CALCULATION DEBUG ===
+LeaveApplications.tsx:797 Current user ID: IN2005002
+LeaveApplications.tsx:798 User assignments: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:799 Assigned variant IDs: (4) [51, 52, 55, 56]
+LeaveApplications.tsx:800 Available leave variants: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:801 Leave balances for user IN2005002 : (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:802 Raw leaveBalances from API: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:40 === LEAVE PERMISSION DEBUG ===
+LeaveApplications.tsx:41 Current role from localStorage: admin
+LeaveApplications.tsx:42 Current org_id from localStorage: 54
+LeaveApplications.tsx:43 Full permissions hook result: {permissions: {…}, loading: false, hasPermission: ƒ, canViewScreen: ƒ, canModifyScreen: ƒ, …}
+LeaveApplications.tsx:44 permissions.permissions: {pto: {…}, roles: {…}, adminPTO: {…}, holidays: {…}, approvals: {…}, …}
+LeaveApplications.tsx:45 allowOnBehalf from permissions.permissions: {pto: true, leave: true, compOff: true}
+LeaveApplications.tsx:46 allowOnBehalf.leave: true
+LeaveApplications.tsx:47 Should show checkbox? true
+LeaveApplications.tsx:48 ================================
+LeaveApplications.tsx:100 Current user ID from localStorage: IN2005002
+LeaveApplications.tsx:170 === LEAVE TYPE FILTERING DEBUG ===
+LeaveApplications.tsx:171 Current user ID: IN2005002
+LeaveApplications.tsx:172 All assignments: (1144) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, …]
+LeaveApplications.tsx:173 All variants: (6) [{…}, {…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:179 User assignments: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:182 Assigned variant IDs: (4) [51, 52, 55, 56]
+LeaveApplications.tsx:188 Available leave variants: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:189 ===============================
+LeaveApplications.tsx:796 === BALANCE CALCULATION DEBUG ===
+LeaveApplications.tsx:797 Current user ID: IN2005002
+LeaveApplications.tsx:798 User assignments: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:799 Assigned variant IDs: (4) [51, 52, 55, 56]
+LeaveApplications.tsx:800 Available leave variants: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:801 Leave balances for user IN2005002 : (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:802 Raw leaveBalances from API: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:40 === LEAVE PERMISSION DEBUG ===
+LeaveApplications.tsx:41 Current role from localStorage: admin
+LeaveApplications.tsx:42 Current org_id from localStorage: 54
+LeaveApplications.tsx:43 Full permissions hook result: {permissions: {…}, loading: false, hasPermission: ƒ, canViewScreen: ƒ, canModifyScreen: ƒ, …}
+LeaveApplications.tsx:44 permissions.permissions: {pto: {…}, roles: {…}, adminPTO: {…}, holidays: {…}, approvals: {…}, …}
+LeaveApplications.tsx:45 allowOnBehalf from permissions.permissions: {pto: true, leave: true, compOff: true}
+LeaveApplications.tsx:46 allowOnBehalf.leave: true
+LeaveApplications.tsx:47 Should show checkbox? true
+LeaveApplications.tsx:48 ================================
+LeaveApplications.tsx:307 🔥 validateDates CALLED! {selectedLeaveType: 'All Employees', startDate: '2025-08-14', endDate: ''}
+LeaveApplications.tsx:314 Early return - missing data
+LeaveApplications.tsx:100 Current user ID from localStorage: IN2005002
+LeaveApplications.tsx:170 === LEAVE TYPE FILTERING DEBUG ===
+LeaveApplications.tsx:171 Current user ID: IN2005002
+LeaveApplications.tsx:172 All assignments: (1144) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, …]
+LeaveApplications.tsx:173 All variants: (6) [{…}, {…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:179 User assignments: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:182 Assigned variant IDs: (4) [51, 52, 55, 56]
+LeaveApplications.tsx:188 Available leave variants: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:189 ===============================
+LeaveApplications.tsx:796 === BALANCE CALCULATION DEBUG ===
+LeaveApplications.tsx:797 Current user ID: IN2005002
+LeaveApplications.tsx:798 User assignments: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:799 Assigned variant IDs: (4) [51, 52, 55, 56]
+LeaveApplications.tsx:800 Available leave variants: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:801 Leave balances for user IN2005002 : (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:802 Raw leaveBalances from API: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:40 === LEAVE PERMISSION DEBUG ===
+LeaveApplications.tsx:41 Current role from localStorage: admin
+LeaveApplications.tsx:42 Current org_id from localStorage: 54
+LeaveApplications.tsx:43 Full permissions hook result: {permissions: {…}, loading: false, hasPermission: ƒ, canViewScreen: ƒ, canModifyScreen: ƒ, …}
+LeaveApplications.tsx:44 permissions.permissions: {pto: {…}, roles: {…}, adminPTO: {…}, holidays: {…}, approvals: {…}, …}
+LeaveApplications.tsx:45 allowOnBehalf from permissions.permissions: {pto: true, leave: true, compOff: true}
+LeaveApplications.tsx:46 allowOnBehalf.leave: true
+LeaveApplications.tsx:47 Should show checkbox? true
+LeaveApplications.tsx:48 ================================
+LeaveApplications.tsx:100 Current user ID from localStorage: IN2005002
+LeaveApplications.tsx:170 === LEAVE TYPE FILTERING DEBUG ===
+LeaveApplications.tsx:171 Current user ID: IN2005002
+LeaveApplications.tsx:172 All assignments: (1144) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, …]
+LeaveApplications.tsx:173 All variants: (6) [{…}, {…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:179 User assignments: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:182 Assigned variant IDs: (4) [51, 52, 55, 56]
+LeaveApplications.tsx:188 Available leave variants: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:189 ===============================
+LeaveApplications.tsx:796 === BALANCE CALCULATION DEBUG ===
+LeaveApplications.tsx:797 Current user ID: IN2005002
+LeaveApplications.tsx:798 User assignments: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:799 Assigned variant IDs: (4) [51, 52, 55, 56]
+LeaveApplications.tsx:800 Available leave variants: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:801 Leave balances for user IN2005002 : (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:802 Raw leaveBalances from API: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:40 === LEAVE PERMISSION DEBUG ===
+LeaveApplications.tsx:41 Current role from localStorage: admin
+LeaveApplications.tsx:42 Current org_id from localStorage: 54
+LeaveApplications.tsx:43 Full permissions hook result: {permissions: {…}, loading: false, hasPermission: ƒ, canViewScreen: ƒ, canModifyScreen: ƒ, …}
+LeaveApplications.tsx:44 permissions.permissions: {pto: {…}, roles: {…}, adminPTO: {…}, holidays: {…}, approvals: {…}, …}
+LeaveApplications.tsx:45 allowOnBehalf from permissions.permissions: {pto: true, leave: true, compOff: true}
+LeaveApplications.tsx:46 allowOnBehalf.leave: true
+LeaveApplications.tsx:47 Should show checkbox? true
+LeaveApplications.tsx:48 ================================
+LeaveApplications.tsx:307 🔥 validateDates CALLED! {selectedLeaveType: 'All Employees', startDate: '2025-08-14', endDate: '2025-08-02'}
+LeaveApplications.tsx:320 Raw form data: {startDate: '2025-08-14', endDate: '2025-08-02', startDateType: 'string', endDateType: 'string'}
+LeaveApplications.tsx:349 Parsed dates: {originalStart: '2025-08-14', originalEnd: '2025-08-02', correctedStart: '2025-08-14', correctedEnd: '2025-08-02', startDate: '2025-08-13T18:30:00.000Z', …}
+LeaveApplications.tsx:100 Current user ID from localStorage: IN2005002
+LeaveApplications.tsx:170 === LEAVE TYPE FILTERING DEBUG ===
+LeaveApplications.tsx:171 Current user ID: IN2005002
+LeaveApplications.tsx:172 All assignments: (1144) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, …]
+LeaveApplications.tsx:173 All variants: (6) [{…}, {…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:179 User assignments: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:182 Assigned variant IDs: (4) [51, 52, 55, 56]
+LeaveApplications.tsx:188 Available leave variants: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:189 ===============================
+LeaveApplications.tsx:796 === BALANCE CALCULATION DEBUG ===
+LeaveApplications.tsx:797 Current user ID: IN2005002
+LeaveApplications.tsx:798 User assignments: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:799 Assigned variant IDs: (4) [51, 52, 55, 56]
+LeaveApplications.tsx:800 Available leave variants: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:801 Leave balances for user IN2005002 : (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:802 Raw leaveBalances from API: (4) [{…}, {…}, {…}, {…}]
+LeaveApplications.tsx:40 === LEAVE PERMISSION DEBUG ===
+LeaveApplications.tsx:41 Current role from localStorage: admin
+LeaveApplications.tsx:42 Current org_id from localStorage: 54
+LeaveApplications.tsx:43 Full permissions hook result: {permissions: {…}, loading: false, hasPermission: ƒ, canViewScreen: ƒ, canModifyScreen: ƒ, …}
+LeaveApplications.tsx:44 permissions.permissions: {pto: {…}, roles: {…}, adminPTO: {…}, holidays: {…}, approvals: {…}, …}
+LeaveApplications.tsx:45 allowOnBehalf from permissions.permissions: {pto: true, leave: true, compOff: true}
+LeaveApplications.tsx:46 allowOnBehalf.leave: true
+LeaveApplications.tsx:47 Should show checkbox? true

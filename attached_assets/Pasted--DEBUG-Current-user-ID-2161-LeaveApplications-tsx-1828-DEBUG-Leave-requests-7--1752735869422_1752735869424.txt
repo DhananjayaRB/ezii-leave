@@ -1,0 +1,34 @@
+🔍 [DEBUG] Current user ID: 2161
+LeaveApplications.tsx:1828 🔍 [DEBUG] Leave requests: (7) [{…}, {…}, {…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:1829 🔍 [DEBUG] Leave requests for current user:
+LeaveApplications.tsx:1832   1: 2025-07-10T00:00:00.000Z to 2025-07-10T00:00:00.000Z (pending) - ID: 2301
+LeaveApplications.tsx:1832   2: 2025-07-14T00:00:00.000Z to 2025-07-18T00:00:00.000Z (pending) - ID: 2300
+LeaveApplications.tsx:1832   3: 2025-06-10T00:00:00.000Z to 2025-06-10T00:00:00.000Z (pending) - ID: 2217
+LeaveApplications.tsx:1832   4: 2025-04-23T00:00:00.000Z to 2025-04-24T00:00:00.000Z (pending) - ID: 2216
+LeaveApplications.tsx:1832   5: 2025-03-12T00:00:00.000Z to 2025-03-14T00:00:00.000Z (pending) - ID: 2215
+LeaveApplications.tsx:1832   6: 2025-02-21T00:00:00.000Z to 2025-02-21T00:00:00.000Z (pending) - ID: 2214
+LeaveApplications.tsx:1832   7: 2025-01-07T00:00:00.000Z to 2025-01-10T00:00:00.000Z (pending) - ID: 2213
+LeaveApplications.tsx:1837 🧪 [TEST] Testing validation with 07/10/2025:
+LeaveApplications.tsx:1840 🧪 [TEST] Test dates: 2025-07-10T00:00:00.000Z 2025-07-10T00:00:00.000Z
+LeaveApplications.tsx:1845 🧪 [TEST] Checking against request: {id: 2301, userId: '2161', status: 'pending', startDate: '2025-07-10T00:00:00.000Z', endDate: '2025-07-10T00:00:00.000Z'}
+LeaveApplications.tsx:1866 🧪 [TEST] Date comparison: {testStart: '2025-07-10', testEnd: '2025-07-10', existingStart: '2025-07-10', existingEnd: '2025-07-10'}
+LeaveApplications.tsx:1874 🧪 [TEST] Overlap result: true
+LeaveApplications.tsx:1845 🧪 [TEST] Checking against request: {id: 2300, userId: '2161', status: 'pending', startDate: '2025-07-14T00:00:00.000Z', endDate: '2025-07-18T00:00:00.000Z'}
+LeaveApplications.tsx:1866 🧪 [TEST] Date comparison: {testStart: '2025-07-10', testEnd: '2025-07-10', existingStart: '2025-07-14', existingEnd: '2025-07-18'}
+LeaveApplications.tsx:1874 🧪 [TEST] Overlap result: false
+LeaveApplications.tsx:1845 🧪 [TEST] Checking against request: {id: 2217, userId: '2161', status: 'pending', startDate: '2025-06-10T00:00:00.000Z', endDate: '2025-06-10T00:00:00.000Z'}
+LeaveApplications.tsx:1866 🧪 [TEST] Date comparison: {testStart: '2025-07-10', testEnd: '2025-07-10', existingStart: '2025-06-10', existingEnd: '2025-06-10'}
+LeaveApplications.tsx:1874 🧪 [TEST] Overlap result: false
+LeaveApplications.tsx:1845 🧪 [TEST] Checking against request: {id: 2216, userId: '2161', status: 'pending', startDate: '2025-04-23T00:00:00.000Z', endDate: '2025-04-24T00:00:00.000Z'}
+LeaveApplications.tsx:1866 🧪 [TEST] Date comparison: {testStart: '2025-07-10', testEnd: '2025-07-10', existingStart: '2025-04-23', existingEnd: '2025-04-24'}
+LeaveApplications.tsx:1874 🧪 [TEST] Overlap result: false
+LeaveApplications.tsx:1845 🧪 [TEST] Checking against request: {id: 2215, userId: '2161', status: 'pending', startDate: '2025-03-12T00:00:00.000Z', endDate: '2025-03-14T00:00:00.000Z'}
+LeaveApplications.tsx:1866 🧪 [TEST] Date comparison: {testStart: '2025-07-10', testEnd: '2025-07-10', existingStart: '2025-03-12', existingEnd: '2025-03-14'}
+LeaveApplications.tsx:1874 🧪 [TEST] Overlap result: false
+LeaveApplications.tsx:1845 🧪 [TEST] Checking against request: {id: 2214, userId: '2161', status: 'pending', startDate: '2025-02-21T00:00:00.000Z', endDate: '2025-02-21T00:00:00.000Z'}
+LeaveApplications.tsx:1866 🧪 [TEST] Date comparison: {testStart: '2025-07-10', testEnd: '2025-07-10', existingStart: '2025-02-21', existingEnd: '2025-02-21'}
+LeaveApplications.tsx:1874 🧪 [TEST] Overlap result: false
+LeaveApplications.tsx:1845 🧪 [TEST] Checking against request: {id: 2213, userId: '2161', status: 'pending', startDate: '2025-01-07T00:00:00.000Z', endDate: '2025-01-10T00:00:00.000Z'}
+LeaveApplications.tsx:1866 🧪 [TEST] Date comparison: {testStart: '2025-07-10', testEnd: '2025-07-10', existingStart: '2025-01-07', existingEnd: '2025-01-10'}
+LeaveApplications.tsx:1874 🧪 [TEST] Overlap result: false
+LeaveApplications.tsx:1878 🧪 [TEST] Found conflicts: 1

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JWT Token Test</title>
+</head>
+<body>
+    <h1>JWT Token Processing Test</h1>
+    <button onclick="processToken()">Process JWT Token</button>
+    <div id="output"></div>
+
+    <script>
+        function processToken() {
+            const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdfaWQiOiI1NCIsInVzZXJfaWQiOiIxIiwicm9sZV9pZCI6IjIxNSIsInVzZXJfdHlwZV9pZCI6IjMiLCJyb2xlX25hbWUiOiJhZG1pbiIsIm5iZiI6MTc1MTM2MzgyOSwiZXhwIjoxNzUxMzkzODI5LCJpc3MiOiJodHRwczovL2xvY2FsaG9zdDo1MDAzIiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMyJ9.xMoh3VU39inrijPdEuYmEBBrE5ndGXHQJuqMiHWaBlU";
+            
+            // Decode JWT manually
+            const parts = token.split('.');
+            const payload = parts[1];
+            const paddedPayload = payload + '='.repeat((4 - payload.length % 4) % 4);
+            const decodedPayload = atob(paddedPayload);
+            const parsedPayload = JSON.parse(decodedPayload);
+            
+            console.log("Decoded JWT:", parsedPayload);
+            
+            // Store in localStorage
+            localStorage.setItem('org_id', parsedPayload.org_id);
+            localStorage.setItem('user_id', parsedPayload.user_id);
+            localStorage.setItem('role_id', parsedPayload.role_id);
+            localStorage.setItem('role_name', parsedPayload.role_name);
+            localStorage.setItem('user_type_id', parsedPayload.user_type_id);
+            localStorage.setItem('jwt_token', token);
+            
+            document.getElementById('output').innerHTML = 'JWT processed, redirecting...';
+            
+            // Redirect to home page
+            window.location.href = '/';
+        }
+    </script>
+</body>
+</html>

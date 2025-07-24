@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Transaction Upload</title>
+</head>
+<body>
+    <h2>Test Transaction Template Upload</h2>
+    <form action="/api/import-leave-data/validate" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".xlsx,.xls" required>
+        <button type="submit">Upload & Validate</button>
+    </form>
+    
+    <script>
+    document.querySelector('form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        
+        try {
+            const response = await fetch('/api/import-leave-data/validate', {
+                method: 'POST',
+                headers: {
+                    'X-Org-Id': '54'
+                },
+                body: formData
+            });
+            
+            const result = await response.json();
+            document.body.innerHTML += '<pre>' + JSON.stringify(result, null, 2) + '</pre>';
+        } catch (error) {
+            console.error('Error:', error);
+            document.body.innerHTML += '<p>Error: ' + error.message + '</p>';
+        }
+    });
+    </script>
+</body>
+</html>

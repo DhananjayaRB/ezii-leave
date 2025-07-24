@@ -1,0 +1,43 @@
+===============================
+LeaveApplications.tsx:676 === BALANCE CALCULATION DEBUG ===
+LeaveApplications.tsx:677 Current user ID: 1
+LeaveApplications.tsx:678 User assignments: Array(0)
+LeaveApplications.tsx:679 Assigned variant IDs: Array(0)
+LeaveApplications.tsx:680 Available leave variants: Array(0)
+LeaveApplications.tsx:681 Leave balances for user 1 : Array(0)
+LeaveApplications.tsx:682 Raw leaveBalances from API: Array(0)
+LeaveApplications.tsx:35 === LEAVE PERMISSION DEBUG ===
+LeaveApplications.tsx:36 Current role from localStorage: employee
+LeaveApplications.tsx:37 Current org_id from localStorage: 18
+LeaveApplications.tsx:38 Full permissions hook result: Object
+LeaveApplications.tsx:39 permissions.permissions: Object
+LeaveApplications.tsx:40 allowOnBehalf from permissions.permissions: Object
+LeaveApplications.tsx:41 allowOnBehalf.leave: true
+LeaveApplications.tsx:42 Direct allowOnBehalf: undefined
+LeaveApplications.tsx:43 Should show checkbox? true
+LeaveApplications.tsx:44 ================================
+LeaveApplications.tsx:72 Current user ID from localStorage: 1
+LeaveApplications.tsx:182 === LEAVE TYPE FILTERING DEBUG ===
+LeaveApplications.tsx:183 Current user ID: 1
+LeaveApplications.tsx:184 All assignments: Array(403)
+LeaveApplications.tsx:185 All variants: Array(2)
+LeaveApplications.tsx:191 User assignments: Array(0)
+LeaveApplications.tsx:194 Assigned variant IDs: Array(0)
+LeaveApplications.tsx:200 Available leave variants: Array(0)
+LeaveApplications.tsx:201 ===============================
+LeaveApplications.tsx:676 === BALANCE CALCULATION DEBUG ===
+LeaveApplications.tsx:677 Current user ID: 1
+LeaveApplications.tsx:678 User assignments: Array(0)
+LeaveApplications.tsx:679 Assigned variant IDs: Array(0)
+LeaveApplications.tsx:680 Available leave variants: Array(0)
+LeaveApplications.tsx:681 Leave balances for user 1 : Array(0)
+LeaveApplications.tsx:682 Raw leaveBalances from API: Array(0)
+LeaveApplications.tsx:35 === LEAVE PERMISSION DEBUG ===
+LeaveApplications.tsx:36 Current role from localStorage: employee
+LeaveApplications.tsx:37 Current org_id from localStorage: 18
+LeaveApplications.tsx:38 Full permissions hook result: Object
+LeaveApplications.tsx:39 permissions.permissions: Object
+LeaveApplications.tsx:40 allowOnBehalf from permissions.permissions: Object
+LeaveApplications.tsx:41 allowOnBehalf.leave: true
+LeaveApplications.tsx:42 Direct allowOnBehalf: undefined
+LeaveApplications.tsx:43 Should show checkbox? true

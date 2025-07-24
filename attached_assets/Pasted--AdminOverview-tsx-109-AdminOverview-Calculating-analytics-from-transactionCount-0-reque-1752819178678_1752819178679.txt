@@ -1,0 +1,135 @@
+
+﻿
+AdminOverview.tsx:109 [AdminOverview] Calculating analytics from: 
+{transactionCount: 0, requestCount: 132, sampleTransaction: undefined, sampleRequest: {…}, requestStatuses: Array(3), …}
+AdminOverview.tsx:122 [AdminOverview] Request status counts: 
+{pending: 18, approved: 107, rejected: 0, total: 132}
+AdminOverview.tsx:137 [AdminOverview] Transaction analysis: 
+{totalTransactions: 0, sampleTransactions: Array(0), transactionTypes: Array(0), descriptions: Array(0)}
+AdminOverview.tsx:164 [AdminOverview] Analytics breakdown: 
+{deductionCount: 0, additionCount: 0, totalGrantedHalfDays: 0, totalAvailedHalfDays: 0, encashed: 0, …}
+AdminOverview.tsx:181 [AdminOverview] Final analytics result: 
+{pending: 18, approved: 107, rejected: 0, onLeave: 0, workingDaysAvailed: 138, …}
+AdminOverview.tsx:211 [AdminOverview] Raw data analysis: 
+{transactionCount: 0, requestCount: 132, selectedYear: '2025', sampleTransaction: undefined, sampleRequest: {…}, …}
+AdminOverview.tsx:241 [AdminOverview] Processing Jan request: 
+{id: 2288, leaveTypeName: 'Earned Leave', workingDays: '1.0', startDate: '2025-01-23T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:241 [AdminOverview] Processing Jan request: 
+{id: 2287, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-20T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:241 [AdminOverview] Processing Jan request: 
+{id: 2277, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '0.5', startDate: '2025-01-30T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:241 [AdminOverview] Processing Jan request: 
+{id: 2261, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-13T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:241 [AdminOverview] Processing Jan request: 
+{id: 2246, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-31T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:241 [AdminOverview] Processing Jan request: 
+{id: 2242, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-27T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:241 [AdminOverview] Processing Jan request: 
+{id: 2241, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '2.0', startDate: '2025-01-23T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:241 [AdminOverview] Processing Jan request: 
+{id: 2219, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-13T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:241 [AdminOverview] Processing Jan request: 
+{id: 2209, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-17T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:241 [AdminOverview] Processing Jan request: 
+{id: 2202, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-31T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:241 [AdminOverview] Processing Jan request: 
+{id: 2201, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-06T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:241 [AdminOverview] Processing Jan request: 
+{id: 2193, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-20T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:241 [AdminOverview] Processing Jan request: 
+{id: 2192, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-18T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:241 [AdminOverview] Processing Jan request: 
+{id: 2182, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-13T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:241 [AdminOverview] Processing Jan request: 
+{id: 2177, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-18T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:241 [AdminOverview] Processing Jan request: 
+{id: 2169, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-13T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:261 [AdminOverview] Monthly data calculated: 
+(12) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+AdminOverview.tsx:271 [AdminOverview] Debug leave types analysis: 
+{totalRequests: 132, sampleRequests: Array(5), allLeaveTypeNames: Array(132), uniqueLeaveTypes: Array(3), leaveTypeCount: 3}
+usePermissions.ts:137 Using cached permissions to prevent flickering
+useWorkPattern.ts:66 [WorkPattern] Fetching work patterns for user: 60838
+orgContext.ts:14 [OrgContext] Reading org_id from localStorage: 38
+queryClient.ts:61 [Query Request] Sending X-Org-Id header: 38 for GET /api/employee-leave-balances
+orgContext.ts:14 [OrgContext] Reading org_id from localStorage: 38
+queryClient.ts:61 [Query Request] Sending X-Org-Id header: 38 for GET /api/leave-balance-transactions
+externalApi.ts:48 [ExternalAPI] Starting fetchEmployeeData...
+externalApi.ts:53 [ExternalAPI] JWT token available: true
+externalApi.ts:54 [ExternalAPI] Token length: 321
+externalApi.ts:55 [ExternalAPI] Token preview: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdfaWQiO...
+externalApi.ts:56 [ExternalAPI] Full Authorization header: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdfaWQiOiIzOCIsInVzZXJfaWQiOiIxIiwicm9sZV9pZCI6IjIyOSIsInVzZXJfdHlwZV9pZCI6IjMiLCJyb2xlX25hbWUiOiJhZG1pbiIsIm5iZiI6MTc1MjgxNDI5NCwiZXhwIjoxNzUyODQ0Mjk0LCJpc3MiOiJodHRwczovL2xvY2FsaG9zdDo1MDAzIiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMyJ9.6-EF8CfAO70nQY_fApW61MjQafGLm0pixg1MQeMDeQU
+externalApi.ts:73 [ExternalAPI] Making request to worker-master-leave endpoint...
+externalApi.ts:74 [ExternalAPI] Payload: 
+{userBlocks: Array(3), userWise: 0, workerType: 0, attribute: 0, subAttributeId: 0}
+useWorkPattern.ts:69 
+ GET https://qa-api.resolveindia.com/organization/work-pattern/60838 404 (Not Found)
+useWorkPattern.ts:77 [WorkPattern] Work pattern API Response status: 404
+useWorkPattern.ts:130 [WorkPattern] Work pattern API Error: 404 
+AdminOverview.tsx:109 [AdminOverview] Calculating analytics from: 
+{transactionCount: 0, requestCount: 132, sampleTransaction: undefined, sampleRequest: {…}, requestStatuses: Array(3), …}
+AdminOverview.tsx:122 [AdminOverview] Request status counts: 
+{pending: 18, approved: 107, rejected: 0, total: 132}
+AdminOverview.tsx:137 [AdminOverview] Transaction analysis: 
+{totalTransactions: 0, sampleTransactions: Array(0), transactionTypes: Array(0), descriptions: Array(0)}
+AdminOverview.tsx:164 [AdminOverview] Analytics breakdown: 
+{deductionCount: 0, additionCount: 0, totalGrantedHalfDays: 0, totalAvailedHalfDays: 0, encashed: 0, …}
+AdminOverview.tsx:181 [AdminOverview] Final analytics result: 
+{pending: 18, approved: 107, rejected: 0, onLeave: 0, workingDaysAvailed: 138, …}
+AdminOverview.tsx:211 [AdminOverview] Raw data analysis: 
+{transactionCount: 0, requestCount: 132, selectedYear: '2025', sampleTransaction: undefined, sampleRequest: {…}, …}
+AdminOverview.tsx:241 [AdminOverview] Processing Jan request: 
+{id: 2288, leaveTypeName: 'Earned Leave', workingDays: '1.0', startDate: '2025-01-23T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:241 [AdminOverview] Processing Jan request: 
+{id: 2287, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-20T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:241 [AdminOverview] Processing Jan request: 
+{id: 2277, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '0.5', startDate: '2025-01-30T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:241 [AdminOverview] Processing Jan request: 
+{id: 2261, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-13T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:241 [AdminOverview] Processing Jan request: 
+{id: 2246, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-31T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:241 [AdminOverview] Processing Jan request: 
+{id: 2242, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-27T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:241 [AdminOverview] Processing Jan request: 
+{id: 2241, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '2.0', startDate: '2025-01-23T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:241 [AdminOverview] Processing Jan request: 
+{id: 2219, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-13T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:241 [AdminOverview] Processing Jan request: 
+{id: 2209, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-17T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:241 [AdminOverview] Processing Jan request: 
+{id: 2202, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-31T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:241 [AdminOverview] Processing Jan request: 
+{id: 2201, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-06T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:241 [AdminOverview] Processing Jan request: 
+{id: 2193, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-20T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:241 [AdminOverview] Processing Jan request: 
+{id: 2192, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-18T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:241 [AdminOverview] Processing Jan request: 
+{id: 2182, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-13T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:241 [AdminOverview] Processing Jan request: 
+{id: 2177, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-18T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:241 [AdminOverview] Processing Jan request: 
+{id: 2169, leaveTypeName: 'Sick Leave/ Casual Leave', workingDays: '1.0', startDate: '2025-01-13T00:00:00.000Z', status: 'approved'}
+AdminOverview.tsx:261 [AdminOverview] Monthly data calculated: 
+(12) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+AdminOverview.tsx:271 [AdminOverview] Debug leave types analysis: 
+{totalRequests: 132, sampleRequests: Array(5), allLeaveTypeNames: Array(132), uniqueLeaveTypes: Array(3), leaveTypeCount: 3}
+externalApi.ts:85 [ExternalAPI] Response status: 200
+externalApi.ts:94 [ExternalAPI] Response data: 
+{result: 'Success', statuscode: 200, message: ' Worker Master Request ', data: {…}}
+externalApi.ts:101 [ExternalAPI] Successfully fetched 39 employees from external API
+AdminOverview.tsx:109 [AdminOverview] Calculating analytics from: 
+{transactionCount: 0, requestCount: 132, sampleTransaction: undefined, sampleRequest: {…}, requestStatuses: Array(3), …}
+AdminOverview.tsx:122 [AdminOverview] Request status counts: 
+{pending: 18, approved: 107, rejected: 0, total: 132}
+AdminOverview.tsx:137 [AdminOverview] Transaction analysis: 
+{totalTransactions: 0, sampleTransactions: Array(0), transactionTypes: Array(0), descriptions: Array(0)}
+AdminOverview.tsx:164 [AdminOverview] Analytics breakdown: 
+{deductionCount: 0, additionCount: 0, totalGrantedHalfDays: 0, totalAvailedHalfDays: 0, encashed: 0, …}
+AdminOverview.tsx:181 [AdminOverview] Final analytics result: 
+{pending: 18, approved: 107, rejected: 0, onLeave: 0, workingDaysAvailed: 138, …}
+AdminOverview.tsx:211 [AdminOverview] Raw data analysis: 
+{transactionCount: 0, requestCount: 132, selectedYear: '2025', sampleTransaction: undefined, sampleRequest: {…}, …}
+AdminOverview.tsx:241 [AdminOverview] Processing Jan request: 
+{id: 2288, leaveTypeName: 'Earned Leave', workingDays: '1.0', startDate: '2025-01-23T00:00:00.000Z', status: 'approved'}
+﻿

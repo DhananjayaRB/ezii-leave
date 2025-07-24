@@ -1,0 +1,199 @@
+[DEBUG] Current org_id from localStorage: 13
+Home.tsx:53 [DEBUG] Company orgId from API: 13
+Home.tsx:106 [DEBUG] Setup wizard check: {currentOrgId: '13', companyOrgId: 13, isSetupCompleted: true, isOrgIdMismatch: false, isNewOrganization: false, …}
+useReportingManagerData.ts:27 [ReportingManager] Hook called - isAuthenticated: true user: true
+orgContext.ts:14 [OrgContext] Reading org_id from localStorage: 13
+queryClient.ts:45 [Query Request] Sending X-Org-Id header: 13 for GET /api/leave-requests
+orgContext.ts:14 [OrgContext] Reading org_id from localStorage: 13
+queryClient.ts:45 [Query Request] Sending X-Org-Id header: 13 for GET /api/leave-types
+orgContext.ts:14 [OrgContext] Reading org_id from localStorage: 13
+queryClient.ts:45 [Query Request] Sending X-Org-Id header: 13 for GET /api/users
+useReportingManagerData.ts:113 [ReportingManager] Effect triggered - isAuthenticated: true user: true
+useReportingManagerData.ts:116 [ReportingManager] User authenticated, calling reporting manager API for user_id: 1
+useReportingManagerData.ts:117 [ReportingManager] localStorage contents: (9) ['org_id', 'role_name', 'jwt_token', 'user_id', 'currentView', 'role', 'role_id', 'user_type_id', 'replitDevBannerClosed-f1ff95f5-c5e9-4a48-8b7d-e5003e7e46b5-00-2ouzfopqowui7.kirk.replit.dev']
+useReportingManagerData.ts:118 [ReportingManager] Available tokens: {jwtToken: false, jwt_token: true, token: false}
+useReportingManagerData.ts:30 [ReportingManager] Fetching reportees for user_id: 1
+useReportingManagerData.ts:36 [ReportingManager] JWT token found: true
+useReportingManagerData.ts:37 [ReportingManager] JWT token length: 320
+useReportingManagerData.ts:51 [ReportingManager] Making API call to: https://qa-api.resolveindia.com/organization/reporting-manager/1/reportees
+useReportingManagerData.ts:52 [ReportingManager] Using JWT token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdfaWQiO...
+useReportingManagerData.ts:132 [ReportingManager] Force calling API immediately for testing with user_id: 1
+useReportingManagerData.ts:133 [ReportingManager] Current localStorage keys: (9) ['org_id', 'role_name', 'jwt_token', 'user_id', 'currentView', 'role', 'role_id', 'user_type_id', 'replitDevBannerClosed-f1ff95f5-c5e9-4a48-8b7d-e5003e7e46b5-00-2ouzfopqowui7.kirk.replit.dev']
+useReportingManagerData.ts:30 [ReportingManager] Fetching reportees for user_id: 1
+useReportingManagerData.ts:36 [ReportingManager] JWT token found: true
+useReportingManagerData.ts:37 [ReportingManager] JWT token length: 320
+useReportingManagerData.ts:51 [ReportingManager] Making API call to: https://qa-api.resolveindia.com/organization/reporting-manager/1/reportees
+useReportingManagerData.ts:52 [ReportingManager] Using JWT token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdfaWQiO...
+useReportingManagerData.ts:139 [ReportingManager] Hook mounted - forcing API call
+orgContext.ts:14 [OrgContext] Reading org_id from localStorage: 13
+queryClient.ts:45 [Query Request] Sending X-Org-Id header: 13 for GET /api/comp-off-config
+orgContext.ts:14 [OrgContext] Reading org_id from localStorage: 13
+queryClient.ts:45 [Query Request] Sending X-Org-Id header: 13 for GET /api/pto-config
+useReportingManagerData.ts:27 [ReportingManager] Hook called - isAuthenticated: true user: true
+useReportingManagerData.ts:54 
+            
+            
+           GET https://qa-api.resolveindia.com/organization/reporting-manager/1/reportees 400 (Bad Request)
+fetchReportees @ useReportingManagerData.ts:54
+(anonymous) @ useReportingManagerData.ts:123
+commitHookEffectListMount @ chunk-RPCDYKBN.js?v=5bd6f64a:16915
+commitPassiveMountOnFiber @ chunk-RPCDYKBN.js?v=5bd6f64a:18156
+commitPassiveMountEffects_complete @ chunk-RPCDYKBN.js?v=5bd6f64a:18129
+commitPassiveMountEffects_begin @ chunk-RPCDYKBN.js?v=5bd6f64a:18119
+commitPassiveMountEffects @ chunk-RPCDYKBN.js?v=5bd6f64a:18109
+flushPassiveEffectsImpl @ chunk-RPCDYKBN.js?v=5bd6f64a:19490
+flushPassiveEffects @ chunk-RPCDYKBN.js?v=5bd6f64a:19447
+commitRootImpl @ chunk-RPCDYKBN.js?v=5bd6f64a:19416
+commitRoot @ chunk-RPCDYKBN.js?v=5bd6f64a:19277
+performSyncWorkOnRoot @ chunk-RPCDYKBN.js?v=5bd6f64a:18895
+flushSyncCallbacks @ chunk-RPCDYKBN.js?v=5bd6f64a:9119
+(anonymous) @ chunk-RPCDYKBN.js?v=5bd6f64a:18627
+setTimeout
+scheduleFn @ @tanstack_react-query.js?v=5bd6f64a:555
+flush @ @tanstack_react-query.js?v=5bd6f64a:569
+batch @ @tanstack_react-query.js?v=5bd6f64a:587
+dispatch_fn @ @tanstack_react-query.js?v=5bd6f64a:996
+setData @ @tanstack_react-query.js?v=5bd6f64a:696
+onSuccess @ @tanstack_react-query.js?v=5bd6f64a:897
+resolve @ @tanstack_react-query.js?v=5bd6f64a:456
+Promise.then
+run @ @tanstack_react-query.js?v=5bd6f64a:498
+start @ @tanstack_react-query.js?v=5bd6f64a:536
+fetch @ @tanstack_react-query.js?v=5bd6f64a:926
+executeFetch_fn @ @tanstack_react-query.js?v=5bd6f64a:2211
+onSubscribe @ @tanstack_react-query.js?v=5bd6f64a:1898
+subscribe @ @tanstack_react-query.js?v=5bd6f64a:24
+(anonymous) @ @tanstack_react-query.js?v=5bd6f64a:3022
+subscribeToStore @ chunk-RPCDYKBN.js?v=5bd6f64a:11984
+commitHookEffectListMount @ chunk-RPCDYKBN.js?v=5bd6f64a:16915
+commitPassiveMountOnFiber @ chunk-RPCDYKBN.js?v=5bd6f64a:18156
+commitPassiveMountEffects_complete @ chunk-RPCDYKBN.js?v=5bd6f64a:18129
+commitPassiveMountEffects_begin @ chunk-RPCDYKBN.js?v=5bd6f64a:18119
+commitPassiveMountEffects @ chunk-RPCDYKBN.js?v=5bd6f64a:18109
+flushPassiveEffectsImpl @ chunk-RPCDYKBN.js?v=5bd6f64a:19490
+flushPassiveEffects @ chunk-RPCDYKBN.js?v=5bd6f64a:19447
+commitRootImpl @ chunk-RPCDYKBN.js?v=5bd6f64a:19416
+commitRoot @ chunk-RPCDYKBN.js?v=5bd6f64a:19277
+performSyncWorkOnRoot @ chunk-RPCDYKBN.js?v=5bd6f64a:18895
+flushSyncCallbacks @ chunk-RPCDYKBN.js?v=5bd6f64a:9119
+(anonymous) @ chunk-RPCDYKBN.js?v=5bd6f64a:18627Understand this error
+useReportingManagerData.ts:62 [ReportingManager] API Response status: 400
+useReportingManagerData.ts:65 [ReportingManager] API call failed with status: 400
+useReportingManagerData.ts:67 [ReportingManager] Error response: {"result":"Failed","statuscode":400,"message":"Unable to process your request at this time.Please try again later."}
+useReportingManagerData.ts:27 [ReportingManager] Hook called - isAuthenticated: true user: true
+useReportingManagerData.ts:54 
+            
+            
+           GET https://qa-api.resolveindia.com/organization/reporting-manager/1/reportees 404 (Not Found)
+fetchReportees @ useReportingManagerData.ts:54
+(anonymous) @ useReportingManagerData.ts:134
+commitHookEffectListMount @ chunk-RPCDYKBN.js?v=5bd6f64a:16915
+commitPassiveMountOnFiber @ chunk-RPCDYKBN.js?v=5bd6f64a:18156
+commitPassiveMountEffects_complete @ chunk-RPCDYKBN.js?v=5bd6f64a:18129
+commitPassiveMountEffects_begin @ chunk-RPCDYKBN.js?v=5bd6f64a:18119
+commitPassiveMountEffects @ chunk-RPCDYKBN.js?v=5bd6f64a:18109
+flushPassiveEffectsImpl @ chunk-RPCDYKBN.js?v=5bd6f64a:19490
+flushPassiveEffects @ chunk-RPCDYKBN.js?v=5bd6f64a:19447
+commitRootImpl @ chunk-RPCDYKBN.js?v=5bd6f64a:19416
+commitRoot @ chunk-RPCDYKBN.js?v=5bd6f64a:19277
+performSyncWorkOnRoot @ chunk-RPCDYKBN.js?v=5bd6f64a:18895
+flushSyncCallbacks @ chunk-RPCDYKBN.js?v=5bd6f64a:9119
+(anonymous) @ chunk-RPCDYKBN.js?v=5bd6f64a:18627
+setTimeout
+scheduleFn @ @tanstack_react-query.js?v=5bd6f64a:555
+flush @ @tanstack_react-query.js?v=5bd6f64a:569
+batch @ @tanstack_react-query.js?v=5bd6f64a:587
+dispatch_fn @ @tanstack_react-query.js?v=5bd6f64a:996
+setData @ @tanstack_react-query.js?v=5bd6f64a:696
+onSuccess @ @tanstack_react-query.js?v=5bd6f64a:897
+resolve @ @tanstack_react-query.js?v=5bd6f64a:456
+Promise.then
+run @ @tanstack_react-query.js?v=5bd6f64a:498
+start @ @tanstack_react-query.js?v=5bd6f64a:536
+fetch @ @tanstack_react-query.js?v=5bd6f64a:926
+executeFetch_fn @ @tanstack_react-query.js?v=5bd6f64a:2211
+onSubscribe @ @tanstack_react-query.js?v=5bd6f64a:1898
+subscribe @ @tanstack_react-query.js?v=5bd6f64a:24
+(anonymous) @ @tanstack_react-query.js?v=5bd6f64a:3022
+subscribeToStore @ chunk-RPCDYKBN.js?v=5bd6f64a:11984
+commitHookEffectListMount @ chunk-RPCDYKBN.js?v=5bd6f64a:16915
+commitPassiveMountOnFiber @ chunk-RPCDYKBN.js?v=5bd6f64a:18156
+commitPassiveMountEffects_complete @ chunk-RPCDYKBN.js?v=5bd6f64a:18129
+commitPassiveMountEffects_begin @ chunk-RPCDYKBN.js?v=5bd6f64a:18119
+commitPassiveMountEffects @ chunk-RPCDYKBN.js?v=5bd6f64a:18109
+flushPassiveEffectsImpl @ chunk-RPCDYKBN.js?v=5bd6f64a:19490
+flushPassiveEffects @ chunk-RPCDYKBN.js?v=5bd6f64a:19447
+commitRootImpl @ chunk-RPCDYKBN.js?v=5bd6f64a:19416
+commitRoot @ chunk-RPCDYKBN.js?v=5bd6f64a:19277
+performSyncWorkOnRoot @ chunk-RPCDYKBN.js?v=5bd6f64a:18895
+flushSyncCallbacks @ chunk-RPCDYKBN.js?v=5bd6f64a:9119
+(anonymous) @ chunk-RPCDYKBN.js?v=5bd6f64a:18627Understand this error
+useReportingManagerData.ts:62 [ReportingManager] API Response status: 404
+useReportingManagerData.ts:65 [ReportingManager] API call failed with status: 404
+useReportingManagerData.ts:67 [ReportingManager] Error response: {"result":"Failed","statuscode":200,"message":"No Data Found!"}
+useReportingManagerData.ts:27 [ReportingManager] Hook called - isAuthenticated: true user: true
+2useReportingManagerData.ts:27 [ReportingManager] Hook called - isAuthenticated: true user: true
+externalApi.ts:81 [ExternalAPI] Response status: 200
+externalApi.ts:90 [ExternalAPI] Response data: {result: 'Success', statuscode: 200, message: ' Worker Master Request ', data: {…}}
+externalApi.ts:97 [ExternalAPI] Successfully fetched 46 employees from external API
+useReportingManagerData.ts:27 [ReportingManager] Hook called - isAuthenticated: true user: true
+useReportingManagerData.ts:142 [ReportingManager] Delayed API call with user_id: 1
+useReportingManagerData.ts:30 [ReportingManager] Fetching reportees for user_id: 1
+useReportingManagerData.ts:36 [ReportingManager] JWT token found: true
+useReportingManagerData.ts:37 [ReportingManager] JWT token length: 320
+useReportingManagerData.ts:51 [ReportingManager] Making API call to: https://qa-api.resolveindia.com/organization/reporting-manager/1/reportees
+useReportingManagerData.ts:52 [ReportingManager] Using JWT token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdfaWQiO...
+useReportingManagerData.ts:27 [ReportingManager] Hook called - isAuthenticated: true user: true
+useReportingManagerData.ts:54 
+            
+            
+           GET https://qa-api.resolveindia.com/organization/reporting-manager/1/reportees 404 (Not Found)
+fetchReportees @ useReportingManagerData.ts:54
+(anonymous) @ useReportingManagerData.ts:143
+setTimeout
+(anonymous) @ useReportingManagerData.ts:141
+commitHookEffectListMount @ chunk-RPCDYKBN.js?v=5bd6f64a:16915
+commitPassiveMountOnFiber @ chunk-RPCDYKBN.js?v=5bd6f64a:18156
+commitPassiveMountEffects_complete @ chunk-RPCDYKBN.js?v=5bd6f64a:18129
+commitPassiveMountEffects_begin @ chunk-RPCDYKBN.js?v=5bd6f64a:18119
+commitPassiveMountEffects @ chunk-RPCDYKBN.js?v=5bd6f64a:18109
+flushPassiveEffectsImpl @ chunk-RPCDYKBN.js?v=5bd6f64a:19490
+flushPassiveEffects @ chunk-RPCDYKBN.js?v=5bd6f64a:19447
+commitRootImpl @ chunk-RPCDYKBN.js?v=5bd6f64a:19416
+commitRoot @ chunk-RPCDYKBN.js?v=5bd6f64a:19277
+performSyncWorkOnRoot @ chunk-RPCDYKBN.js?v=5bd6f64a:18895
+flushSyncCallbacks @ chunk-RPCDYKBN.js?v=5bd6f64a:9119
+(anonymous) @ chunk-RPCDYKBN.js?v=5bd6f64a:18627
+setTimeout
+scheduleFn @ @tanstack_react-query.js?v=5bd6f64a:555
+flush @ @tanstack_react-query.js?v=5bd6f64a:569
+batch @ @tanstack_react-query.js?v=5bd6f64a:587
+dispatch_fn @ @tanstack_react-query.js?v=5bd6f64a:996
+setData @ @tanstack_react-query.js?v=5bd6f64a:696
+onSuccess @ @tanstack_react-query.js?v=5bd6f64a:897
+resolve @ @tanstack_react-query.js?v=5bd6f64a:456
+Promise.then
+run @ @tanstack_react-query.js?v=5bd6f64a:498
+start @ @tanstack_react-query.js?v=5bd6f64a:536
+fetch @ @tanstack_react-query.js?v=5bd6f64a:926
+executeFetch_fn @ @tanstack_react-query.js?v=5bd6f64a:2211
+onSubscribe @ @tanstack_react-query.js?v=5bd6f64a:1898
+subscribe @ @tanstack_react-query.js?v=5bd6f64a:24
+(anonymous) @ @tanstack_react-query.js?v=5bd6f64a:3022
+subscribeToStore @ chunk-RPCDYKBN.js?v=5bd6f64a:11984
+commitHookEffectListMount @ chunk-RPCDYKBN.js?v=5bd6f64a:16915
+commitPassiveMountOnFiber @ chunk-RPCDYKBN.js?v=5bd6f64a:18156
+commitPassiveMountEffects_complete @ chunk-RPCDYKBN.js?v=5bd6f64a:18129
+commitPassiveMountEffects_begin @ chunk-RPCDYKBN.js?v=5bd6f64a:18119
+commitPassiveMountEffects @ chunk-RPCDYKBN.js?v=5bd6f64a:18109
+flushPassiveEffectsImpl @ chunk-RPCDYKBN.js?v=5bd6f64a:19490
+flushPassiveEffects @ chunk-RPCDYKBN.js?v=5bd6f64a:19447
+commitRootImpl @ chunk-RPCDYKBN.js?v=5bd6f64a:19416
+commitRoot @ chunk-RPCDYKBN.js?v=5bd6f64a:19277
+performSyncWorkOnRoot @ chunk-RPCDYKBN.js?v=5bd6f64a:18895
+flushSyncCallbacks @ chunk-RPCDYKBN.js?v=5bd6f64a:9119
+(anonymous) @ chunk-RPCDYKBN.js?v=5bd6f64a:18627Understand this error
+useReportingManagerData.ts:62 [ReportingManager] API Response status: 404
+useReportingManagerData.ts:65 [ReportingManager] API call failed with status: 404
+useReportingManagerData.ts:67 [ReportingManager] Error response: {"result":"Failed","statuscode":200,"message":"No Data Found!"}
+useReportingManagerData.ts:27 [ReportingManager] Hook called - isAuthenticated: true user: true

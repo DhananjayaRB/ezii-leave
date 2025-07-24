@@ -1,0 +1,145 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(20, 14.3%, 4.1%);
+  --muted: hsl(60, 4.8%, 95.9%);
+  --muted-foreground: hsl(25, 5.3%, 44.7%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(20, 14.3%, 4.1%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(20, 14.3%, 4.1%);
+  --border: hsl(20, 5.9%, 90%);
+  --input: hsl(20, 5.9%, 90%);
+  --primary: hsl(158, 64%, 52%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(60, 4.8%, 95.9%);
+  --secondary-foreground: hsl(24, 9.8%, 10%);
+  --accent: hsl(60, 4.8%, 95.9%);
+  --accent-foreground: hsl(24, 9.8%, 10%);
+  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive-foreground: hsl(60, 9.1%, 97.8%);
+  --ring: hsl(20, 14.3%, 4.1%);
+  --radius: 0.5rem;
+  --sidebar-background: hsl(210, 24%, 16%);
+  --sidebar-foreground: hsl(0, 0%, 100%);
+  --sidebar-primary: hsl(158, 64%, 52%);
+  --sidebar-primary-foreground: hsl(0, 0%, 100%);
+  --sidebar-accent: hsl(210, 20%, 25%);
+  --sidebar-accent-foreground: hsl(0, 0%, 100%);
+  --sidebar-border: hsl(210, 20%, 25%);
+  --sidebar-ring: hsl(210, 20%, 25%);
+}
+
+.dark {
+  --background: hsl(240, 10%, 3.9%);
+  --foreground: hsl(0, 0%, 98%);
+  --muted: hsl(240, 3.7%, 15.9%);
+  --muted-foreground: hsl(240, 5%, 64.9%);
+  --popover: hsl(240, 10%, 3.9%);
+  --popover-foreground: hsl(0, 0%, 98%);
+  --card: hsl(240, 10%, 3.9%);
+  --card-foreground: hsl(0, 0%, 98%);
+  --border: hsl(240, 3.7%, 15.9%);
+  --input: hsl(240, 3.7%, 15.9%);
+  --primary: hsl(158, 64%, 52%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(240, 3.7%, 15.9%);
+  --secondary-foreground: hsl(0, 0%, 98%);
+  --accent: hsl(240, 3.7%, 15.9%);
+  --accent-foreground: hsl(0, 0%, 98%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(240, 4.9%, 83.9%);
+  --radius: 0.5rem;
+  --sidebar-background: hsl(210, 24%, 16%);
+  --sidebar-foreground: hsl(0, 0%, 100%);
+  --sidebar-primary: hsl(158, 64%, 52%);
+  --sidebar-primary-foreground: hsl(0, 0%, 100%);
+  --sidebar-accent: hsl(210, 20%, 25%);
+  --sidebar-accent-foreground: hsl(0, 0%, 100%);
+  --sidebar-border: hsl(210, 20%, 25%);
+  --sidebar-ring: hsl(210, 20%, 25%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+  }
+}
+
+/* Dancing Loader Animations */
+@keyframes dance {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  25% { transform: translateY(-5px) rotate(-2deg); }
+  50% { transform: translateY(-8px) rotate(0deg); }
+  75% { transform: translateY(-5px) rotate(2deg); }
+}
+
+@keyframes wave-left {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(-45deg); }
+}
+
+@keyframes wave-right {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(45deg); }
+}
+
+@keyframes kick-left {
+  0%, 100% { transform: rotate(0deg) translateX(0px); }
+  50% { transform: rotate(-15deg) translateX(-3px); }
+}
+
+@keyframes kick-right {
+  0%, 100% { transform: rotate(0deg) translateX(0px); }
+  50% { transform: rotate(15deg) translateX(3px); }
+}
+
+@keyframes step-left {
+  0%, 100% { transform: translateX(0px) translateY(0px); }
+  50% { transform: translateX(-4px) translateY(-2px); }
+}
+
+@keyframes step-right {
+  0%, 100% { transform: translateX(0px) translateY(0px); }
+  50% { transform: translateX(4px) translateY(-2px); }
+}
+
+.animate-dance {
+  animation: dance 1.5s ease-in-out infinite;
+}
+
+.animate-wave-left {
+  animation: wave-left 1s ease-in-out infinite;
+  transform-origin: right center;
+}
+
+.animate-wave-right {
+  animation: wave-right 1s ease-in-out infinite 0.5s;
+  transform-origin: left center;
+}
+
+.animate-kick-left {
+  animation: kick-left 1.2s ease-in-out infinite;
+  transform-origin: top center;
+}
+
+.animate-kick-right {
+  animation: kick-right 1.2s ease-in-out infinite 0.6s;
+  transform-origin: top center;
+}
+
+.animate-step-left {
+  animation: step-left 1.2s ease-in-out infinite;
+}
+
+.animate-step-right {
+  animation: step-right 1.2s ease-in-out infinite 0.6s;
+}

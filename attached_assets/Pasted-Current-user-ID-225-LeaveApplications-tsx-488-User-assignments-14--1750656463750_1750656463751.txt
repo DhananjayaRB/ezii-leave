@@ -1,0 +1,22 @@
+Current user ID: 225
+LeaveApplications.tsx:488 User assignments: (14) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:489 Assigned variant IDs: (14) [32, 33, 34, 37, 18, 40, 41, 42, 43, 44, 45, 36, 6, 8]
+LeaveApplications.tsx:490 Available leave variants: (5) [{…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:491 Leave balances for user 225 : (5) [{…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:492 Raw leaveBalances from API: (5) [{…}, {…}, {…}, {…}, {…}]
+LeaveApplications.tsx:495 === BALANCE MATCHING ===
+LeaveApplications.tsx:499 Variant 36 (All Employees): 3 days
+LeaveApplications.tsx:499 Variant 32 (All Employees): -2.5 days
+LeaveApplications.tsx:499 Variant 37 (All Employees): -7.5 days
+LeaveApplications.tsx:499 Variant 34 (All Male Employees): 2.5 days
+LeaveApplications.tsx:499 Variant 33 (All Employees): 6 days
+LeaveApplications.tsx:506 Adding balance for variant 32: -2.5 days
+LeaveApplications.tsx:506 Adding balance for variant 33: 6 days
+LeaveApplications.tsx:506 Adding balance for variant 34: 2.5 days
+LeaveApplications.tsx:506 Adding balance for variant 36: 3 days
+LeaveApplications.tsx:506 Adding balance for variant 37: -7.5 days
+LeaveApplications.tsx:510 === TOTAL BALANCE CALCULATION ===
+LeaveApplications.tsx:511 Total balance calculated: 1.5
+usePermissions.ts:158 Using database role permissions for admin : {pto: {…}, roles: {…}, adminPTO: {…}, holidays: {…}, approvals: {…}, …}adminCompOff: {view: true, modify: true}adminLeaveTypes: {view: true, modify: true}adminOverview: {view: true, modify: true}adminPTO: {view: true, modify: true}allowOnBehalf: {pto: true, leave: true, compOff: true}approvals: {view: true, modify: true}compensatoryOff: {view: true, modify: true}employeeOverview: {view: true, modify: true}employees: {view: true, modify: true}holidays: {view: true, modify: true}importLeaveData: {view: true, modify: true}leaveApplications: {view: true, modify: true}pto: {view: true, modify: true}roles: {view: true, modify: true}workflows: {view: true, modify: true}[[Prototype]]: Object
+usePermissions.ts:159 Workflows permission: {view: true, modify: true}modify: trueview: true[[Prototype]]: Object
+Layout.tsx:146 [Navigation Filter] Workflows (workflows): hasPermission=true, currentView=employee, type=admin

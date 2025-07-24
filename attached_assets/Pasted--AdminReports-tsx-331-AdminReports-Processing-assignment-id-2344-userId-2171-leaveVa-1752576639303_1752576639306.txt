@@ -1,0 +1,127 @@
+
+﻿
+AdminReports.tsx:331 [AdminReports] Processing assignment: 
+{id: 2344, userId: '2171', leaveVariantId: 58, assignmentType: 'leave_variant', orgId: 38, …}
+AdminReports.tsx:336 [AdminReports] Found variant for assignment: 
+{id: 58, leaveTypeId: 54, leaveTypeName: 'Sick Leave/ Casual Leave', leaveVariantName: 'Sick Leave/Casual Leave', description: 'Sick Leave/Casual Leave All Employees', …}
+AdminReports.tsx:331 [AdminReports] Processing assignment: 
+{id: 2377, userId: '2171', leaveVariantId: 60, assignmentType: 'leave_variant', orgId: 38, …}
+AdminReports.tsx:336 [AdminReports] Found variant for assignment: 
+{id: 60, leaveTypeId: 56, leaveTypeName: 'Paternity Leave', leaveVariantName: 'Paternity Leave', description: 'Paternity Leave (Male Employees)', …}
+AdminReports.tsx:348 [AdminReports] Final totals for Chandrashekhar: entitlement=0, used=0, available=0
+AdminReports.tsx:313 [AdminReports] Employee Vijaya Simha K (2172): found 0 balances, 3 assignments
+AdminReports.tsx:329 [AdminReports] Employee Vijaya Simha K (2172) has no balances but has 3 assignments
+AdminReports.tsx:331 [AdminReports] Processing assignment: 
+{id: 2314, userId: '2172', leaveVariantId: 57, assignmentType: 'leave_variant', orgId: 38, …}
+AdminReports.tsx:336 [AdminReports] Found variant for assignment: 
+{id: 57, leaveTypeId: 53, leaveTypeName: 'Earned Leave', leaveVariantName: 'Earned Leave', description: 'Earned Leave All Employees', …}
+AdminReports.tsx:331 [AdminReports] Processing assignment: 
+{id: 2345, userId: '2172', leaveVariantId: 58, assignmentType: 'leave_variant', orgId: 38, …}
+AdminReports.tsx:336 [AdminReports] Found variant for assignment: 
+{id: 58, leaveTypeId: 54, leaveTypeName: 'Sick Leave/ Casual Leave', leaveVariantName: 'Sick Leave/Casual Leave', description: 'Sick Leave/Casual Leave All Employees', …}
+AdminReports.tsx:331 [AdminReports] Processing assignment: 
+{id: 2378, userId: '2172', leaveVariantId: 60, assignmentType: 'leave_variant', orgId: 38, …}
+AdminReports.tsx:336 [AdminReports] Found variant for assignment: 
+{id: 60, leaveTypeId: 56, leaveTypeName: 'Paternity Leave', leaveVariantName: 'Paternity Leave', description: 'Paternity Leave (Male Employees)', …}
+AdminReports.tsx:348 [AdminReports] Final totals for Vijaya Simha K: entitlement=0, used=0, available=0
+AdminReports.tsx:313 [AdminReports] Employee Mukesh Jadhav (2173): found 0 balances, 3 assignments
+AdminReports.tsx:329 [AdminReports] Employee Mukesh Jadhav (2173) has no balances but has 3 assignments
+AdminReports.tsx:331 [AdminReports] Processing assignment: 
+{id: 2315, userId: '2173', leaveVariantId: 57, assignmentType: 'leave_variant', orgId: 38, …}
+AdminReports.tsx:336 [AdminReports] Found variant for assignment: 
+{id: 57, leaveTypeId: 53, leaveTypeName: 'Earned Leave', leaveVariantName: 'Earned Leave', description: 'Earned Leave All Employees', …}
+AdminReports.tsx:331 [AdminReports] Processing assignment: 
+{id: 2346, userId: '2173', leaveVariantId: 58, assignmentType: 'leave_variant', orgId: 38, …}
+AdminReports.tsx:336 [AdminReports] Found variant for assignment: 
+{id: 58, leaveTypeId: 54, leaveTypeName: 'Sick Leave/ Casual Leave', leaveVariantName: 'Sick Leave/Casual Leave', description: 'Sick Leave/Casual Leave All Employees', …}
+AdminReports.tsx:331 [AdminReports] Processing assignment: 
+{id: 2379, userId: '2173', leaveVariantId: 60, assignmentType: 'leave_variant', orgId: 38, …}
+AdminReports.tsx:336 [AdminReports] Found variant for assignment: 
+{id: 60, leaveTypeId: 56, leaveTypeName: 'Paternity Leave', leaveVariantName: 'Paternity Leave', description: 'Paternity Leave (Male Employees)', …}
+AdminReports.tsx:348 [AdminReports] Final totals for Mukesh Jadhav: entitlement=0, used=0, available=0
+AdminReports.tsx:313 [AdminReports] Employee Supreeth Rao (2174): found 0 balances, 3 assignments
+AdminReports.tsx:329 [AdminReports] Employee Supreeth Rao (2174) has no balances but has 3 assignments
+AdminReports.tsx:331 [AdminReports] Processing assignment: 
+{id: 2316, userId: '2174', leaveVariantId: 57, assignmentType: 'leave_variant', orgId: 38, …}
+AdminReports.tsx:336 [AdminReports] Found variant for assignment: 
+{id: 57, leaveTypeId: 53, leaveTypeName: 'Earned Leave', leaveVariantName: 'Earned Leave', description: 'Earned Leave All Employees', …}
+AdminReports.tsx:331 [AdminReports] Processing assignment: 
+{id: 2347, userId: '2174', leaveVariantId: 58, assignmentType: 'leave_variant', orgId: 38, …}
+AdminReports.tsx:336 [AdminReports] Found variant for assignment: 
+{id: 58, leaveTypeId: 54, leaveTypeName: 'Sick Leave/ Casual Leave', leaveVariantName: 'Sick Leave/Casual Leave', description: 'Sick Leave/Casual Leave All Employees', …}
+AdminReports.tsx:331 [AdminReports] Processing assignment: 
+{id: 2380, userId: '2174', leaveVariantId: 60, assignmentType: 'leave_variant', orgId: 38, …}
+AdminReports.tsx:336 [AdminReports] Found variant for assignment: 
+{id: 60, leaveTypeId: 56, leaveTypeName: 'Paternity Leave', leaveVariantName: 'Paternity Leave', description: 'Paternity Leave (Male Employees)', …}
+AdminReports.tsx:348 [AdminReports] Final totals for Supreeth Rao: entitlement=0, used=0, available=0
+AdminReports.tsx:313 [AdminReports] Employee Umesh T (2175): found 0 balances, 3 assignments
+AdminReports.tsx:329 [AdminReports] Employee Umesh T (2175) has no balances but has 3 assignments
+AdminReports.tsx:331 [AdminReports] Processing assignment: 
+{id: 2317, userId: '2175', leaveVariantId: 57, assignmentType: 'leave_variant', orgId: 38, …}
+AdminReports.tsx:336 [AdminReports] Found variant for assignment: 
+{id: 57, leaveTypeId: 53, leaveTypeName: 'Earned Leave', leaveVariantName: 'Earned Leave', description: 'Earned Leave All Employees', …}
+AdminReports.tsx:331 [AdminReports] Processing assignment: 
+{id: 2348, userId: '2175', leaveVariantId: 58, assignmentType: 'leave_variant', orgId: 38, …}
+AdminReports.tsx:336 [AdminReports] Found variant for assignment: 
+{id: 58, leaveTypeId: 54, leaveTypeName: 'Sick Leave/ Casual Leave', leaveVariantName: 'Sick Leave/Casual Leave', description: 'Sick Leave/Casual Leave All Employees', …}
+AdminReports.tsx:331 [AdminReports] Processing assignment: 
+{id: 2381, userId: '2175', leaveVariantId: 60, assignmentType: 'leave_variant', orgId: 38, …}
+AdminReports.tsx:336 [AdminReports] Found variant for assignment: 
+{id: 60, leaveTypeId: 56, leaveTypeName: 'Paternity Leave', leaveVariantName: 'Paternity Leave', description: 'Paternity Leave (Male Employees)', …}
+AdminReports.tsx:348 [AdminReports] Final totals for Umesh T: entitlement=0, used=0, available=0
+AdminReports.tsx:313 [AdminReports] Employee Nirmala R (2176): found 0 balances, 3 assignments
+AdminReports.tsx:329 [AdminReports] Employee Nirmala R (2176) has no balances but has 3 assignments
+AdminReports.tsx:331 [AdminReports] Processing assignment: 
+{id: 2318, userId: '2176', leaveVariantId: 57, assignmentType: 'leave_variant', orgId: 38, …}
+AdminReports.tsx:336 [AdminReports] Found variant for assignment: 
+{id: 57, leaveTypeId: 53, leaveTypeName: 'Earned Leave', leaveVariantName: 'Earned Leave', description: 'Earned Leave All Employees', …}
+AdminReports.tsx:331 [AdminReports] Processing assignment: 
+{id: 2349, userId: '2176', leaveVariantId: 58, assignmentType: 'leave_variant', orgId: 38, …}
+AdminReports.tsx:336 [AdminReports] Found variant for assignment: 
+{id: 58, leaveTypeId: 54, leaveTypeName: 'Sick Leave/ Casual Leave', leaveVariantName: 'Sick Leave/Casual Leave', description: 'Sick Leave/Casual Leave All Employees', …}
+AdminReports.tsx:331 [AdminReports] Processing assignment: 
+{id: 2366, userId: '2176', leaveVariantId: 59, assignmentType: 'leave_variant', orgId: 38, …}
+AdminReports.tsx:336 [AdminReports] Found variant for assignment: 
+{id: 59, leaveTypeId: 55, leaveTypeName: 'Maternity Leave', leaveVariantName: 'Maternity Leave', description: 'Maternity Leave (Women Employees)', …}
+AdminReports.tsx:348 [AdminReports] Final totals for Nirmala R: entitlement=0, used=0, available=0
+AdminReports.tsx:313 [AdminReports] Employee Krishna Kumar S (2177): found 0 balances, 3 assignments
+AdminReports.tsx:329 [AdminReports] Employee Krishna Kumar S (2177) has no balances but has 3 assignments
+AdminReports.tsx:331 [AdminReports] Processing assignment: 
+{id: 2319, userId: '2177', leaveVariantId: 57, assignmentType: 'leave_variant', orgId: 38, …}
+AdminReports.tsx:336 [AdminReports] Found variant for assignment: 
+{id: 57, leaveTypeId: 53, leaveTypeName: 'Earned Leave', leaveVariantName: 'Earned Leave', description: 'Earned Leave All Employees', …}
+AdminReports.tsx:331 [AdminReports] Processing assignment: 
+{id: 2350, userId: '2177', leaveVariantId: 58, assignmentType: 'leave_variant', orgId: 38, …}
+AdminReports.tsx:336 [AdminReports] Found variant for assignment: 
+{id: 58, leaveTypeId: 54, leaveTypeName: 'Sick Leave/ Casual Leave', leaveVariantName: 'Sick Leave/Casual Leave', description: 'Sick Leave/Casual Leave All Employees', …}
+AdminReports.tsx:331 [AdminReports] Processing assignment: 
+{id: 2382, userId: '2177', leaveVariantId: 60, assignmentType: 'leave_variant', orgId: 38, …}
+AdminReports.tsx:336 [AdminReports] Found variant for assignment: 
+{id: 60, leaveTypeId: 56, leaveTypeName: 'Paternity Leave', leaveVariantName: 'Paternity Leave', description: 'Paternity Leave (Male Employees)', …}
+AdminReports.tsx:348 [AdminReports] Final totals for Krishna Kumar S: entitlement=0, used=0, available=0
+AdminReports.tsx:313 [AdminReports] Employee Krishna R (2178): found 0 balances, 3 assignments
+AdminReports.tsx:329 [AdminReports] Employee Krishna R (2178) has no balances but has 3 assignments
+AdminReports.tsx:331 [AdminReports] Processing assignment: 
+{id: 2320, userId: '2178', leaveVariantId: 57, assignmentType: 'leave_variant', orgId: 38, …}
+AdminReports.tsx:336 [AdminReports] Found variant for assignment: 
+{id: 57, leaveTypeId: 53, leaveTypeName: 'Earned Leave', leaveVariantName: 'Earned Leave', description: 'Earned Leave All Employees', …}
+AdminReports.tsx:331 [AdminReports] Processing assignment: 
+{id: 2351, userId: '2178', leaveVariantId: 58, assignmentType: 'leave_variant', orgId: 38, …}
+AdminReports.tsx:336 [AdminReports] Found variant for assignment: 
+{id: 58, leaveTypeId: 54, leaveTypeName: 'Sick Leave/ Casual Leave', leaveVariantName: 'Sick Leave/Casual Leave', description: 'Sick Leave/Casual Leave All Employees', …}
+AdminReports.tsx:331 [AdminReports] Processing assignment: 
+{id: 2383, userId: '2178', leaveVariantId: 60, assignmentType: 'leave_variant', orgId: 38, …}
+AdminReports.tsx:336 [AdminReports] Found variant for assignment: 
+{id: 60, leaveTypeId: 56, leaveTypeName: 'Paternity Leave', leaveVariantName: 'Paternity Leave', description: 'Paternity Leave (Male Employees)', …}
+AdminReports.tsx:348 [AdminReports] Final totals for Krishna R: entitlement=0, used=0, available=0
+AdminReports.tsx:313 [AdminReports] Employee Rajnish Mishra (2179): found 0 balances, 3 assignments
+AdminReports.tsx:329 [AdminReports] Employee Rajnish Mishra (2179) has no balances but has 3 assignments
+AdminReports.tsx:331 [AdminReports] Processing assignment: 
+{id: 2321, userId: '2179', leaveVariantId: 57, assignmentType: 'leave_variant', orgId: 38, …}
+AdminReports.tsx:336 [AdminReports] Found variant for assignment: 
+{id: 57, leaveTypeId: 53, leaveTypeName: 'Earned Leave', leaveVariantName: 'Earned Leave', description: 'Earned Leave All Employees', …}
+AdminReports.tsx:331 [AdminReports] Processing assignment: 
+{id: 2352, userId: '2179', leaveVariantId: 58, assignmentType: 'leave_variant', orgId: 38, …}
+AdminReports.tsx:336 [AdminReports] Found variant for assignment: 
+{id: 58, leaveTypeId: 54, leaveTypeName: 'Sick Leave/ Casual Leave', leaveVariantName: 'Sick Leave/Casual Leave', description: 'Sick Leave/Casual Leave All Employees', …}
+﻿
