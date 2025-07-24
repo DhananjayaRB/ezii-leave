@@ -34,11 +34,8 @@ export async function setupAuth(app: Express) {
   // No passport, no auth, just session
 }
 
-// Dummy middleware for routes that require login — always allows in development
+// Dummy middleware for routes that require login — always allows in all environments
 export const isAuthenticated: RequestHandler = (req, res, next) => {
-  if (process.env.NODE_ENV === 'development') {
-    return next();
-  }
-
-  return res.status(401).json({ message: "Unauthorized" });
+  // AUTH BYPASSED: Allow all requests through
+  return next();
 };

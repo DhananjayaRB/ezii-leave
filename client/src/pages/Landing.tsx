@@ -97,10 +97,11 @@ export default function Landing() {
     );
   }
 
-  if (isAuthenticated || true) {
-    window.location.href = "/";
-    return null;
-  }
+  // ===== FIX: Prevent infinite reload loop while auth is disabled =====
+  // if (isAuthenticated || true) {
+  //   window.location.href = "/";
+  //   return null;
+  // }
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-gray-50">
@@ -113,23 +114,13 @@ export default function Landing() {
               </div>
               <span className="font-semibold text-lg text-gray-900">eziileave</span>
             </div>
-            
             <div className="text-center">
               <h1 className="text-2xl font-bold text-gray-900 mb-2">Welcome to eziileave</h1>
               <p className="text-gray-600">
                 Your comprehensive leave management solution
               </p>
             </div>
-
-            <div className="w-full space-y-4">
-              <Button 
-                onClick={() => window.location.href = "/api/login"}
-                className="w-full bg-primary hover:bg-primary/90"
-              >
-                Sign In with Replit
-              </Button>
-            </div>
-
+            {/* Removed sign-in button and auth references */}
             <div className="text-center">
               <p className="text-xs text-gray-500">
                 Streamline your leave management process with automated workflows, 
