@@ -97,7 +97,7 @@ export default function Landing() {
     );
   }
 
-  if (isAuthenticated) {
+  if (isAuthenticated || true) {
     window.location.href = "/";
     return null;
   }
