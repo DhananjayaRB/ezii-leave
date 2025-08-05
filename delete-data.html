@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete All Imported Data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #d32f2f;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .button {
+            background-color: #d32f2f;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            display: block;
+            margin: 20px auto;
+            min-width: 200px;
+        }
+        .button:hover {
+            background-color: #b71c1c;
+        }
+        .button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            display: none;
+        }
+        .success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .status {
+            text-align: center;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        pre {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 3px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🗑️ Delete All Imported Data</h1>
+        
+        <div class="warning">
+            <strong>⚠️ WARNING:</strong> This action will permanently delete ALL imported data from the external database for organization 13, including:
+            <ul>
+                <li>Leave balance transactions</li>
+                <li>Employee leave balances</li>
+                <li>Leave requests</li>
+                <li>PTO requests</li>
+                <li>Comp-off requests</li>
+                <li>Collaborative leave tasks</li>
+                <li>Closure reports</li>
+            </ul>
+            This action cannot be undone!
+        </div>
+        
+        <button id="deleteBtn" class="button" onclick="deleteAllData()">
+            DELETE ALL IMPORTED DATA
+        </button>
+        
+        <div id="status" class="status"></div>
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        async function deleteAllData() {
+            const button = document.getElementById('deleteBtn');
+            const status = document.getElementById('status');
+            const result = document.getElementById('result');
+            
+            // Disable button and show loading
+            button.disabled = true;
+            button.textContent = 'DELETING...';
+            status.textContent = 'Processing deletion request...';
+            result.style.display = 'none';
+            
+            try {
+                const response = await fetch('/api/delete-all-imported-data', {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Org-Id': '13'
+                    }
+                });
+                
+                const data = await response.json();
+                
+                result.style.display = 'block';
+                
+                if (response.ok && data.success) {
+                    result.className = 'result success';
+                    result.innerHTML = `
+                        <h3>✅ Deletion Successful!</h3>
+                        <p><strong>Message:</strong> ${data.message}</p>
+                        <h4>Summary:</h4>
+                        <pre>${JSON.stringify(data.summary, null, 2)}</pre>
+                    `;
+                    status.textContent = `Successfully deleted ${data.summary.totalDeleted} records`;
+                    button.textContent = 'COMPLETED';
+                } else {
+                    result.className = 'result error';
+                    result.innerHTML = `
+                        <h3>❌ Deletion Failed</h3>
+                        <p><strong>Error:</strong> ${data.message || 'Unknown error occurred'}</p>
+                        <p><strong>Status:</strong> ${response.status} ${response.statusText}</p>
+                    `;
+                    status.textContent = 'Deletion failed';
+                    button.disabled = false;
+                    button.textContent = 'RETRY DELETE';
+                }
+            } catch (error) {
+                result.style.display = 'block';
+                result.className = 'result error';
+                result.innerHTML = `
+                    <h3>❌ Network Error</h3>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                    <p>Please check your connection and try again.</p>
+                `;
+                status.textContent = 'Network error occurred';
+                button.disabled = false;
+                button.textContent = 'RETRY DELETE';
+            }
+        }
+        
+        // Show current timestamp
+        document.addEventListener('DOMContentLoaded', function() {
+            const now = new Date().toLocaleString();
+            document.querySelector('.container').insertAdjacentHTML('afterbegin', 
+                `<p style="text-align: center; color: #666; margin-bottom: 20px;">Current time: ${now}</p>`
+            );
+        });
+    </script>
+</body>
+</html>

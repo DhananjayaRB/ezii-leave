@@ -46,14 +46,14 @@ export default function ImportLeaveDataSetup({ onNext, onPrevious, isLast, isLoa
       setPreviewData([]);
       setValidationErrors([]);
       setIsValidated(false);
-      
+
       // Only accept CSV and Excel files
       const validTypes = [
         'text/csv',
         'application/vnd.ms-excel',
         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
       ];
-      
+
       if (!validTypes.includes(file.type)) {
         toast({
           title: "Invalid File Type",
@@ -72,7 +72,7 @@ export default function ImportLeaveDataSetup({ onNext, onPrevious, isLast, isLoa
       const formData = new FormData();
       formData.append('file', file);
       formData.append('importType', importType);
-      
+
       const response = await apiRequest("POST", "/api/import-leave-data/validate", formData);
       return response.json();
     },
@@ -80,7 +80,7 @@ export default function ImportLeaveDataSetup({ onNext, onPrevious, isLast, isLoa
       setPreviewData(response.preview);
       setValidationErrors(response.errors || []);
       setIsValidated(response.errors.length === 0);
-      
+
       if (response.errors.length === 0) {
         toast({
           title: "Validation Successful",
@@ -108,29 +108,63 @@ export default function ImportLeaveDataSetup({ onNext, onPrevious, isLast, isLoa
   const importDataMutation = useMutation({
     mutationFn: async () => {
       if (!selectedFile) throw new Error("No file selected");
-      
+
       const formData = new FormData();
       formData.append('file', selectedFile);
       formData.append('importType', importType);
-      
+
+      // CRITICAL FIX: Pass JWT token for ALL import types (balances and transactions)
+      const jwtToken = localStorage.getItem('jwt_token');
+      if (jwtToken) {
+        formData.append('jwtToken', jwtToken);
+        console.log(`[ImportSetup] ✅ Passing JWT token for ${importType} import`);
+      } else {
+        console.warn(`[ImportSetup] ⚠️ No JWT token found - ${importType} import may fail`);
+      }
+
       const response = await apiRequest("POST", "/api/import-leave-data/execute", formData);
       return response.json();
     },
     onSuccess: (response: any) => {
       queryClient.invalidateQueries({ queryKey: ["/api/employee-leave-balances"] });
       queryClient.invalidateQueries({ queryKey: ["/api/leave-balance-transactions"] });
-      
+
+      // Create detailed success message with import statistics
+      let description = `Successfully imported ${response.imported} of ${response.total} records`;
+
+      if (response.importStats) {
+        const skipped = response.total - response.imported;
+        if (skipped > 0) {
+          description += `\n\nSkipped records breakdown:`;
+          if (response.importStats.skippedEmpty > 0) {
+            description += `\n• Empty/missing fields: ${response.importStats.skippedEmpty}`;
+          }
+          if (response.importStats.skippedHeaders > 0) {
+            description += `\n• Header rows: ${response.importStats.skippedHeaders}`;
+          }
+          if (response.importStats.skippedMissingEmployee > 0) {
+            description += `\n• Employee not found: ${response.importStats.skippedMissingEmployee}`;
+          }
+          if (response.importStats.skippedMissingLeaveType > 0) {
+            description += `\n• Leave type not found: ${response.importStats.skippedMissingLeaveType}`;
+          }
+          if (response.importStats.processingErrors > 0) {
+            description += `\n• Processing errors: ${response.importStats.processingErrors}`;
+          }
+        }
+      }
+
       toast({
         title: "Import Successful",
-        description: `Successfully imported ${response.imported} records.`,
+        description,
       });
-      
+
       // Reset form
       setSelectedFile(null);
       setPreviewData([]);
       setValidationErrors([]);
       setIsValidated(false);
-      
+
       // Refresh any queries that might be affected
       queryClient.invalidateQueries({ queryKey: ["/api/leave-types"] });
       queryClient.invalidateQueries({ queryKey: ["/api/leave-variants"] });
@@ -151,7 +185,7 @@ export default function ImportLeaveDataSetup({ onNext, onPrevious, isLast, isLoa
       // Fetch employee data from external API
       const employees = await fetchEmployeeData();
       console.log(`[ImportLeaveDataSetup] External API returned ${employees.length} employees`);
-      
+
       if (employees.length === 0) {
         console.log('No employee data available, generating template with empty employee fields');
         toast({
@@ -160,9 +194,9 @@ export default function ImportLeaveDataSetup({ onNext, onPrevious, isLast, isLoa
           variant: "default",
         });
       }
-      
+
       let templateData: any[] = [];
-      
+
       if (templateType === "balances") {
         // Leave balances template - without LeaveAvailed column
         templateData = [
@@ -176,15 +210,15 @@ export default function ImportLeaveDataSetup({ onNext, onPrevious, isLast, isLoa
           [],
           ["EmpNumber", "EmpName", "LeaveType", "LeaveTakenStartDate", "Is Start Date a Half Day", "LeaveTakenEndDate", "Is End Date a Half Day", "TotalLeaveDays", "Status"]
         ];
-        
+
         // For transaction imports, only include column headers - no employee data
         const typedLeaveTypes = leaveTypes as Array<{name: string}>;
         console.log('[ImportLeaveDataSetup] Transaction template: Only including column headers, no employee data');
-        
+
         // Create Excel with just headers and download immediately
         const wb = XLSX.utils.book_new();
         const ws = XLSX.utils.aoa_to_sheet(templateData);
-        
+
         // Set column widths for transaction template
         ws['!cols'] = [
           { wch: 12 }, // EmpNumber
@@ -204,7 +238,7 @@ export default function ImportLeaveDataSetup({ onNext, onPrevious, isLast, isLoa
 
         const sheetName = "Leave Transaction Import";
         XLSX.utils.book_append_sheet(wb, ws, sheetName);
-        
+
         // Generate Excel file and download
         const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
         const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
@@ -225,7 +259,7 @@ export default function ImportLeaveDataSetup({ onNext, onPrevious, isLast, isLoa
       }
 
       const typedLeaveTypes = leaveTypes as Array<{name: string}>;
-      
+
       if (employees.length > 0) {
         // Only include employees who are actually assigned to each leave type
         for (const leaveType of typedLeaveTypes) {
@@ -233,29 +267,29 @@ export default function ImportLeaveDataSetup({ onNext, onPrevious, isLast, isLoa
             // Fetch leave variants for this leave type
             const currentOrgId = localStorage.getItem('org_id') || '38';
             console.log(`[ImportLeaveDataSetup] Fetching variants for leave type ${leaveType.name} with org_id: ${currentOrgId}`);
-            
+
             const variantsResponse = await fetch('/api/leave-variants', {
               credentials: 'include',
               headers: {
                 'X-Org-Id': currentOrgId
               }
             });
-            
+
             if (variantsResponse.ok) {
               const allVariants = await variantsResponse.json();
               const typeVariants = allVariants.filter((v: any) => v.leaveTypeName === leaveType.name);
               console.log(`[ImportLeaveDataSetup] Found ${typeVariants.length} variants for leave type ${leaveType.name}:`, typeVariants.map(v => `ID: ${v.id}`));
-              
+
               // Get assigned employees for each variant of this leave type
               const assignedEmployeeIds = new Set();
-              
+
               for (const variant of typeVariants) {
                 try {
                   console.log(`[ImportLeaveDataSetup] Fetching assignments for variant ${variant.id}`);
                   const assignmentsResponse = await fetch(`/api/employee-assignments/${variant.id}`, {
                     credentials: 'include'
                   });
-                  
+
                   if (assignmentsResponse.ok) {
                     const assignments = await assignmentsResponse.json();
                     console.log(`[ImportLeaveDataSetup] Found ${assignments.length} assignments for variant ${variant.id}:`, assignments);
@@ -269,24 +303,24 @@ export default function ImportLeaveDataSetup({ onNext, onPrevious, isLast, isLoa
                   console.log(`[ImportLeaveDataSetup] Error fetching assignments for variant ${variant.id}:`, error);
                 }
               }
-              
+
               console.log(`[ImportLeaveDataSetup] Total assigned employee IDs for ${leaveType.name}:`, Array.from(assignedEmployeeIds));
-              
+
               // Only add rows for employees assigned to this leave type who have employee numbers
               console.log(`[ImportLeaveDataSetup] Processing ${employees.length} employees for leave type ${leaveType.name}`);
               let addedEmployeesCount = 0;
-              
+
               employees.forEach((employee: any) => {
                 const empId = employee.user_id || employee.id;
                 const employeeNumber = employee.employeeNumber || employee.employee_number;
                 const employeeName = employee.user_name || employee.name || `${employee.firstName || ''} ${employee.lastName || ''}`.trim() || "";
-                
+
                 console.log(`[ImportLeaveDataSetup] Checking employee: ID=${empId}, Number=${employeeNumber}, Name=${employeeName}, Assigned=${assignedEmployeeIds.has(empId)}`);
-                
+
                 if (assignedEmployeeIds.has(empId) && employeeNumber) {
                   addedEmployeesCount++;
                   console.log(`[ImportLeaveDataSetup] Adding employee ${employeeName} (${employeeNumber}) to ${leaveType.name} template`);
-                  
+
                   if (templateType === "balances") {
                     // Balance template - without LeaveAvailed column
                     templateData.push([
@@ -310,7 +344,7 @@ export default function ImportLeaveDataSetup({ onNext, onPrevious, isLast, isLoa
                   }
                 }
               });
-              
+
               console.log(`[ImportLeaveDataSetup] Added ${addedEmployeesCount} employees for leave type ${leaveType.name}`);
             }
           } catch (error) {
@@ -346,7 +380,7 @@ export default function ImportLeaveDataSetup({ onNext, onPrevious, isLast, isLoa
 
       const wb = XLSX.utils.book_new();
       const ws = XLSX.utils.aoa_to_sheet(templateData);
-      
+
       // Set column widths based on template type
       if (templateType === "balances") {
         // Balance template - without LeaveAvailed column
@@ -381,7 +415,7 @@ export default function ImportLeaveDataSetup({ onNext, onPrevious, isLast, isLoa
 
       const sheetName = templateType === "balances" ? "Leave Balance Import" : "Leave Transaction Import";
       XLSX.utils.book_append_sheet(wb, ws, sheetName);
-      
+
       // Generate Excel file and download
       const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
       const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
@@ -669,7 +703,7 @@ export default function ImportLeaveDataSetup({ onNext, onPrevious, isLast, isLoa
         <Button variant="outline" onClick={onPrevious}>
           Previous
         </Button>
-        
+
         <Button 
           onClick={onNext}
           disabled={isLoading}

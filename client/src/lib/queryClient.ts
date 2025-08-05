@@ -14,21 +14,25 @@ export async function apiRequest(
   data?: unknown | undefined,
 ): Promise<Response> {
   const orgId = OrgContext.getOrgId();
-  console.log(`[API Request] Sending X-Org-Id header: ${orgId} for ${method} ${url}`);
-  
+  console.log(
+    `[API Request] Sending X-Org-Id header: ${orgId} for ${method} ${url}`,
+  );
+
   const headers: Record<string, string> = {
     "X-Org-Id": orgId,
   };
-  
+
   // Add JWT token for external API calls (needed for Excel import employee mapping)
-  const jwtToken = localStorage.getItem('jwt_token');
+  const jwtToken = localStorage.getItem("jwt_token");
   if (jwtToken) {
     headers["Authorization"] = `Bearer ${jwtToken}`;
-    console.log(`[API Request] Adding Authorization header with JWT token for ${url}`);
+    console.log(
+      `[API Request] Adding Authorization header with JWT token for ${url}`,
+    );
   }
-  
+
   let body: any = undefined;
-  
+
   if (data) {
     if (data instanceof FormData) {
       // For FormData (file uploads), don't set Content-Type - browser will set it with boundary
@@ -58,12 +62,25 @@ export const getQueryFn: <T>(options: {
   ({ on401: unauthorizedBehavior }) =>
   async ({ queryKey }) => {
     const orgId = OrgContext.getOrgId();
-    console.log(`[Query Request] Sending X-Org-Id header: ${orgId} for GET ${queryKey[0]}`);
-    
+    console.log(
+      `[Query Request] Sending X-Org-Id header: ${orgId} for GET ${queryKey[0]}`,
+    );
+
+    const headers: Record<string, string> = {
+      "X-Org-Id": orgId,
+    };
+
+    // Add JWT token for authenticated requests
+    const jwtToken = localStorage.getItem("jwt_token");
+    if (jwtToken) {
+      headers["Authorization"] = `Bearer ${jwtToken}`;
+      console.log(
+        `[Query Request] Adding Authorization header with JWT token for ${queryKey[0]}`,
+      );
+    }
+
     const res = await fetch(queryKey[0] as string, {
-      headers: {
-        "X-Org-Id": orgId,
-      },
+      headers,
       credentials: "include",
     });
 

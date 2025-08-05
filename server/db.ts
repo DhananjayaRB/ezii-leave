@@ -1,39 +1,62 @@
-import dotenv from "dotenv";
-dotenv.config();
-
+// FORCE CONNECTION TO EXTERNAL PRODUCTION DATABASE
+import { Pool } from "pg";
+import { drizzle } from "drizzle-orm/node-postgres";
 import * as schema from "@shared/schema";
 
-let db;
+// COMPLETELY OVERRIDE ANY ENVIRONMENT VARIABLES
+const FORCED_EXTERNAL_URL =
+  "postgres://postgres:resolve%402022@20.204.119.48:5432/ezii-leave";
 
-if (process.env.NODE_ENV === "development") {
-  // Local dev: Use pg (no WebSocket)
-  const pg = await import("pg");
-  const { drizzle } = await import("drizzle-orm/node-postgres");
+// Force override any environment variables
+process.env.DATABASE_URL = FORCED_EXTERNAL_URL;
 
-  const Pool = pg.default?.Pool || pg.Pool;
+console.log(
+  "[DATABASE] HARD OVERRIDE - Forcing connection to external database",
+);
+console.log(
+  "[DATABASE] Environment DATABASE_URL:",
+  process.env.DATABASE_URL?.replace(/:[^:]*@/, ":****@"),
+);
+console.log(
+  "[DATABASE] Using URL:",
+  FORCED_EXTERNAL_URL.replace(/:[^:]*@/, ":****@"),
+);
 
-  if (!process.env.DATABASE_URL) {
-    throw new Error("DATABASE_URL must be set for local PostgreSQL");
-  }
-
-  const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-  db = drizzle(pool, { schema });
-} else {
-  // Production (e.g., Replit): Use Neon serverless with WebSocket
-  const neon = await import("@neondatabase/serverless");
-  const { drizzle } = await import("drizzle-orm/neon-serverless");
-  const wsImport = await import("ws");
-
-  const Pool = neon.default?.Pool || neon.Pool;
-  const neonConfig = neon.default?.neonConfig || neon.neonConfig;
-  neonConfig.webSocketConstructor = wsImport.default;
-
-  if (!process.env.DATABASE_URL) {
-    throw new Error("DATABASE_URL must be set for Neon");
-  }
-
-  const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-  db = drizzle({ client: pool, schema });
+// Destroy any existing connections
+if (global.pool) {
+  console.log("[DATABASE] Destroying existing pool");
+  global.pool.end();
+  delete global.pool;
 }
 
-export { db };
+export const pool = new Pool({
+  connectionString: FORCED_EXTERNAL_URL,
+  ssl: false,
+  max: 10,
+  min: 1,
+  idleTimeoutMillis: 10000,
+  connectionTimeoutMillis: 2000,
+});
+
+// Test the connection
+pool
+  .connect()
+  .then((client) => {
+    client
+      .query(
+        "SELECT current_database(), inet_server_addr(), inet_server_port()",
+      )
+      .then((result) => {
+        console.log("[DATABASE] Connected to:", result.rows[0]);
+        client.release();
+      })
+      .catch((err) => {
+        console.error("[DATABASE] Test query failed:", err);
+        client.release();
+      });
+  })
+  .catch((err) => {
+    console.error("[DATABASE] Connection failed:", err);
+  });
+
+export const db = drizzle(pool, { schema });

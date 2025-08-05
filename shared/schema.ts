@@ -28,10 +28,19 @@ export const sessions = pgTable(
 );
 
 // User roles enum
-export const userRoleEnum = pgEnum("user_role", ["admin", "manager", "employee", "hr"]);
+export const userRoleEnum = pgEnum("user_role", [
+  "admin",
+  "manager",
+  "employee",
+  "hr",
+]);
 
 // Setup status enum
-export const setupStatusEnum = pgEnum("setup_status", ["pending", "in_progress", "completed"]);
+export const setupStatusEnum = pgEnum("setup_status", [
+  "pending",
+  "in_progress",
+  "completed",
+]);
 
 // Users table for Replit Auth
 export const users = pgTable("users", {
@@ -63,16 +72,18 @@ export const companies = pgTable("companies", {
 // Leave types table
 export const leaveTypes = pgTable("leave_types", {
   id: serial("id").primaryKey(),
-  name: varchar("name").notNull(),
+  name: text("name").notNull(),
+  maxDays: integer("max_days"),
+  color: text("color"),
   description: text("description"),
-  icon: varchar("icon"),
-  color: varchar("color"),
-  annualAllowance: integer("annual_allowance"),
-  carryForward: boolean("carry_forward").default(false),
   isActive: boolean("is_active").default(true),
-  orgId: integer("org_id").default(60),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
+  icon: text("icon"),
+  annualAllowance: integer("annual_allowance"),
+  carryForward: boolean("carry_forward").default(false),
+  negativeLeaveBalance: integer("negative_leave_balance").default(0),
+  orgId: integer("org_id").default(60),
 });
 
 // Roles table with detailed permissions
@@ -80,7 +91,7 @@ export const roles = pgTable("roles", {
   id: serial("id").primaryKey(),
   name: varchar("name").notNull(),
   description: text("description"),
-  permissions: jsonb("permissions").notNull().default('{}'),
+  permissions: jsonb("permissions").notNull().default("{}"),
   isActive: boolean("is_active").default(true),
   orgId: integer("org_id").default(60),
   createdAt: timestamp("created_at").defaultNow(),
@@ -91,7 +102,9 @@ export const roles = pgTable("roles", {
 export const userRoles = pgTable("user_roles", {
   id: serial("id").primaryKey(),
   userId: varchar("user_id").notNull(),
-  roleId: integer("role_id").notNull().references(() => roles.id),
+  roleId: integer("role_id")
+    .notNull()
+    .references(() => roles.id),
   assignedAt: timestamp("assigned_at").defaultNow(),
 });
 
@@ -125,7 +138,9 @@ export const compOffConfig = pgTable("comp_off_config", {
   advanceNoticeRequired: boolean("advance_notice_required").default(true),
   advanceNoticeDays: integer("advance_notice_days").default(1),
   minimumLeaveUnit: jsonb("minimum_leave_unit").default('["Full Day"]'),
-  compensationOptions: jsonb("compensation_options").default('["En-cashment", "Convert to leaves"]'),
+  compensationOptions: jsonb("compensation_options").default(
+    '["En-cashment", "Convert to leaves"]',
+  ),
   orgId: integer("org_id").default(60),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
@@ -188,43 +203,69 @@ export const holidays = pgTable("holidays", {
 // Leave variants table for multiple variants per leave type
 export const leaveVariants = pgTable("leave_variants", {
   id: serial("id").primaryKey(),
-  leaveTypeId: integer("leave_type_id").notNull().references(() => leaveTypes.id),
+  leaveTypeId: integer("leave_type_id")
+    .notNull()
+    .references(() => leaveTypes.id),
   leaveTypeName: varchar("leave_type_name").notNull(),
   leaveVariantName: varchar("leave_variant_name").notNull(),
   description: text("description"),
   // Configuration fields from the form
   minimumLeaveUnit: varchar("minimum_leave_unit").notNull().default("full_day"),
-  leavesGrantedOn: varchar("leaves_granted_on").notNull().default("calendar_days"),
+  leavesGrantedOn: varchar("leaves_granted_on")
+    .notNull()
+    .default("calendar_days"),
   paidDaysInYear: integer("paid_days_in_year").notNull().default(0),
   grantLeaves: varchar("grant_leaves").notNull().default("in_advance"),
   grantFrequency: varchar("grant_frequency").notNull().default("per_year"),
-  proRataCalculation: varchar("pro_rata_calculation").notNull().default("full_month"),
+  proRataCalculation: varchar("pro_rata_calculation")
+    .notNull()
+    .default("full_month"),
   slabs: jsonb("slabs"),
   onboardingSlabs: jsonb("onboarding_slabs"),
   exitSlabs: jsonb("exit_slabs"),
   fractionalLeaves: varchar("fractional_leaves").default("normal_rounding"),
   applicableGenders: jsonb("applicable_genders").notNull(),
   applicableAfter: integer("applicable_after").notNull().default(0),
-  applicableAfterType: varchar("applicable_after_type").notNull().default("days"), // "days", "probation_end", "date_of_joining"
-  mustBePlannedInAdvance: integer("must_be_planned_in_advance").notNull().default(0),
+  applicableAfterType: varchar("applicable_after_type")
+    .notNull()
+    .default("days"), // "days", "probation_end", "date_of_joining"
+  mustBePlannedInAdvance: integer("must_be_planned_in_advance")
+    .notNull()
+    .default(0),
   maxDaysInStretch: integer("max_days_in_stretch").notNull().default(0),
   minDaysRequired: integer("min_days_required").notNull().default(0),
   maxInstances: integer("max_instances").notNull().default(0),
   maxInstancesPeriod: varchar("max_instances_period").notNull().default("year"),
-  allowLeavesBeforeWeekend: boolean("allow_leaves_before_weekend").default(false),
-  allowLeavesBeforeHoliday: boolean("allow_leaves_before_holiday").default(false),
+  allowLeavesBeforeWeekend: boolean("allow_leaves_before_weekend").default(
+    false,
+  ),
+  allowLeavesBeforeHoliday: boolean("allow_leaves_before_holiday").default(
+    false,
+  ),
   allowClubbing: boolean("allow_clubbing").default(false),
   supportingDocuments: boolean("supporting_documents").default(false),
   supportingDocumentsText: text("supporting_documents_text"),
   allowDuringNotice: boolean("allow_during_notice").default(false),
   requiresWorkflow: boolean("requires_workflow").default(true),
-  leaveBalanceDeductionBefore: boolean("leave_balance_deduction_before").default(false),
-  leaveBalanceDeductionAfter: boolean("leave_balance_deduction_after").default(false),
-  leaveBalanceDeductionNotAllowed: boolean("leave_balance_deduction_not_allowed").default(false),
+  leaveBalanceDeductionBefore: boolean(
+    "leave_balance_deduction_before",
+  ).default(false),
+  leaveBalanceDeductionAfter: boolean("leave_balance_deduction_after").default(
+    false,
+  ),
+  leaveBalanceDeductionNotAllowed: boolean(
+    "leave_balance_deduction_not_allowed",
+  ).default(false),
   gracePeriod: integer("grace_period").notNull().default(0),
-  allowWithdrawalBeforeApproval: boolean("allow_withdrawal_before_approval").default(false),
-  allowWithdrawalAfterApproval: boolean("allow_withdrawal_after_approval").default(false),
-  allowWithdrawalNotAllowed: boolean("allow_withdrawal_not_allowed").default(true),
+  allowWithdrawalBeforeApproval: boolean(
+    "allow_withdrawal_before_approval",
+  ).default(false),
+  allowWithdrawalAfterApproval: boolean(
+    "allow_withdrawal_after_approval",
+  ).default(false),
+  allowWithdrawalNotAllowed: boolean("allow_withdrawal_not_allowed").default(
+    true,
+  ),
   negativeLeaveBalance: integer("negative_leave_balance").notNull().default(0),
   carryForwardLimit: integer("carry_forward_limit").notNull().default(0),
   carryForwardPeriod: varchar("carry_forward_period").notNull().default("year"),
@@ -232,7 +273,9 @@ export const leaveVariants = pgTable("leave_variants", {
   encashmentCalculation: varchar("encashment_calculation"),
   maxEncashmentDays: integer("max_encashment_days"),
   encashmentTiming: varchar("encashment_timing"),
-  allowApplicationsOnBehalf: boolean("allow_applications_on_behalf").default(false),
+  allowApplicationsOnBehalf: boolean("allow_applications_on_behalf").default(
+    false,
+  ),
   showAvailedLeaves: boolean("show_availed_leaves").default(false),
   showBalanceLeaves: boolean("show_balance_leaves").default(false),
   maximumBalance: integer("maximum_balance").notNull().default(0),
@@ -247,62 +290,74 @@ export const compOffVariants = pgTable("comp_off_variants", {
   name: varchar("name").notNull(),
   description: text("description"),
   enabled: boolean("enabled").default(true),
-  
+
   // Comp-off units configuration
   allowFullDay: boolean("allow_full_day").default(false),
-  fullDayHours: numeric("full_day_hours", { precision: 4, scale: 2 }).default("0"),
+  fullDayHours: numeric("full_day_hours", { precision: 4, scale: 2 }).default(
+    "0",
+  ),
   allowHalfDay: boolean("allow_half_day").default(false),
-  halfDayHours: numeric("half_day_hours", { precision: 4, scale: 2 }).default("0"),
+  halfDayHours: numeric("half_day_hours", { precision: 4, scale: 2 }).default(
+    "0",
+  ),
   allowQuarterDay: boolean("allow_quarter_day").default(false),
-  quarterDayHours: numeric("quarter_day_hours", { precision: 4, scale: 2 }).default("0"),
-  
+  quarterDayHours: numeric("quarter_day_hours", {
+    precision: 4,
+    scale: 2,
+  }).default("0"),
+
   // Eligibility criteria
   maxApplications: integer("max_applications").default(1),
   maxApplicationsPeriod: varchar("max_applications_period").default("Month"),
-  
+
   // Workflow settings
   workflowRequired: boolean("workflow_required").default(false),
   documentsRequired: boolean("documents_required").default(false),
   applicableAfter: integer("applicable_after").default(0), // days
   approvalDays: integer("approval_days").default(0),
   expiryDays: integer("expiry_days").default(365),
-  
+
   // Working days
   allowNonWorkingDays: boolean("allow_non_working_days").default(false),
-  
+
   // Withdrawal settings
-  withdrawalBeforeApproval: boolean("withdrawal_before_approval").default(false),
+  withdrawalBeforeApproval: boolean("withdrawal_before_approval").default(
+    false,
+  ),
   withdrawalAfterApproval: boolean("withdrawal_after_approval").default(false),
   withdrawalNotAllowed: boolean("withdrawal_not_allowed").default(true),
-  
+
   // Notice period
   allowedDuringNotice: boolean("allowed_during_notice").default(true),
-  
+
   // Carry Forward and Lapse
   enableCarryForward: boolean("enable_carry_forward").default(false),
   carryForwardDays: integer("carry_forward_days").default(0),
   enableLapse: boolean("enable_lapse").default(false),
   lapsePeriod: integer("lapse_period").default(0),
   lapsePeriodUnit: varchar("lapse_period_unit").default("Month"),
-  
+
   // Compensation settings
   enableCompensation: boolean("enable_compensation").default(false),
   encashmentOption: boolean("encashment_option").default(false),
   convertToLeavesOption: boolean("convert_to_leaves_option").default(false),
   encashmentBasedOn: varchar("encashment_based_on"), // "basic_pay", "basic_plus_dearness_allowance", "gross_pay"
   maxEncashmentDays: integer("max_encashment_days").default(0),
-  maxEncashmentHours: numeric("max_encashment_hours", { precision: 4, scale: 2 }).default("0"),
+  maxEncashmentHours: numeric("max_encashment_hours", {
+    precision: 4,
+    scale: 2,
+  }).default("0"),
   convertibleLeaveTypes: jsonb("convertible_leave_types"), // Array of leave type IDs
-  
+
   // Legacy fields for backward compatibility
   maxBalance: integer("max_balance").default(0),
-  
+
   orgId: integer("org_id").default(60),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
-// PTO variants table  
+// PTO variants table
 export const ptoVariants = pgTable("pto_variants", {
   id: serial("id").primaryKey(),
   name: varchar("name").notNull(),
@@ -314,7 +369,9 @@ export const ptoVariants = pgTable("pto_variants", {
   workflowRequired: boolean("workflow_required").default(false),
   noticePeriodAllowed: boolean("notice_period_allowed").default(true),
   documentsRequired: boolean("documents_required").default(false),
-  applicableAfterType: varchar("applicable_after_type").default("date_of_joining"),
+  applicableAfterType: varchar("applicable_after_type").default(
+    "date_of_joining",
+  ),
   applicableAfter: integer("applicable_after").default(0), // days
   approvalDays: integer("approval_days").default(0),
   minimumHours: integer("minimum_hours").default(0),
@@ -342,7 +399,9 @@ export const ptoVariants = pgTable("pto_variants", {
 export const ptoRequests = pgTable("pto_requests", {
   id: serial("id").primaryKey(),
   userId: varchar("user_id").notNull(),
-  ptoVariantId: integer("pto_variant_id").references(() => ptoVariants.id).notNull(),
+  ptoVariantId: integer("pto_variant_id")
+    .references(() => ptoVariants.id)
+    .notNull(),
   requestDate: date("request_date").notNull(),
   timeType: varchar("time_type").notNull(), // "full_day", "half_day", "quarter_day", "hours"
   startTime: varchar("start_time"), // For hour-based PTO
@@ -403,7 +462,9 @@ export const employeeAssignments = pgTable("employee_assignments", {
   assignmentType: varchar("assignment_type").notNull(), // "leave_variant", "comp_off_variant", or "pto_variant"
   orgId: integer("org_id").default(60),
   createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date()),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => new Date()),
 });
 
 // Original collaborative leave tables removed - enhanced versions defined later
@@ -418,13 +479,18 @@ export const insertUserSchema = createInsertSchema(users).pick({
   role: true,
 });
 
-export const insertCompanySchema = createInsertSchema(companies).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
-}).extend({
-  effectiveDate: z.string().transform((str) => new Date(str)).optional(),
-});
+export const insertCompanySchema = createInsertSchema(companies)
+  .omit({
+    id: true,
+    createdAt: true,
+    updatedAt: true,
+  })
+  .extend({
+    effectiveDate: z
+      .string()
+      .transform((str) => new Date(str))
+      .optional(),
+  });
 
 // Old collaborative leave schemas removed - enhanced versions at bottom
 
@@ -446,11 +512,13 @@ export const insertWorkflowSchema = createInsertSchema(workflows).omit({
   updatedAt: true,
 });
 
-export const insertCompOffConfigSchema = createInsertSchema(compOffConfig).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
-});
+export const insertCompOffConfigSchema = createInsertSchema(compOffConfig).omit(
+  {
+    id: true,
+    createdAt: true,
+    updatedAt: true,
+  },
+);
 
 export const insertPTOConfigSchema = createInsertSchema(ptoConfig).omit({
   id: true,
@@ -458,14 +526,16 @@ export const insertPTOConfigSchema = createInsertSchema(ptoConfig).omit({
   updatedAt: true,
 });
 
-export const insertLeaveRequestSchema = createInsertSchema(leaveRequests).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
-}).extend({
-  startDate: z.string().transform((str) => new Date(str)),
-  endDate: z.string().transform((str) => new Date(str)),
-});
+export const insertLeaveRequestSchema = createInsertSchema(leaveRequests)
+  .omit({
+    id: true,
+    createdAt: true,
+    updatedAt: true,
+  })
+  .extend({
+    startDate: z.string().transform((str) => new Date(str)),
+    endDate: z.string().transform((str) => new Date(str)),
+  });
 
 export const insertHolidaySchema = createInsertSchema(holidays).omit({
   id: true,
@@ -479,16 +549,26 @@ export const insertLeaveVariantSchema = createInsertSchema(leaveVariants).omit({
   updatedAt: true,
 });
 
-export const insertCompOffVariantSchema = createInsertSchema(compOffVariants).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
-}).extend({
-  fullDayHours: z.union([z.number(), z.string()]).transform((val) => String(val)),
-  halfDayHours: z.union([z.number(), z.string()]).transform((val) => String(val)),
-  quarterDayHours: z.union([z.number(), z.string()]).transform((val) => String(val)),
-  maxEncashmentHours: z.union([z.number(), z.string()]).transform((val) => String(val)),
-});
+export const insertCompOffVariantSchema = createInsertSchema(compOffVariants)
+  .omit({
+    id: true,
+    createdAt: true,
+    updatedAt: true,
+  })
+  .extend({
+    fullDayHours: z
+      .union([z.number(), z.string()])
+      .transform((val) => String(val)),
+    halfDayHours: z
+      .union([z.number(), z.string()])
+      .transform((val) => String(val)),
+    quarterDayHours: z
+      .union([z.number(), z.string()])
+      .transform((val) => String(val)),
+    maxEncashmentHours: z
+      .union([z.number(), z.string()])
+      .transform((val) => String(val)),
+  });
 
 export const insertPTOVariantSchema = createInsertSchema(ptoVariants).omit({
   id: true,
@@ -508,19 +588,28 @@ export const insertPTORequestSchema = createInsertSchema(ptoRequests).omit({
   approvalHistory: true,
 });
 
-export const insertCompOffRequestSchema = createInsertSchema(compOffRequests).omit({
-  id: true,
-  appliedAt: true,
-  approvedAt: true,
-  rejectedAt: true,
-  createdAt: true,
-  updatedAt: true,
-}).extend({
-  workedDate: z.union([z.date(), z.string().transform((str) => new Date(str))]),
-  compensateWith: z.union([z.date(), z.string().transform((str) => new Date(str)), z.null()]).optional(),
-});
+export const insertCompOffRequestSchema = createInsertSchema(compOffRequests)
+  .omit({
+    id: true,
+    appliedAt: true,
+    approvedAt: true,
+    rejectedAt: true,
+    createdAt: true,
+    updatedAt: true,
+  })
+  .extend({
+    workedDate: z.union([
+      z.date(),
+      z.string().transform((str) => new Date(str)),
+    ]),
+    compensateWith: z
+      .union([z.date(), z.string().transform((str) => new Date(str)), z.null()])
+      .optional(),
+  });
 
-export const insertEmployeeAssignmentSchema = createInsertSchema(employeeAssignments).omit({
+export const insertEmployeeAssignmentSchema = createInsertSchema(
+  employeeAssignments,
+).omit({
   id: true,
   createdAt: true,
   updatedAt: true,
@@ -559,25 +648,41 @@ export type PTORequest = typeof ptoRequests.$inferSelect;
 export type InsertCompOffRequest = z.infer<typeof insertCompOffRequestSchema>;
 export type CompOffRequest = typeof compOffRequests.$inferSelect;
 // Note: CompOffTransfer and CompOffEnCash schemas are defined above with compOffRequests
-export type InsertEmployeeAssignment = z.infer<typeof insertEmployeeAssignmentSchema>;
+export type InsertEmployeeAssignment = z.infer<
+  typeof insertEmployeeAssignmentSchema
+>;
 export type EmployeeAssignment = typeof employeeAssignments.$inferSelect;
 
 // Employee Leave Balance table - tracks current leave balances for each employee and leave type
-export const employeeLeaveBalances = pgTable("employee_leave_balances", {
-  id: serial("id").primaryKey(),
-  userId: varchar("user_id").notNull(),
-  leaveVariantId: integer("leave_variant_id").notNull(),
-  totalEntitlement: numeric("total_entitlement", { precision: 10, scale: 2 }).notNull(), // Annual entitlement in days (supports decimals)
-  currentBalance: numeric("current_balance", { precision: 10, scale: 2 }).notNull(), // Current available balance in days (supports decimals)
-  usedBalance: numeric("used_balance", { precision: 10, scale: 2 }).default("0").notNull(), // Used balance in days (supports decimals)
-  carryForward: numeric("carry_forward", { precision: 10, scale: 2 }).default("0").notNull(), // Carried forward from previous period
-  year: integer("year").notNull(), // Calendar year this balance is for
-  orgId: integer("org_id").default(60),
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
-}, (table) => [
-  unique().on(table.userId, table.leaveVariantId, table.year, table.orgId)
-]);
+export const employeeLeaveBalances = pgTable(
+  "employee_leave_balances",
+  {
+    id: serial("id").primaryKey(),
+    userId: varchar("user_id").notNull(),
+    leaveVariantId: integer("leave_variant_id").notNull(),
+    totalEntitlement: numeric("total_entitlement", {
+      precision: 10,
+      scale: 2,
+    }).notNull(), // Annual entitlement in days (supports decimals)
+    currentBalance: numeric("current_balance", {
+      precision: 10,
+      scale: 2,
+    }).notNull(), // Current available balance in days (supports decimals)
+    usedBalance: numeric("used_balance", { precision: 10, scale: 2 })
+      .default("0")
+      .notNull(), // Used balance in days (supports decimals)
+    carryForward: numeric("carry_forward", { precision: 10, scale: 2 })
+      .default("0")
+      .notNull(), // Carried forward from previous period
+    year: integer("year").notNull(), // Calendar year this balance is for
+    orgId: integer("org_id").default(60),
+    createdAt: timestamp("created_at").defaultNow(),
+    updatedAt: timestamp("updated_at").defaultNow(),
+  },
+  (table) => [
+    unique().on(table.userId, table.leaveVariantId, table.year, table.orgId),
+  ],
+);
 
 // Leave Balance Transactions table - tracks all balance changes (grants, deductions, etc.)
 export const leaveBalanceTransactions = pgTable("leave_balance_transactions", {
@@ -596,34 +701,75 @@ export const leaveBalanceTransactions = pgTable("leave_balance_transactions", {
 });
 
 // Insert schemas for leave balance tables
-export const insertEmployeeLeaveBalanceSchema = createInsertSchema(employeeLeaveBalances);
-export const insertLeaveBalanceTransactionSchema = createInsertSchema(leaveBalanceTransactions);
+export const insertEmployeeLeaveBalanceSchema = createInsertSchema(
+  employeeLeaveBalances,
+);
+export const insertLeaveBalanceTransactionSchema = createInsertSchema(
+  leaveBalanceTransactions,
+);
 
-export type InsertEmployeeLeaveBalance = z.infer<typeof insertEmployeeLeaveBalanceSchema>;
+export type InsertEmployeeLeaveBalance = z.infer<
+  typeof insertEmployeeLeaveBalanceSchema
+>;
 export type EmployeeLeaveBalance = typeof employeeLeaveBalances.$inferSelect;
-export type InsertLeaveBalanceTransaction = z.infer<typeof insertLeaveBalanceTransactionSchema>;
-export type LeaveBalanceTransaction = typeof leaveBalanceTransactions.$inferSelect;
+export type InsertLeaveBalanceTransaction = z.infer<
+  typeof insertLeaveBalanceTransactionSchema
+>;
+export type LeaveBalanceTransaction =
+  typeof leaveBalanceTransactions.$inferSelect;
+
+// Blackout Periods table - blocks leave applications during specific periods
+export const blackoutPeriods = pgTable("blackout_periods", {
+  id: serial("id").primaryKey(),
+  title: varchar("title").notNull(),
+  startDate: date("start_date").notNull(),
+  endDate: date("end_date").notNull(),
+  reason: text("reason"),
+  allowLeaves: boolean("allow_leaves").default(false).notNull(),
+  allowedLeaveTypes: text("allowed_leave_types").array().default([]), // Array of leave type IDs that are allowed as exceptions
+  assignedEmployees: text("assigned_employees").array().default([]), // Array of user IDs this applies to (empty = all)
+  orgId: integer("org_id").default(60),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const insertBlackoutPeriodSchema = createInsertSchema(
+  blackoutPeriods,
+).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type InsertBlackoutPeriod = z.infer<typeof insertBlackoutPeriodSchema>;
+export type BlackoutPeriod = typeof blackoutPeriods.$inferSelect;
 
 // Enhanced Collaborative Leave Tables - following design requirements
 
 // Enhanced Collaborative Leave Settings table
-export const collaborativeLeaveSettingsEnhanced = pgTable("collaborative_leave_settings", {
-  id: serial("id").primaryKey(),
-  enabled: boolean("enabled").default(false).notNull(),
-  maxTasksPerLeave: integer("max_tasks_per_leave").default(5),
-  requireManagerApproval: boolean("require_manager_approval").default(false),
-  autoReminderDays: integer("auto_reminder_days").default(1), // Days before expected support date to send reminder
-  defaultNotificationMethod: varchar("default_notification_method").default("email"),
-  enableWhatsApp: boolean("enable_whatsapp").default(false),
-  enableEmailNotifications: boolean("enable_email_notifications").default(true),
-  closureReportRequired: boolean("closure_report_required").default(true),
-  managerReviewRequired: boolean("manager_review_required").default(true),
-  orgId: integer("org_id").default(60),
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
-}, (table) => [
-  unique().on(table.orgId)
-]);
+export const collaborativeLeaveSettingsEnhanced = pgTable(
+  "collaborative_leave_settings",
+  {
+    id: serial("id").primaryKey(),
+    enabled: boolean("enabled").default(false).notNull(),
+    maxTasksPerLeave: integer("max_tasks_per_leave").default(5),
+    requireManagerApproval: boolean("require_manager_approval").default(false),
+    autoReminderDays: integer("auto_reminder_days").default(1), // Days before expected support date to send reminder
+    defaultNotificationMethod: varchar("default_notification_method").default(
+      "email",
+    ),
+    enableWhatsApp: boolean("enable_whatsapp").default(false),
+    enableEmailNotifications: boolean("enable_email_notifications").default(
+      true,
+    ),
+    closureReportRequired: boolean("closure_report_required").default(true),
+    managerReviewRequired: boolean("manager_review_required").default(true),
+    orgId: integer("org_id").default(60),
+    createdAt: timestamp("created_at").defaultNow(),
+    updatedAt: timestamp("updated_at").defaultNow(),
+  },
+  (table) => [unique().on(table.orgId)],
+);
 
 // Leave Task Assignees table - stores task assignments during leave
 export const leaveTaskAssigneesEnhanced = pgTable("leave_task_assignees", {
@@ -636,7 +782,7 @@ export const leaveTaskAssigneesEnhanced = pgTable("leave_task_assignees", {
   taskDescription: text("task_description").notNull(),
   expectedSupportDate: date("expected_support_date"), // Keep for backward compatibility
   expectedSupportDateFrom: date("expected_support_date_from"),
-  expectedSupportDateTo: date("expected_support_date_to"), 
+  expectedSupportDateTo: date("expected_support_date_to"),
   additionalNotes: text("additional_notes"), // New field for additional notes
   notificationMethod: varchar("notification_method").notNull(), // 'email', 'whatsapp', 'both'
   status: varchar("status").default("pending").notNull(), // 'pending', 'accepted', 'rejected', 'done', 'wip', 'not_done', 'abandoned'
@@ -652,21 +798,23 @@ export const leaveTaskAssigneesEnhanced = pgTable("leave_task_assignees", {
 });
 
 // Leave Closure Reports table - stores employee's review after leave ends
-export const leaveClosureReportsEnhanced = pgTable("leave_closure_reports", {
-  id: serial("id").primaryKey(),
-  leaveRequestId: integer("leave_request_id").notNull(),
-  employeeComments: text("employee_comments"), // Employee's overall comments
-  taskReviews: jsonb("task_reviews"), // JSON array of task-specific reviews
-  managerRating: varchar("manager_rating"), // 'responsible', 'ok', 'needs_improvement'
-  managerComments: text("manager_comments"),
-  managerReviewedAt: timestamp("manager_reviewed_at"),
-  submittedAt: timestamp("submitted_at").defaultNow(),
-  orgId: integer("org_id").default(60),
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
-}, (table) => [
-  unique().on(table.leaveRequestId, table.orgId)
-]);
+export const leaveClosureReportsEnhanced = pgTable(
+  "leave_closure_reports",
+  {
+    id: serial("id").primaryKey(),
+    leaveRequestId: integer("leave_request_id").notNull(),
+    employeeComments: text("employee_comments"), // Employee's overall comments
+    taskReviews: jsonb("task_reviews"), // JSON array of task-specific reviews
+    managerRating: varchar("manager_rating"), // 'responsible', 'ok', 'needs_improvement'
+    managerComments: text("manager_comments"),
+    managerReviewedAt: timestamp("manager_reviewed_at"),
+    submittedAt: timestamp("submitted_at").defaultNow(),
+    orgId: integer("org_id").default(60),
+    createdAt: timestamp("created_at").defaultNow(),
+    updatedAt: timestamp("updated_at").defaultNow(),
+  },
+  (table) => [unique().on(table.leaveRequestId, table.orgId)],
+);
 
 // Performance Records table - tracks employee performance ratings
 export const performanceRecordsEnhanced = pgTable("performance_records", {
@@ -684,34 +832,60 @@ export const performanceRecordsEnhanced = pgTable("performance_records", {
 });
 
 // Collaborative Leave Audit Log - comprehensive audit trail
-export const collaborativeLeaveAuditLogEnhanced = pgTable("collaborative_leave_audit_log", {
-  id: serial("id").primaryKey(),
-  userId: varchar("user_id").notNull(), // Who performed the action
-  actionType: varchar("action_type").notNull(), // 'task_created', 'notification_sent', 'task_accepted', 'status_updated', etc.
-  relatedEntityType: varchar("related_entity_type").notNull(), // 'leave_request', 'task_assignment', 'closure_report'
-  relatedEntityId: integer("related_entity_id").notNull(),
-  oldValue: text("old_value"), // Previous value (JSON)
-  newValue: text("new_value"), // New value (JSON)
-  details: text("details"), // Additional context
-  timestamp: timestamp("timestamp").defaultNow(),
-  orgId: integer("org_id").default(60),
-});
+export const collaborativeLeaveAuditLogEnhanced = pgTable(
+  "collaborative_leave_audit_log",
+  {
+    id: serial("id").primaryKey(),
+    userId: varchar("user_id").notNull(), // Who performed the action
+    actionType: varchar("action_type").notNull(), // 'task_created', 'notification_sent', 'task_accepted', 'status_updated', etc.
+    relatedEntityType: varchar("related_entity_type").notNull(), // 'leave_request', 'task_assignment', 'closure_report'
+    relatedEntityId: integer("related_entity_id").notNull(),
+    oldValue: text("old_value"), // Previous value (JSON)
+    newValue: text("new_value"), // New value (JSON)
+    details: text("details"), // Additional context
+    timestamp: timestamp("timestamp").defaultNow(),
+    orgId: integer("org_id").default(60),
+  },
+);
 
 // Insert schemas for collaborative leave tables
-export const insertLeaveTaskAssigneeEnhancedSchema = createInsertSchema(leaveTaskAssigneesEnhanced);
-export const insertLeaveClosureReportEnhancedSchema = createInsertSchema(leaveClosureReportsEnhanced);
-export const insertPerformanceRecordEnhancedSchema = createInsertSchema(performanceRecordsEnhanced);
-export const insertCollaborativeLeaveAuditLogEnhancedSchema = createInsertSchema(collaborativeLeaveAuditLogEnhanced);
-export const insertCollaborativeLeaveSettingsEnhancedSchema = createInsertSchema(collaborativeLeaveSettingsEnhanced);
+export const insertLeaveTaskAssigneeEnhancedSchema = createInsertSchema(
+  leaveTaskAssigneesEnhanced,
+);
+export const insertLeaveClosureReportEnhancedSchema = createInsertSchema(
+  leaveClosureReportsEnhanced,
+);
+export const insertPerformanceRecordEnhancedSchema = createInsertSchema(
+  performanceRecordsEnhanced,
+);
+export const insertCollaborativeLeaveAuditLogEnhancedSchema =
+  createInsertSchema(collaborativeLeaveAuditLogEnhanced);
+export const insertCollaborativeLeaveSettingsEnhancedSchema =
+  createInsertSchema(collaborativeLeaveSettingsEnhanced);
 
 // Type exports for collaborative leave
-export type InsertLeaveTaskAssigneeEnhanced = z.infer<typeof insertLeaveTaskAssigneeEnhancedSchema>;
-export type LeaveTaskAssigneeEnhanced = typeof leaveTaskAssigneesEnhanced.$inferSelect;
-export type InsertLeaveClosureReportEnhanced = z.infer<typeof insertLeaveClosureReportEnhancedSchema>;
-export type LeaveClosureReportEnhanced = typeof leaveClosureReportsEnhanced.$inferSelect;
-export type InsertPerformanceRecordEnhanced = z.infer<typeof insertPerformanceRecordEnhancedSchema>;
-export type PerformanceRecordEnhanced = typeof performanceRecordsEnhanced.$inferSelect;
-export type InsertCollaborativeLeaveAuditLogEnhanced = z.infer<typeof insertCollaborativeLeaveAuditLogEnhancedSchema>;
-export type CollaborativeLeaveAuditLogEnhanced = typeof collaborativeLeaveAuditLogEnhanced.$inferSelect;
-export type InsertCollaborativeLeaveSettingsEnhanced = z.infer<typeof insertCollaborativeLeaveSettingsEnhancedSchema>;
-export type CollaborativeLeaveSettingsEnhanced = typeof collaborativeLeaveSettingsEnhanced.$inferSelect;
+export type InsertLeaveTaskAssigneeEnhanced = z.infer<
+  typeof insertLeaveTaskAssigneeEnhancedSchema
+>;
+export type LeaveTaskAssigneeEnhanced =
+  typeof leaveTaskAssigneesEnhanced.$inferSelect;
+export type InsertLeaveClosureReportEnhanced = z.infer<
+  typeof insertLeaveClosureReportEnhancedSchema
+>;
+export type LeaveClosureReportEnhanced =
+  typeof leaveClosureReportsEnhanced.$inferSelect;
+export type InsertPerformanceRecordEnhanced = z.infer<
+  typeof insertPerformanceRecordEnhancedSchema
+>;
+export type PerformanceRecordEnhanced =
+  typeof performanceRecordsEnhanced.$inferSelect;
+export type InsertCollaborativeLeaveAuditLogEnhanced = z.infer<
+  typeof insertCollaborativeLeaveAuditLogEnhancedSchema
+>;
+export type CollaborativeLeaveAuditLogEnhanced =
+  typeof collaborativeLeaveAuditLogEnhanced.$inferSelect;
+export type InsertCollaborativeLeaveSettingsEnhanced = z.infer<
+  typeof insertCollaborativeLeaveSettingsEnhancedSchema
+>;
+export type CollaborativeLeaveSettingsEnhanced =
+  typeof collaborativeLeaveSettingsEnhanced.$inferSelect;

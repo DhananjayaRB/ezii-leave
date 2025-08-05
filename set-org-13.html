@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Setting Context to Org 13</title>
+</head>
+<body>
+    <h1>Setting Context to Organization 13...</h1>
+    <p>Please wait while we redirect you...</p>
+    
+    <script>
+        // Set localStorage values
+        localStorage.setItem("org_id", "13");
+        localStorage.setItem("user_id", "12080");
+        
+        console.log("Context set to org_id: 13, user_id: 12080");
+        
+        // Redirect to the main application
+        setTimeout(() => {
+            window.location.href = "/admin-reports/leave-balances";
+        }, 1000);
+    </script>
+</body>
+</html>

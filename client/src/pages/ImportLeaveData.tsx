@@ -5,13 +5,26 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
-import { Upload, Download, FileSpreadsheet, AlertCircle, CheckCircle, X } from "lucide-react";
+import {
+  Upload,
+  Download,
+  FileSpreadsheet,
+  AlertCircle,
+  CheckCircle,
+  X,
+} from "lucide-react";
 import Layout from "@/components/Layout";
-import * as XLSX from 'xlsx';
-import { fetchEmployeeData, transformEmployeeData } from '@/lib/externalApi';
+import * as XLSX from "xlsx";
+import { fetchEmployeeData, transformEmployeeData } from "@/lib/externalApi";
 
 export default function ImportLeaveData() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -40,14 +53,14 @@ export default function ImportLeaveData() {
       setPreviewData([]);
       setValidationErrors([]);
       setIsValidated(false);
-      
+
       // Only accept CSV and Excel files
       const validTypes = [
-        'text/csv',
-        'application/vnd.ms-excel',
-        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        "text/csv",
+        "application/vnd.ms-excel",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       ];
-      
+
       if (!validTypes.includes(file.type)) {
         toast({
           title: "Invalid File Type",
@@ -64,17 +77,21 @@ export default function ImportLeaveData() {
   const validateFileMutation = useMutation({
     mutationFn: async (file: File) => {
       const formData = new FormData();
-      formData.append('file', file);
-      formData.append('importType', importType);
-      
-      const response = await apiRequest("POST", "/api/import-leave-data/validate", formData);
+      formData.append("file", file);
+      formData.append("importType", importType);
+
+      const response = await apiRequest(
+        "POST",
+        "/api/import-leave-data/validate",
+        formData,
+      );
       return response.json();
     },
     onSuccess: (response: any) => {
       setPreviewData(response.preview);
       setValidationErrors(response.errors || []);
       setIsValidated(response.errors.length === 0);
-      
+
       if (response.errors.length === 0) {
         toast({
           title: "Validation Successful",
@@ -101,23 +118,69 @@ export default function ImportLeaveData() {
   const importDataMutation = useMutation({
     mutationFn: async () => {
       if (!selectedFile) throw new Error("No file selected");
-      
+
       const formData = new FormData();
-      formData.append('file', selectedFile);
-      formData.append('importType', importType);
-      
-      const response = await apiRequest("POST", "/api/import-leave-data/execute", formData);
+      formData.append("file", selectedFile);
+      formData.append("importType", importType);
+
+      // CRITICAL FIX: Pass JWT token for ALL import types (balances and transactions)
+      const jwtToken = localStorage.getItem("jwt_token");
+      if (jwtToken) {
+        formData.append("jwtToken", jwtToken);
+        console.log(
+          `[ImportLeaveData] ✅ Passing JWT token for ${importType} import`,
+        );
+      } else {
+        console.warn(
+          `[ImportLeaveData] ⚠️ No JWT token found - ${importType} import may fail`,
+        );
+      }
+
+      const response = await apiRequest(
+        "POST",
+        "/api/import-leave-data/execute",
+        formData,
+      );
       return response.json();
     },
     onSuccess: (response: any) => {
-      queryClient.invalidateQueries({ queryKey: ["/api/employee-leave-balances"] });
-      queryClient.invalidateQueries({ queryKey: ["/api/leave-balance-transactions"] });
-      
+      queryClient.invalidateQueries({
+        queryKey: ["/api/employee-leave-balances"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["/api/leave-balance-transactions"],
+      });
+
+      // Create detailed success message with import statistics
+      let description = `Successfully imported ${response.imported} of ${response.total} records`;
+
+      if (response.importStats) {
+        const skipped = response.total - response.imported;
+        if (skipped > 0) {
+          description += `\n\nSkipped records breakdown:`;
+          if (response.importStats.skippedEmpty > 0) {
+            description += `\n• Empty/missing fields: ${response.importStats.skippedEmpty}`;
+          }
+          if (response.importStats.skippedHeaders > 0) {
+            description += `\n• Header rows: ${response.importStats.skippedHeaders}`;
+          }
+          if (response.importStats.skippedMissingEmployee > 0) {
+            description += `\n• Employee not found: ${response.importStats.skippedMissingEmployee}`;
+          }
+          if (response.importStats.skippedMissingLeaveType > 0) {
+            description += `\n• Leave type not found: ${response.importStats.skippedMissingLeaveType}`;
+          }
+          if (response.importStats.processingErrors > 0) {
+            description += `\n• Processing errors: ${response.importStats.processingErrors}`;
+          }
+        }
+      }
+
       toast({
         title: "Import Successful",
-        description: `Successfully imported ${response.imported} records.`,
+        description,
       });
-      
+
       // Reset form
       setSelectedFile(null);
       setPreviewData([]);
@@ -135,73 +198,105 @@ export default function ImportLeaveData() {
 
   // Download balance template
   const handleDownloadBalanceTemplate = () => {
-    console.log('Download Balance Template clicked');
+    console.log("Download Balance Template clicked");
     downloadTemplate("balances");
   };
 
   // Download transaction template
   const handleDownloadTransactionTemplate = () => {
-    console.log('Download Transaction Template clicked');
+    console.log("Download Transaction Template clicked");
     downloadTemplate("transactions");
   };
 
   // Debug state values
-  console.log('ImportLeaveData state:', {
-    importType
+  console.log("ImportLeaveData state:", {
+    importType,
   });
 
   // Download template with populated employee data
   const downloadTemplate = async (templateType: string = importType) => {
     try {
       let employees: any[] = [];
-      
+
       // Fetch employee data using the same approach as other components
       try {
-        console.log('[ImportLeaveData] Fetching employee data from external API...');
+        console.log(
+          "[ImportLeaveData] Fetching employee data from external API...",
+        );
         const externalEmployees = await fetchEmployeeData();
         employees = externalEmployees.map(transformEmployeeData);
-        console.log('[ImportLeaveData] Successfully fetched:', employees.length, 'employees');
+        console.log(
+          "[ImportLeaveData] Successfully fetched:",
+          employees.length,
+          "employees",
+        );
       } catch (apiError) {
-        console.log('[ImportLeaveData] External API error:', apiError);
+        console.log("[ImportLeaveData] External API error:", apiError);
         // Continue with empty employees array to generate template with empty fields
       }
-      
+
       // If no employees from external API, show warning
       if (employees.length === 0) {
-        console.log('No employee data available, generating template with empty employee fields');
+        console.log(
+          "No employee data available, generating template with empty employee fields",
+        );
         toast({
           title: "No Employee Data",
-          description: "Could not fetch employee data from external API. Template will have empty employee fields.",
+          description:
+            "Could not fetch employee data from external API. Template will have empty employee fields.",
           variant: "default",
         });
       }
-      
+
       let templateData: any[] = [];
-      
+
       if (templateType === "balances") {
         // Leave balances template - without LeaveAvailed column
         templateData = [
-          ["Leave balance details for the current calendar year as on migration"],
+          [
+            "Leave balance details for the current calendar year as on migration",
+          ],
           [],
-          ["EmpNumber", "EmpName", "LeaveType", "LeaveOpeningBalance", "LeaveEncashed", "LeaveLapsed"]
+          [
+            "EmpNumber",
+            "EmpName",
+            "LeaveType",
+            "LeaveOpeningBalance",
+            "LeaveEncashed",
+            "LeaveLapsed",
+          ],
         ];
       } else {
         templateData = [
-          ["Leave availed details from the beginning of the current calendar year till migration cut off date"],
+          [
+            "Leave availed details from the beginning of the current calendar year till migration cut off date",
+          ],
           [],
-          ["EmpNumber", "EmpName", "LeaveType", "LeaveTakenStartDate", "Is Start Date a Half Day", "LeaveTakenEndDate", "Is End Date a Half Day", "TotalLeaveDays", "Status"]
+          [
+            "EmpNumber",
+            "EmpName",
+            "LeaveType",
+            "LeaveTakenStartDate",
+            "Is Start Date a Half Day",
+            "LeaveTakenEndDate",
+            "Is End Date a Half Day",
+            "TotalLeaveDays",
+            "Status",
+          ],
         ];
-        
+
         // For transaction imports, only include column headers - no employee data
-        const typedLeaveTypes = leaveTypes as Array<{name: string}>;
-        console.log('[ImportLeaveData] Transaction template: Only including column headers, no employee data');
-        
+        const typedLeaveTypes = leaveTypes as Array<{ name: string }>;
+        console.log(
+          "[ImportLeaveData] Transaction template: Only including column headers, no employee data",
+        );
+
         // Create Excel with just headers and download immediately
         const wb = XLSX.utils.book_new();
         const ws = XLSX.utils.aoa_to_sheet(templateData);
-        
+
         // Set column widths for transaction template
-        ws['!cols'] = [
+        ws["!cols"] = [
           { wch: 12 }, // EmpNumber
           { wch: 20 }, // EmpName
           { wch: 15 }, // LeaveType
@@ -210,62 +305,69 @@ export default function ImportLeaveData() {
           { wch: 18 }, // LeaveTakenEndDate
           { wch: 20 }, // Is End Date a Half Day
           { wch: 15 }, // TotalLeaveDays
-          { wch: 12 }  // Status
+          { wch: 12 }, // Status
         ];
 
         // Style the header row
-        if (!ws['!merges']) ws['!merges'] = [];
-        ws['!merges'].push({ s: { r: 0, c: 0 }, e: { r: 0, c: 7 } }); // Merge title row (8 columns)
+        if (!ws["!merges"]) ws["!merges"] = [];
+        ws["!merges"].push({ s: { r: 0, c: 0 }, e: { r: 0, c: 7 } }); // Merge title row (8 columns)
 
         const sheetName = "Leave Transaction Import";
         XLSX.utils.book_append_sheet(wb, ws, sheetName);
-        
+
         // Generate Excel file and download
-        const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-        const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+        const blob = new Blob([excelBuffer], {
+          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        });
         const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
+        const a = document.createElement("a");
         a.href = url;
-        a.download = 'leave_transaction_import_template.xlsx';
+        a.download = "leave_transaction_import_template.xlsx";
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
         window.URL.revokeObjectURL(url);
 
         toast({
-          title: "Template Downloaded", 
+          title: "Template Downloaded",
           description: "Transaction template with column headers only",
         });
         return; // Exit early for transaction templates
       }
 
-      const typedLeaveTypes = leaveTypes as Array<{name: string}>;
-      
+      const typedLeaveTypes = leaveTypes as Array<{ name: string }>;
+
       if (employees.length > 0) {
         // Only include employees who are actually assigned to each leave type
         for (const leaveType of typedLeaveTypes) {
           try {
             // Fetch leave variants for this leave type
-            const variantsResponse = await fetch('/api/leave-variants', {
-              credentials: 'include',
+            const variantsResponse = await fetch("/api/leave-variants", {
+              credentials: "include",
               headers: {
-                'X-Org-Id': localStorage.getItem('org_id') || '60'
-              }
+                "X-Org-Id": localStorage.getItem("org_id") || "60",
+              },
             });
-            
+
             if (variantsResponse.ok) {
               const allVariants = await variantsResponse.json();
-              const typeVariants = allVariants.filter((v: any) => v.leaveTypeName === leaveType.name);
-              
+              const typeVariants = allVariants.filter(
+                (v: any) => v.leaveTypeName === leaveType.name,
+              );
+
               // Get assigned employees for each variant of this leave type
               const assignedEmployeeIds = new Set();
-              
+
               for (const variant of typeVariants) {
                 try {
-                  const assignmentsResponse = await fetch(`/api/employee-assignments/${variant.id}`, {
-                    credentials: 'include'
-                  });
-                  
+                  const assignmentsResponse = await fetch(
+                    `/api/employee-assignments/${variant.id}`,
+                    {
+                      credentials: "include",
+                    },
+                  );
+
                   if (assignmentsResponse.ok) {
                     const assignments = await assignmentsResponse.json();
                     assignments.forEach((assignment: any) => {
@@ -273,42 +375,54 @@ export default function ImportLeaveData() {
                     });
                   }
                 } catch (error) {
-                  console.log(`Could not fetch assignments for variant ${variant.id}`);
+                  console.log(
+                    `Could not fetch assignments for variant ${variant.id}`,
+                  );
                 }
               }
-              
+
               // Only add rows for employees assigned to this leave type who have employee numbers
               employees.forEach((employee: any) => {
                 const empId = employee.user_id || employee.id;
-                const employeeNumber = employee.employeeNumber || employee.employee_number;
-                
+                const employeeNumber =
+                  employee.employeeNumber || employee.employee_number;
+
                 if (assignedEmployeeIds.has(empId) && employeeNumber) {
                   if (templateType === "balances") {
                     // Balance template - without LeaveAvailed column
                     templateData.push([
                       employeeNumber,
-                      employee.user_name || employee.name || `${employee.firstName || ''} ${employee.lastName || ''}`.trim() || "",
+                      employee.user_name ||
+                        employee.name ||
+                        `${employee.firstName || ""} ${employee.lastName || ""}`.trim() ||
+                        "",
                       leaveType.name,
                       "", // LeaveOpeningBalance - empty for user to fill
                       "", // LeaveEncashed - empty for user to fill
-                      ""  // LeaveLapsed - empty for user to fill
+                      "", // LeaveLapsed - empty for user to fill
                     ]);
                   } else {
                     templateData.push([
                       employeeNumber,
-                      employee.user_name || employee.name || `${employee.firstName || ''} ${employee.lastName || ''}`.trim() || "",
+                      employee.user_name ||
+                        employee.name ||
+                        `${employee.firstName || ""} ${employee.lastName || ""}`.trim() ||
+                        "",
                       leaveType.name,
                       "", // StartDate - empty for user to fill
                       "", // EndDate - empty for user to fill
                       "", // Days - empty for user to fill
-                      "approved" // Status - default to approved
+                      "approved", // Status - default to approved
                     ]);
                   }
                 }
               });
             }
           } catch (error) {
-            console.log(`Error processing leave type ${leaveType.name}:`, error);
+            console.log(
+              `Error processing leave type ${leaveType.name}:`,
+              error,
+            );
           }
         }
       } else {
@@ -322,7 +436,7 @@ export default function ImportLeaveData() {
               leaveType.name,
               "", // LeaveOpeningBalance - empty for user to fill
               "", // LeaveEncashed - empty for user to fill
-              ""  // LeaveLapsed - empty for user to fill
+              "", // LeaveLapsed - empty for user to fill
             ]);
           } else {
             templateData.push([
@@ -332,7 +446,7 @@ export default function ImportLeaveData() {
               "", // StartDate - empty for user to fill (YYYY-MM-DD)
               "", // EndDate - empty for user to fill (YYYY-MM-DD)
               "", // Days - empty for user to fill
-              "approved" // Status - default to approved
+              "approved", // Status - default to approved
             ]);
           }
         });
@@ -340,48 +454,56 @@ export default function ImportLeaveData() {
 
       const wb = XLSX.utils.book_new();
       const ws = XLSX.utils.aoa_to_sheet(templateData);
-      
+
       // Set column widths based on template type
       if (templateType === "balances") {
         // Balance template - without LeaveAvailed column
-        ws['!cols'] = [
+        ws["!cols"] = [
           { wch: 12 }, // EmpNumber
           { wch: 20 }, // EmpName
           { wch: 15 }, // LeaveType
           { wch: 18 }, // LeaveOpeningBalance
           { wch: 14 }, // LeaveEncashed
-          { wch: 12 }  // LeaveLapsed
+          { wch: 12 }, // LeaveLapsed
         ];
       } else {
-        ws['!cols'] = [
+        ws["!cols"] = [
           { wch: 12 }, // EmpNumber
           { wch: 20 }, // EmpName
           { wch: 15 }, // LeaveType
           { wch: 12 }, // StartDate
           { wch: 12 }, // EndDate
-          { wch: 8 },  // Days
-          { wch: 10 }  // Status
+          { wch: 8 }, // Days
+          { wch: 10 }, // Status
         ];
       }
 
       // Style the header row
-      if (!ws['!merges']) ws['!merges'] = [];
+      if (!ws["!merges"]) ws["!merges"] = [];
       let colCount = 6; // Default for transaction template
       if (templateType === "balances") {
         colCount = 6; // Balance template has 6 columns (without LeaveAvailed)
       }
-      ws['!merges'].push({ s: { r: 0, c: 0 }, e: { r: 0, c: colCount } }); // Merge title row
+      ws["!merges"].push({ s: { r: 0, c: 0 }, e: { r: 0, c: colCount } }); // Merge title row
 
-      const sheetName = templateType === "balances" ? "Leave Balance Import" : "Leave Transaction Import";
+      const sheetName =
+        templateType === "balances"
+          ? "Leave Balance Import"
+          : "Leave Transaction Import";
       XLSX.utils.book_append_sheet(wb, ws, sheetName);
-      
+
       // Generate Excel file and download
-      const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-      const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+      const blob = new Blob([excelBuffer], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
       const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
-      const fileName = templateType === "balances" ? 'leave_balance_import_template.xlsx' : 'leave_transaction_import_template.xlsx';
+      const fileName =
+        templateType === "balances"
+          ? "leave_balance_import_template.xlsx"
+          : "leave_transaction_import_template.xlsx";
       a.download = fileName;
       document.body.appendChild(a);
       a.click();
@@ -389,19 +511,23 @@ export default function ImportLeaveData() {
       window.URL.revokeObjectURL(url);
 
       const rowCount = templateData.length - 3; // Subtract header rows
-      const message = employees.length > 0 
-        ? `Generated template with ${rowCount} rows based on actual employee assignments`
-        : `Generated empty template with ${typedLeaveTypes.length} leave types - fill in employee data manually`;
-      
+      const message =
+        employees.length > 0
+          ? `Generated template with ${rowCount} rows based on actual employee assignments`
+          : `Generated empty template with ${typedLeaveTypes.length} leave types - fill in employee data manually`;
+
       toast({
-        title: "Template Downloaded", 
+        title: "Template Downloaded",
         description: message,
       });
     } catch (error) {
-      console.error('Template generation error:', error);
+      console.error("Template generation error:", error);
       toast({
         title: "Download Failed",
-        description: error instanceof Error ? error.message : "Failed to generate template",
+        description:
+          error instanceof Error
+            ? error.message
+            : "Failed to generate template",
         variant: "destructive",
       });
     }
@@ -413,8 +539,12 @@ export default function ImportLeaveData() {
         <div className="max-w-4xl mx-auto">
           {/* Header */}
           <div className="mb-6">
-            <h1 className="text-2xl font-semibold text-gray-900">Import Leave Data</h1>
-            <p className="text-gray-600 mt-1">Import employee leave balances and transaction history</p>
+            <h1 className="text-2xl font-semibold text-gray-900">
+              Import Leave Data
+            </h1>
+            <p className="text-gray-600 mt-1">
+              Import employee leave balances and transaction history
+            </p>
           </div>
 
           {/* Import Instructions */}
@@ -439,7 +569,9 @@ export default function ImportLeaveData() {
                         onChange={(e) => setImportType(e.target.value)}
                         className="w-4 h-4 text-blue-600"
                       />
-                      <span className="text-sm font-medium text-gray-900">Balance Template</span>
+                      <span className="text-sm font-medium text-gray-900">
+                        Balance Template
+                      </span>
                     </label>
                     <label className="flex items-center space-x-2 cursor-pointer">
                       <input
@@ -450,7 +582,9 @@ export default function ImportLeaveData() {
                         onChange={(e) => setImportType(e.target.value)}
                         className="w-4 h-4 text-blue-600"
                       />
-                      <span className="text-sm font-medium text-gray-900">Transaction Template</span>
+                      <span className="text-sm font-medium text-gray-900">
+                        Transaction Template
+                      </span>
                     </label>
                   </div>
                 </div>
@@ -458,37 +592,93 @@ export default function ImportLeaveData() {
                 <div className="space-y-3 text-sm text-gray-600">
                   {importType === "balances" ? (
                     <>
-                      <p>Import employee leave balance data from your previous system.</p>
+                      <p>
+                        Import employee leave balance data from your previous
+                        system.
+                      </p>
                       <div className="bg-blue-50 p-3 rounded-lg border border-blue-200">
-                        <h4 className="font-medium text-blue-900 mb-2">Required Format for Leave Balances:</h4>
+                        <h4 className="font-medium text-blue-900 mb-2">
+                          Required Format for Leave Balances:
+                        </h4>
                         <ul className="text-blue-800 space-y-1">
-                          <li>• <strong>EmpNumber:</strong> Employee ID (e.g., HIN/00001)</li>
-                          <li>• <strong>EmpName:</strong> Employee full name</li>
-                          <li>• <strong>LeaveType:</strong> Leave type code (EL, CL, SL, etc.)</li>
-                          <li>• <strong>LeaveOpeningBalance:</strong> Current available balance</li>
-                          <li>• <strong>LeaveEncashed:</strong> Amount encashed (if applicable)</li>
-                          <li>• <strong>LeaveLapsed:</strong> Amount that expired/lapsed</li>
+                          <li>
+                            • <strong>EmpNumber:</strong> Employee ID (e.g.,
+                            HIN/00001)
+                          </li>
+                          <li>
+                            • <strong>EmpName:</strong> Employee full name
+                          </li>
+                          <li>
+                            • <strong>LeaveType:</strong> Leave type code (EL,
+                            CL, SL, etc.)
+                          </li>
+                          <li>
+                            • <strong>LeaveOpeningBalance:</strong> Current
+                            available balance
+                          </li>
+                          <li>
+                            • <strong>LeaveEncashed:</strong> Amount encashed
+                            (if applicable)
+                          </li>
+                          <li>
+                            • <strong>LeaveLapsed:</strong> Amount that
+                            expired/lapsed
+                          </li>
                         </ul>
                       </div>
                     </>
                   ) : (
                     <>
-                      <p>Import historical leave transactions that employees have already taken.</p>
+                      <p>
+                        Import historical leave transactions that employees have
+                        already taken.
+                      </p>
                       <div className="bg-green-50 p-3 rounded-lg border border-green-200">
-                        <h4 className="font-medium text-green-900 mb-2">Required Format for Leave Transactions:</h4>
+                        <h4 className="font-medium text-green-900 mb-2">
+                          Required Format for Leave Transactions:
+                        </h4>
                         <ul className="text-green-800 space-y-1">
-                          <li>• <strong>EmpNumber:</strong> Employee ID (e.g., HIN/00001)</li>
-                          <li>• <strong>EmpName:</strong> Employee full name</li>
-                          <li>• <strong>LeaveType:</strong> Leave type code (EL, CL, SL, etc.)</li>
-                          <li>• <strong>LeaveTakenStartDate:</strong> Leave start date (dd-MM-YYYY)</li>
-                          <li>• <strong>Is Start Date a Half Day:</strong> TRUE/FALSE for half day start</li>
-                          <li>• <strong>LeaveTakenEndDate:</strong> Leave end date (dd-MM-YYYY)</li>
-                          <li>• <strong>Is End Date a Half Day:</strong> TRUE/FALSE for half day end</li>
-                          <li>• <strong>TotalLeaveDays:</strong> Number of leave days taken (must be greater than 0)</li>
-                          <li>• <strong>Status:</strong> Approved/1 (deducts balance), Rejected/0 (no deduction), or Pending/2 (no deduction)</li>
+                          <li>
+                            • <strong>EmpNumber:</strong> Employee ID (e.g.,
+                            HIN/00001)
+                          </li>
+                          <li>
+                            • <strong>EmpName:</strong> Employee full name
+                          </li>
+                          <li>
+                            • <strong>LeaveType:</strong> Leave type code (EL,
+                            CL, SL, etc.)
+                          </li>
+                          <li>
+                            • <strong>LeaveTakenStartDate:</strong> Leave start
+                            date (dd-MM-YYYY)
+                          </li>
+                          <li>
+                            • <strong>Is Start Date a Half Day:</strong>{" "}
+                            TRUE/FALSE for half day start
+                          </li>
+                          <li>
+                            • <strong>LeaveTakenEndDate:</strong> Leave end date
+                            (dd-MM-YYYY)
+                          </li>
+                          <li>
+                            • <strong>Is End Date a Half Day:</strong>{" "}
+                            TRUE/FALSE for half day end
+                          </li>
+                          <li>
+                            • <strong>TotalLeaveDays:</strong> Number of leave
+                            days taken (must be greater than 0)
+                          </li>
+                          <li>
+                            • <strong>Status:</strong> Approved/1 (deducts
+                            balance), Rejected/0 (no deduction), or Pending/2
+                            (no deduction)
+                          </li>
                         </ul>
                         <div className="mt-3 p-2 bg-yellow-50 border border-yellow-200 rounded text-yellow-800">
-                          <strong>Important:</strong> Ensure TotalLeaveDays column contains actual day counts (e.g., 1, 2, 0.5) and not zero values.
+                          <strong>Important:</strong> Ensure TotalLeaveDays
+                          column contains actual day counts (e.g., 1, 2, 0.5)
+                          and not zero values.
                         </div>
                       </div>
                     </>
@@ -526,7 +716,10 @@ export default function ImportLeaveData() {
             <CardContent>
               <div className="space-y-4">
                 <div>
-                  <Label htmlFor="file" className="text-sm font-medium text-gray-700">
+                  <Label
+                    htmlFor="file"
+                    className="text-sm font-medium text-gray-700"
+                  >
                     Select File
                   </Label>
                   <Input
@@ -545,7 +738,9 @@ export default function ImportLeaveData() {
                   <div className="flex items-center space-x-2 p-3 bg-blue-50 rounded-lg border border-blue-200">
                     <FileSpreadsheet className="w-5 h-5 text-blue-600" />
                     <div className="flex-1">
-                      <p className="text-sm font-medium text-blue-900">{selectedFile.name}</p>
+                      <p className="text-sm font-medium text-blue-900">
+                        {selectedFile.name}
+                      </p>
                       <p className="text-xs text-blue-600">
                         {(selectedFile.size / 1024).toFixed(1)} KB
                       </p>
@@ -556,7 +751,9 @@ export default function ImportLeaveData() {
                       onClick={() => validateFileMutation.mutate(selectedFile)}
                       disabled={validateFileMutation.isPending}
                     >
-                      {validateFileMutation.isPending ? "Validating..." : "Validate"}
+                      {validateFileMutation.isPending
+                        ? "Validating..."
+                        : "Validate"}
                     </Button>
                   </div>
                 )}
@@ -576,7 +773,10 @@ export default function ImportLeaveData() {
               <CardContent>
                 <div className="space-y-2">
                   {validationErrors.map((error, index) => (
-                    <div key={index} className="flex items-start space-x-2 text-sm text-red-800">
+                    <div
+                      key={index}
+                      className="flex items-start space-x-2 text-sm text-red-800"
+                    >
                       <X className="w-4 h-4 mt-0.5 flex-shrink-0" />
                       <span>{error}</span>
                     </div>
@@ -608,8 +808,13 @@ export default function ImportLeaveData() {
                     <thead>
                       <tr className="border-b">
                         {Object.keys(previewData[0] || {}).map((key) => (
-                          <th key={key} className="text-left py-2 px-3 font-medium text-gray-700">
-                            {key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                          <th
+                            key={key}
+                            className="text-left py-2 px-3 font-medium text-gray-700"
+                          >
+                            {key
+                              .replace(/_/g, " ")
+                              .replace(/\b\w/g, (l) => l.toUpperCase())}
                           </th>
                         ))}
                       </tr>
@@ -618,7 +823,10 @@ export default function ImportLeaveData() {
                       {previewData.slice(0, 5).map((row, index) => (
                         <tr key={index} className="border-b">
                           {Object.values(row).map((value: any, cellIndex) => (
-                            <td key={cellIndex} className="py-2 px-3 text-gray-600">
+                            <td
+                              key={cellIndex}
+                              className="py-2 px-3 text-gray-600"
+                            >
                               {String(value)}
                             </td>
                           ))}
@@ -642,9 +850,12 @@ export default function ImportLeaveData() {
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="text-lg font-medium text-gray-900">Ready to Import</h3>
+                    <h3 className="text-lg font-medium text-gray-900">
+                      Ready to Import
+                    </h3>
                     <p className="text-sm text-gray-600">
-                      {previewData.length} records validated and ready for import
+                      {previewData.length} records validated and ready for
+                      import
                     </p>
                   </div>
                   <Button
@@ -652,7 +863,9 @@ export default function ImportLeaveData() {
                     disabled={importDataMutation.isPending}
                     className="bg-green-600 hover:bg-green-700 text-white"
                   >
-                    {importDataMutation.isPending ? "Importing..." : "Import Data"}
+                    {importDataMutation.isPending
+                      ? "Importing..."
+                      : "Import Data"}
                   </Button>
                 </div>
               </CardContent>
@@ -660,8 +873,6 @@ export default function ImportLeaveData() {
           )}
         </div>
       </div>
-
-
     </Layout>
   );
 }
