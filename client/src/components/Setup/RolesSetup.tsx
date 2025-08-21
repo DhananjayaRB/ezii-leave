@@ -40,7 +40,11 @@ interface PermissionStructure {
   adminLeaveTypes: { view: boolean; modify: boolean };
   adminCompOff: { view: boolean; modify: boolean };
   adminBTO: { view: boolean; modify: boolean };
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
   // Allow On Behalf Actions
   allowOnBehalf: { bto: boolean; leave: boolean; compOff: boolean };
 }
@@ -82,7 +86,11 @@ export default function RolesSetup({ onNext, onPrevious, isLast, isLoading, show
       adminLeaveTypes: { view: false, modify: false },
       adminCompOff: { view: false, modify: false },
       adminBTO: { view: false, modify: false },
+<<<<<<< HEAD
 
+=======
+      
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       // Allow On Behalf Actions
       allowOnBehalf: { bto: false, leave: false, compOff: false },
     },
@@ -198,7 +206,11 @@ export default function RolesSetup({ onNext, onPrevious, isLast, isLoading, show
         adminLeaveTypes: { view: false, modify: false },
         adminCompOff: { view: false, modify: false },
         adminBTO: { view: false, modify: false },
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
         // Allow On Behalf Actions
         allowOnBehalf: { bto: false, leave: false, compOff: false },
       },

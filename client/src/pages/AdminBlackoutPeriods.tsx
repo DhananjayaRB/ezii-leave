@@ -4,6 +4,7 @@ import { queryClient } from "@/lib/queryClient";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+<<<<<<< HEAD
 import {
   Dialog,
   DialogContent,
@@ -11,6 +12,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+=======
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -38,9 +42,13 @@ interface BlackoutPeriod {
 export default function AdminBlackoutPeriods() {
   const { toast } = useToast();
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+<<<<<<< HEAD
   const [editingPeriod, setEditingPeriod] = useState<BlackoutPeriod | null>(
     null,
   );
+=======
+  const [editingPeriod, setEditingPeriod] = useState<BlackoutPeriod | null>(null);
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
   const [allEmployees, setAllEmployees] = useState<any[]>([]);
   const [showEmployeeSelection, setShowEmployeeSelection] = useState(false);
   const [formData, setFormData] = useState({
@@ -50,7 +58,11 @@ export default function AdminBlackoutPeriods() {
     reason: "",
     allowLeaves: "not-allowed",
     allowedLeaveTypes: [] as string[],
+<<<<<<< HEAD
     assignedEmployees: [] as number[],
+=======
+    assignedEmployees: [] as number[]
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
   });
 
   // The EmployeeAssignment component handles its own employee data fetching
@@ -64,20 +76,31 @@ export default function AdminBlackoutPeriods() {
   });
 
   // Fetch blackout periods
+<<<<<<< HEAD
   const {
     data: blackoutPeriods = [],
     isLoading,
     error,
   } = useQuery<BlackoutPeriod[]>({
+=======
+  const { data: blackoutPeriods = [], isLoading, error } = useQuery<BlackoutPeriod[]>({
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     queryKey: ["/api/blackout-periods"],
     staleTime: 5 * 60 * 1000,
   });
 
   // Debug logging
+<<<<<<< HEAD
   console.log("BlackoutPeriods Query State:", {
     isLoading,
     periodsCount: blackoutPeriods.length,
     error: error?.message,
+=======
+  console.log("BlackoutPeriods Query State:", { 
+    isLoading, 
+    periodsCount: blackoutPeriods.length,
+    error: error?.message 
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
   });
 
   // Create blackout period mutation
@@ -87,11 +110,19 @@ export default function AdminBlackoutPeriods() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+<<<<<<< HEAD
           "X-Org-Id": localStorage.getItem("org_id") || "",
         },
         body: JSON.stringify(data),
       });
 
+=======
+          "X-Org-Id": localStorage.getItem('org_id') || "",
+        },
+        body: JSON.stringify(data),
+      });
+      
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       if (!response.ok) {
         throw new Error("Failed to create blackout period");
       }
@@ -122,11 +153,19 @@ export default function AdminBlackoutPeriods() {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+<<<<<<< HEAD
           "X-Org-Id": localStorage.getItem("org_id") || "",
         },
         body: JSON.stringify(data),
       });
 
+=======
+          "X-Org-Id": localStorage.getItem('org_id') || "",
+        },
+        body: JSON.stringify(data),
+      });
+      
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       if (!response.ok) {
         throw new Error("Failed to update blackout period");
       }
@@ -156,10 +195,17 @@ export default function AdminBlackoutPeriods() {
       const response = await fetch(`/api/blackout-periods/${id}`, {
         method: "DELETE",
         headers: {
+<<<<<<< HEAD
           "X-Org-Id": localStorage.getItem("org_id") || "",
         },
       });
 
+=======
+          "X-Org-Id": localStorage.getItem('org_id') || "",
+        },
+      });
+      
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       if (!response.ok) {
         throw new Error("Failed to delete blackout period");
       }
@@ -188,7 +234,11 @@ export default function AdminBlackoutPeriods() {
       reason: "",
       allowLeaves: "not-allowed",
       allowedLeaveTypes: [],
+<<<<<<< HEAD
       assignedEmployees: [],
+=======
+      assignedEmployees: []
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     });
   };
 
@@ -223,21 +273,30 @@ export default function AdminBlackoutPeriods() {
       reason: period.reason,
       allowLeaves: period.allowLeaves ? "allowed" : "not-allowed",
       allowedLeaveTypes: period.allowedLeaveTypes || [],
+<<<<<<< HEAD
       assignedEmployees: period.assignedEmployees || [],
+=======
+      assignedEmployees: period.assignedEmployees || []
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     });
     setIsCreateDialogOpen(true);
   };
 
   const handleDelete = (id: number) => {
+<<<<<<< HEAD
     if (
       window.confirm("Are you sure you want to delete this blackout period?")
     ) {
+=======
+    if (window.confirm("Are you sure you want to delete this blackout period?")) {
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       deleteMutation.mutate(id);
     }
   };
 
   const handleLeaveTypeToggle = (leaveTypeId: string, checked: boolean) => {
     if (checked) {
+<<<<<<< HEAD
       setFormData((prev) => ({
         ...prev,
         allowedLeaveTypes: [...prev.allowedLeaveTypes, leaveTypeId],
@@ -248,15 +307,32 @@ export default function AdminBlackoutPeriods() {
         allowedLeaveTypes: prev.allowedLeaveTypes.filter(
           (id) => id !== leaveTypeId,
         ),
+=======
+      setFormData(prev => ({
+        ...prev,
+        allowedLeaveTypes: [...prev.allowedLeaveTypes, leaveTypeId]
+      }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        allowedLeaveTypes: prev.allowedLeaveTypes.filter(id => id !== leaveTypeId)
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       }));
     }
   };
 
   const formatDate = (dateString: string) => {
+<<<<<<< HEAD
     return new Date(dateString).toLocaleDateString("en-US", {
       year: "numeric",
       month: "short",
       day: "numeric",
+=======
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     });
   };
 
@@ -265,7 +341,11 @@ export default function AdminBlackoutPeriods() {
     const end = new Date(endDate);
     const diffTime = Math.abs(end.getTime() - start.getTime());
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+<<<<<<< HEAD
     return `${diffDays} day${diffDays !== 1 ? "s" : ""}`;
+=======
+    return `${diffDays} day${diffDays !== 1 ? 's' : ''}`;
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
   };
 
   return (
@@ -273,6 +353,7 @@ export default function AdminBlackoutPeriods() {
       <div className="p-6 space-y-6 max-w-7xl mx-auto">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           <div>
+<<<<<<< HEAD
             <h1 className="text-3xl font-bold text-gray-900">
               Black Out Periods
             </h1>
@@ -292,10 +373,23 @@ export default function AdminBlackoutPeriods() {
                   resetForm();
                 }}
               >
+=======
+            <h1 className="text-3xl font-bold text-gray-900">Black Out Periods</h1>
+            <p className="text-gray-600 mt-1">Manage periods when employees cannot take leave</p>
+          </div>
+          
+          <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+            <DialogTrigger asChild>
+              <Button onClick={() => {
+                setEditingPeriod(null);
+                resetForm();
+              }}>
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                 <Plus className="w-4 h-4 mr-2" />
                 Set Block-out period
               </Button>
             </DialogTrigger>
+<<<<<<< HEAD
 
             <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
               <DialogHeader>
@@ -310,6 +404,19 @@ export default function AdminBlackoutPeriods() {
                 </p>
               </DialogHeader>
 
+=======
+            
+            <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle>
+                  {editingPeriod ? "Edit Block-out period" : "Set Block-out period"}
+                </DialogTitle>
+                <p className="text-sm text-gray-600">
+                  Employees will not be advised against taking a leave during a block-out period
+                </p>
+              </DialogHeader>
+              
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
               <div className="space-y-4">
                 {/* Block-out title */}
                 <div>
@@ -317,12 +424,16 @@ export default function AdminBlackoutPeriods() {
                   <Input
                     id="title"
                     value={formData.title}
+<<<<<<< HEAD
                     onChange={(e) =>
                       setFormData((prev) => ({
                         ...prev,
                         title: e.target.value,
                       }))
                     }
+=======
+                    onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                     placeholder="e.g. Sprint 25"
                   />
                 </div>
@@ -335,12 +446,16 @@ export default function AdminBlackoutPeriods() {
                       id="startDate"
                       type="date"
                       value={formData.startDate}
+<<<<<<< HEAD
                       onChange={(e) =>
                         setFormData((prev) => ({
                           ...prev,
                           startDate: e.target.value,
                         }))
                       }
+=======
+                      onChange={(e) => setFormData(prev => ({ ...prev, startDate: e.target.value }))}
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                     />
                   </div>
                   <div>
@@ -349,12 +464,16 @@ export default function AdminBlackoutPeriods() {
                       id="endDate"
                       type="date"
                       value={formData.endDate}
+<<<<<<< HEAD
                       onChange={(e) =>
                         setFormData((prev) => ({
                           ...prev,
                           endDate: e.target.value,
                         }))
                       }
+=======
+                      onChange={(e) => setFormData(prev => ({ ...prev, endDate: e.target.value }))}
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                     />
                   </div>
                 </div>
@@ -362,9 +481,13 @@ export default function AdminBlackoutPeriods() {
                 {/* Duration Info */}
                 {formData.startDate && formData.endDate && (
                   <div className="bg-blue-50 p-3 rounded text-sm text-blue-800">
+<<<<<<< HEAD
                     Block-out for a stretch of{" "}
                     {calculateDuration(formData.startDate, formData.endDate)}{" "}
                     (10 working, 2 non-working days)
+=======
+                    Block-out for a stretch of {calculateDuration(formData.startDate, formData.endDate)} (10 working, 2 non-working days)
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                   </div>
                 )}
 
@@ -374,12 +497,16 @@ export default function AdminBlackoutPeriods() {
                   <Textarea
                     id="reason"
                     value={formData.reason}
+<<<<<<< HEAD
                     onChange={(e) =>
                       setFormData((prev) => ({
                         ...prev,
                         reason: e.target.value,
                       }))
                     }
+=======
+                    onChange={(e) => setFormData(prev => ({ ...prev, reason: e.target.value }))}
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                     placeholder="e.g. Migrate"
                     rows={3}
                   />
@@ -387,6 +514,7 @@ export default function AdminBlackoutPeriods() {
 
                 {/* Allow leaves toggle */}
                 <div>
+<<<<<<< HEAD
                   <Label>
                     Do you want to allow leaves during this block-out period
                   </Label>
@@ -395,10 +523,17 @@ export default function AdminBlackoutPeriods() {
                     onValueChange={(value) =>
                       setFormData((prev) => ({ ...prev, allowLeaves: value }))
                     }
+=======
+                  <Label>Do you want to allow leaves during this block-out period</Label>
+                  <RadioGroup
+                    value={formData.allowLeaves}
+                    onValueChange={(value) => setFormData(prev => ({ ...prev, allowLeaves: value }))}
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                     className="flex gap-6 mt-2"
                   >
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="allowed" id="allowed" />
+<<<<<<< HEAD
                       <Label htmlFor="allowed" className="text-sm font-normal">
                         Allowed
                       </Label>
@@ -411,6 +546,13 @@ export default function AdminBlackoutPeriods() {
                       >
                         Not Allowed
                       </Label>
+=======
+                      <Label htmlFor="allowed" className="text-sm font-normal">Allowed</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="not-allowed" id="not-allowed" />
+                      <Label htmlFor="not-allowed" className="text-sm font-normal">Not Allowed</Label>
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                     </div>
                   </RadioGroup>
                 </div>
@@ -421,6 +563,7 @@ export default function AdminBlackoutPeriods() {
                     <Label>Leave types that are allowed as exceptions</Label>
                     <div className="mt-2 space-y-2">
                       {leaveTypes.map((type) => (
+<<<<<<< HEAD
                         <div
                           key={type.id}
                           className="flex items-center space-x-2"
@@ -441,6 +584,15 @@ export default function AdminBlackoutPeriods() {
                             htmlFor={type.id.toString()}
                             className="text-sm font-normal"
                           >
+=======
+                        <div key={type.id} className="flex items-center space-x-2">
+                          <Checkbox
+                            id={type.id.toString()}
+                            checked={formData.allowedLeaveTypes.includes(type.id.toString())}
+                            onCheckedChange={(checked) => handleLeaveTypeToggle(type.id.toString(), !!checked)}
+                          />
+                          <Label htmlFor={type.id.toString()} className="text-sm font-normal">
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                             {type.name}
                           </Label>
                         </div>
@@ -453,8 +605,13 @@ export default function AdminBlackoutPeriods() {
                 <div>
                   <div className="flex items-center justify-between">
                     <Label>Assign to Employees</Label>
+<<<<<<< HEAD
                     <Button
                       variant="outline"
+=======
+                    <Button 
+                      variant="outline" 
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                       size="sm"
                       onClick={() => setShowEmployeeSelection(true)}
                     >
@@ -462,9 +619,16 @@ export default function AdminBlackoutPeriods() {
                     </Button>
                   </div>
                   <p className="text-sm text-gray-600 mt-1">
+<<<<<<< HEAD
                     {formData.assignedEmployees.length > 0
                       ? `${formData.assignedEmployees.length} employee${formData.assignedEmployees.length !== 1 ? "s" : ""} assigned`
                       : "Click to assign employees"}
+=======
+                    {formData.assignedEmployees.length > 0 
+                      ? `${formData.assignedEmployees.length} employee${formData.assignedEmployees.length !== 1 ? 's' : ''} assigned`
+                      : "Click to assign employees"
+                    }
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                   </p>
                 </div>
               </div>
@@ -483,6 +647,7 @@ export default function AdminBlackoutPeriods() {
                 </Button>
                 <Button
                   onClick={handleSubmit}
+<<<<<<< HEAD
                   disabled={
                     createMutation.isPending || updateMutation.isPending
                   }
@@ -490,11 +655,17 @@ export default function AdminBlackoutPeriods() {
                   {editingPeriod
                     ? "Update Block-out period"
                     : "Set Block-out period"}
+=======
+                  disabled={createMutation.isPending || updateMutation.isPending}
+                >
+                  {editingPeriod ? "Update Block-out period" : "Set Block-out period"}
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                 </Button>
               </div>
             </DialogContent>
           </Dialog>
 
+<<<<<<< HEAD
           {/* Employee Selection Dialog - needs to be outside the main form dialog for proper z-index */}
           <Dialog
             open={showEmployeeSelection}
@@ -524,6 +695,30 @@ export default function AdminBlackoutPeriods() {
               />
             </DialogContent>
           </Dialog>
+=======
+        {/* Employee Selection Dialog - needs to be outside the main form dialog for proper z-index */}
+        <Dialog open={showEmployeeSelection} onOpenChange={setShowEmployeeSelection}>
+          <DialogContent className="max-w-6xl max-h-[90vh] z-[60] flex flex-col">
+            <DialogHeader>
+              <DialogTitle>Assign Employees to Blackout Period</DialogTitle>
+            </DialogHeader>
+            <EmployeeAssignment
+              onClose={() => setShowEmployeeSelection(false)}
+              onAssign={(selectedEmployees) => {
+                // Map the selected employees to employee IDs
+                const employeeIds = selectedEmployees.map(emp => parseInt(emp.user_id || emp.id));
+                setFormData(prev => ({
+                  ...prev,
+                  assignedEmployees: employeeIds
+                }));
+                setShowEmployeeSelection(false);
+              }}
+              preSelectedEmployees={formData.assignedEmployees.filter(id => id != null).map(id => ({ user_id: id.toString() }))}
+              applicableGenders={[]}
+            />
+          </DialogContent>
+        </Dialog>
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
         </div>
 
         {/* Blackout Periods List */}
@@ -531,9 +726,13 @@ export default function AdminBlackoutPeriods() {
           {isLoading ? (
             <Card>
               <CardContent className="p-6">
+<<<<<<< HEAD
                 <p className="text-center text-gray-500">
                   Loading blackout periods...
                 </p>
+=======
+                <p className="text-center text-gray-500">Loading blackout periods...</p>
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
               </CardContent>
             </Card>
           ) : blackoutPeriods.length === 0 ? (
@@ -541,12 +740,18 @@ export default function AdminBlackoutPeriods() {
               <CardContent className="p-6">
                 <div className="text-center">
                   <Calendar className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+<<<<<<< HEAD
                   <h3 className="text-lg font-medium text-gray-900 mb-2">
                     No blackout periods set
                   </h3>
                   <p className="text-gray-500 mb-4">
                     Create your first blackout period to restrict leave
                     applications during specific periods.
+=======
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">No blackout periods set</h3>
+                  <p className="text-gray-500 mb-4">
+                    Create your first blackout period to restrict leave applications during specific periods.
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                   </p>
                   <Button onClick={() => setIsCreateDialogOpen(true)}>
                     <Plus className="w-4 h-4 mr-2" />
@@ -583,17 +788,24 @@ export default function AdminBlackoutPeriods() {
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
+<<<<<<< HEAD
                       <p className="text-sm font-medium text-gray-500">
                         Duration
                       </p>
                       <p className="text-sm">
                         {formatDate(period.startDate)} -{" "}
                         {formatDate(period.endDate)}
+=======
+                      <p className="text-sm font-medium text-gray-500">Duration</p>
+                      <p className="text-sm">
+                        {formatDate(period.startDate)} - {formatDate(period.endDate)}
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                       </p>
                       <p className="text-xs text-gray-500">
                         {calculateDuration(period.startDate, period.endDate)}
                       </p>
                     </div>
+<<<<<<< HEAD
 
                     <div>
                       <p className="text-sm font-medium text-gray-500">
@@ -604,10 +816,19 @@ export default function AdminBlackoutPeriods() {
                           <span className="text-green-600">
                             Allowed with exceptions
                           </span>
+=======
+                    
+                    <div>
+                      <p className="text-sm font-medium text-gray-500">Leave Policy</p>
+                      <p className="text-sm">
+                        {period.allowLeaves ? (
+                          <span className="text-green-600">Allowed with exceptions</span>
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                         ) : (
                           <span className="text-red-600">Not allowed</span>
                         )}
                       </p>
+<<<<<<< HEAD
                       {period.allowLeaves &&
                         period.allowedLeaveTypes &&
                         period.allowedLeaveTypes.length > 0 && (
@@ -636,6 +857,29 @@ export default function AdminBlackoutPeriods() {
                       <p className="text-sm font-medium text-gray-500">
                         Reason
                       </p>
+=======
+                      {period.allowLeaves && period.allowedLeaveTypes && period.allowedLeaveTypes.length > 0 && (
+                        <p className="text-xs text-gray-500">
+                          {period.allowedLeaveTypes.length} exception{period.allowedLeaveTypes.length !== 1 ? 's' : ''}
+                        </p>
+                      )}
+                    </div>
+                    
+                    <div>
+                      <p className="text-sm font-medium text-gray-500">Assigned Employees</p>
+                      <p className="text-sm">
+                        {period.assignedEmployees && period.assignedEmployees.length > 0 
+                          ? `${period.assignedEmployees.length} employee${period.assignedEmployees.length !== 1 ? 's' : ''}`
+                          : "Not assigned"
+                        }
+                      </p>
+                    </div>
+                  </div>
+                  
+                  {period.reason && (
+                    <div className="mt-4 pt-4 border-t">
+                      <p className="text-sm font-medium text-gray-500">Reason</p>
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                       <p className="text-sm text-gray-700">{period.reason}</p>
                     </div>
                   )}
@@ -647,4 +891,8 @@ export default function AdminBlackoutPeriods() {
       </div>
     </Layout>
   );
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0

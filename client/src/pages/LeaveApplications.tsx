@@ -62,11 +62,16 @@ export default function LeaveApplications() {
   const currentUserId = localStorage.getItem("user_id") || "14674";
 
   // Get org_id from localStorage
+<<<<<<< HEAD
   const currentOrgId = localStorage.getItem("org_id") || "18";
+=======
+  const currentOrgId = localStorage.getItem('org_id') || '18';
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
 
   // Mutation for "After Earning" recalculation
   const recalculateAfterEarningMutation = useMutation({
     mutationFn: async () => {
+<<<<<<< HEAD
       console.log(
         "[AfterEarning - LeaveApp] Triggering balance recalculation for After Earning leave types",
       );
@@ -100,6 +105,30 @@ export default function LeaveApplications() {
     },
   });
 
+=======
+      console.log('[AfterEarning - LeaveApp] Triggering balance recalculation for After Earning leave types');
+      const response = await fetch('/api/recalculate-leave-balances', {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'X-Org-Id': currentOrgId 
+        }
+      });
+      if (!response.ok) throw new Error('Recalculation failed');
+      return response.json();
+    },
+    onSuccess: () => {
+      console.log('[AfterEarning - LeaveApp] Balance recalculation completed successfully');
+      // Refresh leave balance data for current user
+      queryClient.invalidateQueries({ queryKey: [`/api/employee-leave-balances/${currentUserId}`] });
+      queryClient.invalidateQueries({ queryKey: [`/api/employee-leave-balances`] });
+    },
+    onError: (error) => {
+      console.error('[AfterEarning - LeaveApp] Balance recalculation failed:', error);
+    }
+  });
+  
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
   // Debug external employee data
   useEffect(() => {
     console.log("=== EXTERNAL EMPLOYEE DATA DEBUG ===");
@@ -230,6 +259,7 @@ export default function LeaveApplications() {
 
   // Check for "After Earning" leave types and trigger recalculation when Leave Applications screen loads
   useEffect(() => {
+<<<<<<< HEAD
     if (
       leaveVariants &&
       leaveVariants.length > 0 &&
@@ -258,6 +288,23 @@ export default function LeaveApplications() {
           console.log(
             "[AfterEarning - LeaveApp] Already recalculated today, skipping",
           );
+=======
+    if (leaveVariants && leaveVariants.length > 0 && !recalculateAfterEarningMutation.isPending) {
+      const afterEarningVariants = leaveVariants.filter((v: any) => v.grantLeaves === 'after_earning');
+      
+      if (afterEarningVariants.length > 0) {
+        const hasRecalculatedKey = `after_earning_recalc_${currentOrgId}_${new Date().toDateString()}`;
+        const hasRecalculated = sessionStorage.getItem(hasRecalculatedKey);
+        
+        if (!hasRecalculated) {
+          console.log('[AfterEarning - LeaveApp] Found After Earning leave types, triggering balance recalculation:', 
+            afterEarningVariants.map((v: any) => ({ id: v.id, name: v.leaveVariantName })));
+          
+          sessionStorage.setItem(hasRecalculatedKey, 'true');
+          recalculateAfterEarningMutation.mutate();
+        } else {
+          console.log('[AfterEarning - LeaveApp] Already recalculated today, skipping');
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
         }
       }
     }
@@ -279,7 +326,17 @@ export default function LeaveApplications() {
 
   // Fetch blackout periods for validation
   const { data: blackoutPeriods = [] } = useQuery({
+<<<<<<< HEAD
     queryKey: ["/api/blackout-periods"],
+=======
+    queryKey: ['/api/blackout-periods'],
+    staleTime: 5 * 60 * 1000, // Cache for 5 minutes
+  });
+
+  // Check if collaborative leave feature is enabled
+  const { data: collaborativeSettings } = useQuery({
+    queryKey: ['/api/collaborative-leave-settings'],
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     staleTime: 5 * 60 * 1000, // Cache for 5 minutes
   });
 
@@ -316,6 +373,7 @@ export default function LeaveApplications() {
   });
 
   // Function to check if user is assigned to a blackout period that conflicts with leave dates
+<<<<<<< HEAD
   const checkBlackoutPeriodConflict = (
     userId: string,
     startDate: Date,
@@ -361,12 +419,59 @@ export default function LeaveApplications() {
         assignedEmployees: period.assignedEmployees,
       });
 
+=======
+  const checkBlackoutPeriodConflict = (userId: string, startDate: Date, endDate: Date): string | null => {
+    if (!blackoutPeriods || blackoutPeriods.length === 0) {
+      return null; // No blackout periods configured
+    }
+    
+    console.log('🚫 [Blackout Period Validation] Checking for conflicts:', {
+      userId: userId,
+      userIdString: userId.toString(),
+      startDate: startDate.toISOString().split('T')[0],
+      endDate: endDate.toISOString().split('T')[0],
+      blackoutPeriods: blackoutPeriods.length
+    });
+    
+    for (const period of blackoutPeriods) {
+      // Check if user is assigned to this blackout period (check both string and number formats)
+      const isUserAssigned = period.assignedEmployees && (
+        period.assignedEmployees.includes(userId.toString()) || 
+        period.assignedEmployees.includes(parseInt(userId))
+      );
+      
+      if (!isUserAssigned) {
+        continue; // User not assigned to this blackout period
+      }
+      
+      // Check if leave dates overlap with blackout period
+      const blackoutStart = new Date(period.startDate);
+      const blackoutEnd = new Date(period.endDate);
+      
+      // Check for date overlap: (startA <= endB) && (startB <= endA)
+      const hasOverlap = (startDate <= blackoutEnd) && (blackoutStart <= endDate);
+      
+      console.log('🚫 [Blackout Period Validation] Checking period:', {
+        periodId: period.id,
+        periodTitle: period.title,
+        periodDates: `${blackoutStart.toISOString().split('T')[0]} to ${blackoutEnd.toISOString().split('T')[0]}`,
+        isUserAssigned,
+        hasOverlap,
+        allowLeaves: period.allowLeaves,
+        assignedEmployees: period.assignedEmployees
+      });
+      
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       if (hasOverlap) {
         // Check if leave applications are allowed during this blackout period (use allowLeaves field)
         if (!period.allowLeaves) {
           const periodStartStr = blackoutStart.toLocaleDateString();
           const periodEndStr = blackoutEnd.toLocaleDateString();
+<<<<<<< HEAD
 
+=======
+          
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
           if (periodStartStr === periodEndStr) {
             return `You are not allowed to apply for leave during the blackout period "${period.title}" on ${periodStartStr}.`;
           } else {
@@ -374,6 +479,7 @@ export default function LeaveApplications() {
           }
         } else {
           // If allowLeaves is true, show informational message but don't block submission
+<<<<<<< HEAD
           console.log(
             "🚫 [Blackout Period Info] Leave overlaps with blackout period but applications are allowed:",
             {
@@ -385,6 +491,16 @@ export default function LeaveApplications() {
       }
     }
 
+=======
+          console.log('🚫 [Blackout Period Info] Leave overlaps with blackout period but applications are allowed:', {
+            periodTitle: period.title,
+            allowLeaves: period.allowLeaves
+          });
+        }
+      }
+    }
+    
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     return null; // No conflicts found
   };
 
@@ -647,6 +763,7 @@ export default function LeaveApplications() {
       (b: any) => b.leaveVariantId === variant.id,
     );
     const availableDays = balance ? parseFloat(balance.currentBalance) : 0;
+<<<<<<< HEAD
 
     // Find the leave type to check negative balance setting
     const leaveType = Array.isArray(leaveTypes)
@@ -654,32 +771,54 @@ export default function LeaveApplications() {
       : null;
     const allowNegativeBalance = leaveType?.negativeLeaveBalance ?? 0; // Use nullish coalescing to handle null values
 
+=======
+    
+    // Find the leave type to check negative balance setting
+    const leaveType = Array.isArray(leaveTypes) ? leaveTypes.find((lt: any) => lt.id === variant.leaveTypeId) : null;
+    const allowNegativeBalance = leaveType?.negativeLeaveBalance ?? 0; // Use nullish coalescing to handle null values
+    
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     // Enhanced balance validation based on negative balance setting
     if (allowNegativeBalance === 0) {
       // Negative balance NOT allowed - strict validation
       if (actualWorkingDays > availableDays) {
+<<<<<<< HEAD
         errors.push(
           `Insufficient balance. Available: ${availableDays} days, Requested: ${actualWorkingDays} days. Negative balance is not allowed for this leave type.`,
         );
+=======
+        errors.push(`Insufficient balance. Available: ${availableDays} days, Requested: ${actualWorkingDays} days. Negative balance is not allowed for this leave type.`);
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       }
     } else {
       // Negative balance allowed up to specified limit - check against limit
       const wouldResultInBalance = availableDays - actualWorkingDays;
       const negativeLimit = -Math.abs(allowNegativeBalance); // Convert to negative number
+<<<<<<< HEAD
 
       if (wouldResultInBalance < negativeLimit) {
         errors.push(
           `Insufficient balance. Available: ${availableDays} days, Requested: ${actualWorkingDays} days. Maximum negative balance allowed: ${Math.abs(allowNegativeBalance)} days.`,
         );
+=======
+      
+      if (wouldResultInBalance < negativeLimit) {
+        errors.push(`Insufficient balance. Available: ${availableDays} days, Requested: ${actualWorkingDays} days. Maximum negative balance allowed: ${Math.abs(allowNegativeBalance)} days.`);
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       }
     }
 
     // Debug negative balance validation - enhanced logging
+<<<<<<< HEAD
     if (
       variant.leaveVariantName?.includes("Casual") ||
       variant.leaveVariantName?.includes("Sick")
     ) {
       console.log("🚫 [Negative Balance Validation]:", {
+=======
+    if (variant.leaveVariantName?.includes('Casual') || variant.leaveVariantName?.includes('Sick')) {
+      console.log('🚫 [Negative Balance Validation]:', {
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
         variantName: variant.leaveVariantName,
         leaveTypeId: variant.leaveTypeId,
         leaveType: leaveType?.name,
@@ -688,6 +827,7 @@ export default function LeaveApplications() {
         availableDays,
         requestedDays: actualWorkingDays,
         wouldResultInBalance: availableDays - actualWorkingDays,
+<<<<<<< HEAD
         negativeLimit:
           allowNegativeBalance > 0 ? -Math.abs(allowNegativeBalance) : "N/A",
         isNegativeAllowed: allowNegativeBalance > 0,
@@ -705,6 +845,13 @@ export default function LeaveApplications() {
               negativeBalance: lt.negativeLeaveBalance,
             }))
           : "Not array",
+=======
+        negativeLimit: allowNegativeBalance > 0 ? -Math.abs(allowNegativeBalance) : 'N/A',
+        isNegativeAllowed: allowNegativeBalance > 0,
+        validationCheck: allowNegativeBalance === 0 ? 'STRICT_MODE' : 'NEGATIVE_ALLOWED',
+        willPassValidation: allowNegativeBalance === 0 ? actualWorkingDays <= availableDays : (availableDays - actualWorkingDays) >= -Math.abs(allowNegativeBalance),
+        allLeaveTypes: Array.isArray(leaveTypes) ? leaveTypes.map(lt => ({ id: lt.id, name: lt.name, negativeBalance: lt.negativeLeaveBalance })) : 'Not array'
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       });
     }
 
@@ -1118,6 +1265,7 @@ export default function LeaveApplications() {
         );
       }
     }
+<<<<<<< HEAD
 
     // Check for blackout period conflicts in real-time validation
     const blackoutConflict = checkBlackoutPeriodConflict(
@@ -1129,6 +1277,15 @@ export default function LeaveApplications() {
       errors.push(blackoutConflict);
     }
 
+=======
+    
+    // Check for blackout period conflicts in real-time validation
+    const blackoutConflict = checkBlackoutPeriodConflict(targetUserId, startDate, endDate);
+    if (blackoutConflict) {
+      errors.push(blackoutConflict);
+    }
+    
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     setValidationErrors(errors);
   };
 
@@ -1234,6 +1391,7 @@ export default function LeaveApplications() {
         );
       }
     }
+<<<<<<< HEAD
 
     // Check for blackout period conflicts in validateDatesWithVariant
     const blackoutConflict = checkBlackoutPeriodConflict(
@@ -1245,6 +1403,15 @@ export default function LeaveApplications() {
       errors.push(blackoutConflict);
     }
 
+=======
+    
+    // Check for blackout period conflicts in validateDatesWithVariant
+    const blackoutConflict = checkBlackoutPeriodConflict(targetUserId, startDate, endDate);
+    if (blackoutConflict) {
+      errors.push(blackoutConflict);
+    }
+    
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     setValidationErrors(errors);
   };
 
@@ -1428,6 +1595,7 @@ export default function LeaveApplications() {
         );
       }
     }
+<<<<<<< HEAD
 
     // Check for blackout period conflicts in main validateDates function
     const blackoutConflict = checkBlackoutPeriodConflict(
@@ -1439,6 +1607,15 @@ export default function LeaveApplications() {
       errors.push(blackoutConflict);
     }
 
+=======
+    
+    // Check for blackout period conflicts in main validateDates function
+    const blackoutConflict = checkBlackoutPeriodConflict(targetUserId, startDate, endDate);
+    if (blackoutConflict) {
+      errors.push(blackoutConflict);
+    }
+    
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     setValidationErrors(errors);
   };
 
@@ -1978,6 +2155,7 @@ export default function LeaveApplications() {
     }
 
     // Use selectedEmployeeId if applying on behalf, otherwise current user
+<<<<<<< HEAD
     const targetUserId =
       applyOnBehalf && selectedEmployeeId ? selectedEmployeeId : currentUserId;
 
@@ -1987,6 +2165,12 @@ export default function LeaveApplications() {
       startDate,
       endDate,
     );
+=======
+    const targetUserId = applyOnBehalf && selectedEmployeeId ? selectedEmployeeId : currentUserId;
+    
+    // Check for blackout period conflicts
+    const blackoutConflict = checkBlackoutPeriodConflict(targetUserId, startDate, endDate);
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     if (blackoutConflict) {
       setValidationErrors([blackoutConflict]);
       toast({
@@ -1997,7 +2181,11 @@ export default function LeaveApplications() {
       setIsSubmitting(false);
       return;
     }
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     // Upload documents first if any exist
     let documentUrls: string[] = [];
     if (formData.documents.length > 0) {
@@ -2192,10 +2380,15 @@ export default function LeaveApplications() {
               <CardContent className="p-4 text-center">
                 <div className="text-2xl font-bold text-blue-600">
                   {(() => {
+<<<<<<< HEAD
                     // FIXED: Calculate TOTAL ELIGIBILITY (Opening Balance + Eligibility) - matches table
+=======
+                    // Calculate total eligibility dynamically using the same logic as the table
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                     let totalEligibilitySum = 0;
 
                     availableLeaveVariants.forEach((variant: any) => {
+<<<<<<< HEAD
                       const balance = balancesArray.find(
                         (b: any) => b.leaveVariantId === variant.id,
                       );
@@ -2268,19 +2461,125 @@ export default function LeaveApplications() {
                           totalEntitlementInDays || variant.paidDaysInYear || 0;
 
                         if (variant.grantFrequency === "per_year") {
+=======
+                      const balance = balancesArray.find((b: any) => b.leaveVariantId === variant.id);
+                      const transactions = Array.isArray(leaveTransactions) ? leaveTransactions.filter((t: any) => t.leaveVariantId === variant.id) : [];
+                      
+                      // ENHANCED LOGIC: Use same cross-referencing as table calculation
+                      const openingBalanceTransactions = Array.isArray(leaveTransactions) ? 
+                        leaveTransactions
+                          .filter((t: any) => {
+                            const isOpeningBalance = t.transactionType === 'grant' && 
+                                                   t.description?.toLowerCase().includes('opening balance imported from excel');
+                            const isForCurrentUser = t.userId === currentUserId;
+                            
+                            if (!isOpeningBalance || !isForCurrentUser) return false;
+                            
+                            // Direct variant match (preferred)
+                            if (t.leaveVariantId === variant.id) return true;
+                            
+                            // Cross-reference by leave type name - ENHANCED LOGIC
+                            const transactionVariant = availableLeaveVariants.find((v: any) => v.id === t.leaveVariantId);
+                            
+                            // First try: Match by leave type name
+                            if (transactionVariant?.leaveTypeName === variant.leaveTypeName) {
+                              return true;
+                            }
+                            
+                            // Second try: Match by leaveTypeId (more robust for same leave type)
+                            if (transactionVariant?.leaveTypeId === variant.leaveTypeId) {
+                              return true;
+                            }
+                            
+                            // Special case: For known Earned Leave variant mismatch (67 -> 61)
+                            if (variant.leaveTypeName === 'Earned Leave' && 
+                                ((t.leaveVariantId === 67 && variant.id === 61) ||
+                                (t.leaveVariantId === 61 && variant.id === 67))) {
+                              return true;
+                            }
+                            
+                            return false;
+                          })
+                          .sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+                        : [];
+                      
+                      const openingBalance = openingBalanceTransactions.reduce((sum: number, t: any) => 
+                        sum + parseFloat(t.amount || '0'), 0
+                      );
+                      
+                      // Debug enhanced cross-referencing fix
+                      if (variant.leaveTypeName === 'Earned Leave') {
+                        console.log(`🔧 [SUMMARY CARD FIX] Enhanced cross-referencing for ${variant.leaveTypeName}:`, {
+                          variantId: variant.id,
+                          openingBalanceTransactionsFound: openingBalanceTransactions.length,
+                          openingBalanceAmount: openingBalance,
+                          transactions: openingBalanceTransactions.map(t => ({
+                            id: t.id,
+                            variantId: t.leaveVariantId,
+                            amount: t.amount,
+                            description: t.description?.substring(0, 50)
+                          }))
+                        });
+                      }
+                      
+                      // Calculate eligibility based on leave grant method
+                      const totalEntitlementInDays = balance ? parseFloat(balance.totalEntitlement || '0') : 0;
+                      const isAfterEarning = variant.grantLeaves === 'after_earning';
+                      
+                      let eligibility = 0;
+                      if (isAfterEarning) {
+                        // "After Earning" - calculate based on annual entitlement and months completed
+                        const currentMonth = new Date().getMonth() + 1; // August = 8
+                        const monthsCompleted = currentMonth - 1; // 7 months completed (Jan-July)
+                        const annualEntitlement = totalEntitlementInDays || variant.paidDaysInYear || 0;
+                        eligibility = (annualEntitlement / 12) * monthsCompleted;
+                      } else {
+                        // "In Advance" - check grant frequency
+                        const annualEntitlement = totalEntitlementInDays || variant.paidDaysInYear || 0;
+                        
+                        if (variant.grantFrequency === 'per_year') {
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                           // Annual grants like Paternity Leave - full entitlement available immediately
                           eligibility = annualEntitlement;
                         } else {
                           // Monthly grants - pro-rated amount for current month
+<<<<<<< HEAD
                           const currentMonth = new Date().getMonth() + 1; // July = 7
                           eligibility = (annualEntitlement / 12) * currentMonth;
                         }
                       }
                       const totalEligibility = eligibility + openingBalance;
 
+=======
+                          const currentMonth = new Date().getMonth() + 1; // August = 8
+                          eligibility = (annualEntitlement / 12) * currentMonth;
+                        }
+                      }
+                      
+                      const totalEligibility = eligibility + openingBalance;
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                       totalEligibilitySum += totalEligibility;
+                      
+                      console.log(`🔍 [TOTAL LEAVES] Dynamic calculation for ${variant.leaveTypeName}:`, {
+                        variantId: variant.id,
+                        openingBalance,
+                        eligibility,
+                        totalEligibility,
+                        isAfterEarning,
+                        annualEntitlement: totalEntitlementInDays || variant.paidDaysInYear,
+                        totalEntitlementInDays,
+                        paidDaysInYear: variant.paidDaysInYear,
+                        grantLeaves: variant.grantLeaves,
+                        grantFrequency: variant.grantFrequency,
+                        openingBalanceTransactionsCount: openingBalanceTransactions.length
+                      });
                     });
+<<<<<<< HEAD
 
+=======
+                    
+                    console.log(`🔍 [TOTAL LEAVES] Final calculated sum: ${totalEligibilitySum}`);
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                     return totalEligibilitySum.toFixed(1);
                   })()}
                 </div>
@@ -2473,6 +2772,7 @@ export default function LeaveApplications() {
                   {(() => {
                     // FIXED: Use SAME calculation as table - closingBalance = totalEligibility - availed
                     let totalClosingBalance = 0;
+<<<<<<< HEAD
 
                     console.log(
                       "🟢 [BALANCE CARD DEBUG] Starting calculation...",
@@ -2481,6 +2781,62 @@ export default function LeaveApplications() {
                     availableLeaveVariants.forEach((variant: any) => {
                       const balance = balancesArray.find(
                         (b: any) => b.leaveVariantId === variant.id,
+=======
+                    
+                    console.log('🟢 [BALANCE CARD DEBUG] Starting calculation...');
+                    
+                    availableLeaveVariants.forEach((variant: any) => {
+                      const balance = balancesArray.find((b: any) => b.leaveVariantId === variant.id);
+                      const transactions = Array.isArray(leaveTransactions) ? leaveTransactions.filter((t: any) => t.leaveVariantId === variant.id) : [];
+                      
+                      // Calculate opening balance from imported Excel data transactions
+                      const openingBalanceTransactions = transactions
+                        .filter((t: any) => t.transactionType === 'grant' && 
+                               t.description?.toLowerCase().includes('opening balance imported from excel'))
+                        .sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+                      
+                      const openingBalance = openingBalanceTransactions.length > 0 
+                        ? parseFloat(openingBalanceTransactions[0].amount || '0') 
+                        : 0;
+                      
+                      const currentBalanceInDays = balance ? parseFloat(balance.currentBalance || '0') : 0;
+                      
+                      // Calculate eligibility based on leave grant method
+                      const totalEntitlementInDays = balance ? parseFloat(balance.totalEntitlement || '0') : 0;
+                      const isAfterEarning = variant.grantLeaves === 'after_earning';
+                      
+                      let eligibility = 0;
+                      
+                      // CORRECTED ALGORITHMIC CALCULATION for After Earning vs In Advance
+                      if (isAfterEarning) {
+                        // "After Earning" - calculate based on annual entitlement and months completed
+                        const currentMonth = new Date().getMonth() + 1; // July = 7
+                        const monthsCompleted = currentMonth - 1; // 6 months completed (Jan-June)
+                        const annualEntitlement = totalEntitlementInDays || variant.paidDaysInYear || 0;
+                        eligibility = (annualEntitlement / 12) * monthsCompleted;
+                      } else {
+                        // "In Advance" - check grant frequency
+                        const annualEntitlement = totalEntitlementInDays || variant.paidDaysInYear || 0;
+                        
+                        if (variant.grantFrequency === 'per_year') {
+                          // Annual grants like Paternity Leave - full entitlement available immediately
+                          eligibility = annualEntitlement;
+                        } else {
+                          // Monthly grants - pro-rated amount for current month
+                          const currentMonth = new Date().getMonth() + 1; // July = 7
+                          eligibility = (annualEntitlement / 12) * currentMonth;
+                        }
+                      }
+                      const totalEligibility = eligibility + openingBalance;
+                      
+                      // Calculate availed using same logic as table
+                      const isBeforeWorkflow = variant.leaveBalanceDeductionBefore === true;
+                      
+                      // Handle null/undefined leaveVariantId by using leaveTypeId as fallback
+                      const matchingRequests = requestsArray.filter((req: any) => 
+                        req.leaveVariantId === variant.id || 
+                        ((req.leaveVariantId === null || req.leaveVariantId === undefined) && req.leaveTypeId === variant.leaveTypeId)
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                       );
                       const transactions = Array.isArray(leaveTransactions)
                         ? leaveTransactions.filter(
@@ -2565,12 +2921,16 @@ export default function LeaveApplications() {
                       const approvedRequests = matchingRequests.filter(
                         (req: any) => req.status === "approved",
                       );
+<<<<<<< HEAD
                       const approvedDays = approvedRequests.reduce(
                         (sum: number, req: any) =>
                           sum + parseFloat(req.workingDays || "0"),
                         0,
                       );
 
+=======
+                      
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                       // Method 2: For "Before Workflow" types, add active pending requests
                       let pendingDays = 0;
                       if (isBeforeWorkflow) {
@@ -2585,6 +2945,7 @@ export default function LeaveApplications() {
                       }
 
                       // Method 3: Add imported leave usage from Excel
+<<<<<<< HEAD
                       const importedAvailed = transactions
                         .filter(
                           (t: any) =>
@@ -2618,6 +2979,28 @@ export default function LeaveApplications() {
                       `🟢 [BALANCE CARD RESULT] Final closing balance sum: ${totalClosingBalance}`,
                     );
 
+=======
+                      const importedAvailed = transactions.filter((t: any) => 
+                        t.description?.toLowerCase().includes('imported leave transaction') && 
+                        t.description?.toLowerCase().includes('availed') &&
+                        (t.transactionType === 'deduction' || t.transactionType === 'debit')
+                      ).reduce((sum: number, t: any) => 
+                        sum + Math.abs(parseFloat(t.amount || '0')), 0
+                      );
+                      
+                      const availed = approvedDays + pendingDays + importedAvailed;
+                      
+                      // Calculate closing balance as: Total Eligibility - Availed (SAME AS TABLE)
+                      const closingBalance = totalEligibility - availed;
+                      
+                      console.log(`🟢 [BALANCE CARD] ${variant.leaveTypeName}: totalEligibility=${totalEligibility}, availed=${availed}, closingBalance=${closingBalance}`);
+                      
+                      totalClosingBalance += closingBalance;
+                    });
+                    
+                    console.log(`🟢 [BALANCE CARD RESULT] Final closing balance sum: ${totalClosingBalance}`);
+                    
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                     return totalClosingBalance.toFixed(1);
                   })()}
                 </div>
@@ -2689,6 +3072,7 @@ export default function LeaveApplications() {
                       // Calculate opening balance from imported Excel data transactions
                       // ROBUST FIX: Search for opening balance transactions across all variants of the same leave type
                       // This handles cases where opening balance was imported with old variant ID but user is assigned to new variant ID
+<<<<<<< HEAD
                       const openingBalanceTransactions = Array.isArray(
                         leaveTransactions,
                       )
@@ -2856,11 +3240,111 @@ export default function LeaveApplications() {
                       // FIXED: Calculate eligibility based on leave grant method
                       let eligibility = 0;
 
+=======
+                      const openingBalanceTransactions = Array.isArray(leaveTransactions) ? 
+                        leaveTransactions
+                          .filter((t: any) => {
+                            const isOpeningBalance = t.transactionType === 'grant' && 
+                                                   t.description?.toLowerCase().includes('opening balance imported from excel');
+                            const isForCurrentUser = t.userId === currentUserId;
+                            
+                            if (!isOpeningBalance || !isForCurrentUser) return false;
+                            
+                            // Direct variant match (preferred)
+                            if (t.leaveVariantId === variant.id) return true;
+                            
+                            // Cross-reference by leave type name - ENHANCED LOGIC
+                            const transactionVariant = availableLeaveVariants.find((v: any) => v.id === t.leaveVariantId);
+                            
+                            // First try: Match by leave type name
+                            if (transactionVariant?.leaveTypeName === variant.leaveTypeName) {
+                              return true;
+                            }
+                            
+                            // Second try: Match by leaveTypeId (more robust for same leave type)
+                            if (transactionVariant?.leaveTypeId === variant.leaveTypeId) {
+                              return true;
+                            }
+                            
+                            // Special case: For known Earned Leave variant mismatch (67 -> 61)
+                            if (variant.leaveTypeName === 'Earned Leave' && 
+                                ((t.leaveVariantId === 67 && variant.id === 61) ||
+                                (t.leaveVariantId === 61 && variant.id === 67))) {
+                              return true;
+                            }
+                            
+                            return false;
+                          })
+                          .sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+                        : [];
+                      
+                      // DEBUG: Log opening balance calculation for troubleshooting  
+                      if (variant.leaveTypeName === 'Earned Leave' && currentUserId === '241') {
+                        console.log(`🔍 [OPENING BALANCE DEBUG] ${variant.leaveTypeName} for user ${currentUserId}:`, {
+                          variantId: variant.id,
+                          totalTransactions: transactions.length,
+                          totalLeaveTransactions: Array.isArray(leaveTransactions) ? leaveTransactions.length : 0,
+                          openingBalanceTransactions: openingBalanceTransactions.length,
+                          availableVariantsCount: availableLeaveVariants.length,
+                          earnedLeaveVariants: availableLeaveVariants.filter((v: any) => v.leaveTypeName === 'Earned Leave').map(v => ({
+                            id: v.id,
+                            name: v.leaveTypeName,
+                            leaveTypeId: v.leaveTypeId
+                          })),
+                          openingBalanceTransactionSample: openingBalanceTransactions.slice(0, 3).map(t => ({
+                            id: t.id,
+                            type: t.transactionType,
+                            description: t.description,
+                            amount: t.amount,
+                            variantId: t.leaveVariantId
+                          })),
+                          allOpeningBalanceTransactionsForUser: Array.isArray(leaveTransactions) ? 
+                            leaveTransactions.filter(t => 
+                              t.userId === currentUserId && 
+                              t.transactionType === 'grant' && 
+                              t.description?.toLowerCase().includes('opening balance')
+                            ).map(t => ({
+                              id: t.id,
+                              type: t.transactionType,
+                              description: t.description,
+                              amount: t.amount,
+                              variantId: t.leaveVariantId,
+                              variantName: availableLeaveVariants.find((v: any) => v.id === t.leaveVariantId)?.leaveTypeName || 'UNKNOWN'
+                            })) : []
+                        });
+                      }
+                      
+                      // Database now stores in full day units, no conversion needed
+                      const openingBalance = openingBalanceTransactions.reduce((sum: number, t: any) => {
+                        // Debug each opening balance transaction being added
+                        if (currentUserId === '241' && variant.leaveTypeName === 'Earned Leave') {
+                          console.log(`🔍 [OPENING BALANCE CALC] Adding transaction ${t.id}:`, {
+                            amount: t.amount,
+                            description: t.description,
+                            variantId: t.leaveVariantId,
+                            currentSum: sum,
+                            newSum: sum + parseFloat(t.amount || '0')
+                          });
+                        }
+                        return sum + parseFloat(t.amount || '0');
+                      }, 0);
+                      
+                      // For "After Earning" leave types, eligibility should be the calculated earned amount based on months elapsed
+                      // For "In Advance" leave types, eligibility should be total entitlement minus opening balance
+                      const isAfterEarning = variant.grantLeaves === 'after_earning';
+                      const currentBalanceInDays = balance ? parseFloat(balance.currentBalance || '0') : 0;
+                      const totalEntitlementInDays = balance ? parseFloat(balance.totalEntitlement || '0') : 0;
+                      
+                      // FIXED: Calculate eligibility based on leave grant method
+                      let eligibility = 0;
+                      
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                       // CORRECTED ALGORITHMIC CALCULATION for After Earning vs In Advance
                       if (isAfterEarning) {
                         // "After Earning" - calculate based on annual entitlement and months completed
                         const currentMonth = new Date().getMonth() + 1; // July = 7
                         const monthsCompleted = currentMonth - 1; // 6 months completed (Jan-June)
+<<<<<<< HEAD
                         const annualEntitlement =
                           totalEntitlementInDays || variant.paidDaysInYear || 0;
                         eligibility =
@@ -2871,6 +3355,15 @@ export default function LeaveApplications() {
                           totalEntitlementInDays || variant.paidDaysInYear || 0;
 
                         if (variant.grantFrequency === "per_year") {
+=======
+                        const annualEntitlement = totalEntitlementInDays || variant.paidDaysInYear || 0;
+                        eligibility = (annualEntitlement / 12) * monthsCompleted;
+                      } else {
+                        // "In Advance" - check grant frequency
+                        const annualEntitlement = totalEntitlementInDays || variant.paidDaysInYear || 0;
+                        
+                        if (variant.grantFrequency === 'per_year') {
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                           // Annual grants like Paternity Leave - full entitlement available immediately
                           eligibility = annualEntitlement;
                         } else {
@@ -2879,6 +3372,7 @@ export default function LeaveApplications() {
                           eligibility = (annualEntitlement / 12) * currentMonth;
                         }
                       }
+<<<<<<< HEAD
 
                       // DEBUG: For Earned Leave table display issue
                       if (variant.leaveTypeName === "Earned Leave") {
@@ -2897,6 +3391,22 @@ export default function LeaveApplications() {
                         );
                       }
 
+=======
+                      
+                      // DEBUG: For Earned Leave table display issue
+                      if (variant.leaveTypeName === 'Earned Leave') {
+                        console.log(`🔍 [TABLE ROW DEBUG] ${variant.leaveTypeName} for user ${currentUserId}:`, {
+                          currentBalanceInDays,
+                          openingBalance,
+                          eligibility,
+                          variantId: variant.id,
+                          isAfterEarning: variant.grantLeaves === 'after_earning',
+                          grantLeaves: variant.grantLeaves,
+                          calculation: `Final eligibility = ${eligibility}`
+                        });
+                      }
+                      
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                       const totalEligibility = eligibility + openingBalance; // eligibility + opening balance
 
                       // Calculate availed from transactions only (actual leave usage, not grants)
@@ -3167,6 +3677,7 @@ export default function LeaveApplications() {
                   Apply For Leave
                 </DialogTitle>
               </DialogHeader>
+<<<<<<< HEAD
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Leave Type */}
@@ -3266,6 +3777,196 @@ export default function LeaveApplications() {
                               (annualEntitlement / 12) * currentMonth;
                           }
                         }
+=======
+                
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  {/* Leave Type */}
+                  <div>
+                    <Label htmlFor="leaveType" className="text-sm font-medium text-gray-700">
+                      Leave type
+                    </Label>
+                    <Select 
+                      name="leaveType" 
+                      required 
+                      onValueChange={handleLeaveTypeChange}
+                    >
+                      <SelectTrigger className="w-full mt-1">
+                        <SelectValue placeholder="Select Leave Type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {availableLeaveVariants.map((variant: any) => {
+                          const balance = balancesArray.find((b: any) => b.leaveVariantId === variant.id);
+                          
+
+                          
+                          // FIXED: Use same closing balance calculation as Leave Balance Information table
+                          // Calculate correct available days using same logic as closing balance
+                          const transactions = Array.isArray(leaveTransactions) ? leaveTransactions.filter((t: any) => t.leaveVariantId === variant.id) : [];
+                          
+                          // ENHANCED LOGIC: Use same cross-referencing as table and summary cards
+                          const openingBalanceTransactions = Array.isArray(leaveTransactions) ? 
+                            leaveTransactions
+                              .filter((t: any) => {
+                                const isOpeningBalance = t.transactionType === 'grant' && 
+                                                       t.description?.toLowerCase().includes('opening balance imported from excel');
+                                const isForCurrentUser = t.userId === currentUserId;
+                                
+                                if (!isOpeningBalance || !isForCurrentUser) return false;
+                                
+                                // Direct variant match (preferred)
+                                if (t.leaveVariantId === variant.id) return true;
+                                
+                                // Cross-reference by leave type name - ENHANCED LOGIC
+                                const transactionVariant = availableLeaveVariants.find((v: any) => v.id === t.leaveVariantId);
+                                
+                                // First try: Match by leave type name
+                                if (transactionVariant?.leaveTypeName === variant.leaveTypeName) {
+                                  return true;
+                                }
+                                
+                                // Second try: Match by leaveTypeId (more robust for same leave type)
+                                if (transactionVariant?.leaveTypeId === variant.leaveTypeId) {
+                                  return true;
+                                }
+                                
+                                // Special case: For known Earned Leave variant mismatch (67 -> 61)
+                                if (variant.leaveTypeName === 'Earned Leave' && 
+                                    ((t.leaveVariantId === 67 && variant.id === 61) ||
+                                    (t.leaveVariantId === 61 && variant.id === 67))) {
+                                  return true;
+                                }
+                                
+                                return false;
+                              })
+                              .sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+                            : [];
+                          
+                          const openingBalance = openingBalanceTransactions.reduce((sum: number, t: any) => 
+                            sum + parseFloat(t.amount || '0'), 0
+                          );
+                          
+                          // Calculate eligibility for this leave type
+                          const isAfterEarning = variant.grantLeaves === 'after_earning';
+                          const currentBalanceInDays = balance ? parseFloat(balance.currentBalance || '0') : 0;
+                          
+                          let eligibility = 0;
+                          
+                          // CRITICAL FIX: Use EXACT same eligibility calculation as table for both types
+                          // This ensures Apply form shows identical closing balance as Leave Balance Information table
+                          const totalEntitlementInDays = balance ? parseFloat(balance.totalEntitlement || '0') : 0;
+                          
+                          // CORRECTED ALGORITHMIC CALCULATION for After Earning vs In Advance
+                          if (isAfterEarning) {
+                            // "After Earning" - calculate based on annual entitlement and months completed
+                            const currentMonth = new Date().getMonth() + 1; // July = 7
+                            const monthsCompleted = currentMonth - 1; // 6 months completed (Jan-June)
+                            const annualEntitlement = totalEntitlementInDays || variant.paidDaysInYear || 0;
+                            eligibility = (annualEntitlement / 12) * monthsCompleted;
+                          } else {
+                            // "In Advance" - check grant frequency
+                            const annualEntitlement = totalEntitlementInDays || variant.paidDaysInYear || 0;
+                            
+                            if (variant.grantFrequency === 'per_year') {
+                              // Annual grants like Paternity Leave - full entitlement available immediately
+                              eligibility = annualEntitlement;
+                            } else {
+                              // Monthly grants - pro-rated amount for current month
+                              const currentMonth = new Date().getMonth() + 1; // July = 7
+                              eligibility = (annualEntitlement / 12) * currentMonth;
+                            }
+                          }
+                          
+                          const totalEligibility = eligibility + openingBalance;
+                          
+                          // Calculate availed using same logic as table
+                          const isBeforeWorkflow = variant?.leaveBalanceDeductionBefore === true;
+                          
+                          // FIXED: Handle null/undefined leaveVariantId by using leaveTypeId as fallback
+                          const matchingRequests = requestsArray.filter((req: any) => 
+                            req.leaveVariantId === variant.id || 
+                            ((req.leaveVariantId === null || req.leaveVariantId === undefined) && req.leaveTypeId === variant.leaveTypeId)
+                          );
+                          
+                          // Method 1: Count approved leave requests for this variant
+                          const approvedRequests = matchingRequests.filter((req: any) => req.status === 'approved');
+                          const approvedDays = approvedRequests.reduce((sum: number, req: any) => 
+                            sum + parseFloat(req.workingDays || '0'), 0
+                          );
+                          
+                          // Method 2: For "Before Workflow" types, add active pending requests
+                          let pendingDays = 0;
+                          if (isBeforeWorkflow) {
+                            const pendingRequests = matchingRequests.filter((req: any) => req.status === 'pending');
+                            pendingDays = pendingRequests.reduce((sum: number, req: any) => 
+                              sum + parseFloat(req.workingDays || '0'), 0
+                            );
+                          }
+                          
+                          // Method 3: Add imported leave usage from Excel (availed transactions)
+                          const importedAvailed = transactions.filter((t: any) => 
+                            t.description?.toLowerCase().includes('imported leave transaction') && 
+                            t.description?.toLowerCase().includes('availed') &&
+                            (t.transactionType === 'deduction' || t.transactionType === 'debit')
+                          ).reduce((sum: number, t: any) => 
+                            sum + Math.abs(parseFloat(t.amount || '0')), 0
+                          );
+                          
+                          const availed = approvedDays + pendingDays + importedAvailed;
+                          
+                          // Calculate closing balance as: Total Eligibility - Availed (same as table)
+                          const availableDays = totalEligibility - availed;
+                          
+                          // Debug for Earned Leave - Track Apply form fix
+                          if (variant.leaveTypeName === 'Earned Leave') {
+                            console.log('🔧 [APPLY FORM FIX] Enhanced cross-referencing for Earned Leave:', {
+                              variantId: variant.id,
+                              openingBalanceTransactionsFound: openingBalanceTransactions.length,
+                              openingBalance,
+                              eligibility,
+                              totalEligibility,
+                              approvedDays,
+                              pendingDays,
+                              importedAvailed,
+                              availed,
+                              availableDays,
+                              shouldMatch: 'Table closing balance: 44.5'
+                            });
+                          }
+                          
+                          return (
+                            <SelectItem key={variant.id} value={variant.id.toString()}>
+                              {variant.leaveTypeName} ({variant.leaveVariantName}) - {availableDays.toFixed(1)} days available
+                            </SelectItem>
+                          );
+                        })}
+                      </SelectContent>
+                    </Select>
+                    
+                    {/* Show leave type specific information */}
+                    {selectedLeaveType && (
+                      <div className="mt-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                        <h4 className="font-medium text-blue-900 mb-2">Leave Type Requirements:</h4>
+                        <ul className="text-sm text-blue-800 space-y-1">
+                          {selectedLeaveType.minDaysRequired > 0 && (
+                            <li>• Minimum {selectedLeaveType.minDaysRequired} days required</li>
+                          )}
+                          {selectedLeaveType.maxDaysInStretch > 0 && (
+                            <li>• Maximum {selectedLeaveType.maxDaysInStretch} days in a single application</li>
+                          )}
+                          {selectedLeaveType.mustBePlannedInAdvance > 0 && (
+                            <li>• Must be planned {selectedLeaveType.mustBePlannedInAdvance} days in advance</li>
+                          )}
+                          {selectedLeaveType.supportingDocuments && (
+                            <li>• Supporting documents {selectedLeaveType.supportingDocumentsText || 'required'}</li>
+                          )}
+                          {selectedLeaveType.maxInstances > 0 && (
+                            <li>• Maximum {selectedLeaveType.maxInstances} applications per {selectedLeaveType.maxInstancesPeriod}</li>
+                          )}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
 
                         const totalEligibility = eligibility + openingBalance;
 
@@ -3792,7 +4493,19 @@ export default function LeaveApplications() {
                       variant="ghost"
                       className="text-green-600"
                     >
+<<<<<<< HEAD
                       <Plus className="w-4 h-4" />
+=======
+                      Discard
+                    </Button>
+                    <Button
+                      type="submit"
+                      className={`text-white ${validationErrors.length > 0 ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700'}`}
+                      disabled={createLeaveRequestMutation.isPending || isSubmitting || !isLeaveTypeEligible || validationErrors.length > 0}
+                    >
+                      {(createLeaveRequestMutation.isPending || isSubmitting) ? "Submitting..." : 
+                       validationErrors.length > 0 ? "Fix Validation Errors" : "Apply for Leave"}
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                     </Button>
                   </div>
                 </div>

@@ -96,6 +96,7 @@ const isWeekendDate = (date: Date) => {
 };
 
 // Helper function to count comp-off applications in current month
+<<<<<<< HEAD
 const getMonthlyApplicationCount = (
   requests: any[],
   userId: string,
@@ -295,6 +296,118 @@ const createAvailCompOffFormSchema = (
         path: ["startDate"],
       },
     );
+=======
+const getMonthlyApplicationCount = (requests: any[], userId: string, targetDate: Date) => {
+  const targetMonth = targetDate.getMonth();
+  const targetYear = targetDate.getFullYear();
+  
+  return requests.filter((request: any) => {
+    if (request.userId !== userId) return false;
+    
+    const requestDate = new Date(request.appliedAt || request.createdAt);
+    return requestDate.getMonth() === targetMonth && requestDate.getFullYear() === targetYear;
+  }).length;
+};
+
+// Form schema for banking comp-off (worked overtime) 
+const createBankCompOffFormSchema = (holidays: any[], allowOnNonWorkingDays: boolean = true, maxApplications: number = 999, currentMonthCount: number = 0, userId: string = '') => z.object({
+  startDate: z.date({
+    required_error: "Start date is required",
+  }),
+  endDate: z.date({
+    required_error: "End date is required", 
+  }),
+  dayType: z.enum(["full", "half", "quarter"], {
+    required_error: "Please select full day, half day, or quarter day",
+  }),
+  reason: z.string().min(1, "Reason for comp-off is required").max(500, "Reason cannot exceed 500 characters"),
+}).refine((data) => {
+  return data.endDate >= data.startDate;
+}, {
+  message: "End date must be after or same as start date",
+  path: ["endDate"],
+}).refine((data) => {
+  return !isHolidayDate(data.startDate, holidays);
+}, {
+  message: "Cannot apply comp-off on a holiday. Please select a different start date.",
+  path: ["startDate"],
+}).refine((data) => {
+  return !isHolidayDate(data.endDate, holidays);
+}, {
+  message: "Cannot apply comp-off on a holiday. Please select a different end date.",
+  path: ["endDate"],
+}).refine((data) => {
+  // Only check weekends if comp-off variant doesn't allow non-working days
+  if (allowOnNonWorkingDays) return true;
+  return !isWeekendDate(data.startDate);
+}, {
+  message: "Cannot apply comp-off on weekends. This comp-off type only allows working days.",
+  path: ["startDate"],
+}).refine((data) => {
+  // Only check weekends if comp-off variant doesn't allow non-working days
+  if (allowOnNonWorkingDays) return true;
+  return !isWeekendDate(data.endDate);
+}, {
+  message: "Cannot apply comp-off on weekends. This comp-off type only allows working days.",
+  path: ["endDate"],
+}).refine((data) => {
+  // Check monthly application limit
+  const monthCount = getMonthlyApplicationCount([], userId, data.startDate);
+  return currentMonthCount < maxApplications;
+}, {
+  message: `You have reached the maximum limit of ${maxApplications} comp-off applications per month.`,
+  path: ["startDate"],
+});
+
+// Form schema for availing comp-off (using banked comp-off)
+const createAvailCompOffFormSchema = (holidays: any[], allowOnNonWorkingDays: boolean = true, maxApplications: number = 999, currentMonthCount: number = 0, userId: string = '') => z.object({
+  startDate: z.date({
+    required_error: "Start date is required",
+  }),
+  endDate: z.date({
+    required_error: "End date is required",
+  }),
+  dayType: z.enum(["full", "half", "quarter"], {
+    required_error: "Please select full day, half day, or quarter day",
+  }),
+  reason: z.string().min(1, "Reason for taking comp-off is required").max(500, "Reason cannot exceed 500 characters"),
+}).refine((data) => {
+  return data.endDate >= data.startDate;
+}, {
+  message: "End date must be after or same as start date",
+  path: ["endDate"],
+}).refine((data) => {
+  return !isHolidayDate(data.startDate, holidays);
+}, {
+  message: "Cannot avail comp-off on a holiday. Please select a different start date.",
+  path: ["startDate"],
+}).refine((data) => {
+  return !isHolidayDate(data.endDate, holidays);
+}, {
+  message: "Cannot avail comp-off on a holiday. Please select a different end date.",
+  path: ["endDate"],
+}).refine((data) => {
+  // Only check weekends if comp-off variant doesn't allow non-working days
+  if (allowOnNonWorkingDays) return true;
+  return !isWeekendDate(data.startDate);
+}, {
+  message: "Cannot avail comp-off on weekends. This comp-off type only allows working days.",
+  path: ["startDate"],
+}).refine((data) => {
+  // Only check weekends if comp-off variant doesn't allow non-working days
+  if (allowOnNonWorkingDays) return true;
+  return !isWeekendDate(data.endDate);
+}, {
+  message: "Cannot avail comp-off on weekends. This comp-off type only allows working days.",
+  path: ["endDate"],
+}).refine((data) => {
+  // Check monthly application limit
+  return currentMonthCount < maxApplications;
+}, {
+  message: `You have reached the maximum limit of ${maxApplications} comp-off applications per month.`,
+  path: ["startDate"],
+});
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
 
 // Form schema for transferring comp-off to leave
 const transferToLeaveFormSchema = z.object({
@@ -333,8 +446,12 @@ export default function CompensatoryOff() {
   const [applyOnBehalf, setApplyOnBehalf] = useState(false);
   const [selectedEmployeeId, setSelectedEmployeeId] = useState("");
   const [showViewModal, setShowViewModal] = useState(false);
+<<<<<<< HEAD
   const [selectedCompOffDetails, setSelectedCompOffDetails] =
     useState<any>(null);
+=======
+  const [selectedCompOffDetails, setSelectedCompOffDetails] = useState<any>(null);
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
   const { toast } = useToast();
 
   const permissions = usePermissions();
@@ -416,12 +533,20 @@ export default function CompensatoryOff() {
   });
 
   // Debug the comp-off config data structure
+<<<<<<< HEAD
   console.log("🏗️ Comp-off Config Data Structure:", {
     config: compOffConfig,
     hasVariantSettings: compOffConfig?.variantSettings,
     allowOnNonWorkingDays:
       compOffConfig?.variantSettings?.allowOnNonWorkingDays,
     maxApplications: compOffConfig?.variantSettings?.maxApplicationsPerMonth,
+=======
+  console.log('🏗️ Comp-off Config Data Structure:', {
+    config: compOffConfig,
+    hasVariantSettings: compOffConfig?.variantSettings,
+    allowOnNonWorkingDays: compOffConfig?.variantSettings?.allowOnNonWorkingDays,
+    maxApplications: compOffConfig?.variantSettings?.maxApplicationsPerMonth
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
   });
 
   // Force refetch when component mounts to ensure latest config
@@ -523,6 +648,7 @@ export default function CompensatoryOff() {
     if (!compOffVariants || compOffVariants.length === 0) {
       return false;
     }
+<<<<<<< HEAD
 
     const variant = compOffVariants[0];
     if (
@@ -532,6 +658,14 @@ export default function CompensatoryOff() {
       return false;
     }
 
+=======
+    
+    const variant = compOffVariants[0];
+    if (!variant.convertibleLeaveTypes || !Array.isArray(variant.convertibleLeaveTypes)) {
+      return false;
+    }
+    
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     // Check if this leave type ID is in the convertible leave types array
     return variant.convertibleLeaveTypes.includes(leaveType.id);
   });
@@ -546,7 +680,11 @@ export default function CompensatoryOff() {
     // Get the first assigned comp-off variant (assuming user has one primary variant)
     const variant = compOffVariants[0];
     const dayTypes = [];
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     // Check variant configuration for allowed day types
     if (variant.allowFullDay) {
       dayTypes.push({ value: "full", label: "Full Day" });
@@ -557,10 +695,15 @@ export default function CompensatoryOff() {
     if (variant.allowQuarterDay) {
       dayTypes.push({ value: "quarter", label: "Quarter Day" });
     }
+<<<<<<< HEAD
 
     return dayTypes.length > 0
       ? dayTypes
       : [{ value: "full", label: "Full Day" }];
+=======
+    
+    return dayTypes.length > 0 ? dayTypes : [{ value: "full", label: "Full Day" }];
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
   };
 
   const availableDayTypes = getAvailableDayTypes();
@@ -649,9 +792,15 @@ export default function CompensatoryOff() {
       case "approved":
       case "banked":
         return (
+<<<<<<< HEAD
           <Button
             variant="outline"
             size="sm"
+=======
+          <Button 
+            variant="outline" 
+            size="sm" 
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
             className="text-blue-600 border-blue-200 hover:bg-blue-50"
             onClick={() => handleView(record)}
           >
@@ -684,7 +833,15 @@ export default function CompensatoryOff() {
           </Button>
         );
       case "rejected":
+<<<<<<< HEAD
         return <div className="text-xs text-red-600 font-medium">Rejected</div>;
+=======
+        return (
+          <div className="text-xs text-red-600 font-medium">
+            Rejected
+          </div>
+        );
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       default:
         return null;
     }
@@ -700,6 +857,7 @@ export default function CompensatoryOff() {
   // Based on the UI screenshot, "Not Allowed" means allowOnNonWorkingDays should be false
   let allowOnNonWorkingDays = true; // Default to allow
   let maxApplicationsPerMonth = 999; // Default to unlimited
+<<<<<<< HEAD
 
   if (compOffConfig) {
     // Try multiple possible field names for non-working days setting
@@ -717,12 +875,30 @@ export default function CompensatoryOff() {
       if (typeof maxAppConfig === "object" && maxAppConfig.Month) {
         maxApplicationsPerMonth = maxAppConfig.Month;
       } else if (typeof maxAppConfig === "number") {
+=======
+  
+  if (compOffConfig) {
+    // Try multiple possible field names for non-working days setting
+    allowOnNonWorkingDays = compOffConfig.allownonworkingdays ?? 
+                           compOffConfig.allowNonWorkingDays ?? 
+                           compOffConfig.allowOnNonWorkingDays ?? 
+                           compOffConfig.variantSettings?.allownonworkingdays ?? 
+                           compOffConfig.variantSettings?.allowNonWorkingDays ?? true;
+    
+    // For max applications, handle different data structures
+    const maxAppConfig = compOffConfig.maxcompoffapplications;
+    if (maxAppConfig) {
+      if (typeof maxAppConfig === 'object' && maxAppConfig.Month) {
+        maxApplicationsPerMonth = maxAppConfig.Month;
+      } else if (typeof maxAppConfig === 'number') {
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
         maxApplicationsPerMonth = maxAppConfig;
       }
     } else {
       maxApplicationsPerMonth = compOffConfig.maxApplicationsPerMonth ?? 999;
     }
   }
+<<<<<<< HEAD
 
   const maxApplicationsPeriod = "Month";
 
@@ -735,12 +911,27 @@ export default function CompensatoryOff() {
     new Date(),
   );
 
+=======
+  
+  const maxApplicationsPeriod = 'Month';
+  
+  // Count current month's applications for the user
+  const currentUserId = localStorage.getItem('user_id') || '';
+  const currentOrgId = localStorage.getItem('org_id') || '13';
+  const currentMonthCount = getMonthlyApplicationCount(compOffRequests, currentUserId, new Date());
+  
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
   // TEMPORARY: Force weekend validation to test the mechanism
   // Based on the UI screenshot showing "Not Allowed", let's force this to false for testing
   allowOnNonWorkingDays = false; // Force weekend blocking for testing
   maxApplicationsPerMonth = 3; // Force the 3 application limit for testing
+<<<<<<< HEAD
 
   console.log("🔒 Comp-off Validation Settings:", {
+=======
+  
+  console.log('🔒 Comp-off Validation Settings:', {
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     allowOnNonWorkingDays,
     maxApplicationsPerMonth,
     maxApplicationsPeriod,
@@ -750,12 +941,17 @@ export default function CompensatoryOff() {
     configData: compOffConfig,
     rawConfigKeys: compOffConfig ? Object.keys(compOffConfig) : [],
     weekendValidationActive: !allowOnNonWorkingDays,
+<<<<<<< HEAD
     TESTING_NOTE:
       "Temporarily forcing allowOnNonWorkingDays = false to test validation",
+=======
+    TESTING_NOTE: 'Temporarily forcing allowOnNonWorkingDays = false to test validation'
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
   });
 
   // Create dynamic schemas with all validation rules
   const bankCompOffFormSchema = createBankCompOffFormSchema(
+<<<<<<< HEAD
     filteredHolidays,
     allowOnNonWorkingDays,
     maxApplicationsPerMonth,
@@ -768,6 +964,20 @@ export default function CompensatoryOff() {
     maxApplicationsPerMonth,
     currentMonthCount,
     currentUserId,
+=======
+    filteredHolidays, 
+    allowOnNonWorkingDays, 
+    maxApplicationsPerMonth, 
+    currentMonthCount, 
+    currentUserId
+  );
+  const availCompOffFormSchema = createAvailCompOffFormSchema(
+    filteredHolidays, 
+    allowOnNonWorkingDays, 
+    maxApplicationsPerMonth, 
+    currentMonthCount, 
+    currentUserId
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
   );
 
   // Form for banking comp-off (worked overtime)
@@ -1803,6 +2013,7 @@ export default function CompensatoryOff() {
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
+<<<<<<< HEAD
                               {transferableLeaveTypes &&
                               transferableLeaveTypes.length > 0 ? (
                                 transferableLeaveTypes.map((leaveType: any) => (
@@ -1817,6 +2028,14 @@ export default function CompensatoryOff() {
                                 <SelectItem value="no-types" disabled>
                                   No convertible leave types configured
                                 </SelectItem>
+=======
+                              {transferableLeaveTypes && transferableLeaveTypes.length > 0 ? transferableLeaveTypes.map((leaveType: any) => (
+                                <SelectItem key={leaveType.id} value={leaveType.id.toString()}>
+                                  {leaveType.name}
+                                </SelectItem>
+                              )) : (
+                                <SelectItem value="no-types" disabled>No convertible leave types configured</SelectItem>
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                               )}
                             </SelectContent>
                           </Select>
@@ -2385,6 +2604,7 @@ export default function CompensatoryOff() {
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
+<<<<<<< HEAD
                   <Label className="text-sm font-medium text-gray-500">
                     Type
                   </Label>
@@ -2408,10 +2628,25 @@ export default function CompensatoryOff() {
                     >
                       {selectedCompOffDetails.status?.charAt(0).toUpperCase() +
                         selectedCompOffDetails.status?.slice(1)}
+=======
+                  <Label className="text-sm font-medium text-gray-500">Type</Label>
+                  <p className="mt-1 text-sm text-gray-900 capitalize">{selectedCompOffDetails.type}</p>
+                </div>
+                <div>
+                  <Label className="text-sm font-medium text-gray-500">Status</Label>
+                  <p className="mt-1">
+                    <Badge className={selectedCompOffDetails.status === 'approved' 
+                      ? 'bg-green-100 text-green-800' 
+                      : selectedCompOffDetails.status === 'pending' 
+                      ? 'bg-yellow-100 text-yellow-800' 
+                      : 'bg-red-100 text-red-800'}>
+                      {selectedCompOffDetails.status?.charAt(0).toUpperCase() + selectedCompOffDetails.status?.slice(1)}
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                     </Badge>
                   </p>
                 </div>
                 <div>
+<<<<<<< HEAD
                   <Label className="text-sm font-medium text-gray-500">
                     Worked Date
                   </Label>
@@ -2479,14 +2714,59 @@ export default function CompensatoryOff() {
                     {new Date(
                       selectedCompOffDetails.compensateWith,
                     ).toLocaleDateString()}
+=======
+                  <Label className="text-sm font-medium text-gray-500">Worked Date</Label>
+                  <p className="mt-1 text-sm text-gray-900">
+                    {new Date(selectedCompOffDetails.workedDate).toLocaleDateString()}
+                  </p>
+                </div>
+                <div>
+                  <Label className="text-sm font-medium text-gray-500">Day Type</Label>
+                  <p className="mt-1 text-sm text-gray-900 capitalize">
+                    {selectedCompOffDetails.dayType === 'full' ? 'Full Day' : 
+                     selectedCompOffDetails.dayType === 'half' ? 'Half Day' : 
+                     selectedCompOffDetails.dayType === 'quarter' ? 'Quarter Day' : selectedCompOffDetails.dayType}
+                  </p>
+                </div>
+              </div>
+              
+              <div>
+                <Label className="text-sm font-medium text-gray-500">Reason</Label>
+                <p className="mt-1 text-sm text-gray-900">{selectedCompOffDetails.reason}</p>
+              </div>
+
+              {selectedCompOffDetails.type === 'transfer' && selectedCompOffDetails.transferAmount && (
+                <div>
+                  <Label className="text-sm font-medium text-gray-500">Transfer Amount</Label>
+                  <p className="mt-1 text-sm text-gray-900">{selectedCompOffDetails.transferAmount} days</p>
+                </div>
+              )}
+
+              {selectedCompOffDetails.type === 'en-cash' && selectedCompOffDetails.enCashAmount && (
+                <div>
+                  <Label className="text-sm font-medium text-gray-500">En-cash Amount</Label>
+                  <p className="mt-1 text-sm text-gray-900">{selectedCompOffDetails.enCashAmount} days</p>
+                </div>
+              )}
+
+              {selectedCompOffDetails.compensateWith && (
+                <div>
+                  <Label className="text-sm font-medium text-gray-500">Compensate Date</Label>
+                  <p className="mt-1 text-sm text-gray-900">
+                    {new Date(selectedCompOffDetails.compensateWith).toLocaleDateString()}
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                   </p>
                 </div>
               )}
 
               <div>
+<<<<<<< HEAD
                 <Label className="text-sm font-medium text-gray-500">
                   Applied At
                 </Label>
+=======
+                <Label className="text-sm font-medium text-gray-500">Applied At</Label>
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                 <p className="mt-1 text-sm text-gray-900">
                   {new Date(selectedCompOffDetails.appliedAt).toLocaleString()}
                 </p>
@@ -2494,23 +2774,33 @@ export default function CompensatoryOff() {
 
               {selectedCompOffDetails.rejectionReason && (
                 <div>
+<<<<<<< HEAD
                   <Label className="text-sm font-medium text-red-500">
                     Rejection Reason
                   </Label>
                   <p className="mt-1 text-sm text-red-700">
                     {selectedCompOffDetails.rejectionReason}
                   </p>
+=======
+                  <Label className="text-sm font-medium text-red-500">Rejection Reason</Label>
+                  <p className="mt-1 text-sm text-red-700">{selectedCompOffDetails.rejectionReason}</p>
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                 </div>
               )}
 
               {selectedCompOffDetails.notes && (
                 <div>
+<<<<<<< HEAD
                   <Label className="text-sm font-medium text-gray-500">
                     Notes
                   </Label>
                   <p className="mt-1 text-sm text-gray-900">
                     {selectedCompOffDetails.notes}
                   </p>
+=======
+                  <Label className="text-sm font-medium text-gray-500">Notes</Label>
+                  <p className="mt-1 text-sm text-gray-900">{selectedCompOffDetails.notes}</p>
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                 </div>
               )}
             </div>
@@ -2519,6 +2809,10 @@ export default function CompensatoryOff() {
             <Button variant="outline" onClick={() => setShowViewModal(false)}>
               Close
             </Button>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
           </div>
         </DialogContent>
       </Dialog>

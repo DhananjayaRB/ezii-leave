@@ -39,7 +39,11 @@ export default function NewEmployeeOverview() {
 
   // Get current user ID from localStorage (same as Leave Applications)
   const currentUserId = localStorage.getItem('user_id') || '241';
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
   console.log('📊 [NewEmployeeOverview] Loading component for user:', currentUserId);
   console.log('📊 [NewEmployeeOverview] Current org_id:', localStorage.getItem('org_id'));
 
@@ -102,6 +106,7 @@ export default function NewEmployeeOverview() {
     const requestsArray = Array.isArray(leaveRequests) ? leaveRequests : [];
     const transactionsArray = Array.isArray(transactions) ? transactions : [];
     const variantsArray = Array.isArray(leaveVariantsData) ? leaveVariantsData : [];
+<<<<<<< HEAD
 
     console.log('🎯 [NewEmployeeOverview] EXACT Leave Applications calculation:', {
       currentUserId,
@@ -116,10 +121,27 @@ export default function NewEmployeeOverview() {
     const currentUserAssignments = Array.isArray(allAssignments) ? 
       allAssignments.filter((a: any) => String(a.userId) === String(currentUserId)) : [];
 
+=======
+    
+    console.log('🎯 [NewEmployeeOverview] EXACT Leave Applications calculation:', {
+      currentUserId,
+      orgId: localStorage.getItem('org_id'),
+      balancesCount: balancesArray.length,
+      requestsCount: requestsArray.length,
+      transactionsCount: transactionsArray.length,
+      variantsCount: variantsArray.length
+    });
+
+    // Use assignment filtering to match Leave Applications logic
+    const currentUserAssignments = Array.isArray(allAssignments) ? 
+      allAssignments.filter((a: any) => String(a.userId) === String(currentUserId)) : [];
+    
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     const assignedVariantIds = currentUserAssignments.map((a: any) => a.leaveVariantId);
     const availableLeaveVariants = variantsArray.filter((variant: any) => 
       assignedVariantIds.includes(variant.id)
     );
+<<<<<<< HEAD
 
     // TOTAL ELIGIBILITY calculation (exactly from Leave Applications)
     let totalEligibilitySum = 0;
@@ -143,16 +165,67 @@ export default function NewEmployeeOverview() {
 
       let eligibility = 0;
 
+=======
+    
+    // Calculate total eligibility dynamically using the same logic as the table
+    let totalEligibilitySum = 0;
+    
+    availableLeaveVariants.forEach((variant: any) => {
+      const balance = balancesArray.find((b: any) => b.leaveVariantId === variant.id);
+      const transactions = Array.isArray(transactionsArray) ? transactionsArray.filter((t: any) => t.leaveVariantId === variant.id) : [];
+      
+      // Calculate opening balance from imported Excel data transactions with enhanced logic
+      const openingBalanceTransactions = Array.isArray(transactionsArray) ? 
+        transactionsArray
+          .filter((t: any) => {
+            const isOpeningBalance = t.transactionType === 'grant' && 
+                                   t.description?.toLowerCase().includes('opening balance imported from excel');
+            const isForCurrentUser = t.userId === currentUserId;
+            
+            if (!isOpeningBalance || !isForCurrentUser) return false;
+            
+            // Direct variant match (preferred)
+            if (t.leaveVariantId === variant.id) return true;
+            
+            // Cross-reference by leave type name
+            const transactionVariant = variantsArray.find((v: any) => v.id === t.leaveVariantId);
+            if (transactionVariant?.leaveTypeName === variant.leaveTypeName) return true;
+            if (transactionVariant?.leaveTypeId === variant.leaveTypeId) return true;
+            
+            return false;
+          })
+          .sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+        : [];
+      
+      const openingBalance = openingBalanceTransactions.reduce((sum: number, t: any) => 
+        sum + parseFloat(t.amount || '0'), 0
+      );
+      
+      // Calculate eligibility based on leave grant method
+      const totalEntitlementInDays = balance ? parseFloat(balance.totalEntitlement || '0') : 0;
+      const isAfterEarning = variant.grantLeaves === 'after_earning';
+      
+      let eligibility = 0;
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       if (isAfterEarning) {
         // "After Earning" - calculate based on annual entitlement and months completed
         const currentMonth = new Date().getMonth() + 1; // August = 8
         const monthsCompleted = currentMonth - 1; // 7 months completed (Jan-July)
+<<<<<<< HEAD
         const annualEntitlement = totalEntitlementInDays || variant.annualLeaveAllocation || 0;
         eligibility = (annualEntitlement / 12) * monthsCompleted;
       } else {
         // "In Advance" - check grant frequency
         const annualEntitlement = totalEntitlementInDays || variant.annualLeaveAllocation || 0;
 
+=======
+        const annualEntitlement = totalEntitlementInDays || variant.paidDaysInYear || 0;
+        eligibility = (annualEntitlement / 12) * monthsCompleted;
+      } else {
+        // "In Advance" - check grant frequency
+        const annualEntitlement = totalEntitlementInDays || variant.paidDaysInYear || 0;
+        
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
         if (variant.grantFrequency === 'per_year') {
           // Annual grants like Paternity Leave - full entitlement available immediately
           eligibility = annualEntitlement;
@@ -162,17 +235,38 @@ export default function NewEmployeeOverview() {
           eligibility = (annualEntitlement / 12) * currentMonth;
         }
       }
+<<<<<<< HEAD
       const totalEligibility = eligibility + openingBalance;
       totalEligibilitySum += totalEligibility;
+=======
+      
+      const totalEligibility = eligibility + openingBalance;
+      totalEligibilitySum += totalEligibility;
+      
+      console.log(`🎯 [Dashboard] Dynamic calculation for ${variant.leaveTypeName}:`, {
+        openingBalance,
+        eligibility,
+        totalEligibility,
+        isAfterEarning,
+        annualEntitlement: totalEntitlementInDays || variant.paidDaysInYear
+      });
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     });
 
     // TOTAL AVAILED calculation (exactly from Leave Applications)
     const allUserTransactions = (transactionsArray as any[]).filter((t: any) => t.userId === currentUserId);
     let totalAvailed = 0;
+<<<<<<< HEAD
 
     availableLeaveVariants.forEach((variant: any) => {
       const isBeforeWorkflow = variant.leaveBalanceDeductionBefore === true;
 
+=======
+    
+    availableLeaveVariants.forEach((variant: any) => {
+      const isBeforeWorkflow = variant.leaveBalanceDeductionBefore === true;
+      
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       // Handle null leaveVariantId by using leaveTypeId as fallback with type conversion
       const matchingRequests = requestsArray.filter((req: any) => {
         const variantIdMatch = req.leaveVariantId === variant.id;
@@ -180,16 +274,27 @@ export default function NewEmployeeOverview() {
           (req.leaveTypeId === variant.leaveTypeId || 
            String(req.leaveTypeId) === String(variant.leaveTypeId) ||
            Number(req.leaveTypeId) === Number(variant.leaveTypeId));
+<<<<<<< HEAD
 
         return variantIdMatch || typeIdMatch;
       });
 
+=======
+        
+        return variantIdMatch || typeIdMatch;
+      });
+      
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       // Method 1: Count approved leave requests
       const approvedRequests = matchingRequests.filter((req: any) => req.status === 'approved');
       const approvedDays = approvedRequests.reduce((sum: number, req: any) => 
         sum + parseFloat(req.workingDays || '0'), 0
       );
+<<<<<<< HEAD
 
+=======
+      
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       // Method 2: For "Before Workflow" types, add pending requests
       let pendingDays = 0;
       if (isBeforeWorkflow) {
@@ -198,7 +303,11 @@ export default function NewEmployeeOverview() {
           sum + parseFloat(req.workingDays || '0'), 0
         );
       }
+<<<<<<< HEAD
 
+=======
+      
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       // Method 3: Add imported leave usage from Excel
       const variantTransactions = allUserTransactions.filter((t: any) => t.leaveVariantId === variant.id);
       const importedAvailed = variantTransactions.filter((t: any) => 
@@ -208,7 +317,11 @@ export default function NewEmployeeOverview() {
       ).reduce((sum: number, t: any) => 
         sum + Math.abs(parseFloat(t.amount || '0')), 0
       );
+<<<<<<< HEAD
 
+=======
+      
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       const variantAvailed = approvedDays + pendingDays + importedAvailed;
       totalAvailed += variantAvailed;
     });
@@ -218,12 +331,17 @@ export default function NewEmployeeOverview() {
     availableLeaveVariants.forEach((variant: any) => {
       const balance = balancesArray.find((b: any) => b.leaveVariantId === variant.id);
       const transactions = Array.isArray(transactionsArray) ? transactionsArray.filter((t: any) => t.leaveVariantId === variant.id) : [];
+<<<<<<< HEAD
 
+=======
+      
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       // Calculate opening balance from imported Excel data transactions
       const openingBalanceTransactions = transactions
         .filter((t: any) => t.transactionType === 'grant' && 
                t.description?.toLowerCase().includes('opening balance imported from excel'))
         .sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+<<<<<<< HEAD
 
       const openingBalance = openingBalanceTransactions.length > 0 
         ? parseFloat(openingBalanceTransactions[0].amount || '0') 
@@ -237,6 +355,21 @@ export default function NewEmployeeOverview() {
 
       let eligibility = 0;
 
+=======
+      
+      const openingBalance = openingBalanceTransactions.length > 0 
+        ? parseFloat(openingBalanceTransactions[0].amount || '0') 
+        : 0;
+      
+      const currentBalanceInDays = balance ? parseFloat(balance.currentBalance || '0') : 0;
+      
+      // Calculate eligibility based on leave grant method
+      const totalEntitlementInDays = balance ? parseFloat(balance.totalEntitlement || '0') : 0;
+      const isAfterEarning = variant.grantLeaves === 'after_earning';
+      
+      let eligibility = 0;
+      
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       if (isAfterEarning) {
         const currentMonth = new Date().getMonth() + 1; // August = 8
         const monthsCompleted = currentMonth - 1; // 7 months completed (Jan-July)
@@ -244,7 +377,11 @@ export default function NewEmployeeOverview() {
         eligibility = (annualEntitlement / 12) * monthsCompleted;
       } else {
         const annualEntitlement = totalEntitlementInDays || variant.annualLeaveAllocation || 0;
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
         if (variant.grantFrequency === 'per_year') {
           eligibility = annualEntitlement;
         } else {
@@ -253,20 +390,35 @@ export default function NewEmployeeOverview() {
         }
       }
       const totalEligibility = eligibility + openingBalance;
+<<<<<<< HEAD
 
       // Calculate availed using same logic as table
       const isBeforeWorkflow = variant.leaveBalanceDeductionBefore === true;
 
+=======
+      
+      // Calculate availed using same logic as table
+      const isBeforeWorkflow = variant.leaveBalanceDeductionBefore === true;
+      
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       const matchingRequests = requestsArray.filter((req: any) => 
         req.leaveVariantId === variant.id || 
         ((req.leaveVariantId === null || req.leaveVariantId === undefined) && req.leaveTypeId === variant.leaveTypeId)
       );
+<<<<<<< HEAD
 
+=======
+      
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       const approvedRequests = matchingRequests.filter((req: any) => req.status === 'approved');
       const approvedDays = approvedRequests.reduce((sum: number, req: any) => 
         sum + parseFloat(req.workingDays || '0'), 0
       );
+<<<<<<< HEAD
 
+=======
+      
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       let pendingDays = 0;
       if (isBeforeWorkflow) {
         const pendingRequests = matchingRequests.filter((req: any) => req.status === 'pending');
@@ -274,7 +426,11 @@ export default function NewEmployeeOverview() {
           sum + parseFloat(req.workingDays || '0'), 0
         );
       }
+<<<<<<< HEAD
 
+=======
+      
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       const importedAvailed = transactions.filter((t: any) => 
         t.description?.toLowerCase().includes('imported leave transaction') && 
         t.description?.toLowerCase().includes('availed') &&
@@ -282,7 +438,11 @@ export default function NewEmployeeOverview() {
       ).reduce((sum: number, t: any) => 
         sum + Math.abs(parseFloat(t.amount || '0')), 0
       );
+<<<<<<< HEAD
 
+=======
+      
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       const availed = approvedDays + pendingDays + importedAvailed;
       const closingBalance = totalEligibility - availed;
       totalClosingBalance += closingBalance;
@@ -302,7 +462,11 @@ export default function NewEmployeeOverview() {
   };
 
   const sophisticatedMetrics = calculateSophisticatedMetrics();
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
   // Use sophisticated calculations for display
   const totalEntitlement = sophisticatedMetrics.totalEligibility;
   const totalAvailed = sophisticatedMetrics.totalAvailed;
@@ -326,10 +490,17 @@ export default function NewEmployeeOverview() {
     console.log('[UsageTrends] DEBUG - Total leave requests:', leaveRequests.length);
     console.log('[UsageTrends] DEBUG - Approved leaves:', approvedLeaves.length);
     console.log('[UsageTrends] DEBUG - Pending leaves:', leaveRequests.filter(l => l.status === 'pending').length);
+<<<<<<< HEAD
 
     // Use all leave requests (approved + pending) to show usage trends
     const relevantLeaves = leaveRequests; // Include all statuses for now to show data
 
+=======
+    
+    // Use only approved leave requests to show usage trends - exclude rejected and pending
+    const relevantLeaves = leaveRequests.filter((leave: LeaveRequest) => leave.status === 'approved');
+    
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     console.log('[UsageTrends] DEBUG - Using leaves for trends:', relevantLeaves.map(l => ({
       id: l.id,
       startDate: l.startDate,

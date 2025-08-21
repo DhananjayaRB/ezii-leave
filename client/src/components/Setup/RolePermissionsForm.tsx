@@ -230,6 +230,7 @@ export default function RolePermissionsForm({
                 />
                 <PermissionRow title="Workflows" category="workflows" />
                 <PermissionRow title="Leave Types" category="leaveTypes" />
+<<<<<<< HEAD
                 <PermissionRow
                   title="Leave Configurations"
                   category="leaveConfigurations"
@@ -242,6 +243,11 @@ export default function RolePermissionsForm({
                   title="Comp-Off Configurations"
                   category="compOffConfigurations"
                 />
+=======
+                <PermissionRow title="Leave Configurations" category="leaveConfigurations" />
+                <PermissionRow title="BTO Configurations" category="ptoConfigurations" />
+                <PermissionRow title="Comp-Off Configurations" category="compOffConfigurations" />
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
               </div>
             </CardContent>
           </Card>

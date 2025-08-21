@@ -65,7 +65,11 @@ interface Task {
 }
 
 export default function TaskManager() {
+<<<<<<< HEAD
   const [currentUserId, setCurrentUserId] = useState<string>("");
+=======
+  const [currentUserId, setCurrentUserId] = useState<string>('');
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
   const [rejectionComment, setRejectionComment] = useState("");
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [completionComment, setCompletionComment] = useState("");
@@ -89,22 +93,35 @@ export default function TaskManager() {
     dateFrom: "",
     dateTo: "",
   });
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
   const { orgId } = useOrgContext();
   const queryClient = useQueryClient();
 
   // Initialize user ID from localStorage
   useEffect(() => {
+<<<<<<< HEAD
     const userId = localStorage.getItem("user_id") || "";
+=======
+    const userId = localStorage.getItem('user_id') || '';
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     setCurrentUserId(userId);
   }, []);
 
   // Note: User context is preserved from localStorage - no automatic overrides
+<<<<<<< HEAD
 
   console.log(
     "TaskManager - Current user ID from localStorage:",
     currentUserId,
   );
+=======
+  
+  console.log('TaskManager - Current user ID from localStorage:', currentUserId);
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
 
   // Fetch tasks assigned TO current user
   const { data: assignedToMe = [] } = useQuery<Task[]>({
@@ -118,8 +135,15 @@ export default function TaskManager() {
     enabled: !!currentUserId,
   });
 
+<<<<<<< HEAD
   console.log("TaskManager - Tasks assigned to me:", assignedToMe);
   console.log("TaskManager - Tasks assigned by me:", assignedByMe);
+=======
+
+  
+  console.log('TaskManager - Tasks assigned to me:', assignedToMe);
+  console.log('TaskManager - Tasks assigned by me:', assignedByMe);
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
 
   // Filter function for tasks
   const filterTasks = (tasks: Task[], filters: typeof assignedToMeFilters) => {
@@ -674,6 +698,11 @@ export default function TaskManager() {
     </div>
   );
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
   return (
     <Layout>
       <div className="space-y-8">

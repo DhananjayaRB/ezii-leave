@@ -145,11 +145,19 @@ export function usePermissions() {
         }
 
         console.log('Loading permissions for role:', role);
+<<<<<<< HEAD
 
         // Clear cache to force reload of updated permissions
         permissionsCache = null;
         cacheTimestamp = 0;
 
+=======
+        
+        // Clear cache to force reload of updated permissions
+        permissionsCache = null;
+        cacheTimestamp = 0;
+        
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
         // Try to fetch role permissions from database first
         if (orgId) {
           try {

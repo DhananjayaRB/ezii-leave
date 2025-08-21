@@ -107,16 +107,24 @@ export default function Approvals() {
     if (!blackoutPeriods || blackoutPeriods.length === 0) {
       return { hasConflict: false };
     }
+<<<<<<< HEAD
 
     const requestStart = new Date(startDate);
     const requestEnd = new Date(endDate);
 
+=======
+    
+    const requestStart = new Date(startDate);
+    const requestEnd = new Date(endDate);
+    
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     for (const period of blackoutPeriods as any[]) {
       // Check if user is assigned to this blackout period (check both string and number formats)
       const isUserAssigned = period.assignedEmployees && (
         period.assignedEmployees.includes(userId.toString()) || 
         period.assignedEmployees.includes(parseInt(userId))
       );
+<<<<<<< HEAD
 
       if (!isUserAssigned) {
         continue; // User not assigned to this blackout period
@@ -129,11 +137,29 @@ export default function Approvals() {
       // Check for date overlap: (startA <= endB) && (startB <= endA)
       const hasOverlap = (requestStart <= blackoutEnd) && (blackoutStart <= requestEnd);
 
+=======
+      
+      if (!isUserAssigned) {
+        continue; // User not assigned to this blackout period
+      }
+      
+      // Check if leave dates overlap with blackout period
+      const blackoutStart = new Date(period.startDate);
+      const blackoutEnd = new Date(period.endDate);
+      
+      // Check for date overlap: (startA <= endB) && (startB <= endA)
+      const hasOverlap = (requestStart <= blackoutEnd) && (blackoutStart <= requestEnd);
+      
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       if (hasOverlap) {
         return { hasConflict: true, periodName: period.title };
       }
     }
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     return { hasConflict: false };
   };
 
@@ -141,18 +167,30 @@ export default function Approvals() {
   let filteredLeaveRequests = leaveRequests as any[];
   let filteredPtoRequests = ptoRequests as any[];
   let filteredCompOffRequests = compOffRequests as any[];
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
   console.log('🔍 [Approvals] Pre-filter comp-off requests:', filteredCompOffRequests.length);
   console.log('🔍 [Approvals] Reporting manager data:', {
     isReportingManager: reportingManagerData.isReportingManager,
     reporteesCount: reportingManagerData.reportees.length,
     currentView: currentView
   });
+<<<<<<< HEAD
 
   if (reportingManagerData.isReportingManager && reportingManagerData.reportees.length > 0) {
     const reporteeIds = reportingManagerData.reportees.map(r => r.user_id.toString());
     console.log('🔍 [Approvals] Filtering for reportees:', reporteeIds);
 
+=======
+  
+  if (reportingManagerData.isReportingManager && reportingManagerData.reportees.length > 0) {
+    const reporteeIds = reportingManagerData.reportees.map(r => r.user_id.toString());
+    console.log('🔍 [Approvals] Filtering for reportees:', reporteeIds);
+    
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     filteredLeaveRequests = filteredLeaveRequests.filter(req => 
       reporteeIds.includes(req.userId?.toString())
     );
@@ -162,7 +200,11 @@ export default function Approvals() {
     filteredCompOffRequests = filteredCompOffRequests.filter(req => 
       reporteeIds.includes(req.userId?.toString())
     );
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     console.log('🔍 [Approvals] Post-filter comp-off requests:', filteredCompOffRequests.length);
   } else {
     console.log('🔍 [Approvals] No filtering applied - showing all requests');
@@ -530,7 +572,11 @@ export default function Approvals() {
                                   request.startDate,
                                   request.endDate
                                 );
+<<<<<<< HEAD
 
+=======
+                                
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                                 if (blackoutCheck.hasConflict) {
                                   return (
                                     <div className="text-sm">

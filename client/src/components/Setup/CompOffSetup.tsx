@@ -19,6 +19,7 @@ interface CompOffSetupProps {
   showNavigation?: boolean; // Add prop to control navigation buttons visibility
 }
 
+<<<<<<< HEAD
 export default function CompOffSetup({
   onNext,
   onPrevious,
@@ -26,6 +27,11 @@ export default function CompOffSetup({
   isLoading,
   showNavigation = true,
 }: CompOffSetupProps) {
+=======
+
+
+export default function CompOffSetup({ onNext, onPrevious, isLast, isLoading, showNavigation = true }: CompOffSetupProps) {
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
   const { toast } = useToast();
   const [compOffEnabled, setCompOffEnabled] = useState(true);
   const [showVariantForm, setShowVariantForm] = useState(false);

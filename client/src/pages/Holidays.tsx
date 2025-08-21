@@ -456,6 +456,7 @@ export default function Holidays() {
             </div>
           </div>
 
+<<<<<<< HEAD
           {/* Yearly Summary - Show above yearly calendar */}
           {viewMode === "yearly" && (
             <div className="mb-6">
@@ -485,6 +486,8 @@ export default function Holidays() {
               </Card>
             </div>
           )}
+=======
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
 
           {/* Monthly Holiday Legend - Show above monthly calendar */}
           {viewMode === "monthly" && (
@@ -541,6 +544,75 @@ export default function Holidays() {
                               },
                             )}{" "}
                             - {holiday.name}
+                          </span>
+                        </div>
+                      ));
+                    })()}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+
+          {/* Yearly Summary - Show above yearly calendar */}
+          {viewMode === "yearly" && (
+            <div className="mb-6">
+              <Card>
+                <CardContent className="p-4">
+                  <h3 className="text-lg font-medium text-gray-900 mb-3">All Holidays for 2025</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {holidays.map((holiday, index) => (
+                      <div key={index} className="flex items-center space-x-3 p-2 bg-gray-50 rounded">
+                        <div className="w-3 h-3 bg-red-500 rounded-full flex-shrink-0"></div>
+                        <span className="text-sm text-gray-700">
+                          {new Date(holiday.date).toLocaleDateString('en-US', { 
+                            month: 'short', 
+                            day: 'numeric' 
+                          })} - {holiday.name}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+          {/* Monthly Holiday Legend - Show above monthly calendar */}
+          {viewMode === "monthly" && (
+            <div className="mb-6">
+              <Card>
+                <CardContent className="p-4">
+                  <h3 className="text-lg font-medium text-gray-900 mb-3">Holidays for {selectedMonth}</h3>
+                  <div className="space-y-2">
+                    {(() => {
+                      const monthNames = [
+                        "January", "February", "March", "April", "May", "June",
+                        "July", "August", "September", "October", "November", "December"
+                      ];
+                      const monthName = selectedMonth.split(' ')[0];
+                      const monthIndex = monthNames.indexOf(monthName);
+                      const monthPrefix = `2025-${String(monthIndex + 1).padStart(2, '0')}`;
+                      
+                      const monthHolidays = holidays.filter(holiday => holiday.date.startsWith(monthPrefix));
+                      
+                      if (monthHolidays.length === 0) {
+                        return (
+                          <div className="text-sm text-gray-500 italic">
+                            No holidays in {selectedMonth}
+                          </div>
+                        );
+                      }
+                      
+                      return monthHolidays.map((holiday, index) => (
+                        <div key={index} className="flex items-center space-x-3">
+                          <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                          <span className="text-sm text-gray-700">
+                            {new Date(holiday.date).toLocaleDateString('en-US', { 
+                              month: 'long', 
+                              day: 'numeric' 
+                            })} - {holiday.name}
                           </span>
                         </div>
                       ));
@@ -706,6 +778,12 @@ export default function Holidays() {
               </CardContent>
             </Card>
           )}
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
         </div>
       </div>
     </Layout>

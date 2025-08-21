@@ -107,6 +107,7 @@ const defaultLeaveTypes = [
   },
 ];
 
+<<<<<<< HEAD
 export default function LeaveTypesSetup({
   onNext,
   onPrevious,
@@ -114,6 +115,9 @@ export default function LeaveTypesSetup({
   isLoading,
   showNavigation = true,
 }: LeaveTypesSetupProps) {
+=======
+export default function LeaveTypesSetup({ onNext, onPrevious, isLast, isLoading, showNavigation = true }: LeaveTypesSetupProps) {
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
   const [selectedLeaveType, setSelectedLeaveType] = useState<any>(null);
   const [selectedVariant, setSelectedVariant] = useState<any>(null);
   const [showConfigForm, setShowConfigForm] = useState(false);
@@ -574,19 +578,34 @@ export default function LeaveTypesSetup({
 
       {showNavigation && (
         <div className="flex justify-between mt-8">
+<<<<<<< HEAD
           <Button variant="outline" onClick={onPrevious} disabled={isLoading}>
             Previous
           </Button>
           <Button
+=======
+          <Button 
+            variant="outline" 
+            onClick={onPrevious}
+            disabled={isLoading}
+          >
+            Previous
+          </Button>
+          <Button 
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
             onClick={handleNext}
             disabled={isLoading || createLeaveTypesMutation.isPending}
             className="bg-blue-600 hover:bg-blue-700 text-white"
           >
+<<<<<<< HEAD
             {createLeaveTypesMutation.isPending
               ? "Creating..."
               : isLast
                 ? "Finish Setup"
                 : "Next"}
+=======
+            {createLeaveTypesMutation.isPending ? "Creating..." : isLast ? "Finish Setup" : "Next"}
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
           </Button>
         </div>
       )}

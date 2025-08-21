@@ -425,6 +425,7 @@ export default function AdminWorkflows() {
                                 <SelectValue placeholder="Select Process" />
                               </SelectTrigger>
                               <SelectContent>
+<<<<<<< HEAD
                                 <SelectItem value="application">
                                   Application
                                 </SelectItem>
@@ -432,6 +433,11 @@ export default function AdminWorkflows() {
                                 <SelectItem value="comp-off">
                                   Comp-off
                                 </SelectItem>
+=======
+                                <SelectItem value="application">Application</SelectItem>
+                                <SelectItem value="pto">BTO</SelectItem>
+                                <SelectItem value="comp-off">Comp-off</SelectItem>
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                               </SelectContent>
                             </Select>
                           </FormControl>
@@ -539,12 +545,16 @@ export default function AdminWorkflows() {
                                       }
                                     }}
                                   />
+<<<<<<< HEAD
                                   <Label
                                     htmlFor="apply-pto"
                                     className="text-sm"
                                   >
                                     Apply BTO
                                   </Label>
+=======
+                                  <Label htmlFor="apply-pto" className="text-sm">Apply BTO</Label>
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                                 </div>
                               )}
                               {form.watch("process") === "comp-off" && (

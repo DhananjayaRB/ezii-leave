@@ -75,7 +75,11 @@ export default function Layout({ children }: LayoutProps) {
     localStorage.removeItem('role_name');
     localStorage.removeItem('org_id');
     localStorage.removeItem('leave_year');
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     // Redirect to the appropriate login service based on plan status
     await redirectToLogin();
   };
@@ -85,7 +89,11 @@ export default function Layout({ children }: LayoutProps) {
     // External modules that require plan status check and redirect
     const planStatusModules = ['core', 'payroll'];
     const loginStringModules = ['attendance', 'expense'];
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     if (planStatusModules.includes(moduleId)) {
       // Check if plan status is available
       if (planStatus && !planStatusLoading) {
@@ -103,7 +111,11 @@ export default function Layout({ children }: LayoutProps) {
       setActiveModule(moduleId);
     }
   };
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
   // Check JWT token expiration
   useJWTTokenCheck();
 
@@ -174,15 +186,25 @@ export default function Layout({ children }: LayoutProps) {
 
   // Get user role from localStorage (permanent role)
   const userRole = localStorage.getItem('role_name') || localStorage.getItem('role');
+<<<<<<< HEAD
 
 
 
+=======
+  
+
+  
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
   // Get current view mode (separate from actual role)
   const [currentView, setCurrentView] = useState(() => {
     const savedView = localStorage.getItem('currentView');
     return savedView || 'admin';
   });
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
   // Sync currentView with localStorage on mount only
   useEffect(() => {
     const savedView = localStorage.getItem('currentView');
@@ -629,7 +651,11 @@ export default function Layout({ children }: LayoutProps) {
               <button className="hidden md:block p-2 text-gray-400 hover:text-gray-600 transition-colors">
                 <Bell className="w-4 md:w-5 h-4 md:h-5" />
               </button>
+<<<<<<< HEAD
 
+=======
+              
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
               {/* View Indicator and Switch - Hidden on mobile */}
               {userRole === 'admin' && (
                 <div className="hidden md:flex items-center space-x-2">

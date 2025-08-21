@@ -111,11 +111,15 @@ export default function PTOVariantForm({
         const employeeData = await fetchEmployeeData();
         const transformedEmployees = employeeData.map(transformEmployeeData);
         setAllEmployees(transformedEmployees);
+<<<<<<< HEAD
         console.log(
           "PTO Edit - External API loaded",
           transformedEmployees.length,
           "employees",
         );
+=======
+        console.log("PTO Edit - External API loaded", transformedEmployees.length, "employees");
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       } catch (error) {
         console.error("Error loading employees:", error);
       }
@@ -128,6 +132,7 @@ export default function PTOVariantForm({
   useEffect(() => {
     if (allEmployees.length > 0 && assignedEmployees.length > 0) {
       // Check if current assigned employees are just fallback data
+<<<<<<< HEAD
       const isUsingFallbackData = assignedEmployees.every(
         (emp) =>
           emp.user_name?.startsWith("Employee ") &&
@@ -142,10 +147,21 @@ export default function PTOVariantForm({
           (emp) => emp.user_id || emp.id,
         );
         const enhancedEmployees = allEmployees.filter((emp) => {
+=======
+      const isUsingFallbackData = assignedEmployees.every(emp => 
+        emp.user_name?.startsWith('Employee ') && emp.firstName === 'Employee'
+      );
+      
+      if (isUsingFallbackData) {
+        console.log("PTO Edit - Enhancing fallback data with external API data");
+        const assignedUserIds = assignedEmployees.map(emp => emp.user_id || emp.id);
+        const enhancedEmployees = allEmployees.filter(emp => {
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
           const userIdMatch = assignedUserIds.includes(emp.user_id);
           const idMatch = assignedUserIds.includes(emp.id);
           return userIdMatch || idMatch;
         });
+<<<<<<< HEAD
 
         if (enhancedEmployees.length > 0) {
           console.log(
@@ -153,6 +169,11 @@ export default function PTOVariantForm({
             enhancedEmployees.length,
             "employees with API data",
           );
+=======
+        
+        if (enhancedEmployees.length > 0) {
+          console.log("PTO Edit - Enhanced", enhancedEmployees.length, "employees with API data");
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
           setAssignedEmployees(enhancedEmployees);
         }
       }
@@ -165,6 +186,7 @@ export default function PTOVariantForm({
       return; // Still loading assignments
     }
 
+<<<<<<< HEAD
     console.log(
       "PTO Edit - Processing assignments:",
       existingAssignments.length,
@@ -181,14 +203,26 @@ export default function PTOVariantForm({
       console.log(
         "PTO Edit - No assignments found, clearing assigned employees",
       );
+=======
+    console.log("PTO Edit - Processing assignments:", existingAssignments.length, "assignments");
+    console.log("PTO Edit - All employees loaded:", allEmployees.length, "employees");
+    
+    if (existingAssignments.length === 0) {
+      // No assignments exist
+      console.log("PTO Edit - No assignments found, clearing assigned employees");
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       setAssignedEmployees([]);
       return;
     }
 
     // Create fallback employees immediately to preserve assignments
+<<<<<<< HEAD
     const assignedUserIds = existingAssignments.map(
       (assignment: any) => assignment.userId,
     );
+=======
+    const assignedUserIds = existingAssignments.map((assignment: any) => assignment.userId);
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     const fallbackEmployees = existingAssignments.map((assignment: any) => ({
       user_id: assignment.userId,
       id: assignment.userId,
@@ -210,16 +244,25 @@ export default function PTOVariantForm({
       leaveId: assignment.userId,
       isDifferentlyAbled: false,
       lastWorkingDay: null,
+<<<<<<< HEAD
       employee_number: assignment.userId,
+=======
+      employee_number: assignment.userId
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     }));
 
     if (allEmployees.length > 0) {
       // Try to match with external API employee data if available
+<<<<<<< HEAD
       const assignedEmployeeData = allEmployees.filter((emp) => {
+=======
+      const assignedEmployeeData = allEmployees.filter(emp => {
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
         const userIdMatch = assignedUserIds.includes(emp.user_id);
         const idMatch = assignedUserIds.includes(emp.id);
         return userIdMatch || idMatch;
       });
+<<<<<<< HEAD
 
       if (assignedEmployeeData.length > 0) {
         console.log(
@@ -232,13 +275,25 @@ export default function PTOVariantForm({
         console.log(
           "PTO Edit - No matches found in external API, using fallback employees",
         );
+=======
+      
+      if (assignedEmployeeData.length > 0) {
+        console.log("PTO Edit - Matched", assignedEmployeeData.length, "employees from external API");
+        setAssignedEmployees(assignedEmployeeData);
+      } else {
+        console.log("PTO Edit - No matches found in external API, using fallback employees");
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
         setAssignedEmployees(fallbackEmployees);
       }
     } else {
       // External API not loaded yet, use fallback to preserve assignments
+<<<<<<< HEAD
       console.log(
         "PTO Edit - External API not loaded, using fallback employees to preserve assignments",
       );
+=======
+      console.log("PTO Edit - External API not loaded, using fallback employees to preserve assignments");
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       setAssignedEmployees(fallbackEmployees);
     }
   }, [existingAssignments, variant?.id]);

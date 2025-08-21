@@ -11,8 +11,13 @@ export interface ExternalEmployee {
   email?: string;
   mobile?: string;
   gender?: string;
+<<<<<<< HEAD
   type_id_0?: string; // Location
   type_id_1?: string; // Department
+=======
+  type_id_0?: string;  // Location
+  type_id_1?: string;  // Department
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
   date_of_joining?: string;
 }
 
@@ -59,9 +64,15 @@ export function useExternalEmployeeData() {
           email: emp.email,
           mobile: emp.Mobile_number_1,
           gender: emp.gender_name,
+<<<<<<< HEAD
           date_of_joining: emp.date_of_joining, // Include joining date for pro-rata calculations
           type_id_0: emp.type_id_0, // Location field
           type_id_1: emp.type_id_1, // Department field
+=======
+          date_of_joining: emp.date_of_joining,  // Include joining date for pro-rata calculations
+          type_id_0: emp.type_id_0,  // Location field
+          type_id_1: emp.type_id_1   // Department field
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
         }));
 
         console.log(

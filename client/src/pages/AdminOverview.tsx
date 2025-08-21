@@ -31,15 +31,23 @@ export default function AdminOverview() {
   // Get work pattern data for leave calculations (keep this for other functionality)  
   const { workPattern, holidays: workPatternHolidays, isHoliday: workPatternIsHoliday, isWorkingDay, getHolidayDetails: workPatternGetHolidayDetails } = useWorkPattern();
 
+<<<<<<< HEAD
 
 
+=======
+  
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
   // Fetch holidays from external API (same as Holidays page)
   const { data: allHolidaysData } = useQuery({
     queryKey: ['/external/holidays'],
     queryFn: async () => {
       const jwtToken = localStorage.getItem('jwt_token');
       console.log('🔑 [AdminOverview External Holidays] JWT token found:', !!jwtToken);
+<<<<<<< HEAD
 
+=======
+      
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       if (!jwtToken) {
         throw new Error('JWT token not found in localStorage');
       }
@@ -77,7 +85,11 @@ export default function AdminOverview() {
   const allHolidays = allHolidaysData && allHolidaysData.length > 0 
     ? allHolidaysData 
     : (dbHolidays || []);
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
   // Filter holidays based on user's work pattern selectedHolidays (same as Holidays page)
   const filteredHolidays = workPattern && workPattern.selectedHolidays 
     ? allHolidays.filter((holiday: any) => workPattern.selectedHolidays.includes(holiday.id))
@@ -415,7 +427,11 @@ export default function AdminOverview() {
   // Get current requests to display
   const getCurrentRequests = () => {
     let requests = leaveRequests as any[];
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     if (activeRequestTab === "BTO") {
       requests = ptoRequests as any[];
     } else if (activeRequestTab === "Comp-off") {
@@ -1060,10 +1076,17 @@ export default function AdminOverview() {
                   console.log('[AdminOverview] All holidays:', allHolidays);
                   console.log('[AdminOverview] Filtered holidays:', filteredHolidays);
                   console.log('[AdminOverview] Work pattern selected holidays:', workPattern?.selectedHolidays);
+<<<<<<< HEAD
 
                   // Use the same logic as Holidays page
                   const holidaysToDisplay = filteredHolidays;
 
+=======
+                  
+                  // Use the same logic as Holidays page
+                  const holidaysToDisplay = filteredHolidays;
+                  
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                   if (!holidaysToDisplay || holidaysToDisplay.length === 0) {
                     return (
                       <div className="text-center py-4 text-muted-foreground">
@@ -1132,6 +1155,7 @@ export default function AdminOverview() {
               </div>
             </CardContent>
           </Card>
+<<<<<<< HEAD
         </div>
 
         {/* Admin Reports Section */}
@@ -1415,6 +1439,12 @@ export default function AdminOverview() {
           </Card>
         </div>
 
+=======
+        </div>
+
+
+
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       </div>
     </Layout>
   );

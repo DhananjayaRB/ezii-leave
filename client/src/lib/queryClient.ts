@@ -62,6 +62,7 @@ export const getQueryFn: <T>(options: {
   ({ on401: unauthorizedBehavior }) =>
   async ({ queryKey }) => {
     const orgId = OrgContext.getOrgId();
+<<<<<<< HEAD
     console.log(
       `[Query Request] Sending X-Org-Id header: ${orgId} for GET ${queryKey[0]}`,
     );
@@ -79,6 +80,21 @@ export const getQueryFn: <T>(options: {
       );
     }
 
+=======
+    console.log(`[Query Request] Sending X-Org-Id header: ${orgId} for GET ${queryKey[0]}`);
+    
+    const headers: Record<string, string> = {
+      "X-Org-Id": orgId,
+    };
+    
+    // Add JWT token for authenticated requests
+    const jwtToken = localStorage.getItem('jwt_token');
+    if (jwtToken) {
+      headers["Authorization"] = `Bearer ${jwtToken}`;
+      console.log(`[Query Request] Adding Authorization header with JWT token for ${queryKey[0]}`);
+    }
+    
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     const res = await fetch(queryKey[0] as string, {
       headers,
       credentials: "include",

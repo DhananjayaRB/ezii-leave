@@ -112,7 +112,11 @@ export default function ImportLeaveDataSetup({ onNext, onPrevious, isLast, isLoa
       const formData = new FormData();
       formData.append('file', selectedFile);
       formData.append('importType', importType);
+<<<<<<< HEAD
 
+=======
+      
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       // CRITICAL FIX: Pass JWT token for ALL import types (balances and transactions)
       const jwtToken = localStorage.getItem('jwt_token');
       if (jwtToken) {
@@ -121,17 +125,28 @@ export default function ImportLeaveDataSetup({ onNext, onPrevious, isLast, isLoa
       } else {
         console.warn(`[ImportSetup] ⚠️ No JWT token found - ${importType} import may fail`);
       }
+<<<<<<< HEAD
 
+=======
+      
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       const response = await apiRequest("POST", "/api/import-leave-data/execute", formData);
       return response.json();
     },
     onSuccess: (response: any) => {
       queryClient.invalidateQueries({ queryKey: ["/api/employee-leave-balances"] });
       queryClient.invalidateQueries({ queryKey: ["/api/leave-balance-transactions"] });
+<<<<<<< HEAD
 
       // Create detailed success message with import statistics
       let description = `Successfully imported ${response.imported} of ${response.total} records`;
 
+=======
+      
+      // Create detailed success message with import statistics
+      let description = `Successfully imported ${response.imported} of ${response.total} records`;
+      
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       if (response.importStats) {
         const skipped = response.total - response.imported;
         if (skipped > 0) {
@@ -153,7 +168,11 @@ export default function ImportLeaveDataSetup({ onNext, onPrevious, isLast, isLoa
           }
         }
       }
+<<<<<<< HEAD
 
+=======
+      
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       toast({
         title: "Import Successful",
         description,

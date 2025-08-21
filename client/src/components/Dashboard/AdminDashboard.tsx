@@ -190,9 +190,13 @@ export default function AdminDashboard() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-600">BTO</p>
+<<<<<<< HEAD
                   <p className="text-2xl font-semibold text-gray-800">
                     {ptoEnabled}
                   </p>
+=======
+                  <p className="text-2xl font-semibold text-gray-800">{ptoEnabled}</p>
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                 </div>
                 <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
                   <Plane className="w-6 h-6 text-green-500" />
@@ -240,12 +244,19 @@ export default function AdminDashboard() {
                 >
                   Leaves ({allRequests.length})
                 </Button>
+<<<<<<< HEAD
                 <Button
                   variant={activeRequestTab === "BTO" ? "default" : "outline"}
                   size="sm"
                   className={
                     activeRequestTab === "BTO" ? "bg-gray-900 text-white" : ""
                   }
+=======
+                <Button 
+                  variant={activeRequestTab === "BTO" ? "default" : "outline"} 
+                  size="sm"
+                  className={activeRequestTab === "BTO" ? "bg-gray-900 text-white" : ""}
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                   onClick={() => setActiveRequestTab("BTO")}
                 >
                   BTO (0)
@@ -318,9 +329,13 @@ export default function AdminDashboard() {
                 <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Plane className="w-8 h-8 text-gray-400" />
                 </div>
+<<<<<<< HEAD
                 <h3 className="text-lg font-medium text-gray-900 mb-2">
                   No BTO requests
                 </h3>
+=======
+                <h3 className="text-lg font-medium text-gray-900 mb-2">No BTO requests</h3>
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                 <p className="text-gray-600">
                   BTO requests will appear here when submitted by employees.
                 </p>

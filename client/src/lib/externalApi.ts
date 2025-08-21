@@ -49,6 +49,7 @@ export async function fetchEmployeeData(): Promise<ExternalEmployee[]> {
   console.log("[ExternalAPI] Starting fetchEmployeeData...");
 
   // Get current JWT token from localStorage
+<<<<<<< HEAD
   const token = localStorage.getItem("jwt_token");
 
   console.log("[ExternalAPI] JWT token available:", !!token);
@@ -78,6 +79,27 @@ export async function fetchEmployeeData(): Promise<ExternalEmployee[]> {
     );
     window.location.href = "https://services.resolvepay.in";
     throw new Error("JWT token required. Redirecting to authentication...");
+=======
+  const token = localStorage.getItem('jwt_token');
+  
+  console.log('[ExternalAPI] JWT token available:', !!token);
+  console.log('[ExternalAPI] Token length:', token?.length || 0);
+  console.log('[ExternalAPI] Token preview:', token?.substring(0, 50) + '...');
+  console.log('[ExternalAPI] Full Authorization header:', `Bearer ${token}`);
+  
+  // Check if we're currently on the token setup route
+  const isTokenSetupRoute = window.location.pathname.startsWith('/id/');
+  
+  if (!token || token.trim() === '' || token === 'null' || token === 'undefined') {
+    if (isTokenSetupRoute) {
+      console.log('[ExternalAPI] On token setup route, skipping redirect');
+      throw new Error('JWT token being processed. Please wait...');
+    }
+    console.error('[ExternalAPI] Invalid or missing JWT token, redirecting to authentication...');
+    console.log('[ExternalAPI] Available localStorage keys:', Object.keys(localStorage));
+    window.location.href = 'https://services.resolvepay.in';
+    throw new Error('JWT token required. Redirecting to authentication...');
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
   }
 
   const payload = {

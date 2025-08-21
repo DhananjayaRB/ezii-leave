@@ -15,9 +15,15 @@ export default function AdminRoles() {
         </div>
 
         {/* Reuse the RolesSetup component */}
+<<<<<<< HEAD
         <RolesSetup
           onNext={() => {}}
           onPrevious={() => {}}
+=======
+        <RolesSetup 
+          onNext={() => {}} 
+          onPrevious={() => {}} 
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
           showNavigation={false}
         />
       </div>

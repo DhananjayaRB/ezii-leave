@@ -616,8 +616,13 @@ export default function CompOffVariantForm({
       const response = await fetch("/api/employee-assignments/bulk", {
         method: "POST",
         headers: {
+<<<<<<< HEAD
           "Content-Type": "application/json",
           "X-Org-Id": localStorage.getItem("org_id") || "",
+=======
+          'Content-Type': 'application/json',
+          'X-Org-Id': localStorage.getItem('org_id') || '',
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
         },
         body: JSON.stringify({
           leaveVariantId: variant.id,

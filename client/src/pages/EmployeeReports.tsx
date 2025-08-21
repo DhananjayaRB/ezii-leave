@@ -74,6 +74,7 @@ export default function EmployeeReports() {
   // Map URL params to report types
   const mapReportType = (type: string) => {
     switch (type) {
+<<<<<<< HEAD
       case "history":
         return "my-leave-history";
       case "balances":
@@ -82,6 +83,12 @@ export default function EmployeeReports() {
         return "my-withdrawal-history";
       default:
         return "my-leave-history";
+=======
+      case "history": return "my-leave-history";
+      case "balances": return "my-leave-balances";  
+      case "withdrawal-history": return "my-withdrawal-history";
+      default: return "my-leave-history";
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     }
   };
 
@@ -133,13 +140,18 @@ export default function EmployeeReports() {
 
   const getMyBalanceData = () => {
     // Use EXACT SAME filtering logic as LeaveApplications.tsx
+<<<<<<< HEAD
     const assignmentsArray = Array.isArray(allAssignments)
       ? allAssignments
       : [];
+=======
+    const assignmentsArray = Array.isArray(allAssignments) ? allAssignments : [];
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     const variantsArray = Array.isArray(leaveVariants) ? leaveVariants : [];
     const balancesArray = (myLeaveBalances as any[]) || [];
     const transactionsArray = (myTransactions as any[]) || [];
     const requestsArray = (myLeaveRequests as any[]) || [];
+<<<<<<< HEAD
 
     // Filter user assignments and available leave variants (EXACT same logic as LeaveApplications)
     const userAssignments = assignmentsArray.filter(
@@ -157,11 +169,27 @@ export default function EmployeeReports() {
     );
 
     console.log("🔍 [Employee Reports Assignment Filter]:", {
+=======
+    
+    // Filter user assignments and available leave variants (EXACT same logic as LeaveApplications)
+    const userAssignments = assignmentsArray.filter(
+      (assignment: any) => assignment.userId === currentUserId && assignment.assignmentType === 'leave_variant'
+    );
+    
+    const assignedVariantIds = userAssignments.map((assignment: any) => assignment.leaveVariantId);
+    
+    const availableLeaveVariants = variantsArray.filter(
+      (variant: any) => assignedVariantIds.includes(variant.id)
+    );
+    
+    console.log('🔍 [Employee Reports Assignment Filter]:', {
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       userId: currentUserId,
       totalAssignments: assignmentsArray.length,
       userAssignments: userAssignments.length,
       assignedVariantIds,
       availableVariants: availableLeaveVariants.length,
+<<<<<<< HEAD
       variantNames: availableLeaveVariants.map(
         (v: any) => v.leaveVariantName || v.leaveTypeName,
       ),
@@ -219,10 +247,50 @@ export default function EmployeeReports() {
 
       let eligibility = 0;
 
+=======
+      variantNames: availableLeaveVariants.map((v: any) => v.leaveVariantName || v.leaveTypeName)
+    });
+    
+    return availableLeaveVariants.map((variant: any) => {
+      const balance = balancesArray.find((b: any) => b.leaveVariantId === variant.id);
+      const transactions = transactionsArray.filter((t: any) => t.leaveVariantId === variant.id);
+      
+      // Calculate opening balance from imported Excel data transactions (same logic as LeaveApplications)
+      const openingBalanceTransactions = transactionsArray
+        .filter((t: any) => {
+          const isOpeningBalance = t.transactionType === 'grant' && 
+                                 t.description?.toLowerCase().includes('opening balance imported from excel');
+          const isForCurrentUser = t.userId === currentUserId;
+          
+          if (!isOpeningBalance || !isForCurrentUser) return false;
+          
+          // Direct variant match (preferred)
+          if (t.leaveVariantId === variant.id) return true;
+          
+          // Cross-reference by leave type
+          const transactionVariant = availableLeaveVariants.find((v: any) => v.id === t.leaveVariantId);
+          if (transactionVariant?.leaveTypeName === variant.leaveTypeName) return true;
+          if (transactionVariant?.leaveTypeId === variant.leaveTypeId) return true;
+          
+          return false;
+        })
+        .sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      
+      const openingBalance = openingBalanceTransactions.reduce((sum: number, t: any) => 
+        sum + parseFloat(t.amount || '0'), 0);
+      
+      // Calculate eligibility based on leave grant method (same logic as LeaveApplications)
+      const isAfterEarning = variant.grantLeaves === 'after_earning';
+      const totalEntitlementInDays = balance ? parseFloat(balance.totalEntitlement || '0') : 0;
+      
+      let eligibility = 0;
+      
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       if (isAfterEarning) {
         // "After Earning" - calculate based on annual entitlement and months completed
         const currentMonth = new Date().getMonth() + 1;
         const monthsCompleted = currentMonth - 1;
+<<<<<<< HEAD
         const annualEntitlement =
           totalEntitlementInDays || variant.annualLeaveAllocation || 0;
         eligibility = (annualEntitlement / 12) * monthsCompleted;
@@ -232,12 +300,22 @@ export default function EmployeeReports() {
           totalEntitlementInDays || variant.annualLeaveAllocation || 0;
 
         if (variant.grantFrequency === "per_year") {
+=======
+        const annualEntitlement = totalEntitlementInDays || variant.annualLeaveAllocation || 0;
+        eligibility = (annualEntitlement / 12) * monthsCompleted;
+      } else {
+        // "In Advance" - check grant frequency
+        const annualEntitlement = totalEntitlementInDays || variant.annualLeaveAllocation || 0;
+        
+        if (variant.grantFrequency === 'per_year') {
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
           eligibility = annualEntitlement;
         } else {
           const currentMonth = new Date().getMonth() + 1;
           eligibility = (annualEntitlement / 12) * currentMonth;
         }
       }
+<<<<<<< HEAD
 
       const totalEligibility = eligibility + openingBalance;
 
@@ -295,11 +373,55 @@ export default function EmployeeReports() {
       return {
         leaveType:
           variant.leaveTypeName || variant.leaveVariantName || "Unknown",
+=======
+      
+      const totalEligibility = eligibility + openingBalance;
+      
+      // Calculate availed using same logic as LeaveApplications
+      const isBeforeWorkflow = variant.leaveBalanceDeductionBefore === true;
+      
+      // Match requests to variant (handle null leaveVariantId)
+      const matchingRequests = requestsArray.filter((req: any) => 
+        req.leaveVariantId === variant.id || 
+        ((req.leaveVariantId === null || req.leaveVariantId === undefined) && req.leaveTypeId === variant.leaveTypeId)
+      );
+      
+      // Count approved requests
+      const approvedRequests = matchingRequests.filter((req: any) => req.status === 'approved');
+      const approvedDays = approvedRequests.reduce((sum: number, req: any) => 
+        sum + parseFloat(req.workingDays || '0'), 0);
+      
+      // For "Before Workflow" types, add pending requests
+      let pendingDays = 0;
+      if (isBeforeWorkflow) {
+        const pendingRequests = matchingRequests.filter((req: any) => req.status === 'pending');
+        pendingDays = pendingRequests.reduce((sum: number, req: any) => 
+          sum + parseFloat(req.workingDays || '0'), 0);
+      }
+      
+      // Add imported leave usage from Excel
+      const importedAvailed = transactions.filter((t: any) => 
+        t.description?.toLowerCase().includes('imported leave transaction') && 
+        t.description?.toLowerCase().includes('availed') &&
+        (t.transactionType === 'deduction' || t.transactionType === 'debit')
+      ).reduce((sum: number, t: any) => 
+        sum + Math.abs(parseFloat(t.amount || '0')), 0);
+      
+      const totalAvailed = approvedDays + pendingDays + importedAvailed;
+      const closingBalance = totalEligibility - totalAvailed;
+      
+      return {
+        leaveType: variant.leaveTypeName || variant.leaveVariantName || 'Unknown',
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
         entitlement: eligibility,
         used: totalAvailed,
         carryForward: openingBalance,
         available: closingBalance,
+<<<<<<< HEAD
         year: new Date().getFullYear(),
+=======
+        year: new Date().getFullYear()
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       };
     });
   };
@@ -339,6 +461,7 @@ export default function EmployeeReports() {
   const withdrawalRequests = getWithdrawalRequests();
 
   // Debug the current state
+<<<<<<< HEAD
   console.log("=== EMPLOYEE REPORTS DEBUG ===");
   console.log("URL reportType:", reportType);
   console.log("selectedReport:", selectedReport);
@@ -347,6 +470,16 @@ export default function EmployeeReports() {
   console.log("myLeaveRequests length:", (myLeaveRequests as any[]).length);
   console.log("myLeaveBalances length:", (myLeaveBalances as any[]).length);
   console.log("================================");
+=======
+  console.log('=== EMPLOYEE REPORTS DEBUG ===');
+  console.log('URL reportType:', reportType);
+  console.log('selectedReport:', selectedReport);
+  console.log('localStorage user_id:', localStorage.getItem('user_id'));
+  console.log('currentUserId variable:', currentUserId);
+  console.log('myLeaveRequests length:', (myLeaveRequests as any[]).length);
+  console.log('myLeaveBalances length:', (myLeaveBalances as any[]).length);
+  console.log('================================');
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
 
   const exportData = () => {
     const dataToExport = {
@@ -526,9 +659,13 @@ export default function EmployeeReports() {
                     </TableCell>
                     <TableCell>{balance.entitlement.toFixed(1)}</TableCell>
                     <TableCell>{balance.used.toFixed(1)}</TableCell>
+<<<<<<< HEAD
                     <TableCell className="font-medium">
                       {balance.available.toFixed(1)}
                     </TableCell>
+=======
+                    <TableCell className="font-medium">{balance.available.toFixed(1)}</TableCell>
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                     <TableCell>
                       <span
                         className={`font-medium ${
@@ -654,9 +791,13 @@ export default function EmployeeReports() {
         <div className="mb-6">
           <div className="flex flex-wrap gap-2">
             <Button
+<<<<<<< HEAD
               variant={
                 selectedReport === "my-leave-history" ? "default" : "outline"
               }
+=======
+              variant={selectedReport === "my-leave-history" ? "default" : "outline"}
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
               onClick={() => setSelectedReport("my-leave-history")}
             >
               <FileText className="h-4 w-4 mr-2" />

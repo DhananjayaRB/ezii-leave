@@ -47,6 +47,9 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
+  
+  // Check JWT token expiration
+  useJWTTokenCheck();
 
   // Check JWT token expiration
   useJWTTokenCheck();

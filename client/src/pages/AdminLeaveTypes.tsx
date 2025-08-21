@@ -16,9 +16,15 @@ export default function AdminLeaveTypes() {
         </div>
 
         {/* Reuse the LeaveTypesSetup component */}
+<<<<<<< HEAD
         <LeaveTypesSetup
           onNext={() => {}}
           onPrevious={() => {}}
+=======
+        <LeaveTypesSetup 
+          onNext={() => {}} 
+          onPrevious={() => {}} 
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
           showNavigation={false}
         />
       </div>

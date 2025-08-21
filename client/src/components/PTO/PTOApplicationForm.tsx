@@ -133,24 +133,40 @@ export default function BTOApplicationForm({
     queryKey: ['/api/pto-variants/user', currentUserId],
     queryFn: async () => {
       console.log("BTO Form - Fetching variants for user:", currentUserId);
+<<<<<<< HEAD
 
       // First get all BTO variants  
       const orgId = localStorage.getItem('org_id') || '13';
       console.log("BTO Form - Using org_id:", orgId);
 
+=======
+      
+      // First get all BTO variants  
+      const orgId = localStorage.getItem('org_id') || '13';
+      console.log("BTO Form - Using org_id:", orgId);
+      
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       const variants = await fetch('/api/pto-variants', {
         credentials: 'include',
         headers: {
           'X-Org-Id': orgId
         }
       }).then(res => res.json());
+<<<<<<< HEAD
 
+=======
+      
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       console.log("BTO Form - All variants:", variants);
 
       // Filter variants assigned to current user
       const userVariants = [];
       let hasAnyAssignments = false;
+<<<<<<< HEAD
 
+=======
+      
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       for (const variant of variants) {
         try {
           const assignmentsResponse = await fetch(`/api/employee-assignments/pto/${variant.id}`, {
@@ -162,15 +178,25 @@ export default function BTOApplicationForm({
           if (assignmentsResponse.ok) {
             const assignments = await assignmentsResponse.json();
             console.log(`BTO Form - Assignments for variant ${variant.id}:`, assignments);
+<<<<<<< HEAD
 
+=======
+            
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
             if (assignments.length > 0) {
               hasAnyAssignments = true;
               const isAssigned = assignments.some((assignment: any) => 
                 assignment.userId === currentUserId || assignment.userId === currentUserId.toString()
               );
+<<<<<<< HEAD
 
               console.log(`BTO Form - User ${currentUserId} assigned to variant ${variant.id}:`, isAssigned);
 
+=======
+              
+              console.log(`BTO Form - User ${currentUserId} assigned to variant ${variant.id}:`, isAssigned);
+              
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
               if (isAssigned) {
                 userVariants.push(variant);
               }
@@ -180,13 +206,21 @@ export default function BTOApplicationForm({
           console.error(`Error checking assignments for variant ${variant.id}:`, error);
         }
       }
+<<<<<<< HEAD
 
+=======
+      
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       // If no assignments exist for any variant, show all variants (for testing/initial setup)
       if (!hasAnyAssignments && variants.length > 0) {
         console.log("BTO Form - No assignments found for any variant, showing all variants for testing");
         return variants;
       }
+<<<<<<< HEAD
 
+=======
+      
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       console.log("BTO Form - Final user variants:", userVariants);
       return userVariants;
     },
@@ -373,6 +407,7 @@ export default function BTOApplicationForm({
 
     // Calculate working days for BTO request
     let workingDays = 1; // Default for single day BTO
+<<<<<<< HEAD
 
     // For date range BTO (future enhancement if needed)
     if (data.requestDate) {
@@ -382,6 +417,17 @@ export default function BTOApplicationForm({
       const requestDateStr = format(data.requestDate, "yyyy-MM-dd");
       console.log('✅ Using dynamic working days calculation for BTO:', workingDays);
 
+=======
+    
+    // For date range BTO (future enhancement if needed)
+    if (data.requestDate) {
+      workingDays = calculateWorkingDays(data.requestDate, data.requestDate, filteredHolidays);
+      
+      // Use dynamic holiday validation for BTO requests
+      const requestDateStr = format(data.requestDate, "yyyy-MM-dd");
+      console.log('✅ Using dynamic working days calculation for BTO:', workingDays);
+      
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       console.log('BTO Working Days Calculation:', {
         requestDate: requestDateStr,
         calculatedWorkingDays: workingDays
@@ -432,7 +478,11 @@ export default function BTOApplicationForm({
 
   const getAvailableTimeTypes = () => {
     if (!selectedVariant) return [];
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     console.log("BTO Form - Selected variant time options:", {
       halfDay: selectedVariant.halfDay,
       quarterDay: selectedVariant.quarterDay,
@@ -440,7 +490,11 @@ export default function BTOApplicationForm({
     });
 
     const types = [];
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     // BTO units are specific - only add enabled options from variant
     if (selectedVariant.halfDay) {
       types.push({ value: "half_day", label: "Half Day" });
@@ -453,7 +507,11 @@ export default function BTOApplicationForm({
     if (selectedVariant.hours) {
       types.push({ value: "hours", label: "Hours" });
     }
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     console.log("BTO Form - Available BTO time types:", types);
     return types;
   };

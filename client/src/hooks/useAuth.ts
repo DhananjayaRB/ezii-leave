@@ -15,7 +15,11 @@ export function useAuth() {
   useEffect(() => {
     const jwtToken = localStorage.getItem('jwt_token');
     const isTokenSetupRoute = window.location.pathname.startsWith('/id/');
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     if (!jwtToken || jwtToken.trim() === '' || jwtToken === 'null' || jwtToken === 'undefined') {
       if (!isTokenSetupRoute && !isLoading) {
         console.log('[useAuth] JWT token missing, redirecting to authentication service...');

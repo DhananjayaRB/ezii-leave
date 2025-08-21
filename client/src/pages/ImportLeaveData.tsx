@@ -120,6 +120,7 @@ export default function ImportLeaveData() {
       if (!selectedFile) throw new Error("No file selected");
 
       const formData = new FormData();
+<<<<<<< HEAD
       formData.append("file", selectedFile);
       formData.append("importType", importType);
 
@@ -154,6 +155,30 @@ export default function ImportLeaveData() {
       // Create detailed success message with import statistics
       let description = `Successfully imported ${response.imported} of ${response.total} records`;
 
+=======
+      formData.append('file', selectedFile);
+      formData.append('importType', importType);
+      
+      // CRITICAL FIX: Pass JWT token for ALL import types (balances and transactions)
+      const jwtToken = localStorage.getItem('jwt_token');
+      if (jwtToken) {
+        formData.append('jwtToken', jwtToken);
+        console.log(`[ImportLeaveData] ✅ Passing JWT token for ${importType} import`);
+      } else {
+        console.warn(`[ImportLeaveData] ⚠️ No JWT token found - ${importType} import may fail`);
+      }
+      
+      const response = await apiRequest("POST", "/api/import-leave-data/execute", formData);
+      return response.json();
+    },
+    onSuccess: (response: any) => {
+      queryClient.invalidateQueries({ queryKey: ["/api/employee-leave-balances"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/leave-balance-transactions"] });
+      
+      // Create detailed success message with import statistics
+      let description = `Successfully imported ${response.imported} of ${response.total} records`;
+      
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       if (response.importStats) {
         const skipped = response.total - response.imported;
         if (skipped > 0) {
@@ -175,7 +200,11 @@ export default function ImportLeaveData() {
           }
         }
       }
+<<<<<<< HEAD
 
+=======
+      
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       toast({
         title: "Import Successful",
         description,

@@ -82,6 +82,7 @@ export default function AdminReports() {
   // Map URL params to report types
   const mapReportType = (type: string) => {
     switch (type) {
+<<<<<<< HEAD
       case "balances":
         return "balance-report";
       case "leave-availed":
@@ -96,6 +97,15 @@ export default function AdminReports() {
         return "comp-off-report";
       default:
         return "balance-report";
+=======
+      case "balances": return "balance-report";
+      case "leave-availed": return "leave-availed-report";
+      case "withdrawal-rejection": return "withdrawal-rejection-report";
+      case "collaborative-leave": return "collaborative-leave-report";
+      case "bto-report": return "bto-report";
+      case "comp-off-report": return "comp-off-report";
+      default: return "balance-report";
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     }
   };
 
@@ -180,6 +190,24 @@ export default function AdminReports() {
     queryKey: ["/api/pto-variants"],
     enabled: currentView === "admin",
   });
+
+  // Fetch BTO and Comp-off data for reports
+  const { data: btoRequests = [] } = useQuery({
+    queryKey: ["/api/pto-requests"],
+    enabled: currentView === 'admin',
+  });
+
+  const { data: compOffRequests = [] } = useQuery({
+    queryKey: ["/api/comp-off-requests"],
+    enabled: currentView === 'admin',
+  });
+
+  const { data: btoVariants = [] } = useQuery({
+    queryKey: ["/api/pto-variants"],
+    enabled: currentView === 'admin',
+  });
+
+
 
   // Apply reporting manager filtering to data
   const getFilteredData = () => {
@@ -1166,6 +1194,7 @@ export default function AdminReports() {
 
       case "bto-report":
         let btoData = btoRequests as any[];
+<<<<<<< HEAD
 
         // Apply filters to BTO data
         if (btoEmployeeFilter) {
@@ -1179,11 +1208,26 @@ export default function AdminReports() {
           btoData = btoData.filter(
             (req: any) => req.status === btoStatusFilter,
           );
+=======
+        
+        // Apply filters to BTO data
+        if (btoEmployeeFilter) {
+          btoData = btoData.filter((req: any) => 
+            getEmployeeName(req.userId).toLowerCase().includes(btoEmployeeFilter.toLowerCase())
+          );
+        }
+        if (btoStatusFilter !== "all") {
+          btoData = btoData.filter((req: any) => req.status === btoStatusFilter);
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
         }
         if (btoDateFilter !== "all") {
           const now = new Date();
           const filterDate = new Date();
+<<<<<<< HEAD
 
+=======
+          
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
           switch (btoDateFilter) {
             case "last-30":
               filterDate.setDate(now.getDate() - 30);
@@ -1197,6 +1241,7 @@ export default function AdminReports() {
             default:
               filterDate.setFullYear(1900);
           }
+<<<<<<< HEAD
 
           btoData = btoData.filter(
             (req: any) =>
@@ -1207,6 +1252,16 @@ export default function AdminReports() {
           btoData = btoData.filter(
             (req: any) =>
               req.ptoVariantName?.toLowerCase() === btoTypeFilter.toLowerCase(),
+=======
+          
+          btoData = btoData.filter((req: any) => 
+            req.createdAt && new Date(req.createdAt) >= filterDate
+          );
+        }
+        if (btoTypeFilter !== "all") {
+          btoData = btoData.filter((req: any) => 
+            req.ptoVariantName?.toLowerCase() === btoTypeFilter.toLowerCase()
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
           );
         }
 
@@ -1231,10 +1286,14 @@ export default function AdminReports() {
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Status</label>
+<<<<<<< HEAD
                     <Select
                       value={btoStatusFilter}
                       onValueChange={setBtoStatusFilter}
                     >
+=======
+                    <Select value={btoStatusFilter} onValueChange={setBtoStatusFilter}>
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                       <SelectTrigger>
                         <SelectValue placeholder="All Status" />
                       </SelectTrigger>
@@ -1248,10 +1307,14 @@ export default function AdminReports() {
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Date Range</label>
+<<<<<<< HEAD
                     <Select
                       value={btoDateFilter}
                       onValueChange={setBtoDateFilter}
                     >
+=======
+                    <Select value={btoDateFilter} onValueChange={setBtoDateFilter}>
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                       <SelectTrigger>
                         <SelectValue placeholder="Select period" />
                       </SelectTrigger>
@@ -1265,20 +1328,28 @@ export default function AdminReports() {
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">BTO Type</label>
+<<<<<<< HEAD
                     <Select
                       value={btoTypeFilter}
                       onValueChange={setBtoTypeFilter}
                     >
+=======
+                    <Select value={btoTypeFilter} onValueChange={setBtoTypeFilter}>
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                       <SelectTrigger>
                         <SelectValue placeholder="All types" />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="all">All Types</SelectItem>
                         {btoVariants?.map((variant: any) => (
+<<<<<<< HEAD
                           <SelectItem
                             key={variant.id}
                             value={variant.name.toLowerCase()}
                           >
+=======
+                          <SelectItem key={variant.id} value={variant.name.toLowerCase()}>
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                             {variant.name}
                           </SelectItem>
                         ))}
@@ -1288,11 +1359,18 @@ export default function AdminReports() {
                 </div>
                 <div className="flex justify-between items-center pt-4 border-t">
                   <div className="text-sm text-muted-foreground">
+<<<<<<< HEAD
                     Showing {btoData.length} of {(btoRequests as any[]).length}{" "}
                     BTO requests
                   </div>
                   <Button
                     variant="outline"
+=======
+                    Showing {btoData.length} of {(btoRequests as any[]).length} BTO requests
+                  </div>
+                  <Button 
+                    variant="outline" 
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                     size="sm"
                     onClick={() => {
                       setBtoEmployeeFilter("");
@@ -1306,6 +1384,7 @@ export default function AdminReports() {
                 </div>
               </CardContent>
             </Card>
+<<<<<<< HEAD
 
             <Card>
               <CardContent className="p-0">
@@ -1497,11 +1576,142 @@ export default function AdminReports() {
                 </div>
               </CardContent>
             </Card>
+=======
+            
+            <Card>
+            <CardContent className="p-0">
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow className="bg-gray-50">
+                      <TableHead className="font-semibold">Employee Name</TableHead>
+                      <TableHead className="font-semibold">Application ID</TableHead>
+                      <TableHead className="font-semibold">BTO Type</TableHead>
+                      <TableHead className="font-semibold">From Date</TableHead>
+                      <TableHead className="font-semibold">To Date</TableHead>
+                      <TableHead className="font-semibold">Total Hours</TableHead>
+                      <TableHead className="font-semibold">Status</TableHead>
+                      <TableHead className="font-semibold">Applied Date</TableHead>
+                      <TableHead className="font-semibold">Reason</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {(() => {
+                      
+                      if (btoData.length === 0) {
+                        return (
+                          <TableRow>
+                            <TableCell colSpan={9} className="py-8 px-4 text-center text-muted-foreground">
+                              No BTO requests found for this organization
+                            </TableCell>
+                          </TableRow>
+                        );
+                      }
+
+                      return btoData.map((request: any, index: number) => (
+                        <TableRow key={request.id || index} className="hover:bg-gray-50">
+                          <TableCell className="font-medium">
+                            {getEmployeeName(request.userId)}
+                          </TableCell>
+                          <TableCell>
+                            <Badge variant="outline" className="bg-blue-50 text-blue-800">
+                              BTO-{request.id}
+                            </Badge>
+                          </TableCell>
+                          <TableCell>
+                            <Badge variant="secondary">
+                              {request.ptoVariantName || 'Unknown'}
+                            </Badge>
+                          </TableCell>
+                          <TableCell>
+                            {request.fromDate ? new Date(request.fromDate).toLocaleDateString('en-US', {
+                              month: 'short',
+                              day: 'numeric', 
+                              year: 'numeric'
+                            }) : 'N/A'}
+                          </TableCell>
+                          <TableCell>
+                            {request.toDate ? new Date(request.toDate).toLocaleDateString('en-US', {
+                              month: 'short',
+                              day: 'numeric',
+                              year: 'numeric'
+                            }) : 'N/A'}
+                          </TableCell>
+                          <TableCell>
+                            <span className="font-mono text-sm">
+                              {request.totalHours || request.hours || 'N/A'}
+                            </span>
+                          </TableCell>
+                          <TableCell>
+                            <Badge 
+                              variant={
+                                request.status === 'approved' ? 'default' :
+                                request.status === 'pending' ? 'secondary' :
+                                request.status === 'rejected' ? 'destructive' : 'outline'
+                              }
+                              className={
+                                request.status === 'approved' ? 'bg-green-100 text-green-800' :
+                                request.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                                request.status === 'rejected' ? 'bg-red-100 text-red-800' : ''
+                              }
+                            >
+                              {request.status?.charAt(0).toUpperCase() + request.status?.slice(1) || 'Unknown'}
+                            </Badge>
+                          </TableCell>
+                          <TableCell className="text-sm text-muted-foreground">
+                            {request.createdAt ? new Date(request.createdAt).toLocaleDateString('en-US', {
+                              month: 'short',
+                              day: 'numeric'
+                            }) : 'N/A'}
+                          </TableCell>
+                          <TableCell className="max-w-xs">
+                            <div className="text-sm text-muted-foreground truncate" title={request.reason}>
+                              {request.reason || 'No reason provided'}
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ));
+                    })()}
+                  </TableBody>
+                </Table>
+              </div>
+              
+              {/* BTO Summary Statistics */}
+              <div className="mt-6 grid grid-cols-1 md:grid-cols-4 gap-4 p-6 bg-gray-50">
+                <div className="bg-blue-50 p-4 rounded-lg">
+                  <div className="text-sm text-blue-600 font-medium">Total BTO Requests</div>
+                  <div className="text-2xl font-bold text-blue-900">
+                    {btoData.length}
+                  </div>
+                </div>
+                <div className="bg-green-50 p-4 rounded-lg">
+                  <div className="text-sm text-green-600 font-medium">Approved</div>
+                  <div className="text-2xl font-bold text-green-900">
+                    {btoData.filter((req: any) => req.status === 'approved').length}
+                  </div>
+                </div>
+                <div className="bg-yellow-50 p-4 rounded-lg">
+                  <div className="text-sm text-yellow-600 font-medium">Pending</div>
+                  <div className="text-2xl font-bold text-yellow-900">
+                    {btoData.filter((req: any) => req.status === 'pending').length}
+                  </div>
+                </div>
+                <div className="bg-red-50 p-4 rounded-lg">
+                  <div className="text-sm text-red-600 font-medium">Rejected</div>
+                  <div className="text-2xl font-bold text-red-900">
+                    {btoData.filter((req: any) => req.status === 'rejected').length}
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
           </div>
         );
 
       case "comp-off-report":
         let compOffData = compOffRequests as any[];
+<<<<<<< HEAD
 
         // Apply filters to Comp-off data
         if (compOffEmployeeFilter) {
@@ -1515,11 +1725,26 @@ export default function AdminReports() {
           compOffData = compOffData.filter(
             (req: any) => req.status === compOffStatusFilter,
           );
+=======
+        
+        // Apply filters to Comp-off data
+        if (compOffEmployeeFilter) {
+          compOffData = compOffData.filter((req: any) => 
+            getEmployeeName(req.userId).toLowerCase().includes(compOffEmployeeFilter.toLowerCase())
+          );
+        }
+        if (compOffStatusFilter !== "all") {
+          compOffData = compOffData.filter((req: any) => req.status === compOffStatusFilter);
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
         }
         if (compOffDateFilter !== "all") {
           const now = new Date();
           const filterDate = new Date();
+<<<<<<< HEAD
 
+=======
+          
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
           switch (compOffDateFilter) {
             case "last-30":
               filterDate.setDate(now.getDate() - 30);
@@ -1533,6 +1758,7 @@ export default function AdminReports() {
             default:
               filterDate.setFullYear(1900);
           }
+<<<<<<< HEAD
 
           compOffData = compOffData.filter(
             (req: any) =>
@@ -1542,6 +1768,16 @@ export default function AdminReports() {
         if (compOffTypeFilter !== "all") {
           compOffData = compOffData.filter((req: any) =>
             req.type?.toLowerCase().includes(compOffTypeFilter.toLowerCase()),
+=======
+          
+          compOffData = compOffData.filter((req: any) => 
+            req.createdAt && new Date(req.createdAt) >= filterDate
+          );
+        }
+        if (compOffTypeFilter !== "all") {
+          compOffData = compOffData.filter((req: any) => 
+            req.type?.toLowerCase().includes(compOffTypeFilter.toLowerCase())
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
           );
         }
 
@@ -1566,10 +1802,14 @@ export default function AdminReports() {
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Status</label>
+<<<<<<< HEAD
                     <Select
                       value={compOffStatusFilter}
                       onValueChange={setCompOffStatusFilter}
                     >
+=======
+                    <Select value={compOffStatusFilter} onValueChange={setCompOffStatusFilter}>
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                       <SelectTrigger>
                         <SelectValue placeholder="All Status" />
                       </SelectTrigger>
@@ -1583,10 +1823,14 @@ export default function AdminReports() {
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Date Range</label>
+<<<<<<< HEAD
                     <Select
                       value={compOffDateFilter}
                       onValueChange={setCompOffDateFilter}
                     >
+=======
+                    <Select value={compOffDateFilter} onValueChange={setCompOffDateFilter}>
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                       <SelectTrigger>
                         <SelectValue placeholder="Select period" />
                       </SelectTrigger>
@@ -1600,10 +1844,14 @@ export default function AdminReports() {
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Comp-off Type</label>
+<<<<<<< HEAD
                     <Select
                       value={compOffTypeFilter}
                       onValueChange={setCompOffTypeFilter}
                     >
+=======
+                    <Select value={compOffTypeFilter} onValueChange={setCompOffTypeFilter}>
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                       <SelectTrigger>
                         <SelectValue placeholder="All types" />
                       </SelectTrigger>
@@ -1618,11 +1866,18 @@ export default function AdminReports() {
                 </div>
                 <div className="flex justify-between items-center pt-4 border-t">
                   <div className="text-sm text-muted-foreground">
+<<<<<<< HEAD
                     Showing {compOffData.length} of{" "}
                     {(compOffRequests as any[]).length} comp-off requests
                   </div>
                   <Button
                     variant="outline"
+=======
+                    Showing {compOffData.length} of {(compOffRequests as any[]).length} comp-off requests
+                  </div>
+                  <Button 
+                    variant="outline" 
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                     size="sm"
                     onClick={() => {
                       setCompOffEmployeeFilter("");
@@ -1636,6 +1891,7 @@ export default function AdminReports() {
                 </div>
               </CardContent>
             </Card>
+<<<<<<< HEAD
 
             <Card>
               <CardContent className="p-0">
@@ -1835,6 +2091,136 @@ export default function AdminReports() {
                 </div>
               </CardContent>
             </Card>
+=======
+            
+            <Card>
+            <CardContent className="p-0">
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow className="bg-gray-50">
+                      <TableHead className="font-semibold">Employee Name</TableHead>
+                      <TableHead className="font-semibold">Application ID</TableHead>
+                      <TableHead className="font-semibold">Type</TableHead>
+                      <TableHead className="font-semibold">Work Date</TableHead>
+                      <TableHead className="font-semibold">Comp-off Date</TableHead>
+                      <TableHead className="font-semibold">Total Days</TableHead>
+                      <TableHead className="font-semibold">Status</TableHead>
+                      <TableHead className="font-semibold">Applied Date</TableHead>
+                      <TableHead className="font-semibold">Reason</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {(() => {
+                      
+                      if (compOffData.length === 0) {
+                        return (
+                          <TableRow>
+                            <TableCell colSpan={9} className="py-8 px-4 text-center text-muted-foreground">
+                              No comp-off requests found for this organization
+                            </TableCell>
+                          </TableRow>
+                        );
+                      }
+
+                      return compOffData.map((request: any, index: number) => (
+                        <TableRow key={request.id || index} className="hover:bg-gray-50">
+                          <TableCell className="font-medium">
+                            {getEmployeeName(request.userId)}
+                          </TableCell>
+                          <TableCell>
+                            <Badge variant="outline" className="bg-purple-50 text-purple-800">
+                              CO-{request.id}
+                            </Badge>
+                          </TableCell>
+                          <TableCell>
+                            <Badge variant="secondary" className="bg-orange-100 text-orange-800">
+                              {request.type?.charAt(0).toUpperCase() + request.type?.slice(1) || 'Standard'}
+                            </Badge>
+                          </TableCell>
+                          <TableCell>
+                            {request.workDate ? new Date(request.workDate).toLocaleDateString('en-US', {
+                              month: 'short',
+                              day: 'numeric',
+                              year: 'numeric'
+                            }) : 'N/A'}
+                          </TableCell>
+                          <TableCell>
+                            {request.compOffDate ? new Date(request.compOffDate).toLocaleDateString('en-US', {
+                              month: 'short',
+                              day: 'numeric',
+                              year: 'numeric'
+                            }) : 'N/A'}
+                          </TableCell>
+                          <TableCell>
+                            <span className="font-mono text-sm">
+                              {request.days || '1'} day{(request.days && request.days > 1) ? 's' : ''}
+                            </span>
+                          </TableCell>
+                          <TableCell>
+                            <Badge 
+                              variant={
+                                request.status === 'approved' ? 'default' :
+                                request.status === 'pending' ? 'secondary' :
+                                request.status === 'rejected' ? 'destructive' : 'outline'
+                              }
+                              className={
+                                request.status === 'approved' ? 'bg-green-100 text-green-800' :
+                                request.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                                request.status === 'rejected' ? 'bg-red-100 text-red-800' : ''
+                              }
+                            >
+                              {request.status?.charAt(0).toUpperCase() + request.status?.slice(1) || 'Unknown'}
+                            </Badge>
+                          </TableCell>
+                          <TableCell className="text-sm text-muted-foreground">
+                            {request.createdAt ? new Date(request.createdAt).toLocaleDateString('en-US', {
+                              month: 'short',
+                              day: 'numeric'
+                            }) : 'N/A'}
+                          </TableCell>
+                          <TableCell className="max-w-xs">
+                            <div className="text-sm text-muted-foreground truncate" title={request.reason}>
+                              {request.reason || 'No reason provided'}
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ));
+                    })()}
+                  </TableBody>
+                </Table>
+              </div>
+              
+              {/* Comp-off Summary Statistics */}
+              <div className="mt-6 grid grid-cols-1 md:grid-cols-4 gap-4 p-6 bg-gray-50">
+                <div className="bg-purple-50 p-4 rounded-lg">
+                  <div className="text-sm text-purple-600 font-medium">Total Comp-off Requests</div>
+                  <div className="text-2xl font-bold text-purple-900">
+                    {compOffData.length}
+                  </div>
+                </div>
+                <div className="bg-green-50 p-4 rounded-lg">
+                  <div className="text-sm text-green-600 font-medium">Approved</div>
+                  <div className="text-2xl font-bold text-green-900">
+                    {compOffData.filter((req: any) => req.status === 'approved').length}
+                  </div>
+                </div>
+                <div className="bg-yellow-50 p-4 rounded-lg">
+                  <div className="text-sm text-yellow-600 font-medium">Pending</div>
+                  <div className="text-2xl font-bold text-yellow-900">
+                    {compOffData.filter((req: any) => req.status === 'pending').length}
+                  </div>
+                </div>
+                <div className="bg-red-50 p-4 rounded-lg">
+                  <div className="text-sm text-red-600 font-medium">Rejected</div>
+                  <div className="text-2xl font-bold text-red-900">
+                    {compOffData.filter((req: any) => req.status === 'rejected').length}
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
           </div>
         );
 
@@ -1846,6 +2232,134 @@ export default function AdminReports() {
   return (
     <Layout>
       <div className="container mx-auto py-8">
+<<<<<<< HEAD
+=======
+      <div className="space-y-6">
+        {/* Only show header for other reports, not BTO or Comp-off */}
+        {selectedReport !== "bto-report" && selectedReport !== "comp-off-report" && (
+        <Card>
+          <CardHeader>
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <div>
+                <CardTitle className="text-2xl">Admin Reports</CardTitle>
+                <p className="text-muted-foreground mt-1">
+                  Comprehensive leave management analytics and insights
+                </p>
+              </div>
+              <div className="flex gap-2">
+                <Button variant="outline" size="sm">
+                  <Filter className="h-4 w-4 mr-2" />
+                  Filter
+                </Button>
+                <Button variant="outline" size="sm">
+                  <Download className="h-4 w-4 mr-2" />
+                  Export
+                </Button>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {selectedReport === "collaborative-leave-report" ? (
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Task Status</label>
+                  <Select value={selectedTaskStatus} onValueChange={setSelectedTaskStatus}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Statuses</SelectItem>
+                      <SelectItem value="pending">Pending</SelectItem>
+                      <SelectItem value="accepted">Accepted</SelectItem>
+                      <SelectItem value="done">Completed</SelectItem>
+                      <SelectItem value="rejected">Rejected</SelectItem>
+                      <SelectItem value="not_done">Not Done</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Assignee Name</label>
+                  <input
+                    type="text"
+                    placeholder="Search by name or email..."
+                    value={taskAssigneeFilter}
+                    onChange={(e) => setTaskAssigneeFilter(e.target.value)}
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Date Range</label>
+                  <div className="text-sm text-muted-foreground">
+                    {format(dateRange.from, "MMM dd, yyyy")} - {format(dateRange.to, "MMM dd, yyyy")}
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Actions</label>
+                  <div className="flex gap-2">
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => {
+                        setSelectedTaskStatus("all");
+                        setTaskAssigneeFilter("");
+                      }}
+                    >
+                      Clear Filters
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Department</label>
+                  <Select value={selectedDepartment} onValueChange={setSelectedDepartment}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select department" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Departments</SelectItem>
+                      <SelectItem value="engineering">Engineering</SelectItem>
+                      <SelectItem value="hr">Human Resources</SelectItem>
+                      <SelectItem value="sales">Sales</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Leave Type</label>
+                  <Select value={selectedLeaveType} onValueChange={setSelectedLeaveType}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select leave type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Leave Types</SelectItem>
+                      {(leaveTypes as any[]).map((type: any) => (
+                        <SelectItem key={type.id} value={type.id.toString()}>
+                          {type.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Date Range</label>
+                  <div className="text-sm text-muted-foreground">
+                    {format(dateRange.from, "MMM dd, yyyy")} - {format(dateRange.to, "MMM dd, yyyy")}
+                  </div>
+                </div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+        )}
+
+        {/* Report Content */}
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
         <div className="space-y-6">
           {/* Only show header for other reports, not BTO or Comp-off */}
           {selectedReport !== "bto-report" &&

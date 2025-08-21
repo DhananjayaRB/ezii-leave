@@ -77,6 +77,7 @@ interface EmployeeAssignmentProps {
 const fetchEmployeesFromAPI = async (filters?: FilterState): Promise<Employee[]> => {
   try {
     console.log('[ExternalAPI] Starting fetchEmployeeData with new API...');
+<<<<<<< HEAD
 
     // Get JWT token from localStorage
     const jwtToken = localStorage.getItem('jwt_token');
@@ -84,6 +85,15 @@ const fetchEmployeesFromAPI = async (filters?: FilterState): Promise<Employee[]>
     // Check if we're currently on the token setup route
     const isTokenSetupRoute = window.location.pathname.startsWith('/id/');
 
+=======
+    
+    // Get JWT token from localStorage
+    const jwtToken = localStorage.getItem('jwt_token');
+    
+    // Check if we're currently on the token setup route
+    const isTokenSetupRoute = window.location.pathname.startsWith('/id/');
+    
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     if (!jwtToken || jwtToken.trim() === '' || jwtToken === 'null' || jwtToken === 'undefined') {
       if (isTokenSetupRoute) {
         console.log('[ExternalAPI] On token setup route, skipping redirect');
@@ -93,27 +103,46 @@ const fetchEmployeesFromAPI = async (filters?: FilterState): Promise<Employee[]>
       window.location.href = 'https://services.resolvepay.in';
       throw new Error('JWT token required. Redirecting to authentication...');
     }
+<<<<<<< HEAD
 
     console.log('[ExternalAPI] JWT token available:', !!jwtToken);
     console.log('[ExternalAPI] Applying filters:', filters);
 
+=======
+    
+    console.log('[ExternalAPI] JWT token available:', !!jwtToken);
+    console.log('[ExternalAPI] Applying filters:', filters);
+    
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     // Prepare payload with new AttributeFilters structure
     const attributeFilters: Array<{attributeId: number; subAttributeId: number[]}> = [];
     const attributeIds = filters?.attributeIds || [];
     const subAttributeIds = filters?.subAttributeIds || [];
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     // Group subAttributeIds by their corresponding attributeId
     // Assuming attributeIds and subAttributeIds arrays have corresponding indices
     if (attributeIds.length > 0 && subAttributeIds.length > 0) {
       // Create a map to group subAttributeIds by attributeId
       const attributeMap: { [key: string]: number[] } = {};
+<<<<<<< HEAD
 
+=======
+      
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       // If arrays have same length, pair them up
       if (attributeIds.length === subAttributeIds.length) {
         attributeIds.forEach((attrId, index) => {
           const attributeIdNum = parseInt(attrId);
           const subAttrIdNum = parseInt(subAttributeIds[index]);
+<<<<<<< HEAD
 
+=======
+          
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
           if (!attributeMap[attributeIdNum]) {
             attributeMap[attributeIdNum] = [];
           }
@@ -124,7 +153,11 @@ const fetchEmployeesFromAPI = async (filters?: FilterState): Promise<Employee[]>
         const firstAttrId = parseInt(attributeIds[0]);
         attributeMap[firstAttrId] = subAttributeIds.map(id => parseInt(id));
       }
+<<<<<<< HEAD
 
+=======
+      
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       // Convert map to AttributeFilters array
       Object.keys(attributeMap).forEach(attributeId => {
         attributeFilters.push({
@@ -133,21 +166,33 @@ const fetchEmployeesFromAPI = async (filters?: FilterState): Promise<Employee[]>
         });
       });
     }
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     const payload = {
       "workerTypeId": filters?.workerTypeIds || [],
       "AttributeFilters": attributeFilters,
       "isActive": filters?.userType ?? 2, // 0 = Inactive, 1 = Active, 2 = All
       "patternId": filters?.patternId || 0
     };
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     console.log('[ExternalAPI] New payload structure:');
     console.log('- workerTypeId:', payload.workerTypeId);
     console.log('- AttributeFilters:', payload.AttributeFilters);
     console.log('- isActive:', payload.isActive);
     console.log('- patternId:', payload.patternId);
     console.log('[ExternalAPI] Full request payload:', JSON.stringify(payload, null, 2));
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     // Call the new employees API endpoint
     const response = await fetch('https://qa-api.resolveindia.com/organization/employees?page=1&pageSize=0', {
       method: 'POST',
@@ -157,6 +202,7 @@ const fetchEmployeesFromAPI = async (filters?: FilterState): Promise<Employee[]>
       },
       body: JSON.stringify(payload)
     });
+<<<<<<< HEAD
 
     if (!response.ok) {
       throw new Error(`API request failed with status: ${response.status}`);
@@ -169,6 +215,20 @@ const fetchEmployeesFromAPI = async (filters?: FilterState): Promise<Employee[]>
       throw new Error('Invalid employee data format received from new API');
     }
 
+=======
+    
+    if (!response.ok) {
+      throw new Error(`API request failed with status: ${response.status}`);
+    }
+    
+    const apiData = await response.json();
+    console.log('[ExternalAPI] New API response:', apiData);
+    
+    if (!apiData || apiData.result !== 'Success' || !apiData.data || !Array.isArray(apiData.data.employee_data)) {
+      throw new Error('Invalid employee data format received from new API');
+    }
+    
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     // Transform the new API data to match our Employee interface
     const transformedData: Employee[] = apiData.data.employee_data.map((emp: any) => ({
       id: emp.user_id.toString(),
@@ -195,10 +255,17 @@ const fetchEmployeesFromAPI = async (filters?: FilterState): Promise<Employee[]>
       location: emp.location,
       emp_status: emp.emp_status,
     }));
+<<<<<<< HEAD
 
     console.log('[ExternalAPI] Transformed employee data from new API:', transformedData);
     return transformedData;
 
+=======
+    
+    console.log('[ExternalAPI] Transformed employee data from new API:', transformedData);
+    return transformedData;
+    
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
   } catch (error) {
     console.error('[ExternalAPI] Error fetching employees from new API:', error);
     throw error;
@@ -212,13 +279,18 @@ const fetchWorkerTypes = async (): Promise<WorkerType[]> => {
     if (!jwtToken) {
       throw new Error('JWT token required');
     }
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     const response = await fetch('https://qa-api.resolveindia.com/organization/customer/worker-type-list', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${jwtToken}`,
       },
     });
+<<<<<<< HEAD
 
     if (!response.ok) {
       throw new Error(`Worker types API failed: ${response.status}`);
@@ -231,6 +303,20 @@ const fetchWorkerTypes = async (): Promise<WorkerType[]> => {
       return data.worker_type_list;
     }
 
+=======
+    
+    if (!response.ok) {
+      throw new Error(`Worker types API failed: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    console.log('[FilterAPI] Worker types response:', data);
+    
+    if (data.result === 'Success' && data.worker_type_list) {
+      return data.worker_type_list;
+    }
+    
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     return [];
   } catch (error) {
     console.error('[FilterAPI] Error fetching worker types:', error);
@@ -245,13 +331,18 @@ const fetchAttributes = async (): Promise<Attribute[]> => {
     if (!jwtToken) {
       throw new Error('JWT token required');
     }
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     const response = await fetch('https://qa-api.resolveindia.com/organization/attribute-list', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${jwtToken}`,
       },
     });
+<<<<<<< HEAD
 
     if (!response.ok) {
       throw new Error(`Attributes API failed: ${response.status}`);
@@ -264,6 +355,20 @@ const fetchAttributes = async (): Promise<Attribute[]> => {
       return data.attributes;
     }
 
+=======
+    
+    if (!response.ok) {
+      throw new Error(`Attributes API failed: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    console.log('[FilterAPI] Attributes response:', data);
+    
+    if (data.result === 'Success' && data.attributes) {
+      return data.attributes;
+    }
+    
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     return [];
   } catch (error) {
     console.error('[FilterAPI] Error fetching attributes:', error);
@@ -278,13 +383,18 @@ const fetchSubAttributes = async (attributeId: string): Promise<SubAttribute[]> 
     if (!jwtToken) {
       throw new Error('JWT token required');
     }
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     const response = await fetch(`https://qa-api.resolveindia.com/organization/attribute-details/${attributeId}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${jwtToken}`,
       },
     });
+<<<<<<< HEAD
 
     if (!response.ok) {
       throw new Error(`Sub-attributes API failed: ${response.status}`);
@@ -297,6 +407,20 @@ const fetchSubAttributes = async (attributeId: string): Promise<SubAttribute[]> 
       return data.sub_attributes;
     }
 
+=======
+    
+    if (!response.ok) {
+      throw new Error(`Sub-attributes API failed: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    console.log('[FilterAPI] Sub-attributes response for', attributeId, ':', data);
+    
+    if (data.result === 'Success' && data.sub_attributes) {
+      return data.sub_attributes;
+    }
+    
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     return [];
   } catch (error) {
     console.error('[FilterAPI] Error fetching sub-attributes for', attributeId, ':', error);
@@ -325,7 +449,11 @@ export default function EmployeeAssignment({ onClose, onAssign, preSelectedEmplo
     subAttributeIds: [],
     userType: 2 // Default to "All"
   });
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
   // User Type filter state
   const [selectedUserType, setSelectedUserType] = useState<number>(2); // 0 = Inactive, 1 = Active, 2 = All
 
@@ -346,14 +474,22 @@ export default function EmployeeAssignment({ onClose, onAssign, preSelectedEmplo
           setLoading(false);
           return;
         }
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
         const employeeData = await fetchEmployeesFromAPI(activeFilters);
         console.log('[EmployeeAssignment] Loaded employees:', employeeData.length);
         setEmployees(employeeData);
         setError(null);
       } catch (error) {
         console.error('[EmployeeAssignment] Error loading employees:', error);
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
         // Fallback to sample employees if external API fails
         console.log('[EmployeeAssignment] Falling back to sample employees');
         const sampleEmployees: Employee[] = [
@@ -402,7 +538,11 @@ export default function EmployeeAssignment({ onClose, onAssign, preSelectedEmplo
             lastWorkingDay: null
           }
         ];
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
         setEmployees(sampleEmployees);
         setError(null);
       } finally {
@@ -422,7 +562,11 @@ export default function EmployeeAssignment({ onClose, onAssign, preSelectedEmplo
             fetchWorkerTypes(),
             fetchAttributes()
           ]);
+<<<<<<< HEAD
 
+=======
+          
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
           setWorkerTypes(workerTypesData);
           setAttributes(attributesData);
           console.log('[FilterAPI] Loaded filter data:', { workerTypesData, attributesData });
@@ -430,7 +574,11 @@ export default function EmployeeAssignment({ onClose, onAssign, preSelectedEmplo
           console.error('[FilterAPI] Error loading filter data:', error);
         }
       };
+<<<<<<< HEAD
 
+=======
+      
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       loadFilterData();
     }
   }, [showFilterDialog]);
@@ -447,12 +595,20 @@ export default function EmployeeAssignment({ onClose, onAssign, preSelectedEmplo
 
   const filteredEmployees = employees.filter((employee: Employee) => {
     if (!employee) return false;
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
     // Gender-based filtering - only apply if we have specific gender requirements
     // If applicableGenders is empty array, skip gender filtering entirely (used for BTO variants)
     if (applicableGenders && applicableGenders.length > 0) {
       const employeeGender = (employee.gender || '').toLowerCase();
+<<<<<<< HEAD
 
+=======
+      
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
       // If employee gender is "not specified" or empty, include them in all gender filters
       // This allows unspecified gender employees to be assigned to any leave type
       if (employeeGender === 'not specified' || employeeGender === '' || !employeeGender) {
@@ -693,7 +849,11 @@ export default function EmployeeAssignment({ onClose, onAssign, preSelectedEmplo
                 <DialogHeader>
                   <DialogTitle>Filter Employees</DialogTitle>
                 </DialogHeader>
+<<<<<<< HEAD
 
+=======
+                
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                 <div className="space-y-4">
                   {/* User Type Filter - Always visible */}
                   <div className="flex items-center gap-2 p-4 border rounded-lg bg-blue-50">
@@ -716,13 +876,21 @@ export default function EmployeeAssignment({ onClose, onAssign, preSelectedEmplo
                     </Select>
                     <span className="text-sm text-gray-500">employees</span>
                   </div>
+<<<<<<< HEAD
 
+=======
+                  
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                   {filterConditions.map((condition, index) => (
                     <div key={condition.id} className="flex items-center gap-2 p-4 border rounded-lg">
                       <span className="text-sm text-gray-500 min-w-12">
                         {index === 0 ? 'Where' : 'And'}
                       </span>
+<<<<<<< HEAD
 
+=======
+                      
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                       {/* Filter Type Selection */}
                       <Select
                         value={condition.type === 'workerType' ? 'workerType' : condition.attributeName || ''}
@@ -755,16 +923,26 @@ export default function EmployeeAssignment({ onClose, onAssign, preSelectedEmplo
                           ))}
                         </SelectContent>
                       </Select>
+<<<<<<< HEAD
 
                       <span className="text-sm text-gray-500">is</span>
 
+=======
+                      
+                      <span className="text-sm text-gray-500">is</span>
+                      
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                       {/* Value Selection */}
                       <Select
                         value=""
                         onValueChange={(value) => {
                           const currentValues = condition.selectedValues || [];
                           const currentLabels = condition.selectedLabels || [];
+<<<<<<< HEAD
 
+=======
+                          
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                           if (condition.type === 'workerType') {
                             const workerType = workerTypes.find(wt => wt.id.toString() === value);
                             if (workerType && !currentValues.includes(value)) {
@@ -813,7 +991,11 @@ export default function EmployeeAssignment({ onClose, onAssign, preSelectedEmplo
                           }
                         </SelectContent>
                       </Select>
+<<<<<<< HEAD
 
+=======
+                      
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                       {/* Selected Values Display */}
                       <div className="flex flex-wrap gap-1 max-w-xs">
                         {condition.selectedLabels?.map((label, idx) => (
@@ -837,7 +1019,11 @@ export default function EmployeeAssignment({ onClose, onAssign, preSelectedEmplo
                           </span>
                         ))}
                       </div>
+<<<<<<< HEAD
 
+=======
+                      
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                       {/* Remove Condition Button */}
                       <Button
                         variant="ghost"
@@ -849,7 +1035,11 @@ export default function EmployeeAssignment({ onClose, onAssign, preSelectedEmplo
                       </Button>
                     </div>
                   ))}
+<<<<<<< HEAD
 
+=======
+                  
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                   {/* Add Filter Button */}
                   <Button 
                     variant="outline" 
@@ -858,7 +1048,11 @@ export default function EmployeeAssignment({ onClose, onAssign, preSelectedEmplo
                   >
                     + Add Filter Condition
                   </Button>
+<<<<<<< HEAD
 
+=======
+                  
+>>>>>>> 86b9e613a1c56dccd44b752e2920391633e6ebe0
                   {/* Apply/Clear Buttons */}
                   <div className="flex gap-2 pt-4">
                     <Button variant="outline" onClick={clearFilters}>
