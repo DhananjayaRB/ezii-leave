@@ -448,7 +448,7 @@ export default function WorkflowsSetup({ onNext, onPrevious, onComplete, isLast,
                             </FormControl>
                             <SelectContent>
                               <SelectItem value="application">Application</SelectItem>
-                              <SelectItem value="pto">PTO</SelectItem>
+                              <SelectItem value="pto">BTO</SelectItem>
                               <SelectItem value="comp-off">Comp-off</SelectItem>
                             </SelectContent>
                           </Select>
@@ -514,7 +514,7 @@ export default function WorkflowsSetup({ onNext, onPrevious, onComplete, isLast,
                                         }
                                       }}
                                     />
-                                    <Label htmlFor="apply-pto" className="text-sm">Apply PTO</Label>
+                                    <Label htmlFor="apply-pto" className="text-sm">Apply BTO</Label>
                                   </div>
                                 </>
                               )}

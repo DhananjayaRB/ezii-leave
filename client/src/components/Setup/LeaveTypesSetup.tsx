@@ -31,6 +31,7 @@ interface LeaveTypesSetupProps {
   isLast?: boolean;
   isLoading?: boolean;
   company?: any;
+  showNavigation?: boolean; // Add prop to control navigation buttons visibility
 }
 
 const defaultLeaveTypes = [
@@ -106,7 +107,7 @@ const defaultLeaveTypes = [
   }
 ];
 
-export default function LeaveTypesSetup({ onNext, onPrevious, isLast, isLoading }: LeaveTypesSetupProps) {
+export default function LeaveTypesSetup({ onNext, onPrevious, isLast, isLoading, showNavigation = true }: LeaveTypesSetupProps) {
   const [selectedLeaveType, setSelectedLeaveType] = useState<any>(null);
   const [selectedVariant, setSelectedVariant] = useState<any>(null);
   const [showConfigForm, setShowConfigForm] = useState(false);
@@ -515,22 +516,24 @@ export default function LeaveTypesSetup({ onNext, onPrevious, isLast, isLoading 
         })}
       </div>
 
-      <div className="flex justify-between mt-8">
-        <Button 
-          variant="outline" 
-          onClick={onPrevious}
-          disabled={isLoading}
-        >
-          Previous
-        </Button>
-        <Button 
-          onClick={handleNext}
-          disabled={isLoading || createLeaveTypesMutation.isPending}
-          className="bg-blue-600 hover:bg-blue-700 text-white"
-        >
-          {createLeaveTypesMutation.isPending ? "Creating..." : isLast ? "Finish Setup" : "Next"}
-        </Button>
-      </div>
+      {showNavigation && (
+        <div className="flex justify-between mt-8">
+          <Button 
+            variant="outline" 
+            onClick={onPrevious}
+            disabled={isLoading}
+          >
+            Previous
+          </Button>
+          <Button 
+            onClick={handleNext}
+            disabled={isLoading || createLeaveTypesMutation.isPending}
+            className="bg-blue-600 hover:bg-blue-700 text-white"
+          >
+            {createLeaveTypesMutation.isPending ? "Creating..." : isLast ? "Finish Setup" : "Next"}
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

@@ -16,6 +16,7 @@ export default function AdminLeaveTypes() {
         <LeaveTypesSetup 
           onNext={() => {}} 
           onPrevious={() => {}} 
+          showNavigation={false}
         />
       </div>
     </Layout>

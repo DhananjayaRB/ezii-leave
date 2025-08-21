@@ -43,11 +43,10 @@ export default function EmployeeReports() {
   // Map URL params to report types
   const mapReportType = (type: string) => {
     switch (type) {
-      case "dashboard": return "my-leave-summary";
       case "history": return "my-leave-history";
       case "balances": return "my-leave-balances";  
       case "withdrawal-history": return "my-withdrawal-history";
-      default: return "my-leave-summary";
+      default: return "my-leave-history";
     }
   };
   
@@ -88,55 +87,135 @@ export default function EmployeeReports() {
     queryKey: ["/api/leave-variants"],
   });
 
+  // Fetch employee assignments to determine which leave variants this user can access (same as LeaveApplications)
+  const { data: allAssignments = [] } = useQuery({
+    queryKey: ["/api/employee-assignments"],
+  });
+
   // Report calculations for current employee
-  const getMyLeaveStats = () => {
-    const allRequests = (myLeaveRequests as any[]) || [];
-
-    return {
-      totalRequests: allRequests.length,
-      approvedRequests: allRequests.filter((req: any) => req.status === "approved").length,
-      pendingRequests: allRequests.filter((req: any) => req.status === "pending" || req.status === "approval_pending").length,
-      rejectedRequests: allRequests.filter((req: any) => req.status === "rejected").length,
-      totalDaysTaken: allRequests.reduce((sum: number, req: any) => sum + (parseFloat(req.workingDays) || parseFloat(req.totalDays) || 0), 0),
-    };
-  };
-
-  const getMyLeaveTypeUsage = () => {
-    const usage: Record<string, { days: number, requests: number }> = {};
-    (myLeaveRequests as any[]).forEach((req: any) => {
-      const leaveType = (leaveTypes as any[]).find((type: any) => type.id === req.leaveTypeId);
-      const typeName = leaveType?.name || "Unknown Leave Type";
-      if (!usage[typeName]) {
-        usage[typeName] = { days: 0, requests: 0 };
-      }
-      usage[typeName].days += parseFloat(req.workingDays) || parseFloat(req.totalDays) || 0;
-      usage[typeName].requests += 1;
-    });
-    
-    return Object.entries(usage).map(([name, data]) => ({
-      name,
-      ...data
-    }));
-  };
 
   const getMyBalanceData = () => {
-    return (myLeaveBalances as any[]).map((balance: any) => {
-      const variant = (leaveVariants as any[]).find((v: any) => v.id === balance.leaveVariantId);
-      const leaveType = (leaveTypes as any[]).find((type: any) => type.id === variant?.leaveTypeId);
+    // Use EXACT SAME filtering logic as LeaveApplications.tsx
+    const assignmentsArray = Array.isArray(allAssignments) ? allAssignments : [];
+    const variantsArray = Array.isArray(leaveVariants) ? leaveVariants : [];
+    const balancesArray = (myLeaveBalances as any[]) || [];
+    const transactionsArray = (myTransactions as any[]) || [];
+    const requestsArray = (myLeaveRequests as any[]) || [];
+    
+    // Filter user assignments and available leave variants (EXACT same logic as LeaveApplications)
+    const userAssignments = assignmentsArray.filter(
+      (assignment: any) => assignment.userId === currentUserId && assignment.assignmentType === 'leave_variant'
+    );
+    
+    const assignedVariantIds = userAssignments.map((assignment: any) => assignment.leaveVariantId);
+    
+    const availableLeaveVariants = variantsArray.filter(
+      (variant: any) => assignedVariantIds.includes(variant.id)
+    );
+    
+    console.log('🔍 [Employee Reports Assignment Filter]:', {
+      userId: currentUserId,
+      totalAssignments: assignmentsArray.length,
+      userAssignments: userAssignments.length,
+      assignedVariantIds,
+      availableVariants: availableLeaveVariants.length,
+      variantNames: availableLeaveVariants.map((v: any) => v.leaveVariantName || v.leaveTypeName)
+    });
+    
+    return availableLeaveVariants.map((variant: any) => {
+      const balance = balancesArray.find((b: any) => b.leaveVariantId === variant.id);
+      const transactions = transactionsArray.filter((t: any) => t.leaveVariantId === variant.id);
       
-      // Convert half-day units to full days for display
-      const entitlement = (balance.entitlement || 0) / 2;
-      const usedBalance = (balance.usedBalance || 0) / 2;
-      const carryForward = (balance.carryForward || 0) / 2;
-      const currentBalance = (balance.currentBalance || 0) / 2;
+      // Calculate opening balance from imported Excel data transactions (same logic as LeaveApplications)
+      const openingBalanceTransactions = transactionsArray
+        .filter((t: any) => {
+          const isOpeningBalance = t.transactionType === 'grant' && 
+                                 t.description?.toLowerCase().includes('opening balance imported from excel');
+          const isForCurrentUser = t.userId === currentUserId;
+          
+          if (!isOpeningBalance || !isForCurrentUser) return false;
+          
+          // Direct variant match (preferred)
+          if (t.leaveVariantId === variant.id) return true;
+          
+          // Cross-reference by leave type
+          const transactionVariant = availableLeaveVariants.find((v: any) => v.id === t.leaveVariantId);
+          if (transactionVariant?.leaveTypeName === variant.leaveTypeName) return true;
+          if (transactionVariant?.leaveTypeId === variant.leaveTypeId) return true;
+          
+          return false;
+        })
+        .sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      
+      const openingBalance = openingBalanceTransactions.reduce((sum: number, t: any) => 
+        sum + parseFloat(t.amount || '0'), 0);
+      
+      // Calculate eligibility based on leave grant method (same logic as LeaveApplications)
+      const isAfterEarning = variant.grantLeaves === 'after_earning';
+      const totalEntitlementInDays = balance ? parseFloat(balance.totalEntitlement || '0') : 0;
+      
+      let eligibility = 0;
+      
+      if (isAfterEarning) {
+        // "After Earning" - calculate based on annual entitlement and months completed
+        const currentMonth = new Date().getMonth() + 1;
+        const monthsCompleted = currentMonth - 1;
+        const annualEntitlement = totalEntitlementInDays || variant.annualLeaveAllocation || 0;
+        eligibility = (annualEntitlement / 12) * monthsCompleted;
+      } else {
+        // "In Advance" - check grant frequency
+        const annualEntitlement = totalEntitlementInDays || variant.annualLeaveAllocation || 0;
+        
+        if (variant.grantFrequency === 'per_year') {
+          eligibility = annualEntitlement;
+        } else {
+          const currentMonth = new Date().getMonth() + 1;
+          eligibility = (annualEntitlement / 12) * currentMonth;
+        }
+      }
+      
+      const totalEligibility = eligibility + openingBalance;
+      
+      // Calculate availed using same logic as LeaveApplications
+      const isBeforeWorkflow = variant.leaveBalanceDeductionBefore === true;
+      
+      // Match requests to variant (handle null leaveVariantId)
+      const matchingRequests = requestsArray.filter((req: any) => 
+        req.leaveVariantId === variant.id || 
+        ((req.leaveVariantId === null || req.leaveVariantId === undefined) && req.leaveTypeId === variant.leaveTypeId)
+      );
+      
+      // Count approved requests
+      const approvedRequests = matchingRequests.filter((req: any) => req.status === 'approved');
+      const approvedDays = approvedRequests.reduce((sum: number, req: any) => 
+        sum + parseFloat(req.workingDays || '0'), 0);
+      
+      // For "Before Workflow" types, add pending requests
+      let pendingDays = 0;
+      if (isBeforeWorkflow) {
+        const pendingRequests = matchingRequests.filter((req: any) => req.status === 'pending');
+        pendingDays = pendingRequests.reduce((sum: number, req: any) => 
+          sum + parseFloat(req.workingDays || '0'), 0);
+      }
+      
+      // Add imported leave usage from Excel
+      const importedAvailed = transactions.filter((t: any) => 
+        t.description?.toLowerCase().includes('imported leave transaction') && 
+        t.description?.toLowerCase().includes('availed') &&
+        (t.transactionType === 'deduction' || t.transactionType === 'debit')
+      ).reduce((sum: number, t: any) => 
+        sum + Math.abs(parseFloat(t.amount || '0')), 0);
+      
+      const totalAvailed = approvedDays + pendingDays + importedAvailed;
+      const closingBalance = totalEligibility - totalAvailed;
       
       return {
-        leaveType: leaveType?.name || variant?.leaveTypeName || 'Unknown',
-        entitlement: entitlement,
-        used: usedBalance,
-        carryForward: carryForward,
-        available: currentBalance,
-        year: balance.year || new Date().getFullYear()
+        leaveType: variant.leaveTypeName || variant.leaveVariantName || 'Unknown',
+        entitlement: eligibility,
+        used: totalAvailed,
+        carryForward: openingBalance,
+        available: closingBalance,
+        year: new Date().getFullYear()
       };
     });
   };
@@ -167,8 +246,6 @@ export default function EmployeeReports() {
     );
   };
 
-  const myStats = getMyLeaveStats();
-  const myUsage = getMyLeaveTypeUsage();
   const myBalances = getMyBalanceData();
   const filteredRequests = getFilteredRequests();
   const withdrawalRequests = getWithdrawalRequests();
@@ -181,7 +258,6 @@ export default function EmployeeReports() {
   console.log('currentUserId variable:', currentUserId);
   console.log('myLeaveRequests length:', (myLeaveRequests as any[]).length);
   console.log('myLeaveBalances length:', (myLeaveBalances as any[]).length);
-  console.log('myStats:', myStats);
   console.log('================================');
 
   const exportData = () => {
@@ -205,80 +281,6 @@ export default function EmployeeReports() {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   };
-
-  const renderDashboard = () => (
-    <div className="space-y-6">
-      {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Requests</CardTitle>
-            <FileText className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{myStats.totalRequests}</div>
-            <p className="text-xs text-muted-foreground">All time</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Approved</CardTitle>
-            <CheckCircle className="h-4 w-4 text-green-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-green-600">{myStats.approvedRequests}</div>
-            <p className="text-xs text-muted-foreground">Successful requests</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Pending</CardTitle>
-            <Clock className="h-4 w-4 text-yellow-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-yellow-600">{myStats.pendingRequests}</div>
-            <p className="text-xs text-muted-foreground">Awaiting approval</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Days Taken</CardTitle>
-            <Calendar className="h-4 w-4 text-blue-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-blue-600">{myStats.totalDaysTaken.toFixed(1)}</div>
-            <p className="text-xs text-muted-foreground">Total leave days</p>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Leave Type Usage Chart */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <PieChart className="h-5 w-5" />
-            <span>My Leave Usage by Type</span>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {myUsage.map((item, index) => (
-              <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                <div>
-                  <p className="font-medium">{item.name}</p>
-                  <p className="text-sm text-muted-foreground">{item.requests} requests</p>
-                </div>
-                <div className="text-right">
-                  <p className="font-bold text-lg">{item.days.toFixed(1)}</p>
-                  <p className="text-sm text-muted-foreground">days</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  );
 
   const renderLeaveHistory = () => (
     <div className="space-y-6">
@@ -400,7 +402,6 @@ export default function EmployeeReports() {
                 <TableHead>Leave Type</TableHead>
                 <TableHead>Entitlement</TableHead>
                 <TableHead>Used</TableHead>
-                <TableHead>Carry Forward</TableHead>
                 <TableHead>Available</TableHead>
                 <TableHead>Utilization %</TableHead>
               </TableRow>
@@ -413,7 +414,6 @@ export default function EmployeeReports() {
                     <TableCell className="font-medium">{balance.leaveType}</TableCell>
                     <TableCell>{balance.entitlement.toFixed(1)}</TableCell>
                     <TableCell>{balance.used.toFixed(1)}</TableCell>
-                    <TableCell>{balance.carryForward.toFixed(1)}</TableCell>
                     <TableCell className="font-medium">{balance.available.toFixed(1)}</TableCell>
                     <TableCell>
                       <span className={`font-medium ${
@@ -518,13 +518,6 @@ export default function EmployeeReports() {
         <div className="mb-6">
           <div className="flex flex-wrap gap-2">
             <Button
-              variant={selectedReport === "my-leave-summary" ? "default" : "outline"}
-              onClick={() => setSelectedReport("my-leave-summary")}
-            >
-              <BarChart3 className="h-4 w-4 mr-2" />
-              My Dashboard
-            </Button>
-            <Button
               variant={selectedReport === "my-leave-history" ? "default" : "outline"}
               onClick={() => setSelectedReport("my-leave-history")}
             >
@@ -549,7 +542,6 @@ export default function EmployeeReports() {
         </div>
 
         {/* Report Content */}
-        {selectedReport === "my-leave-summary" && renderDashboard()}
         {selectedReport === "my-leave-history" && renderLeaveHistory()}
         {selectedReport === "my-leave-balances" && renderLeaveBalances()}
         {selectedReport === "my-withdrawal-history" && renderWithdrawalHistory()}

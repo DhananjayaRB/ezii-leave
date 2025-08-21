@@ -26,6 +26,7 @@ interface LeaveBalance {
   leaveVariantId: number;
   currentBalance: number;
   entitlement: number;
+  totalEntitlement: number;
   leaveTypeName: string;
   leaveVariantName: string;
 }
@@ -36,41 +37,47 @@ export default function NewEmployeeOverview() {
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
 
-  // Get current user ID from localStorage
-  const currentUserId = localStorage.getItem('user_id') || '2161';
+  // Get current user ID from localStorage (same as Leave Applications)
+  const currentUserId = localStorage.getItem('user_id') || '241';
   
-  console.log('[NewEmployeeOverview] Loading component for user:', currentUserId);
+  console.log('📊 [NewEmployeeOverview] Loading component for user:', currentUserId);
+  console.log('📊 [NewEmployeeOverview] Current org_id:', localStorage.getItem('org_id'));
 
   // Fetch leave requests with proper typing
-  const { data: leaveRequestsData = [], isLoading: leaveLoading } = useQuery({
+  const { data: leaveRequestsData = [] } = useQuery({
     queryKey: [`/api/leave-requests?userId=${currentUserId}`],
-    staleTime: 0,
-    refetchOnMount: true
   });
 
   // Fetch leave balances with proper typing
-  const { data: leaveBalancesData = [], isLoading: balanceLoading } = useQuery({
+  const { data: leaveBalancesData = [] } = useQuery({
     queryKey: [`/api/employee-leave-balances/${currentUserId}`],
-    staleTime: 0,
-    refetchOnMount: true
   });
 
-  // Fetch PTO and Comp-off data
+  // Fetch BTO and Comp-off data
   const { data: ptoRequestsData = [] } = useQuery({
     queryKey: [`/api/pto-requests?userId=${currentUserId}`],
-    staleTime: 0
   });
 
   const { data: compOffRequestsData = [] } = useQuery({
     queryKey: [`/api/comp-off-requests?userId=${currentUserId}`],
-    staleTime: 0
   });
 
   // Fetch leave transactions for trends chart
   const { data: leaveTransactions = [] } = useQuery({
     queryKey: [`/api/leave-balance-transactions/${currentUserId}`],
-    staleTime: 0
   });
+
+  // Fetch leave variants for calculations (needed for sophisticated metrics)
+  const { data: leaveVariantsData = [] } = useQuery({
+    queryKey: ['/api/leave-variants'],
+  });
+
+  // Fetch assignments to match Leave Applications logic
+  const { data: allAssignments = [] } = useQuery({
+    queryKey: ['/api/employee-assignments'],
+  });
+
+
 
   // Type the arrays properly
   const leaveRequests = leaveRequestsData as LeaveRequest[];
@@ -79,33 +86,264 @@ export default function NewEmployeeOverview() {
   const compOffRequests = compOffRequestsData as any[];
   const transactions = leaveTransactions as any[];
 
-  // Calculate statistics
+  // Calculate statistics using same sophisticated logic as Leave Applications page
   const totalRequests = leaveRequests.length;
   const approvedLeaves = leaveRequests.filter((req: LeaveRequest) => req.status === 'approved');
   const approvedCount = approvedLeaves.length;
   const pendingCount = leaveRequests.filter((req: LeaveRequest) => req.status === 'pending').length;
   const rejectedCount = leaveRequests.filter((req: LeaveRequest) => req.status === 'rejected').length;
 
-  // Calculate total working days availed
-  const totalAvailed = approvedLeaves.reduce((sum: number, req: LeaveRequest) => {
-    const days = req.workingDays ? parseFloat(req.workingDays.toString()) : 0;
-    return sum + (isNaN(days) ? 0 : days);
-  }, 0);
-
   // Debug approved leaves for calendar
   console.log('[NewEmployeeOverview] Approved leaves for calendar:', approvedLeaves.map(l => ({ id: l.id, startDate: l.startDate, endDate: l.endDate })));
 
-  // Calculate total balance
-  const totalBalance = leaveBalances.reduce((sum: number, balance: LeaveBalance) => {
-    const balance_val = balance.currentBalance ? parseFloat(balance.currentBalance.toString()) / 2 : 0;
-    return sum + (isNaN(balance_val) ? 0 : balance_val);
-  }, 0);
+  // EXACT CALCULATION from working Leave Applications screen
+  const calculateSophisticatedMetrics = () => {
+    const balancesArray = Array.isArray(leaveBalances) ? leaveBalances : [];
+    const requestsArray = Array.isArray(leaveRequests) ? leaveRequests : [];
+    const transactionsArray = Array.isArray(transactions) ? transactions : [];
+    const variantsArray = Array.isArray(leaveVariantsData) ? leaveVariantsData : [];
+    
+    console.log('🎯 [NewEmployeeOverview] EXACT Leave Applications calculation:', {
+      currentUserId,
+      orgId: localStorage.getItem('org_id'),
+      balancesCount: balancesArray.length,
+      requestsCount: requestsArray.length,
+      transactionsCount: transactionsArray.length,
+      variantsCount: variantsArray.length
+    });
 
-  // Calculate total entitlement
-  const totalEntitlement = leaveBalances.reduce((sum: number, balance: LeaveBalance) => {
-    const entitlement_val = balance.entitlement ? parseFloat(balance.entitlement.toString()) / 2 : 0;
-    return sum + (isNaN(entitlement_val) ? 0 : entitlement_val);
-  }, 0);
+    // Use assignment filtering to match Leave Applications logic
+    const currentUserAssignments = Array.isArray(allAssignments) ? 
+      allAssignments.filter((a: any) => String(a.userId) === String(currentUserId)) : [];
+    
+    const assignedVariantIds = currentUserAssignments.map((a: any) => a.leaveVariantId);
+    const availableLeaveVariants = variantsArray.filter((variant: any) => 
+      assignedVariantIds.includes(variant.id)
+    );
+    
+    // Calculate total eligibility dynamically using the same logic as the table
+    let totalEligibilitySum = 0;
+    
+    availableLeaveVariants.forEach((variant: any) => {
+      const balance = balancesArray.find((b: any) => b.leaveVariantId === variant.id);
+      const transactions = Array.isArray(transactionsArray) ? transactionsArray.filter((t: any) => t.leaveVariantId === variant.id) : [];
+      
+      // Calculate opening balance from imported Excel data transactions with enhanced logic
+      const openingBalanceTransactions = Array.isArray(transactionsArray) ? 
+        transactionsArray
+          .filter((t: any) => {
+            const isOpeningBalance = t.transactionType === 'grant' && 
+                                   t.description?.toLowerCase().includes('opening balance imported from excel');
+            const isForCurrentUser = t.userId === currentUserId;
+            
+            if (!isOpeningBalance || !isForCurrentUser) return false;
+            
+            // Direct variant match (preferred)
+            if (t.leaveVariantId === variant.id) return true;
+            
+            // Cross-reference by leave type name
+            const transactionVariant = variantsArray.find((v: any) => v.id === t.leaveVariantId);
+            if (transactionVariant?.leaveTypeName === variant.leaveTypeName) return true;
+            if (transactionVariant?.leaveTypeId === variant.leaveTypeId) return true;
+            
+            return false;
+          })
+          .sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+        : [];
+      
+      const openingBalance = openingBalanceTransactions.reduce((sum: number, t: any) => 
+        sum + parseFloat(t.amount || '0'), 0
+      );
+      
+      // Calculate eligibility based on leave grant method
+      const totalEntitlementInDays = balance ? parseFloat(balance.totalEntitlement || '0') : 0;
+      const isAfterEarning = variant.grantLeaves === 'after_earning';
+      
+      let eligibility = 0;
+      if (isAfterEarning) {
+        // "After Earning" - calculate based on annual entitlement and months completed
+        const currentMonth = new Date().getMonth() + 1; // August = 8
+        const monthsCompleted = currentMonth - 1; // 7 months completed (Jan-July)
+        const annualEntitlement = totalEntitlementInDays || variant.paidDaysInYear || 0;
+        eligibility = (annualEntitlement / 12) * monthsCompleted;
+      } else {
+        // "In Advance" - check grant frequency
+        const annualEntitlement = totalEntitlementInDays || variant.paidDaysInYear || 0;
+        
+        if (variant.grantFrequency === 'per_year') {
+          // Annual grants like Paternity Leave - full entitlement available immediately
+          eligibility = annualEntitlement;
+        } else {
+          // Monthly grants - pro-rated amount for current month
+          const currentMonth = new Date().getMonth() + 1; // August = 8
+          eligibility = (annualEntitlement / 12) * currentMonth;
+        }
+      }
+      
+      const totalEligibility = eligibility + openingBalance;
+      totalEligibilitySum += totalEligibility;
+      
+      console.log(`🎯 [Dashboard] Dynamic calculation for ${variant.leaveTypeName}:`, {
+        openingBalance,
+        eligibility,
+        totalEligibility,
+        isAfterEarning,
+        annualEntitlement: totalEntitlementInDays || variant.paidDaysInYear
+      });
+    });
+
+    // TOTAL AVAILED calculation (exactly from Leave Applications)
+    const allUserTransactions = (transactionsArray as any[]).filter((t: any) => t.userId === currentUserId);
+    let totalAvailed = 0;
+    
+    availableLeaveVariants.forEach((variant: any) => {
+      const isBeforeWorkflow = variant.leaveBalanceDeductionBefore === true;
+      
+      // Handle null leaveVariantId by using leaveTypeId as fallback with type conversion
+      const matchingRequests = requestsArray.filter((req: any) => {
+        const variantIdMatch = req.leaveVariantId === variant.id;
+        const typeIdMatch = (req.leaveVariantId === null || req.leaveVariantId === undefined) && 
+          (req.leaveTypeId === variant.leaveTypeId || 
+           String(req.leaveTypeId) === String(variant.leaveTypeId) ||
+           Number(req.leaveTypeId) === Number(variant.leaveTypeId));
+        
+        return variantIdMatch || typeIdMatch;
+      });
+      
+      // Method 1: Count approved leave requests
+      const approvedRequests = matchingRequests.filter((req: any) => req.status === 'approved');
+      const approvedDays = approvedRequests.reduce((sum: number, req: any) => 
+        sum + parseFloat(req.workingDays || '0'), 0
+      );
+      
+      // Method 2: For "Before Workflow" types, add pending requests
+      let pendingDays = 0;
+      if (isBeforeWorkflow) {
+        const pendingRequests = matchingRequests.filter((req: any) => req.status === 'pending');
+        pendingDays = pendingRequests.reduce((sum: number, req: any) => 
+          sum + parseFloat(req.workingDays || '0'), 0
+        );
+      }
+      
+      // Method 3: Add imported leave usage from Excel
+      const variantTransactions = allUserTransactions.filter((t: any) => t.leaveVariantId === variant.id);
+      const importedAvailed = variantTransactions.filter((t: any) => 
+        t.description?.toLowerCase().includes('imported leave transaction') && 
+        t.description?.toLowerCase().includes('availed') &&
+        (t.transactionType === 'deduction' || t.transactionType === 'debit')
+      ).reduce((sum: number, t: any) => 
+        sum + Math.abs(parseFloat(t.amount || '0')), 0
+      );
+      
+      const variantAvailed = approvedDays + pendingDays + importedAvailed;
+      totalAvailed += variantAvailed;
+    });
+
+    // BALANCE calculation (exactly from Leave Applications)
+    let totalClosingBalance = 0;
+    availableLeaveVariants.forEach((variant: any) => {
+      const balance = balancesArray.find((b: any) => b.leaveVariantId === variant.id);
+      const transactions = Array.isArray(transactionsArray) ? transactionsArray.filter((t: any) => t.leaveVariantId === variant.id) : [];
+      
+      // Calculate opening balance from imported Excel data transactions
+      const openingBalanceTransactions = transactions
+        .filter((t: any) => t.transactionType === 'grant' && 
+               t.description?.toLowerCase().includes('opening balance imported from excel'))
+        .sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      
+      const openingBalance = openingBalanceTransactions.length > 0 
+        ? parseFloat(openingBalanceTransactions[0].amount || '0') 
+        : 0;
+      
+      const currentBalanceInDays = balance ? parseFloat(balance.currentBalance || '0') : 0;
+      
+      // Calculate eligibility based on leave grant method
+      const totalEntitlementInDays = balance ? parseFloat(balance.totalEntitlement || '0') : 0;
+      const isAfterEarning = variant.grantLeaves === 'after_earning';
+      
+      let eligibility = 0;
+      
+      if (isAfterEarning) {
+        const currentMonth = new Date().getMonth() + 1; // August = 8
+        const monthsCompleted = currentMonth - 1; // 7 months completed (Jan-July)
+        const annualEntitlement = totalEntitlementInDays || variant.annualLeaveAllocation || 0;
+        eligibility = (annualEntitlement / 12) * monthsCompleted;
+      } else {
+        const annualEntitlement = totalEntitlementInDays || variant.annualLeaveAllocation || 0;
+        
+        if (variant.grantFrequency === 'per_year') {
+          eligibility = annualEntitlement;
+        } else {
+          const currentMonth = new Date().getMonth() + 1; // August = 8
+          eligibility = (annualEntitlement / 12) * currentMonth;
+        }
+      }
+      const totalEligibility = eligibility + openingBalance;
+      
+      // Calculate availed using same logic as table
+      const isBeforeWorkflow = variant.leaveBalanceDeductionBefore === true;
+      
+      const matchingRequests = requestsArray.filter((req: any) => 
+        req.leaveVariantId === variant.id || 
+        ((req.leaveVariantId === null || req.leaveVariantId === undefined) && req.leaveTypeId === variant.leaveTypeId)
+      );
+      
+      const approvedRequests = matchingRequests.filter((req: any) => req.status === 'approved');
+      const approvedDays = approvedRequests.reduce((sum: number, req: any) => 
+        sum + parseFloat(req.workingDays || '0'), 0
+      );
+      
+      let pendingDays = 0;
+      if (isBeforeWorkflow) {
+        const pendingRequests = matchingRequests.filter((req: any) => req.status === 'pending');
+        pendingDays = pendingRequests.reduce((sum: number, req: any) => 
+          sum + parseFloat(req.workingDays || '0'), 0
+        );
+      }
+      
+      const importedAvailed = transactions.filter((t: any) => 
+        t.description?.toLowerCase().includes('imported leave transaction') && 
+        t.description?.toLowerCase().includes('availed') &&
+        (t.transactionType === 'deduction' || t.transactionType === 'debit')
+      ).reduce((sum: number, t: any) => 
+        sum + Math.abs(parseFloat(t.amount || '0')), 0
+      );
+      
+      const availed = approvedDays + pendingDays + importedAvailed;
+      const closingBalance = totalEligibility - availed;
+      totalClosingBalance += closingBalance;
+    });
+
+    console.log('🎯 [NewEmployeeOverview] EXACT calculation results:', {
+      totalEligibilitySum: totalEligibilitySum.toFixed(1),
+      totalAvailed: totalAvailed.toFixed(1),
+      totalClosingBalance: totalClosingBalance.toFixed(1)
+    });
+
+    return {
+      totalEligibility: parseFloat(totalEligibilitySum.toFixed(1)),
+      totalAvailed: parseFloat(totalAvailed.toFixed(1)),
+      totalBalance: parseFloat(totalClosingBalance.toFixed(1))
+    };
+  };
+
+  const sophisticatedMetrics = calculateSophisticatedMetrics();
+  
+  // Use sophisticated calculations for display
+  const totalEntitlement = sophisticatedMetrics.totalEligibility;
+  const totalAvailed = sophisticatedMetrics.totalAvailed;
+  const totalBalance = sophisticatedMetrics.totalBalance;
+
+  console.log('[NewEmployeeOverview] Final sophisticated metrics applied:', {
+    totalEntitlement,
+    totalAvailed,
+    totalBalance,
+    displayValues: {
+      totalEntitlementDisplay: totalEntitlement.toFixed(1),
+      totalAvailedDisplay: totalAvailed.toFixed(1),
+      totalBalanceDisplay: totalBalance.toFixed(1)
+    }
+  });
 
   // Generate usage trends from leave requests (both approved and pending for demo)
   const generateUsageTrends = () => {
@@ -115,8 +353,8 @@ export default function NewEmployeeOverview() {
     console.log('[UsageTrends] DEBUG - Approved leaves:', approvedLeaves.length);
     console.log('[UsageTrends] DEBUG - Pending leaves:', leaveRequests.filter(l => l.status === 'pending').length);
     
-    // Use all leave requests (approved + pending) to show usage trends
-    const relevantLeaves = leaveRequests; // Include all statuses for now to show data
+    // Use only approved leave requests to show usage trends - exclude rejected and pending
+    const relevantLeaves = leaveRequests.filter((leave: LeaveRequest) => leave.status === 'approved');
     
     console.log('[UsageTrends] DEBUG - Using leaves for trends:', relevantLeaves.map(l => ({
       id: l.id,
@@ -234,13 +472,13 @@ export default function NewEmployeeOverview() {
       if (hasLeave && leaveForDate) {
         switch (leaveForDate.status) {
           case 'approved':
-            dayClasses += 'bg-green-100 text-green-800 font-medium';
+            dayClasses += 'bg-green-300 text-green-800 font-medium';
             break;
           case 'pending':
-            dayClasses += 'bg-orange-100 text-orange-800 font-medium';
+            dayClasses += 'bg-orange-300 text-orange-800 font-medium';
             break;
           case 'rejected':
-            dayClasses += 'bg-red-100 text-red-800 font-medium';
+            dayClasses += 'bg-red-300 text-red-800 font-medium';
             break;
           default:
             dayClasses += 'bg-gray-100 text-gray-800 font-medium';
@@ -259,20 +497,7 @@ export default function NewEmployeeOverview() {
     return days;
   };
 
-  if (leaveLoading || balanceLoading) {
-    return (
-      <div className="p-6 space-y-6 max-w-7xl mx-auto">
-        <div className="animate-pulse">
-          <div className="h-8 bg-gray-200 rounded mb-4"></div>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-            {[1, 2, 3, 4].map(i => (
-              <div key={i} className="h-24 bg-gray-200 rounded"></div>
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  }
+
 
   return (
     <div className="p-6 space-y-6 max-w-7xl mx-auto">
@@ -314,7 +539,7 @@ export default function NewEmployeeOverview() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">Total Leaves</p>
-                <p className="text-3xl font-bold text-gray-900">{Math.round(totalEntitlement) || 0}</p>
+                <p className="text-3xl font-bold text-gray-900">{totalEntitlement.toFixed(1)}</p>
               </div>
               <Calendar className="h-8 w-8 text-blue-500" />
             </div>
@@ -326,7 +551,7 @@ export default function NewEmployeeOverview() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">Total Availed</p>
-                <p className="text-3xl font-bold text-gray-900">{Math.round(totalAvailed) || 0}</p>
+                <p className="text-3xl font-bold text-gray-900">{totalAvailed.toFixed(1)}</p>
               </div>
               <CheckCircle className="h-8 w-8 text-green-500" />
             </div>
@@ -350,7 +575,7 @@ export default function NewEmployeeOverview() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">Balance</p>
-                <p className="text-3xl font-bold text-gray-900">{Math.round(totalBalance) || 0}</p>
+                <p className="text-3xl font-bold text-gray-900">{totalBalance.toFixed(1)}</p>
               </div>
               <TrendingUp className="h-8 w-8 text-purple-500" />
             </div>
@@ -358,10 +583,10 @@ export default function NewEmployeeOverview() {
         </Card>
       </div>
 
-      {/* Main Content Grid */}
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-        {/* Applications Section */}
-        <div className="xl:col-span-2 space-y-6">
+      {/* Main Content Grid - Reorganized for better space utilization */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Left Column */}
+        <div className="space-y-6">
           {/* Applications Table */}
           <Card>
             <CardHeader>
@@ -374,7 +599,7 @@ export default function NewEmployeeOverview() {
               <Tabs defaultValue="leaves" className="space-y-4">
                 <TabsList className="grid w-full grid-cols-3">
                   <TabsTrigger value="leaves">Leaves ({totalRequests})</TabsTrigger>
-                  <TabsTrigger value="pto">PTO ({ptoRequests.length})</TabsTrigger>
+                  <TabsTrigger value="pto">BTO ({ptoRequests.length})</TabsTrigger>
                   <TabsTrigger value="compoff">Comp-off ({compOffRequests.length})</TabsTrigger>
                 </TabsList>
 
@@ -416,7 +641,7 @@ export default function NewEmployeeOverview() {
 
                 <TabsContent value="pto">
                   <div className="text-center py-8 text-gray-500">
-                    {ptoRequests.length === 0 ? 'No PTO requests found' : `${ptoRequests.length} PTO requests`}
+                    {ptoRequests.length === 0 ? 'No BTO requests found' : `${ptoRequests.length} BTO requests`}
                   </div>
                 </TabsContent>
 
@@ -428,43 +653,11 @@ export default function NewEmployeeOverview() {
               </Tabs>
             </CardContent>
           </Card>
-
-          {/* Chart Section */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Leave Usage Trends</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="h-80">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={usageTrendsData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="month" />
-                    <YAxis />
-                    <Bar dataKey="usage" fill="#3B82F6" />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-              {/* Debug Chart Data */}
-              <div className="mt-4 p-3 bg-gray-50 rounded text-xs">
-                <p className="font-medium mb-2">Chart Debug Data:</p>
-                <p>Total requests: {leaveRequests.length}</p>
-                <p>Approved: {approvedLeaves.length}</p>
-                <p>Chart data points: {usageTrendsData.length}</p>
-                <div className="mt-2">
-                  {usageTrendsData.filter(d => d.usage > 0).map(d => (
-                    <span key={d.month} className="mr-2">
-                      {d.month}: {d.usage}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
         </div>
 
-        {/* Calendar Section */}
+        {/* Right Column */}
         <div className="space-y-6">
+          {/* Calendar Section */}
           <Card>
             <CardHeader>
               <div className="flex items-center justify-between">
@@ -497,15 +690,15 @@ export default function NewEmployeeOverview() {
                 {/* Legend */}
                 <div className="flex items-center gap-4 text-sm">
                   <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 bg-green-100 rounded"></div>
+                    <div className="w-3 h-3 bg-green-300 rounded"></div>
                     <span className="text-gray-600">Approved</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 bg-orange-100 rounded"></div>
+                    <div className="w-3 h-3 bg-orange-300 rounded"></div>
                     <span className="text-gray-600">Pending</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 bg-red-100 rounded"></div>
+                    <div className="w-3 h-3 bg-red-300 rounded"></div>
                     <span className="text-gray-600">Rejected</span>
                   </div>
                 </div>
@@ -513,25 +706,34 @@ export default function NewEmployeeOverview() {
             </CardContent>
           </Card>
 
-          {/* Balance Summary */}
+          {/* Chart Section - Now positioned to fill empty space */}
           <Card>
             <CardHeader>
-              <CardTitle>Leave Balances</CardTitle>
+              <CardTitle>Leave Usage Trends</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-3">
-                {leaveBalances.map((balance: LeaveBalance, index: number) => (
-                  <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
-                    <div>
-                      <p className="font-medium text-gray-900">{balance.leaveTypeName}</p>
-                      <p className="text-sm text-gray-500">{balance.leaveVariantName}</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-bold text-gray-900">{Math.round(balance.currentBalance / 2)}</p>
-                      <p className="text-sm text-gray-500">days</p>
-                    </div>
-                  </div>
-                ))}
+              <div className="h-64">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={usageTrendsData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="month" />
+                    <YAxis />
+                    <Bar dataKey="usage" fill="#3B82F6" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+              {/* Debug data without header */}
+              <div className="mt-4 p-3 bg-gray-50 rounded text-xs">
+                <p>Total requests: {leaveRequests.length}</p>
+                <p>Approved: {approvedLeaves.length}</p>
+                <p>Chart data points: {usageTrendsData.length}</p>
+                <div className="mt-2">
+                  {usageTrendsData.filter(d => d.usage > 0).map(d => (
+                    <span key={d.month} className="mr-2">
+                      {d.month}: {d.usage}
+                    </span>
+                  ))}
+                </div>
               </div>
             </CardContent>
           </Card>

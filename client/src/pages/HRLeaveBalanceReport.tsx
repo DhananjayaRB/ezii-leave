@@ -19,7 +19,7 @@ export default function HRLeaveBalanceReport() {
   const [selectedLeaveType, setSelectedLeaveType] = useState("all");
 
   // Get org_id from localStorage - use current org from JWT token
-  const currentOrgId = localStorage.getItem('org_id') || '38';
+  const currentOrgId = localStorage.getItem('org_id');
   
   console.log('[HR Report] Current org_id:', currentOrgId);
 
@@ -93,6 +93,31 @@ export default function HRLeaveBalanceReport() {
     }
   }, [externalEmployees, currentOrgId, recalculateProRataMutation.isPending]);
 
+  // Separate mutation for "After Earning" recalculation
+  const recalculateAfterEarningMutation = useMutation({
+    mutationFn: async () => {
+      console.log('[AfterEarning] Triggering balance recalculation for After Earning leave types');
+      const response = await fetch('/api/recalculate-leave-balances', {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'X-Org-Id': currentOrgId 
+        }
+      });
+      if (!response.ok) throw new Error('Recalculation failed');
+      return response.json();
+    },
+    onSuccess: () => {
+      console.log('[AfterEarning] Balance recalculation completed successfully');
+      // Force refresh of data after recalculation
+      queryClient.invalidateQueries({ queryKey: [`/api/employee-leave-balances/all`] });
+      queryClient.invalidateQueries({ queryKey: [`/api/leave-balance-transactions/all`] });
+    },
+    onError: (error) => {
+      console.error('[AfterEarning] Balance recalculation failed:', error);
+    }
+  });
+
   // Fetch leave types
   const { data: leaveTypes = [] } = useQuery({
     queryKey: ["/api/leave-types"],
@@ -128,13 +153,60 @@ export default function HRLeaveBalanceReport() {
     refetchOnMount: true
   });
 
+  // Fetch all leave requests for accurate availed calculations (same method as Leave Applications page)
+  const { data: allLeaveRequests = [] } = useQuery({
+    queryKey: ["/api/leave-requests"],
+    enabled: !!currentOrgId
+  });
+
+  // Check for "After Earning" leave types and trigger recalculation when HR report loads
+  React.useEffect(() => {
+    if (leaveVariants && leaveVariants.length > 0 && !recalculateAfterEarningMutation.isPending) {
+      const afterEarningVariants = leaveVariants.filter((v: any) => v.grantLeaves === 'after_earning');
+      
+      if (afterEarningVariants.length > 0) {
+        const hasRecalculatedKey = `after_earning_recalc_${currentOrgId}_${new Date().toDateString()}`;
+        const hasRecalculated = sessionStorage.getItem(hasRecalculatedKey);
+        
+        if (!hasRecalculated) {
+          console.log('[AfterEarning] Found After Earning leave types, triggering balance recalculation:', 
+            afterEarningVariants.map((v: any) => ({ id: v.id, name: v.leaveVariantName })));
+          
+          sessionStorage.setItem(hasRecalculatedKey, 'true');
+          recalculateAfterEarningMutation.mutate();
+        } else {
+          console.log('[AfterEarning] Already recalculated today, skipping');
+        }
+      }
+    }
+  }, [leaveVariants, currentOrgId, recalculateAfterEarningMutation.isPending]);
+
   // Debug logging
   console.log('[HR Report] Debug data:');
-  console.log('All balances:', allBalances?.length || 0, allBalances);
-  console.log('All transactions:', allTransactions?.length || 0, allTransactions); 
-  console.log('All assignments:', allAssignments?.length || 0, allAssignments);
-  console.log('Leave variants:', leaveVariants?.length || 0);
-  console.log('External employees:', externalEmployees?.length || 0, externalEmployees);
+  console.log('All balances:', (allBalances as any[])?.length || 0);
+  console.log('All transactions:', (allTransactions as any[])?.length || 0); 
+  console.log('All assignments:', (allAssignments as any[])?.length || 0);
+  console.log('Leave variants:', (leaveVariants as any[])?.length || 0);
+  console.log('External employees:', (externalEmployees as any[])?.length || 0);
+  
+  // DEBUG: Check external employee data and type_id fields
+  console.log('[HR Report] External employees sample:', externalEmployees?.slice(0, 3));
+  console.log('[HR Report] JWT token available:', !!localStorage.getItem('jwt_token'));
+  
+  // DEBUG: Check if any employee has type_id_0 and type_id_1 data
+  const employeeWithTypeIds = externalEmployees?.find((emp: any) => emp.type_id_0 || emp.type_id_1);
+  console.log('[HR Report] Employee with type_id data:', employeeWithTypeIds);
+  
+  // DEBUG: Check specific employee 015 (Ashwani Khanna) in external data
+  const employee015 = externalEmployees?.find((emp: any) => emp.employee_number === '015' || emp.user_id === '015');
+  console.log('[HR Report] Employee 015 in external data:', employee015);
+  
+  // DEBUG: If no external data, show guidance message
+  if (!externalEmployees || externalEmployees.length === 0) {
+    console.warn('[HR Report] ⚠️ No external employee data loaded. Location and Department will show N/A.');
+    console.warn('[HR Report] 💡 To fix this, you need to provide a JWT token for external API access.');
+    console.warn('[HR Report] 📋 Use /fix-location-department.html to setup JWT token.');
+  }
   
   // Debug pro-rata recalculation status
   console.log('[ProRata] Recalculation status:', {
@@ -154,9 +226,9 @@ export default function HRLeaveBalanceReport() {
   console.log('[HR Report] User 2162 balances:', user2162Balances);
 
   // Get unique employee IDs from both assignments AND leave balances to include Excel imported employees
-  const assignmentUserIds = allAssignments.map((assignment: any) => assignment.userId);
-  const balanceUserIds = allBalances.map((balance: any) => balance.userId);
-  const employeeIds = [...new Set([...assignmentUserIds, ...balanceUserIds])];
+  const assignmentUserIds = (allAssignments as any[]).map((assignment: any) => assignment.userId);
+  const balanceUserIds = (allBalances as any[]).map((balance: any) => balance.userId);
+  const employeeIds = Array.from(new Set([...assignmentUserIds, ...balanceUserIds]));
   console.log('[HR Report] Employee IDs from assignments:', assignmentUserIds);
   console.log('[HR Report] Employee IDs from balances:', balanceUserIds);
   console.log('[HR Report] Combined employee IDs:', employeeIds);
@@ -180,26 +252,101 @@ export default function HRLeaveBalanceReport() {
     // Get user transactions
     const userTransactions = allTransactions.filter((transaction: any) => transaction.userId === userId);
 
-    // For imported employees without assignments, use their balance variants
-    // For employees with assignments, use their assigned variants
-    const relevantVariantIds = assignedVariantIds.length > 0 
-      ? assignedVariantIds 
-      : userBalances.map((balance: any) => balance.leaveVariantId);
+    // CRITICAL FIX: Group by LEAVE TYPE instead of variants to prevent duplicates
+    // Use combination of assigned variants AND balance variants to ensure complete coverage
+    const balanceVariantIds = userBalances.map((balance: any) => balance.leaveVariantId);
+    const relevantVariantIds = [...new Set([...assignedVariantIds, ...balanceVariantIds])];
+    
 
-    // Create a row for each relevant leave type
-    return relevantVariantIds.map((variantId: number) => {
+    
+    // Group variants by leave type to prevent duplicates
+    const leaveTypeGroups = new Map<number, { variants: number[], balance?: any }>();
+    
+    relevantVariantIds.forEach((variantId: number) => {
       const variant = leaveVariants.find((v: any) => v.id === variantId);
-      const leaveType = leaveTypes.find((lt: any) => lt.id === variant?.leaveTypeId);
       const balance = userBalances.find((b: any) => b.leaveVariantId === variantId);
       
-      // Get transactions for this specific leave variant
-      const variantTransactions = userTransactions.filter((t: any) => t.leaveVariantId === variantId);
+
+      
+      if (variant?.leaveTypeId) {
+        if (!leaveTypeGroups.has(variant.leaveTypeId)) {
+          leaveTypeGroups.set(variant.leaveTypeId, { variants: [], balance: undefined });
+        }
+        
+        const group = leaveTypeGroups.get(variant.leaveTypeId)!;
+        group.variants.push(variantId);
+        
+        // Use balance from any variant that has one (prioritize actual balances)
+        if (balance && (!group.balance || parseFloat(balance.totalEntitlement || '0') > 0)) {
+          group.balance = balance;
+        } else if (!group.balance) {
+          // Create a default balance for assigned variants without actual balances
+          group.balance = {
+            userId: userId,
+            leaveVariantId: variantId,
+            totalEntitlement: '0',
+            currentBalance: '0',
+            usedBalance: '0'
+          };
+        }
+      }
+    });
+    
+    // Debug for user 225 to track duplicate fix
+    if (userId === '225') {
+      console.log(`[HR Report DUPLICATE FIX] User ${userId}:`, {
+        assignedVariantIds,
+        balanceVariantIds,
+        relevantVariantIds,
+        leaveTypeGroups: Array.from(leaveTypeGroups.entries()).map(([ltId, group]) => ({
+          leaveTypeId: ltId,
+          variants: group.variants,
+          hasBalance: !!group.balance
+        }))
+      });
+    }
+
+    // Create a row for each leave type (not variant)
+    return Array.from(leaveTypeGroups.entries()).map(([leaveTypeId, group]) => {
+      const leaveType = leaveTypes.find((lt: any) => lt.id === leaveTypeId);
+      const balance = group.balance;
+      
+      // Debug specific mapping for leave types
+      if (leaveTypeId === 68) { // Casual & Sick Leave type
+        console.log('[HR Report] Casual & Sick Leave mapping debug:', {
+          userId,
+          leaveTypeId,
+          leaveType,
+          balance,
+          groupVariants: group.variants,
+          allLeaveTypes: leaveTypes?.map(lt => ({ id: lt.id, name: lt.name })),
+          allVariants: leaveVariants?.map(v => ({ id: v.id, name: v.leaveVariantName, leaveTypeId: v.leaveTypeId }))
+        });
+      }
+      
+      // Get transactions for ALL variants of this leave type
+      const leaveTypeTransactions = userTransactions.filter((t: any) => {
+        const transactionVariant = leaveVariants.find((v: any) => v.id === t.leaveVariantId);
+        return transactionVariant?.leaveTypeId === leaveTypeId;
+      });
+      
+      // Debug for user 015 to see why AVAILED is 0.0
+      if (userId === '015') {
+        console.log(`[HR Report User 015 Debug] Leave Type ${leaveTypeId}:`, {
+          userTransactions: userTransactions.length,
+          leaveTypeTransactions: leaveTypeTransactions.length,
+          userTransactionSample: userTransactions.slice(0, 3),
+          leaveTypeTransactionSample: leaveTypeTransactions.slice(0, 3),
+          searchingForLeaveTypeId: leaveTypeId,
+          userTransactionVariantIds: [...new Set(userTransactions.map(t => t.leaveVariantId))]
+        });
+      }
 
       // Use exact same calculation logic as Leave Applications summary table
       
       // Calculate opening balance from imported Excel data transactions
       // Only count the most recent "Opening balance imported from Excel" transaction to avoid duplicates
-      const openingBalanceTransactions = variantTransactions
+      const openingBalanceTransactions = leaveTypeTransactions
         .filter((t: any) => t.transactionType === 'grant' && 
                t.description?.toLowerCase().includes('opening balance imported from excel'))
         .sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
@@ -211,37 +358,85 @@ export default function HRLeaveBalanceReport() {
       
       // For "After Earning" leave types, eligibility should be the calculated earned amount based on months elapsed
       // For "In Advance" leave types, eligibility should be total entitlement minus opening balance
-      const variantData = variant || leaveVariants?.find((v: any) => v.id === balance?.leaveVariantId);
+      const variantData = leaveVariants?.find((v: any) => v.id === balance?.leaveVariantId);
       const leaveTypeData = leaveTypes?.find((lt: any) => lt.id === variantData?.leaveTypeId);
       
-      const isAfterEarning = leaveTypeData?.grantLeaves === 'after_earning' || balance?.grantLeaves === 'after_earning';
+      // Check both variant data and leave type data for "After Earning" setting
+      const isAfterEarning = variantData?.grantLeaves === 'after_earning' || 
+                             leaveTypeData?.grantLeaves === 'after_earning' || 
+                             balance?.grantLeaves === 'after_earning';
       const currentBalanceInDays = balance ? parseFloat(balance.currentBalance || '0') : 0;
       const totalEntitlementInDays = balance ? parseFloat(balance.totalEntitlement || '0') : 0;
+      
+      // Debug for user 015 detection
+      if (userId === '015') {
+        console.log(`[HR Report Detection Debug] User ${userId} Leave Type ${leaveTypeId}:`, {
+          variantData,
+          leaveTypeData,
+          balance,
+          isAfterEarning,
+          variantGrantLeaves: variantData?.grantLeaves,
+          leaveTypeGrantLeaves: leaveTypeData?.grantLeaves,
+          balanceGrantLeaves: balance?.grantLeaves
+        });
+      }
       
       let eligibility = 0;
       
       if (isAfterEarning) {
-        // For "After Earning" leave types, find earned amount from accrual transactions
-        // Look for transactions that represent earned amounts from monthly accrual
-        const earnedTransactions = variantTransactions.filter((t: any) => 
-          t.transactionType === 'grant' && 
-          (t.description?.toLowerCase().includes('after earning calculation') ||
-           t.description?.toLowerCase().includes('months ×') ||
-           t.description?.toLowerCase().includes('automatic balance calculation') ||
-           t.description?.toLowerCase().includes('balance computation') ||
-           t.description?.toLowerCase().includes('first login auto-calculation') ||
-           t.description?.toLowerCase().includes('after earning'))
+        // For "After Earning" leave types, calculate eligibility based on completed months
+        // Formula: (Annual entitlement ÷ 12) × Completed months
+        
+        // Find employee joining date from external API
+        const employee = externalEmployees?.find((emp: any) => 
+          emp.user_id?.toString() === userId || 
+          emp.id?.toString() === userId ||
+          emp.employee_number?.toString() === userId
         );
         
-        if (earnedTransactions.length > 0) {
-          // Sum up all earned amounts from accrual transactions
-          eligibility = earnedTransactions.reduce((sum: number, t: any) => 
-            sum + parseFloat(t.amount || '0'), 0
-          );
+        const joiningDate = employee?.date_of_joining;
+        const currentYear = new Date().getFullYear();
+        const currentDate = new Date();
+        
+        if (joiningDate && variantData) {
+          // Parse joining date (DD-MMM-YYYY format from external API)
+          const joinDate = new Date(joiningDate);
+          const joinYear = joinDate.getFullYear();
+          
+          // Calculate completed months since joining for "After Earning"
+          let completedMonths = 0;
+          
+          if (joinYear < currentYear) {
+            // Employee joined before current year - count completed months from Jan 1 to current month
+            // For "After Earning", only count completed months, not the current month
+            completedMonths = currentDate.getMonth(); // 0-based month (current month not included)
+          } else if (joinYear === currentYear) {
+            // Employee joined in current year - calculate months from joining month to current month
+            const monthsSinceJoining = currentDate.getMonth() - joinDate.getMonth();
+            completedMonths = Math.max(0, monthsSinceJoining); // Only completed full months
+          }
+          
+          // Calculate eligibility: (Annual entitlement ÷ 12) × Completed months
+          const annualEntitlement = variantData?.paidDaysInYear || totalEntitlementInDays || 0;
+          eligibility = Math.round((annualEntitlement / 12) * completedMonths * 2) / 2; // Round to nearest 0.5
+          
+          // Debug for user 015 (Ashwani Khanna)
+          if (userId === '015') {
+            console.log(`[HR Report After Earning Debug] User ${userId} Leave Type ${leaveTypeId}:`, {
+              joiningDate,
+              joinDate: joinDate.toISOString(),
+              currentYear,
+              currentDate: currentDate.toISOString(),
+              completedMonths,
+              annualEntitlement,
+              monthlyRate: annualEntitlement / 12,
+              calculatedEligibility: eligibility,
+              expectedFor6Months: (18 / 12) * 6
+            });
+          }
         } else {
-          // Fallback: For "After Earning" types, if no earned transactions found,
-          // eligibility = current balance minus opening balance
-          eligibility = Math.max(0, currentBalanceInDays - openingBalance);
+          // Fallback: use current balance if no joining date available
+          eligibility = currentBalanceInDays;
         }
       } else {
         // For "In Advance" leave types, check if employee joined before current year
@@ -262,42 +457,47 @@ export default function HRLeaveBalanceReport() {
           const joinYear = new Date(joiningDate).getFullYear();
           
           if (joinYear < currentYear) {
-            // Employee joined before current year - give full entitlement
-            // Use totalEntitlementInDays but only if it seems reasonable (not corrupted by duplicates)
-            // If totalEntitlementInDays is way higher than expected, use the variant's configured amount
+            // Employee joined before current year - check grant frequency
             const variantConfiguredAmount = variantData?.paidDaysInYear || 0;
-            const maxReasonableAmount = variantConfiguredAmount * 2; // Allow some buffer for carry-forward etc.
+            const grantFrequency = variantData?.grantFrequency || 'per_year';
             
-            if (totalEntitlementInDays > 0 && totalEntitlementInDays <= maxReasonableAmount) {
-              eligibility = totalEntitlementInDays;
-            } else {
-              // Fallback to configured amount if totalEntitlement seems corrupted
+            if (grantFrequency === 'per_year') {
+              // For "In Advance" + "Per Year": Full annual amount is available immediately
               eligibility = variantConfiguredAmount;
+            } else {
+              // For "In Advance" + "Per Month": Pro-rated based on months elapsed
+              const currentDate = new Date();
+              const monthsFromYearStart = currentDate.getMonth() + 1; // 0-based month + 1
+              eligibility = Math.round((variantConfiguredAmount / 12) * monthsFromYearStart * 2) / 2; // Round to nearest 0.5
             }
           } else {
-            // Employee joined in current year - calculate pro-rated amount
+            // Employee joined in current year - check grant frequency
             const variantConfiguredAmount = variantData?.paidDaysInYear || 0;
-            const joinDate = new Date(joiningDate);
-            const currentDate = new Date();
-            const endOfYear = new Date(currentYear, 11, 31); // December 31st
+            const grantFrequency = variantData?.grantFrequency || 'per_year';
             
-            // Calculate remaining months from joining date to end of year
-            const remainingMonths = Math.max(0, 
-              (endOfYear.getFullYear() - joinDate.getFullYear()) * 12 + 
-              (endOfYear.getMonth() - joinDate.getMonth()) + 1
-            );
-            
-            // Pro-rated eligibility = (configured annual amount / 12) * remaining months
-            eligibility = Math.round((variantConfiguredAmount / 12) * remainingMonths * 2) / 2; // Round to nearest 0.5
+            if (grantFrequency === 'per_year') {
+              // For "In Advance" + "Per Year": Full annual amount is available immediately
+              eligibility = variantConfiguredAmount;
+            } else {
+              // For "In Advance" + "Per Month": Pro-rated based on remaining months
+              const joinDate = new Date(joiningDate);
+              const currentDate = new Date();
+              const endOfYear = new Date(currentYear, 11, 31); // December 31st
+              
+              // Calculate remaining months from joining date to end of year
+              const remainingMonths = Math.max(0, 
+                (endOfYear.getFullYear() - joinDate.getFullYear()) * 12 + 
+                (endOfYear.getMonth() - joinDate.getMonth()) + 1
+              );
+              
+              // Pro-rated eligibility = (configured annual amount / 12) * remaining months
+              eligibility = Math.round((variantConfiguredAmount / 12) * remainingMonths * 2) / 2; // Round to nearest 0.5
+            }
             
             // Debug logging for Jainish Shah
             if (userId === '14674') {
-              console.log(`[HR Report Pro-rata Debug] Jainish Shah User ${userId} Variant ${variantId} (${leaveTypeData?.name || 'Unknown'}):`, {
+              console.log(`[HR Report Pro-rata Debug] Jainish Shah User ${userId} Leave Type ${leaveTypeId} (${leaveTypeData?.name || 'Unknown'}):`, {
                 joiningDate,
-                joinDate: joinDate.toISOString(),
-                currentYear,
-                endOfYear: endOfYear.toISOString(),
-                remainingMonths,
                 variantConfiguredAmount,
                 monthlyRate: variantConfiguredAmount / 12,
                 calculatedEligibility: eligibility
@@ -309,13 +509,13 @@ export default function HRLeaveBalanceReport() {
           eligibility = currentBalanceInDays;
         }
         
-        // Debug logging for user 14674 (Jainish Shah) and user 58976 (Ananth BS)
-        if (userId === '14674' || userId === '58976') {
+        // Debug logging for specific employees if needed
+        if (userId === '14674' || userId === '58976' || userId === '225') {
           const variantConfiguredAmount = variantData?.paidDaysInYear || 0;
-          const maxReasonableAmount = variantConfiguredAmount * 2;
+          const grantFrequency = variantData?.grantFrequency || 'per_year';
           const joinYear = employee?.date_of_joining ? new Date(employee.date_of_joining).getFullYear() : null;
           
-          console.log(`[HR Report Eligibility Debug] User ${userId} (${leaveTypeData?.name || 'Unknown'}) Variant ${variantId}:`, {
+          console.log(`[HR Report Eligibility Debug] User ${userId} (${leaveTypeData?.name || 'Unknown'}) Leave Type ${leaveTypeId}:`, {
             balanceData: balance,
             currentBalanceRaw: balance?.currentBalance,
             currentBalanceInDays,
@@ -323,12 +523,12 @@ export default function HRLeaveBalanceReport() {
             calculatedEligibility: eligibility,
             totalEntitlementInDays,
             variantConfiguredAmount,
-            maxReasonableAmount,
-            usedTotalEntitlement: totalEntitlementInDays > 0 && totalEntitlementInDays <= maxReasonableAmount,
+            grantFrequency,
             isAfterEarning: isAfterEarning,
             joiningDate: employee?.date_of_joining,
             joinYear,
-            joinedBeforeCurrentYear: joinYear < 2025
+            joinedBeforeCurrentYear: joinYear < 2025,
+            eligibilityCalculationMethod: grantFrequency === 'per_year' ? 'full_annual_amount' : 'pro_rata_calculation'
           });
         }
       }
@@ -339,7 +539,7 @@ export default function HRLeaveBalanceReport() {
       
       // Debug logging for user 58976 (Ananth BS) to identify source of incorrect 234.5 eligibility
       if (userId === '58976') {
-        console.log(`[HR Report Ananth BS Debug] User 58976 Variant ${variantId}:`, {
+        console.log(`[HR Report Ananth BS Debug] User 58976 Leave Type ${leaveTypeId}:`, {
           leaveTypeName: leaveTypeData?.name,
           eligibilityCalculated: eligibility,
           openingBalanceFromTransactions: openingBalance,
@@ -347,7 +547,7 @@ export default function HRLeaveBalanceReport() {
           balanceData: balance,
           currentBalanceInDays,
           totalEntitlementInDays,
-          variantTransactions: variantTransactions?.length || 0,
+          leaveTypeTransactions: leaveTypeTransactions?.length || 0,
           isAfterEarning,
           employee: externalEmployees?.find((emp: any) => 
             emp.user_id?.toString() === userId || 
@@ -357,121 +557,98 @@ export default function HRLeaveBalanceReport() {
         });
       }
       
-      // Calculate availed from transactions only (actual leave usage, not grants)
-      // Include Excel imported availed leave data but exclude truly historical transactions
-      const isBeforeWorkflow = variantData?.leaveBalanceDeductionBefore === true;
+      // FIXED: Calculate availed using same method as Leave Applications page
+      // Use approved leave requests instead of transactions for accuracy
+      const userLeaveRequests = allLeaveRequests.filter((req: any) => req.userId === userId);
       
-      // Debug logging for AVAILED calculation (including DB061 employee)
-      const employee = externalEmployees?.find((emp: any) => 
-        emp.user_id?.toString() === userId || 
-        emp.id?.toString() === userId ||
-        emp.employee_number?.toString() === userId
-      );
-      const isDebugUser = userId === '2161' || userId === '14674' || userId === '2176' || userId === '2162' || employee?.employee_number === 'DB061';
+      // Get requests for this leave type specifically
+      const leaveTypeRequests = userLeaveRequests.filter((req: any) => {
+        // Match by leaveTypeId (primary method)
+        if (req.leaveTypeId === leaveTypeId) {
+          return true;
+        }
+        
+        // Fallback: Match by variant's leaveTypeId if request has leaveVariantId
+        const requestVariant = leaveVariants.find((v: any) => v.id === req.leaveVariantId);
+        if (requestVariant?.leaveTypeId === leaveTypeId) {
+          return true;
+        }
+        
+        return false;
+      });
       
-      // Extra debug for DB061 specifically
-      if (employee?.employee_number === 'DB061' || userId === '2162' || userId === '2176') {
-        console.log(`[HR Report DB061 Debug] Found user ${userId} with employee_number: ${employee?.employee_number}`);
-        console.log(`[HR Report DB061 Debug] Variant transactions for user ${userId}:`, variantTransactions);
-        console.log(`[HR Report DB061 Debug] Variant data for user ${userId}:`, variantData);
-        console.log(`[HR Report DB061 Debug] Leave type data for user ${userId}:`, leaveTypeData);
-      }
+      // Calculate availed from approved requests only (consistent with Leave Applications page)
+      const approvedRequests = leaveTypeRequests.filter((req: any) => req.status === 'approved');
+      const availed = approvedRequests.reduce((sum: number, req: any) => {
+        return sum + parseFloat(req.totalDays || '0');
+      }, 0);
       
-      if (isDebugUser) {
-        console.log(`[HR Report AVAILED Debug] User ${userId}, Variant ${variantId} (${leaveTypeData?.name || 'Unknown'}):`, {
-          variantName: leaveTypeData?.name || 'Unknown',
-          isBeforeWorkflow,
-          leaveBalanceDeductionBefore: variantData?.leaveBalanceDeductionBefore,
-          totalTransactions: variantTransactions.length,
-          pendingDeductions: variantTransactions.filter(t => t.transactionType === 'pending_deduction').length,
-          deductionTransactions: variantTransactions.filter(t => t.transactionType === 'deduction').length,
-          allTransactionTypes: [...new Set(variantTransactions.map(t => t.transactionType))],
-          variantData: variantData,
-          allPendingTransactions: variantTransactions.filter(t => t.transactionType === 'pending_deduction').map(t => ({
-            id: t.id,
-            amount: t.amount,
-            description: t.description
+      // Debug for user 241 (Sanjay) to verify correct calculation
+      if (userId === '241') {
+        console.log(`[HR Report SANJAY FIXED] Leave Type ${leaveTypeId} (${leaveTypeData?.name}):`, {
+          totalUserRequests: userLeaveRequests.length,
+          leaveTypeRequests: leaveTypeRequests.length,
+          approvedRequests: approvedRequests.length,
+          availedDays: availed,
+          approvedRequestDetails: approvedRequests.map(req => ({
+            id: req.id,
+            startDate: req.startDate,
+            endDate: req.endDate,
+            totalDays: req.totalDays,
+            reason: req.reason
           }))
         });
       }
       
-      const usageTransactions = variantTransactions.filter((t: any) => {
-        const amount = parseFloat(t.amount || '0');
-        const isDeductionType = t.transactionType === 'debit' || t.transactionType === 'deduction';
-        const isNegativeAmount = amount < 0;
-        const isPendingDeduction = t.transactionType === 'pending_deduction';
-        
-        // Only exclude specific historical transactions, not Excel imported availed leave
-        // Include approved imported transactions but exclude "additional historical" and rejected ones
-        const isExcludedHistorical = t.description?.toLowerCase().includes('additional historical availed leave') ||
-                                    t.description?.toLowerCase().includes('status: rejected');
-        
-        // Exclude only specific historical transactions that don't represent current period usage
-        if (isExcludedHistorical) {
-          return false;
-        }
-        
-        // For "before workflow" types, include pending deductions
-        // For "after workflow" types, exclude pending deductions
-        if (isPendingDeduction && !isBeforeWorkflow) {
-          return false; // Don't include pending deductions for "after workflow" types
-        }
-        
-        const shouldInclude = isDeductionType || isNegativeAmount || (isPendingDeduction && isBeforeWorkflow);
-        
-        // Debug logging for specific transactions  
-        if (isDebugUser && (isPendingDeduction || isDeductionType || isNegativeAmount)) {
-          console.log(`[HR Report] Transaction analysis:`, {
-            id: t.id,
-            type: t.transactionType,
-            amount: t.amount,
-            description: t.description,
-            isBeforeWorkflow,
-            isPendingDeduction,
-            isDeductionType,
-            isNegativeAmount,
-            shouldInclude
-          });
-        }
-        
-        return shouldInclude;
-      });
-      
-      const availed = usageTransactions.reduce((sum: number, t: any) => 
-        sum + Math.abs(parseFloat(t.amount || '0')), 0
-      );
-      
-      // Debug final AVAILED result
-      if (isDebugUser) {
-        console.log(`[HR Report AVAILED Result] User ${userId}, Variant ${variantId}:`, {
-          usageTransactionsCount: usageTransactions.length,
+      // Enhanced debug final AVAILED result for specific users
+      if (userId === '239' || userId === '241') {
+        console.log(`[HR Report AVAILED FIXED] User ${userId}, Leave Type ${leaveTypeId} (${leaveTypeData?.name}):`, {
           availedAmount: availed,
-          usageTransactions: usageTransactions.map(t => ({
-            id: t.id,
-            type: t.transactionType,
-            amount: t.amount,
-            description: t.description
-          }))
+          calculationMethod: 'request-based (same as Leave Applications page)',
+          approvedRequestsCount: approvedRequests.length
         });
       }
       
       // Calculate LOP from transactions (Loss of Pay) - already in full days
-      const lop = variantTransactions
+      const lop = leaveTypeTransactions
         .filter((t: any) => (t.transactionType === 'debit' || t.transactionType === 'deduction') && (t.description?.toLowerCase().includes('lop') || t.description?.toLowerCase().includes('loss of pay')))
         .reduce((sum: number, t: any) => sum + Math.abs(parseFloat(t.amount || '0')), 0);
       
       // Calculate encashed from transactions - already in full days
-      const encashed = variantTransactions
+      const encashed = leaveTypeTransactions
         .filter((t: any) => (t.transactionType === 'debit' || t.transactionType === 'deduction') && t.description?.toLowerCase().includes('encash'))
         .reduce((sum: number, t: any) => sum + Math.abs(parseFloat(t.amount || '0')), 0);
       
       // Calculate lapsed from transactions - already in full days
-      const lapsed = variantTransactions
+      const lapsed = leaveTypeTransactions
         .filter((t: any) => (t.transactionType === 'debit' || t.transactionType === 'deduction') && t.description?.toLowerCase().includes('lapse'))
         .reduce((sum: number, t: any) => sum + Math.abs(parseFloat(t.amount || '0')), 0);
       
       // Calculate closing balance as: Total Eligibility - Availed
       const closingBalance = totalEligibility - availed;
+
+      // Find employee data for display purposes
+      const employee = externalEmployees?.find((emp: any) => 
+        emp.user_id?.toString() === userId || 
+        emp.id?.toString() === userId ||
+        emp.employee_number?.toString() === userId
+      );
+
+      // DEBUG: Log employee lookup for specific users
+      if (userId === '015' || userId === '128' || userId === '225') {
+        console.log(`[HR Report MAPPING DEBUG] User ${userId}:`, {
+          employeeFound: !!employee,
+          employeeData: employee,
+          type_id_0: employee?.type_id_0,
+          type_id_1: employee?.type_id_1,
+          allExternalEmployees: externalEmployees?.length,
+          lookupMatches: externalEmployees?.filter((emp: any) => 
+            emp.user_id?.toString() === userId || 
+            emp.id?.toString() === userId ||
+            emp.employee_number?.toString() === userId
+          )
+        });
+      }
 
       return {
         employeeNo: employee?.employee_number || userId,
@@ -479,9 +656,8 @@ export default function HRLeaveBalanceReport() {
                      (employee?.first_name && employee?.last_name ? 
                       `${employee.first_name} ${employee.last_name}` : 
                       `Employee ${userId}`),
-        location: employee?.location || employee?.city || "N/A",
-        department: employee?.department || employee?.dept_name || "N/A", 
-        division: employee?.division || employee?.unit || "N/A",
+        location: employee?.type_id_0 || "N/A",
+        department: employee?.type_id_1 || "N/A", 
         leaveType: leaveTypeData?.name || leaveType?.name || "Unknown",
         opBalance: Number(openingBalance || 0).toFixed(1),
         eligibility: Number(eligibility || 0).toFixed(1),
@@ -491,11 +667,42 @@ export default function HRLeaveBalanceReport() {
         leaveEncashed: Number(encashed || 0).toFixed(1),
         closingBalance: Number(closingBalance || 0).toFixed(1),
         userId,
-        variantId,
         leaveTypeId: leaveTypeData?.id || leaveType?.id
       };
     });
   }).filter(Boolean);
+
+  // Debug: Check for Casual & Sick Leave data
+  const casualSickData = reportData.filter((row: any) => row.leaveType === 'Casual & Sick Leave');
+  console.log('[HR Report] Casual & Sick Leave data found:', casualSickData.length, casualSickData);
+  
+  // Debug specific user mapping for "015" employee
+  casualSickData.forEach((row: any, index: number) => {
+    if (index < 5) { // Log first 5 for debugging
+      console.log(`[HR Report] Row ${index}: Employee No=${row.employeeNo}, Name=${row.employeeName}, UserId=${row.userId}, Eligibility=${row.eligibility}`);
+    }
+    if (row.employeeNo === '015') {
+      console.log(`[HR Report] FOUND ASHWANI KHANNA (015):`, {
+        employeeNo: row.employeeNo,
+        employeeName: row.employeeName,
+        userId: row.userId,
+        eligibility: row.eligibility,
+        totalEligibility: row.totalEligibility,
+        openingBalance: row.opBalance,
+        availed: row.availed,
+        closingBalance: row.closingBalance,
+        fullRowData: row
+      });
+    }
+  });
+  
+  // Debug: Check all leave types in report data
+  const allLeaveTypesInData = [...new Set(reportData.map((row: any) => row.leaveType))];
+  console.log('[HR Report] All leave types in report data:', allLeaveTypesInData);
+  
+  // Debug: Check selected leave type filter
+  console.log('[HR Report] Selected leave type filter:', selectedLeaveType);
+  console.log('[HR Report] Available leave types for dropdown:', leaveTypes?.map((lt: any) => ({ id: lt.id, name: lt.name })));
 
   // Apply filters
   const filteredData = reportData.filter((row: any) => {
@@ -506,6 +713,16 @@ export default function HRLeaveBalanceReport() {
     const matchesLocation = selectedLocation === "all" || row.location === selectedLocation;
     const matchesDepartment = selectedDepartment === "all" || row.department === selectedDepartment;
     const matchesLeaveType = selectedLeaveType === "all" || row.leaveTypeId?.toString() === selectedLeaveType;
+
+    // Debug specific filtering for Casual & Sick Leave
+    if (row.leaveType === 'Casual & Sick Leave') {
+      console.log('[HR Report] Casual & Sick Leave row filter debug:', {
+        rowLeaveTypeId: row.leaveTypeId,
+        selectedLeaveType,
+        matchesLeaveType,
+        rowData: row
+      });
+    }
 
     return matchesSearch && matchesLocation && matchesDepartment && matchesLeaveType;
   });
@@ -519,7 +736,7 @@ export default function HRLeaveBalanceReport() {
   // Export to Excel function
   const exportToExcel = () => {
     const headers = [
-      "Employee No", "Employee Name", "Location", "Department", "Division", 
+      "Employee No", "Employee Name", "Location", "Department", 
       "Leave Type", "Op Balance", "Eligibility", "Total Eligibility", 
       "Availed", "Leave Lapsed", "Leave Encashed", "Closing Balance"
     ];
@@ -527,7 +744,7 @@ export default function HRLeaveBalanceReport() {
     const csvContent = [
       headers.join(","),
       ...filteredData.map((row: any) => [
-        row.employeeNo, row.employeeName, row.location, row.department, row.division,
+        row.employeeNo, row.employeeName, row.location, row.department,
         row.leaveType, row.opBalance, row.eligibility, row.totalEligibility,
         row.availed, row.leaveLapsed, row.leaveEncashed, row.closingBalance
       ].map(cell => `"${cell}"`).join(","))
@@ -665,7 +882,6 @@ export default function HRLeaveBalanceReport() {
                       <TableHead className="font-semibold">Employee Name</TableHead>
                       <TableHead className="font-semibold">Location</TableHead>
                       <TableHead className="font-semibold">Department</TableHead>
-                      <TableHead className="font-semibold">Division</TableHead>
                       <TableHead className="font-semibold">Leave Type</TableHead>
                       <TableHead className="font-semibold text-right">Op Balance</TableHead>
                       <TableHead className="font-semibold text-right">Eligibility</TableHead>
@@ -679,18 +895,17 @@ export default function HRLeaveBalanceReport() {
                   <TableBody>
                     {filteredData.length === 0 ? (
                       <TableRow>
-                        <TableCell colSpan={13} className="text-center py-8 text-gray-500">
+                        <TableCell colSpan={12} className="text-center py-8 text-gray-500">
                           No data available for the selected filters
                         </TableCell>
                       </TableRow>
                     ) : (
                       filteredData.map((row: any, index: number) => (
-                        <TableRow key={`${row.userId}-${row.variantId}`} className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
+                        <TableRow key={`${row.userId}-${row.leaveTypeId}`} className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
                           <TableCell className="font-medium">{row.employeeNo}</TableCell>
                           <TableCell>{row.employeeName}</TableCell>
                           <TableCell>{row.location}</TableCell>
                           <TableCell>{row.department}</TableCell>
-                          <TableCell>{row.division}</TableCell>
                           <TableCell>{row.leaveType}</TableCell>
                           <TableCell className="text-right">{row.opBalance}</TableCell>
                           <TableCell className="text-right">{row.eligibility}</TableCell>

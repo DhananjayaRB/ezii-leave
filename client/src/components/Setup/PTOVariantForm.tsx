@@ -62,9 +62,9 @@ export default function PTOVariantForm({ variant, onClose }: PTOVariantFormProps
     }
   };
 
-  // Fetch existing employee assignments for this variant
+  // Fetch existing employee assignments for this variant using PTO-specific endpoint
   const { data: existingAssignments = [] } = useQuery({
-    queryKey: [`/api/employee-assignments/${variant?.id}`],
+    queryKey: [`/api/employee-assignments/pto/${variant?.id}`],
     enabled: !!variant?.id,
     staleTime: Infinity, // Never refetch automatically
     refetchOnWindowFocus: false,
@@ -79,7 +79,7 @@ export default function PTOVariantForm({ variant, onClose }: PTOVariantFormProps
   const { data: leaveTypes = [] } = useQuery({
     queryKey: ["/api/leave-types"],
     staleTime: 5 * 60 * 1000, // 5 minutes
-  });
+  }) as { data: any[] };
 
   // Load employee data from external API
   useEffect(() => {
@@ -88,6 +88,7 @@ export default function PTOVariantForm({ variant, onClose }: PTOVariantFormProps
         const employeeData = await fetchEmployeeData();
         const transformedEmployees = employeeData.map(transformEmployeeData);
         setAllEmployees(transformedEmployees);
+        console.log("PTO Edit - External API loaded", transformedEmployees.length, "employees");
       } catch (error) {
         console.error('Error loading employees:', error);
       }
@@ -96,54 +97,94 @@ export default function PTOVariantForm({ variant, onClose }: PTOVariantFormProps
     loadEmployees();
   }, []);
 
-  // Load assigned employees when variant changes or assignments are fetched
+  // Enhance assigned employees with external API data when it becomes available
   useEffect(() => {
-    if (Array.isArray(existingAssignments) && existingAssignments.length > 0) {
-      console.log("PTO Edit - Existing assignments:", existingAssignments);
-      console.log("PTO Edit - All employees count:", allEmployees.length);
+    if (allEmployees.length > 0 && assignedEmployees.length > 0) {
+      // Check if current assigned employees are just fallback data
+      const isUsingFallbackData = assignedEmployees.every(emp => 
+        emp.user_name?.startsWith('Employee ') && emp.firstName === 'Employee'
+      );
       
-      if (allEmployees.length > 0) {
-        // Try to match with external API employee data
-        const assignedUserIds = existingAssignments.map((assignment: any) => assignment.userId);
-        const assignedEmployeeData = allEmployees.filter(emp => {
+      if (isUsingFallbackData) {
+        console.log("PTO Edit - Enhancing fallback data with external API data");
+        const assignedUserIds = assignedEmployees.map(emp => emp.user_id || emp.id);
+        const enhancedEmployees = allEmployees.filter(emp => {
           const userIdMatch = assignedUserIds.includes(emp.user_id);
           const idMatch = assignedUserIds.includes(emp.id);
           return userIdMatch || idMatch;
         });
-        console.log("PTO Edit - Matched employees from external API:", assignedEmployeeData);
+        
+        if (enhancedEmployees.length > 0) {
+          console.log("PTO Edit - Enhanced", enhancedEmployees.length, "employees with API data");
+          setAssignedEmployees(enhancedEmployees);
+        }
+      }
+    }
+  }, [allEmployees, assignedEmployees]);
+
+  // Load assigned employees when variant changes or assignments are fetched
+  useEffect(() => {
+    if (!Array.isArray(existingAssignments)) {
+      return; // Still loading assignments
+    }
+
+    console.log("PTO Edit - Processing assignments:", existingAssignments.length, "assignments");
+    console.log("PTO Edit - All employees loaded:", allEmployees.length, "employees");
+    
+    if (existingAssignments.length === 0) {
+      // No assignments exist
+      console.log("PTO Edit - No assignments found, clearing assigned employees");
+      setAssignedEmployees([]);
+      return;
+    }
+
+    // Create fallback employees immediately to preserve assignments
+    const assignedUserIds = existingAssignments.map((assignment: any) => assignment.userId);
+    const fallbackEmployees = existingAssignments.map((assignment: any) => ({
+      user_id: assignment.userId,
+      id: assignment.userId,
+      user_name: `Employee ${assignment.userId}`,
+      name: `Employee ${assignment.userId}`,
+      firstName: "Employee",
+      lastName: assignment.userId,
+      email: `employee${assignment.userId}@company.com`,
+      employeeNumber: assignment.userId,
+      designation: "Employee",
+      dateOfJoining: new Date().toISOString(),
+      userRole: "employee",
+      workerType: "regular",
+      profilePhoto: null,
+      phoneNumber: null,
+      dateOfBirth: new Date().toISOString(),
+      gender: "Other",
+      reportingManager: null,
+      leaveId: assignment.userId,
+      isDifferentlyAbled: false,
+      lastWorkingDay: null,
+      employee_number: assignment.userId
+    }));
+
+    if (allEmployees.length > 0) {
+      // Try to match with external API employee data if available
+      const assignedEmployeeData = allEmployees.filter(emp => {
+        const userIdMatch = assignedUserIds.includes(emp.user_id);
+        const idMatch = assignedUserIds.includes(emp.id);
+        return userIdMatch || idMatch;
+      });
+      
+      if (assignedEmployeeData.length > 0) {
+        console.log("PTO Edit - Matched", assignedEmployeeData.length, "employees from external API");
         setAssignedEmployees(assignedEmployeeData);
       } else {
-        // Fallback: Create robust employee objects from assignments when external API fails
-        const fallbackEmployees = existingAssignments.map((assignment: any) => ({
-          user_id: assignment.userId,
-          id: assignment.userId,
-          user_name: `Employee ${assignment.userId}`,
-          name: `Employee ${assignment.userId}`, // Add name field for display
-          first_name: "Employee",
-          last_name: assignment.userId,
-          email: `employee${assignment.userId}@company.com`,
-          employeeNumber: assignment.userId,
-          designation: "Employee",
-          dateOfJoining: new Date().toISOString(),
-          userRole: "employee",
-          workerType: "regular",
-          profilePhoto: null,
-          phoneNumber: null,
-          dateOfBirth: new Date().toISOString(),
-          gender: "Other",
-          reportingManager: null,
-          leaveId: assignment.userId,
-          isDifferentlyAbled: false,
-          lastWorkingDay: null,
-          employee_number: assignment.userId
-        }));
-        console.log("PTO Edit - Using fallback employees:", fallbackEmployees);
+        console.log("PTO Edit - No matches found in external API, using fallback employees");
         setAssignedEmployees(fallbackEmployees);
       }
-    } else if (Array.isArray(existingAssignments) && existingAssignments.length === 0) {
-      setAssignedEmployees([]);
+    } else {
+      // External API not loaded yet, use fallback to preserve assignments
+      console.log("PTO Edit - External API not loaded, using fallback employees to preserve assignments");
+      setAssignedEmployees(fallbackEmployees);
     }
-  }, [existingAssignments, allEmployees, variant?.id]);
+  }, [existingAssignments, variant?.id]);
 
   const { register, handleSubmit, formState: { errors }, reset } = useForm({
     defaultValues: {
@@ -833,7 +874,10 @@ export default function PTOVariantForm({ variant, onClose }: PTOVariantFormProps
                 type="button"
                 variant="outline"
                 size="sm"
-                onClick={() => setShowEmployeeAssignment(true)}
+                onClick={() => {
+                  console.log("Assign Employees button clicked!");
+                  setShowEmployeeAssignment(true);
+                }}
                 className="text-blue-600 border-blue-200 hover:bg-blue-50"
               >
                 <Users className="w-4 h-4 mr-2" />
@@ -894,7 +938,10 @@ export default function PTOVariantForm({ variant, onClose }: PTOVariantFormProps
       {/* Employee Assignment Modal */}
       {showEmployeeAssignment && (
         <EmployeeAssignment
-          onClose={() => setShowEmployeeAssignment(false)}
+          onClose={() => {
+            console.log("Closing Employee Assignment dialog");
+            setShowEmployeeAssignment(false);
+          }}
           preSelectedEmployees={assignedEmployees}
           applicableGenders={[]}
           onAssign={async (selectedEmployees) => {

@@ -106,6 +106,15 @@ export default function ImportLeaveData() {
       formData.append('file', selectedFile);
       formData.append('importType', importType);
       
+      // CRITICAL FIX: Pass JWT token for ALL import types (balances and transactions)
+      const jwtToken = localStorage.getItem('jwt_token');
+      if (jwtToken) {
+        formData.append('jwtToken', jwtToken);
+        console.log(`[ImportLeaveData] ✅ Passing JWT token for ${importType} import`);
+      } else {
+        console.warn(`[ImportLeaveData] ⚠️ No JWT token found - ${importType} import may fail`);
+      }
+      
       const response = await apiRequest("POST", "/api/import-leave-data/execute", formData);
       return response.json();
     },
@@ -113,9 +122,34 @@ export default function ImportLeaveData() {
       queryClient.invalidateQueries({ queryKey: ["/api/employee-leave-balances"] });
       queryClient.invalidateQueries({ queryKey: ["/api/leave-balance-transactions"] });
       
+      // Create detailed success message with import statistics
+      let description = `Successfully imported ${response.imported} of ${response.total} records`;
+      
+      if (response.importStats) {
+        const skipped = response.total - response.imported;
+        if (skipped > 0) {
+          description += `\n\nSkipped records breakdown:`;
+          if (response.importStats.skippedEmpty > 0) {
+            description += `\n• Empty/missing fields: ${response.importStats.skippedEmpty}`;
+          }
+          if (response.importStats.skippedHeaders > 0) {
+            description += `\n• Header rows: ${response.importStats.skippedHeaders}`;
+          }
+          if (response.importStats.skippedMissingEmployee > 0) {
+            description += `\n• Employee not found: ${response.importStats.skippedMissingEmployee}`;
+          }
+          if (response.importStats.skippedMissingLeaveType > 0) {
+            description += `\n• Leave type not found: ${response.importStats.skippedMissingLeaveType}`;
+          }
+          if (response.importStats.processingErrors > 0) {
+            description += `\n• Processing errors: ${response.importStats.processingErrors}`;
+          }
+        }
+      }
+      
       toast({
         title: "Import Successful",
-        description: `Successfully imported ${response.imported} records.`,
+        description,
       });
       
       // Reset form

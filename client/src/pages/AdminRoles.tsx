@@ -16,6 +16,7 @@ export default function AdminRoles() {
         <RolesSetup 
           onNext={() => {}} 
           onPrevious={() => {}} 
+          showNavigation={false}
         />
       </div>
     </Layout>

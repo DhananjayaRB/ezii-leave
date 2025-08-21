@@ -234,20 +234,16 @@ function PTOEmployeeAssignmentDialog({ open, onOpenChange, variantId, onComplete
     }
   };
 
+  // Use the same pattern as CompOffVariantForm - render EmployeeAssignment directly as full-screen overlay
+  if (!open) return null;
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>Assign Employees to PTO Variant</DialogTitle>
-        </DialogHeader>
-        <EmployeeAssignment
-          onClose={() => onOpenChange(false)}
-          onAssign={handleAssign}
-          preSelectedEmployees={assignedEmployees}
-          applicableGenders={[]}
-        />
-      </DialogContent>
-    </Dialog>
+    <EmployeeAssignment
+      onClose={() => onOpenChange(false)}
+      onAssign={handleAssign}
+      preSelectedEmployees={assignedEmployees}
+      applicableGenders={[]} // PTO variants don't use gender filtering
+    />
   );
 }
 

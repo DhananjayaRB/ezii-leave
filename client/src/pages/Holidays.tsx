@@ -8,8 +8,8 @@ import { useWorkPattern } from "@/hooks/useWorkPattern";
 
 export default function Holidays() {
   const [selectedMonth, setSelectedMonth] = useState("July 2025");
-  const [activeTab, setActiveTab] = useState("My Calendar");
-  const [viewMode, setViewMode] = useState("monthly"); // "monthly" or "yearly"
+
+  const [viewMode, setViewMode] = useState("yearly"); // "monthly" or "yearly"
 
   // Month navigation functions
   const goToPreviousMonth = () => {
@@ -296,30 +296,26 @@ export default function Holidays() {
             <div className="flex items-center space-x-4">
               {/* View Mode Toggle */}
               <div className="flex space-x-1 bg-gray-100 rounded-lg p-1">
-                <Button
-                  variant={viewMode === "monthly" ? "default" : "ghost"}
-                  size="sm"
+                <button
                   onClick={() => setViewMode("monthly")}
-                  className={`px-3 py-1 text-sm ${
+                  className={`px-3 py-1 text-sm font-medium rounded transition-colors ${
                     viewMode === "monthly"
-                      ? "bg-white shadow-sm"
-                      : "bg-transparent hover:bg-gray-200"
+                      ? "bg-white text-gray-900 shadow-sm"
+                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-200"
                   }`}
                 >
                   Monthly
-                </Button>
-                <Button
-                  variant={viewMode === "yearly" ? "default" : "ghost"}
-                  size="sm"
+                </button>
+                <button
                   onClick={() => setViewMode("yearly")}
-                  className={`px-3 py-1 text-sm ${
+                  className={`px-3 py-1 text-sm font-medium rounded transition-colors ${
                     viewMode === "yearly"
-                      ? "bg-white shadow-sm"
-                      : "bg-transparent hover:bg-gray-200"
+                      ? "bg-white text-gray-900 shadow-sm"
+                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-200"
                   }`}
                 >
                   Yearly
-                </Button>
+                </button>
               </div>
               
               {/* Month Selector - only show in monthly view */}
@@ -347,33 +343,77 @@ export default function Holidays() {
             </div>
           </div>
 
-          {/* Tabs */}
-          <div className="flex space-x-1 mb-6">
-            <Button
-              variant={activeTab === "My Calendar" ? "default" : "ghost"}
-              onClick={() => setActiveTab("My Calendar")}
-              className={`px-4 py-2 text-sm font-medium rounded-t-lg border-b-2 ${
-                activeTab === "My Calendar"
-                  ? "bg-gray-100 text-gray-900 border-gray-900"
-                  : "text-gray-500 border-transparent hover:text-gray-700"
-              }`}
-            >
-              My Calendar
-            </Button>
-            <Button
-              variant={activeTab === "My Team" ? "default" : "ghost"}
-              onClick={() => setActiveTab("My Team")}
-              className={`px-4 py-2 text-sm font-medium rounded-t-lg border-b-2 ${
-                activeTab === "My Team"
-                  ? "bg-gray-100 text-gray-900 border-gray-900"
-                  : "text-gray-500 border-transparent hover:text-gray-700"
-              }`}
-            >
-              My Team
-            </Button>
-          </div>
 
 
+
+
+          {/* Yearly Summary - Show above yearly calendar */}
+          {viewMode === "yearly" && (
+            <div className="mb-6">
+              <Card>
+                <CardContent className="p-4">
+                  <h3 className="text-lg font-medium text-gray-900 mb-3">All Holidays for 2025</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {holidays.map((holiday, index) => (
+                      <div key={index} className="flex items-center space-x-3 p-2 bg-gray-50 rounded">
+                        <div className="w-3 h-3 bg-red-500 rounded-full flex-shrink-0"></div>
+                        <span className="text-sm text-gray-700">
+                          {new Date(holiday.date).toLocaleDateString('en-US', { 
+                            month: 'short', 
+                            day: 'numeric' 
+                          })} - {holiday.name}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+          {/* Monthly Holiday Legend - Show above monthly calendar */}
+          {viewMode === "monthly" && (
+            <div className="mb-6">
+              <Card>
+                <CardContent className="p-4">
+                  <h3 className="text-lg font-medium text-gray-900 mb-3">Holidays for {selectedMonth}</h3>
+                  <div className="space-y-2">
+                    {(() => {
+                      const monthNames = [
+                        "January", "February", "March", "April", "May", "June",
+                        "July", "August", "September", "October", "November", "December"
+                      ];
+                      const monthName = selectedMonth.split(' ')[0];
+                      const monthIndex = monthNames.indexOf(monthName);
+                      const monthPrefix = `2025-${String(monthIndex + 1).padStart(2, '0')}`;
+                      
+                      const monthHolidays = holidays.filter(holiday => holiday.date.startsWith(monthPrefix));
+                      
+                      if (monthHolidays.length === 0) {
+                        return (
+                          <div className="text-sm text-gray-500 italic">
+                            No holidays in {selectedMonth}
+                          </div>
+                        );
+                      }
+                      
+                      return monthHolidays.map((holiday, index) => (
+                        <div key={index} className="flex items-center space-x-3">
+                          <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                          <span className="text-sm text-gray-700">
+                            {new Date(holiday.date).toLocaleDateString('en-US', { 
+                              month: 'long', 
+                              day: 'numeric' 
+                            })} - {holiday.name}
+                          </span>
+                        </div>
+                      ));
+                    })()}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
 
           {/* Calendar Views */}
           {viewMode === "monthly" ? (
@@ -508,73 +548,8 @@ export default function Holidays() {
             </Card>
           )}
 
-          {/* Holiday Legend - Only show in monthly view */}
-          {viewMode === "monthly" && (
-            <div className="mt-6">
-              <Card>
-                <CardContent className="p-4">
-                  <h3 className="text-lg font-medium text-gray-900 mb-3">Holidays for {selectedMonth}</h3>
-                  <div className="space-y-2">
-                    {(() => {
-                      const monthNames = [
-                        "January", "February", "March", "April", "May", "June",
-                        "July", "August", "September", "October", "November", "December"
-                      ];
-                      const monthName = selectedMonth.split(' ')[0];
-                      const monthIndex = monthNames.indexOf(monthName);
-                      const monthPrefix = `2025-${String(monthIndex + 1).padStart(2, '0')}`;
-                      
-                      const monthHolidays = holidays.filter(holiday => holiday.date.startsWith(monthPrefix));
-                      
-                      if (monthHolidays.length === 0) {
-                        return (
-                          <div className="text-sm text-gray-500 italic">
-                            No holidays in {selectedMonth}
-                          </div>
-                        );
-                      }
-                      
-                      return monthHolidays.map((holiday, index) => (
-                        <div key={index} className="flex items-center space-x-3">
-                          <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                          <span className="text-sm text-gray-700">
-                            {new Date(holiday.date).toLocaleDateString('en-US', { 
-                              month: 'long', 
-                              day: 'numeric' 
-                            })} - {holiday.name}
-                          </span>
-                        </div>
-                      ));
-                    })()}
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          )}
-          
-          {/* Yearly Summary - Only show in yearly view */}
-          {viewMode === "yearly" && (
-            <div className="mt-6">
-              <Card>
-                <CardContent className="p-4">
-                  <h3 className="text-lg font-medium text-gray-900 mb-3">All Holidays for 2025</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {holidays.map((holiday, index) => (
-                      <div key={index} className="flex items-center space-x-3 p-2 bg-gray-50 rounded">
-                        <div className="w-3 h-3 bg-red-500 rounded-full flex-shrink-0"></div>
-                        <span className="text-sm text-gray-700">
-                          {new Date(holiday.date).toLocaleDateString('en-US', { 
-                            month: 'short', 
-                            day: 'numeric' 
-                          })} - {holiday.name}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          )}
+
+
         </div>
       </div>
     </Layout>

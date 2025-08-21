@@ -63,16 +63,18 @@ export const companies = pgTable("companies", {
 // Leave types table
 export const leaveTypes = pgTable("leave_types", {
   id: serial("id").primaryKey(),
-  name: varchar("name").notNull(),
+  name: text("name").notNull(),
+  maxDays: integer("max_days"),
+  color: text("color"),
   description: text("description"),
-  icon: varchar("icon"),
-  color: varchar("color"),
-  annualAllowance: integer("annual_allowance"),
-  carryForward: boolean("carry_forward").default(false),
   isActive: boolean("is_active").default(true),
-  orgId: integer("org_id").default(60),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
+  icon: text("icon"),
+  annualAllowance: integer("annual_allowance"),
+  carryForward: boolean("carry_forward").default(false),
+  negativeLeaveBalance: integer("negative_leave_balance").default(0),
+  orgId: integer("org_id").default(60),
 });
 
 // Roles table with detailed permissions
@@ -603,6 +605,30 @@ export type InsertEmployeeLeaveBalance = z.infer<typeof insertEmployeeLeaveBalan
 export type EmployeeLeaveBalance = typeof employeeLeaveBalances.$inferSelect;
 export type InsertLeaveBalanceTransaction = z.infer<typeof insertLeaveBalanceTransactionSchema>;
 export type LeaveBalanceTransaction = typeof leaveBalanceTransactions.$inferSelect;
+
+// Blackout Periods table - blocks leave applications during specific periods
+export const blackoutPeriods = pgTable("blackout_periods", {
+  id: serial("id").primaryKey(),
+  title: varchar("title").notNull(),
+  startDate: date("start_date").notNull(),
+  endDate: date("end_date").notNull(),
+  reason: text("reason"),
+  allowLeaves: boolean("allow_leaves").default(false).notNull(),
+  allowedLeaveTypes: text("allowed_leave_types").array().default([]), // Array of leave type IDs that are allowed as exceptions
+  assignedEmployees: text("assigned_employees").array().default([]), // Array of user IDs this applies to (empty = all)
+  orgId: integer("org_id").default(60),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const insertBlackoutPeriodSchema = createInsertSchema(blackoutPeriods).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type InsertBlackoutPeriod = z.infer<typeof insertBlackoutPeriodSchema>;
+export type BlackoutPeriod = typeof blackoutPeriods.$inferSelect;
 
 // Enhanced Collaborative Leave Tables - following design requirements
 

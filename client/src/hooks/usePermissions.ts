@@ -11,7 +11,7 @@ interface PermissionStructure {
   leaveApplications: { view: boolean; modify: boolean };
   holidays: { view: boolean; modify: boolean };
   compensatoryOff: { view: boolean; modify: boolean };
-  pto: { view: boolean; modify: boolean };
+  bto: { view: boolean; modify: boolean };
   employeeReports: { view: boolean; modify: boolean };
   
   // Admin Screens
@@ -26,11 +26,11 @@ interface PermissionStructure {
   // Admin Configuration Screens
   adminLeaveTypes: { view: boolean; modify: boolean };
   adminCompOff: { view: boolean; modify: boolean };
-  adminPTO: { view: boolean; modify: boolean };
+  adminBTO: { view: boolean; modify: boolean };
   adminSettings: { view: boolean; modify: boolean };
   
   // Allow On Behalf Actions
-  allowOnBehalf: { pto: boolean; leave: boolean; compOff: boolean };
+  allowOnBehalf: { bto: boolean; leave: boolean; compOff: boolean };
 }
 
 // Default permissions based on role
@@ -43,7 +43,7 @@ const getDefaultPermissions = (role: string): PermissionStructure => {
         leaveApplications: { view: true, modify: true },
         holidays: { view: true, modify: true },
         compensatoryOff: { view: true, modify: true },
-        pto: { view: true, modify: true },
+        bto: { view: true, modify: true },
         employeeReports: { view: true, modify: true },
         
         // Admin Screens
@@ -58,11 +58,11 @@ const getDefaultPermissions = (role: string): PermissionStructure => {
         // Admin Configuration Screens
         adminLeaveTypes: { view: true, modify: true },
         adminCompOff: { view: true, modify: true },
-        adminPTO: { view: true, modify: true },
+        adminBTO: { view: true, modify: true },
         adminSettings: { view: true, modify: true },
         
         // Allow On Behalf Actions
-        allowOnBehalf: { pto: true, leave: true, compOff: true },
+        allowOnBehalf: { bto: true, leave: true, compOff: true },
       };
     case 'manager':
       return {
@@ -71,7 +71,7 @@ const getDefaultPermissions = (role: string): PermissionStructure => {
         leaveApplications: { view: true, modify: false },
         holidays: { view: true, modify: false },
         compensatoryOff: { view: true, modify: false },
-        pto: { view: true, modify: false },
+        bto: { view: true, modify: false },
         employeeReports: { view: true, modify: false },
         
         // Admin Screens
@@ -86,11 +86,11 @@ const getDefaultPermissions = (role: string): PermissionStructure => {
         // Admin Configuration Screens
         adminLeaveTypes: { view: false, modify: false },
         adminCompOff: { view: false, modify: false },
-        adminPTO: { view: false, modify: false },
+        adminBTO: { view: false, modify: false },
         adminSettings: { view: false, modify: false },
         
         // Allow On Behalf Actions
-        allowOnBehalf: { pto: true, leave: true, compOff: true },
+        allowOnBehalf: { bto: true, leave: true, compOff: true },
       };
     case 'employee':
     default:
@@ -100,7 +100,7 @@ const getDefaultPermissions = (role: string): PermissionStructure => {
         leaveApplications: { view: true, modify: true },
         holidays: { view: true, modify: false },
         compensatoryOff: { view: true, modify: true },
-        pto: { view: true, modify: true },
+        bto: { view: true, modify: true },
         employeeReports: { view: true, modify: false },
         
         // Admin Screens
@@ -115,11 +115,11 @@ const getDefaultPermissions = (role: string): PermissionStructure => {
         // Admin Configuration Screens
         adminLeaveTypes: { view: false, modify: false },
         adminCompOff: { view: false, modify: false },
-        adminPTO: { view: false, modify: false },
+        adminBTO: { view: false, modify: false },
         adminSettings: { view: false, modify: false },
         
         // Allow On Behalf Actions
-        allowOnBehalf: { pto: false, leave: false, compOff: false },
+        allowOnBehalf: { bto: false, leave: false, compOff: false },
       };
   }
 };
@@ -145,6 +145,10 @@ export function usePermissions() {
         }
         
         console.log('Loading permissions for role:', role);
+        
+        // Clear cache to force reload of updated permissions
+        permissionsCache = null;
+        cacheTimestamp = 0;
         
         // Try to fetch role permissions from database first
         if (orgId) {
@@ -190,6 +194,7 @@ export function usePermissions() {
                     adminLeaveTypes: { view: true, modify: true },
                     adminCompOff: { view: true, modify: true },
                     adminPTO: { view: true, modify: true },
+                    adminSettings: { view: true, modify: true },
                     allowOnBehalf: { pto: true, leave: true, compOff: true }
                   };
                 }

@@ -146,8 +146,8 @@ export default function Home() {
         }
         keysToRemove.forEach(key => localStorage.removeItem(key));
         queryClient.clear();
-        // ===== FIX: Prevent infinite reload loop while auth/setup is disabled =====
-        return <div style={{padding: 40, textAlign: 'center', color: 'red'}}>Setup required. Please refresh the page manually or contact admin.</div>;
+        window.location.reload();
+        return null;
       }
     }
     return <SetupWizard company={company} />;

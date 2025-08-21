@@ -8,7 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Eye, Plus, Clock, CheckCircle, XCircle, AlertCircle } from "lucide-react";
 import { format } from "date-fns";
 import Layout from "@/components/Layout";
-import PTOApplicationForm from "@/components/PTO/PTOApplicationForm";
+import BTOApplicationForm from "@/components/PTO/PTOApplicationForm";
 import { usePermissions } from "@/hooks/usePermissions";
 import { useExternalEmployeeData } from "@/hooks/useExternalEmployeeData";
 
@@ -16,36 +16,20 @@ export default function PTO() {
   const [activeTab, setActiveTab] = useState("All");
   const [dateRange, setDateRange] = useState("01 Jun 2024 - 31st Dec 2024");
   const [showApplicationForm, setShowApplicationForm] = useState(false);
-  const [applyOnBehalf, setApplyOnBehalf] = useState(false);
-  const [selectedEmployeeId, setSelectedEmployeeId] = useState("");
+  // Apply on behalf functionality moved to inside the dialog
 
   const permissions = usePermissions();
   const { employees: externalEmployees } = useExternalEmployeeData();
 
-  // Debug permissions and external employees
-  useEffect(() => {
-    console.log('=== PTO PERMISSION DEBUG ===');
-    console.log('PTO allowOnBehalf permission:', permissions?.permissions?.allowOnBehalf?.pto);
-    console.log('Should show checkbox?', permissions?.permissions?.allowOnBehalf?.pto === true);
-    console.log('External employees array:', externalEmployees);
-    console.log('External employees length:', externalEmployees?.length);
-    console.log('Apply on behalf state:', applyOnBehalf);
-    console.log('===============================');
-  }, [permissions, externalEmployees, applyOnBehalf]);
+  // Apply on behalf functionality moved to inside the dialog
 
-  // Reset on-behalf state when dialog closes
-  useEffect(() => {
-    if (!showApplicationForm) {
-      setApplyOnBehalf(false);
-      setSelectedEmployeeId("");
-    }
-  }, [showApplicationForm]);
+  // Apply on behalf functionality moved to inside the dialog
 
   // Get current user ID from localStorage
   const currentUserId = localStorage.getItem('user_id') || '225';
 
-  // Fetch PTO requests
-  const { data: ptoRequests = [], isLoading: requestsLoading, refetch } = useQuery({
+  // Fetch BTO requests
+  const { data: btoRequests = [], isLoading: requestsLoading, refetch } = useQuery({
     queryKey: ['/api/pto-requests', currentUserId],
     queryFn: async () => {
       const response = await fetch(`/api/pto-requests?userId=${currentUserId}`, {
@@ -59,16 +43,16 @@ export default function PTO() {
   });
 
   // Filter requests by active tab
-  const filteredRequests = ptoRequests.filter((request: any) => {
+  const filteredRequests = btoRequests.filter((request: any) => {
     if (activeTab === "All") return true;
     return request.status.toLowerCase() === activeTab.toLowerCase();
   });
 
   // Calculate statistics from real data
   const stats = {
-    totalGranted: ptoRequests.filter((r: any) => r.status === "approved").length,
-    pendingApprovals: ptoRequests.filter((r: any) => r.status === "pending").length,
-    totalAvailed: ptoRequests.filter((r: any) => r.status === "approved").reduce((sum: number, r: any) => {
+    totalGranted: btoRequests.filter((r: any) => r.status === "approved").length,
+    pendingApprovals: btoRequests.filter((r: any) => r.status === "pending").length,
+    totalAvailed: btoRequests.filter((r: any) => r.status === "approved").reduce((sum: number, r: any) => {
       if (r.timeType === "hours") {
         // Direct hours calculation
         return sum + (parseFloat(r.totalHours) || 0);
@@ -80,8 +64,8 @@ export default function PTO() {
         return sum + 8; // Full day = 8 hours
       }
     }, 0),
-    rejected: ptoRequests.filter((r: any) => r.status === "rejected").length,
-    cancelled: ptoRequests.filter((r: any) => r.status === "cancelled").length,
+    rejected: btoRequests.filter((r: any) => r.status === "rejected").length,
+    cancelled: btoRequests.filter((r: any) => r.status === "cancelled").length,
   };
 
   const tabs = [
@@ -148,7 +132,7 @@ export default function PTO() {
       <div className="p-6 space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-semibold text-gray-900">Paid time off (PTO)</h1>
+          <h1 className="text-2xl font-semibold text-gray-900">Break Time Off (BTO)</h1>
           <div className="flex items-center space-x-3">
             <Select value={dateRange} onValueChange={setDateRange}>
               <SelectTrigger className="w-48">
@@ -160,55 +144,13 @@ export default function PTO() {
                 <SelectItem value="01 Jan 2024 - 31st Dec 2024">01 Jan 2024 - 31st Dec 2024</SelectItem>
               </SelectContent>
             </Select>
-            <div className="flex flex-col space-y-3">
-              <Button 
-                className="bg-teal-600 hover:bg-teal-700 text-white"
-                onClick={() => setShowApplicationForm(true)}
-              >
-                <Plus className="w-4 h-4 mr-2" />
-                Apply for PTO
-              </Button>
-              
-              {/* Apply on behalf checkbox */}
-              {permissions?.permissions?.allowOnBehalf?.pto === true && (
-                <div className="space-y-3">
-                  <div className="flex items-center space-x-2">
-                    <Checkbox 
-                      id="pto-apply-on-behalf"
-                      checked={applyOnBehalf}
-                      onCheckedChange={(checked) => setApplyOnBehalf(!!checked)}
-                    />
-                    <label 
-                      htmlFor="pto-apply-on-behalf" 
-                      className="text-sm font-medium leading-none cursor-pointer"
-                    >
-                      Apply on behalf of someone else
-                    </label>
-                  </div>
-
-                  {applyOnBehalf && (
-                    <Select value={selectedEmployeeId} onValueChange={setSelectedEmployeeId}>
-                      <SelectTrigger className="w-64">
-                        <SelectValue placeholder="Select Employee" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {externalEmployees && externalEmployees.length > 0 ? (
-                          externalEmployees
-                            .filter(employee => employee?.user_id)
-                            .map((employee) => (
-                              <SelectItem key={employee.user_id} value={employee.user_id.toString()}>
-                                {employee.user_name || `Employee ${employee.user_id}`}
-                              </SelectItem>
-                            ))
-                        ) : (
-                          <SelectItem value="no-employees" disabled>No employees available</SelectItem>
-                        )}
-                      </SelectContent>
-                    </Select>
-                  )}
-                </div>
-              )}
-            </div>
+            <Button 
+              className="bg-teal-600 hover:bg-teal-700 text-white"
+              onClick={() => setShowApplicationForm(true)}
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Apply for BTO
+            </Button>
           </div>
         </div>
 
@@ -263,7 +205,7 @@ export default function PTO() {
               }`}
             >
               <span>{tab.label}</span>
-              {tab.count && (
+              {tab.count !== undefined && tab.count > 0 && (
                 <Badge variant="secondary" className="bg-gray-100 text-gray-600 text-xs">
                   {tab.count}
                 </Badge>
@@ -279,7 +221,7 @@ export default function PTO() {
               <div className="flex items-center justify-center py-12">
                 <div className="text-center">
                   <Clock className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                  <p className="text-gray-500">Loading PTO requests...</p>
+                  <p className="text-gray-500">Loading BTO requests...</p>
                 </div>
               </div>
             ) : filteredRequests.length === 0 ? (
@@ -287,14 +229,14 @@ export default function PTO() {
                 <div className="text-center">
                   <Clock className="w-8 h-8 text-gray-400 mx-auto mb-2" />
                   <p className="text-gray-500">
-                    {activeTab === "All" ? "No PTO requests found" : `No ${activeTab.toLowerCase()} requests found`}
+                    {activeTab === "All" ? "No BTO requests found" : `No ${activeTab.toLowerCase()} requests found`}
                   </p>
                   <Button 
                     className="mt-4 bg-teal-600 hover:bg-teal-700"
                     onClick={() => setShowApplicationForm(true)}
                   >
                     <Plus className="w-4 h-4 mr-2" />
-                    Apply for PTO
+                    Apply for BTO
                   </Button>
                 </div>
               </div>
@@ -360,16 +302,15 @@ export default function PTO() {
         </Card>
       </div>
 
-      {/* PTO Application Form */}
-      <PTOApplicationForm 
+      {/* BTO Application Form */}
+      <BTOApplicationForm 
         open={showApplicationForm}
         onOpenChange={setShowApplicationForm}
         onSuccess={() => {
-          refetch(); // Refresh the PTO requests list
+          refetch(); // Refresh the BTO requests list
         }}
-        applyOnBehalf={applyOnBehalf}
-        selectedEmployeeId={selectedEmployeeId}
         employees={externalEmployees}
+        permissions={permissions}
       />
     </Layout>
   );

@@ -9,6 +9,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
@@ -48,9 +49,9 @@ const calculateWorkingDays = (startDate: Date, endDate: Date, holidays: any[]) =
   return count;
 };
 
-// PTO Application form schema
-const ptoApplicationSchema = z.object({
-  ptoVariantId: z.number().min(1, "Please select a PTO variant"),
+// BTO Application form schema
+const btoApplicationSchema = z.object({
+  btoVariantId: z.number().min(1, "Please select a BTO variant"),
   requestDate: z.date({
     required_error: "Request date is required",
   }),
@@ -62,29 +63,37 @@ const ptoApplicationSchema = z.object({
   documentUrl: z.string().optional(),
 });
 
-type PTOApplicationForm = z.infer<typeof ptoApplicationSchema>;
+type BTOApplicationForm = z.infer<typeof btoApplicationSchema>;
 
-interface PTOApplicationFormProps {
+interface BTOApplicationFormProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSuccess?: () => void;
-  applyOnBehalf?: boolean;
-  selectedEmployeeId?: string;
   employees?: any[];
+  permissions?: any;
 }
 
-export default function PTOApplicationForm({ 
+export default function BTOApplicationForm({ 
   open, 
   onOpenChange, 
   onSuccess, 
-  applyOnBehalf = false,
-  selectedEmployeeId = "",
-  employees = []
-}: PTOApplicationFormProps) {
+  employees = [],
+  permissions
+}: BTOApplicationFormProps) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [selectedVariant, setSelectedVariant] = useState<any>(null);
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
+  const [applyOnBehalf, setApplyOnBehalf] = useState(false);
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState("");
+
+  // Reset apply on behalf state when dialog opens/closes
+  useEffect(() => {
+    if (!open) {
+      setApplyOnBehalf(false);
+      setSelectedEmployeeId("");
+    }
+  }, [open]);
 
   // Get current user ID from localStorage or use selected employee ID for on-behalf
   const currentUserId = applyOnBehalf && selectedEmployeeId ? selectedEmployeeId : (localStorage.getItem('user_id') || '225');
@@ -99,7 +108,7 @@ export default function PTOApplicationForm({
       const response = await fetch('/api/holidays', {
         credentials: 'include',
         headers: {
-          'X-Org-Id': localStorage.getItem('org_id') || '60'
+          'X-Org-Id': localStorage.getItem('org_id') || '13'
         }
       });
       return response.ok ? response.json() : [];
@@ -112,51 +121,59 @@ export default function PTOApplicationForm({
     ? allHolidays.filter((holiday: any) => workPattern.selectedHolidays.includes(holiday.id))
     : allHolidays; // Show all holidays if work pattern isn't available
 
-  console.log('🎯 PTO Form Holiday Filtering:', {
+  console.log('🎯 BTO Form Holiday Filtering:', {
     workPattern: workPattern?.patternName,
     selectedHolidayIds: workPattern?.selectedHolidays,
     allHolidays: allHolidays.length,
     filteredHolidays: filteredHolidays.length
   });
 
-  // Fetch PTO variants available to current user
-  const { data: ptoVariants = [], isLoading: variantsLoading } = useQuery({
+  // Fetch BTO variants available to current user
+  const { data: btoVariants = [], isLoading: variantsLoading } = useQuery({
     queryKey: ['/api/pto-variants/user', currentUserId],
     queryFn: async () => {
-      console.log("PTO Form - Fetching variants for user:", currentUserId);
+      console.log("BTO Form - Fetching variants for user:", currentUserId);
       
-      // First get all PTO variants
+      // First get all BTO variants  
+      const orgId = localStorage.getItem('org_id') || '13';
+      console.log("BTO Form - Using org_id:", orgId);
+      
       const variants = await fetch('/api/pto-variants', {
         credentials: 'include',
         headers: {
-          'X-Org-Id': localStorage.getItem('org_id') || '60'
+          'X-Org-Id': orgId
         }
       }).then(res => res.json());
       
-      console.log("PTO Form - All variants:", variants);
+      console.log("BTO Form - All variants:", variants);
 
       // Filter variants assigned to current user
       const userVariants = [];
+      let hasAnyAssignments = false;
+      
       for (const variant of variants) {
         try {
           const assignmentsResponse = await fetch(`/api/employee-assignments/pto/${variant.id}`, {
             credentials: 'include',
             headers: {
-              'X-Org-Id': localStorage.getItem('org_id') || '60'
+              'X-Org-Id': orgId
             }
           });
           if (assignmentsResponse.ok) {
             const assignments = await assignmentsResponse.json();
-            console.log(`PTO Form - Assignments for variant ${variant.id}:`, assignments);
+            console.log(`BTO Form - Assignments for variant ${variant.id}:`, assignments);
             
-            const isAssigned = assignments.some((assignment: any) => 
-              assignment.userId === currentUserId || assignment.userId === currentUserId.toString()
-            );
-            
-            console.log(`PTO Form - User ${currentUserId} assigned to variant ${variant.id}:`, isAssigned);
-            
-            if (isAssigned) {
-              userVariants.push(variant);
+            if (assignments.length > 0) {
+              hasAnyAssignments = true;
+              const isAssigned = assignments.some((assignment: any) => 
+                assignment.userId === currentUserId || assignment.userId === currentUserId.toString()
+              );
+              
+              console.log(`BTO Form - User ${currentUserId} assigned to variant ${variant.id}:`, isAssigned);
+              
+              if (isAssigned) {
+                userVariants.push(variant);
+              }
             }
           }
         } catch (error) {
@@ -164,20 +181,26 @@ export default function PTOApplicationForm({
         }
       }
       
-      console.log("PTO Form - Final user variants:", userVariants);
+      // If no assignments exist for any variant, show all variants (for testing/initial setup)
+      if (!hasAnyAssignments && variants.length > 0) {
+        console.log("BTO Form - No assignments found for any variant, showing all variants for testing");
+        return variants;
+      }
+      
+      console.log("BTO Form - Final user variants:", userVariants);
       return userVariants;
     },
     enabled: open,
   });
 
-  // Fetch user's existing PTO requests for validation
+  // Fetch user's existing BTO requests for validation
   const { data: existingRequests = [] } = useQuery({
     queryKey: ['/api/pto-requests', currentUserId],
     queryFn: async () => {
       const response = await fetch(`/api/pto-requests?userId=${currentUserId}`, {
         credentials: 'include',
         headers: {
-          'X-Org-Id': localStorage.getItem('org_id') || '60'
+          'X-Org-Id': localStorage.getItem('org_id') || '13'
         }
       });
       return response.ok ? response.json() : [];
@@ -186,23 +209,23 @@ export default function PTOApplicationForm({
   });
 
   // Form setup
-  const form = useForm<PTOApplicationForm>({
-    resolver: zodResolver(ptoApplicationSchema),
+  const form = useForm<BTOApplicationForm>({
+    resolver: zodResolver(btoApplicationSchema),
     defaultValues: {
       reason: "",
       timeType: "",
     },
   });
 
-  const watchedVariantId = form.watch("ptoVariantId");
+  const watchedVariantId = form.watch("btoVariantId");
   const watchedTimeType = form.watch("timeType");
   const watchedRequestDate = form.watch("requestDate");
 
   // Update selected variant when form changes
   useEffect(() => {
     if (watchedVariantId) {
-      const variant = ptoVariants.find(v => v.id === watchedVariantId);
-      console.log("PTO Form - Selected variant:", variant);
+      const variant = btoVariants.find(v => v.id === watchedVariantId);
+      console.log("BTO Form - Selected variant:", variant);
       setSelectedVariant(variant);
       
       // Reset time unit when variant changes
@@ -213,7 +236,7 @@ export default function PTOApplicationForm({
     } else {
       setSelectedVariant(null);
     }
-  }, [watchedVariantId, ptoVariants]);
+  }, [watchedVariantId, btoVariants]);
 
   // Validate request based on variant rules and existing requests
   useEffect(() => {
@@ -239,7 +262,7 @@ export default function PTOApplicationForm({
         const holidayDate = new Date(holiday.selectedDate || holiday.date);
         return format(holidayDate, 'yyyy-MM-dd') === requestDateString;
       })?.holidayName || 'holiday';
-      errors.push(`Cannot apply for PTO on ${holidayName}. Please select a different date.`);
+      errors.push(`Cannot apply for BTO on ${holidayName}. Please select a different date.`);
     }
 
     // Check advance notice requirement
@@ -276,7 +299,7 @@ export default function PTOApplicationForm({
     setValidationErrors(errors);
   }, [selectedVariant, watchedRequestDate, existingRequests, filteredHolidays]);
 
-  // Calculate total hours for hour-based PTO
+  // Calculate total hours for hour-based BTO
   const calculateHours = (startTime: string, endTime: string) => {
     if (!startTime || !endTime) return 0;
     
@@ -309,8 +332,8 @@ export default function PTOApplicationForm({
     onSuccess: (response: any) => {
       queryClient.invalidateQueries({ queryKey: ['/api/pto-requests'] });
       const message = response.workflowId 
-        ? "PTO request submitted and sent for approval"
-        : "PTO request submitted and approved automatically";
+        ? "BTO request submitted and sent for approval"
+        : "BTO request submitted and approved automatically";
       toast({
         title: "Success",
         description: message,
@@ -322,13 +345,23 @@ export default function PTOApplicationForm({
     onError: (error: any) => {
       toast({
         title: "Error",
-        description: error.message || "Failed to submit PTO request",
+        description: error.message || "Failed to submit BTO request",
         variant: "destructive",
       });
     },
   });
 
-  const onSubmit = (data: PTOApplicationForm) => {
+  const onSubmit = (data: BTOApplicationForm) => {
+    // Validate apply on behalf selection
+    if (applyOnBehalf && !selectedEmployeeId) {
+      toast({
+        title: "Validation Error",
+        description: "Please select an employee to apply on behalf of",
+        variant: "destructive",
+      });
+      return;
+    }
+
     if (validationErrors.length > 0) {
       toast({
         title: "Validation Error",
@@ -338,29 +371,29 @@ export default function PTOApplicationForm({
       return;
     }
 
-    // Calculate working days for PTO request
-    let workingDays = 1; // Default for single day PTO
+    // Calculate working days for BTO request
+    let workingDays = 1; // Default for single day BTO
     
-    // For date range PTO (future enhancement if needed)
+    // For date range BTO (future enhancement if needed)
     if (data.requestDate) {
       workingDays = calculateWorkingDays(data.requestDate, data.requestDate, filteredHolidays);
       
-      // Use dynamic holiday validation for PTO requests
+      // Use dynamic holiday validation for BTO requests
       const requestDateStr = format(data.requestDate, "yyyy-MM-dd");
-      console.log('✅ Using dynamic working days calculation for PTO:', workingDays);
+      console.log('✅ Using dynamic working days calculation for BTO:', workingDays);
       
-      console.log('PTO Working Days Calculation:', {
+      console.log('BTO Working Days Calculation:', {
         requestDate: requestDateStr,
         calculatedWorkingDays: workingDays
       });
     }
 
-    // Additional validation for hours-based PTO
+    // Additional validation for hours-based BTO
     if (data.timeType === "hours") {
       if (!data.startTime || !data.endTime || !data.totalHours) {
         toast({
           title: "Validation Error", 
-          description: "Start time, end time, and total hours are required for hour-based PTO",
+          description: "Start time, end time, and total hours are required for hour-based BTO",
           variant: "destructive",
         });
         return;
@@ -389,18 +422,18 @@ export default function PTOApplicationForm({
     const requestData = {
       ...data,
       userId: currentUserId,
-      ptoVariantId: parseInt(data.ptoVariantId.toString()),
+      ptoVariantId: parseInt(data.btoVariantId.toString()),
       workingDays // Add working days calculation
     };
 
-    console.log("PTO Form - Submitting request:", requestData);
+    console.log("BTO Form - Submitting request:", requestData);
     submitMutation.mutate(requestData);
   };
 
   const getAvailableTimeTypes = () => {
     if (!selectedVariant) return [];
     
-    console.log("PTO Form - Selected variant time options:", {
+    console.log("BTO Form - Selected variant time options:", {
       halfDay: selectedVariant.halfDay,
       quarterDay: selectedVariant.quarterDay,
       hours: selectedVariant.hours
@@ -408,7 +441,7 @@ export default function PTOApplicationForm({
     
     const types = [];
     
-    // PTO units are specific - only add enabled options from variant
+    // BTO units are specific - only add enabled options from variant
     if (selectedVariant.halfDay) {
       types.push({ value: "half_day", label: "Half Day" });
     }
@@ -421,7 +454,7 @@ export default function PTOApplicationForm({
       types.push({ value: "hours", label: "Hours" });
     }
     
-    console.log("PTO Form - Available PTO time types:", types);
+    console.log("BTO Form - Available BTO time types:", types);
     return types;
   };
 
@@ -447,7 +480,7 @@ export default function PTOApplicationForm({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Clock className="w-5 h-5 text-teal-600" />
-            Apply for PTO
+            Apply for BTO
           </DialogTitle>
         </DialogHeader>
 
@@ -472,26 +505,77 @@ export default function PTOApplicationForm({
               </Card>
             )}
 
-            {/* PTO Variant Selection */}
+            {/* Apply on behalf section - Only show for users with permission */}
+            {permissions?.permissions?.allowOnBehalf?.bto && (
+              <div className="space-y-4 p-4 border border-gray-200 rounded-lg bg-gray-50">
+                <div className="flex items-center space-x-2">
+                  <Checkbox 
+                    id="bto-apply-on-behalf"
+                    checked={applyOnBehalf}
+                    onCheckedChange={(checked) => {
+                      setApplyOnBehalf(!!checked);
+                      if (!checked) {
+                        setSelectedEmployeeId("");
+                      }
+                    }}
+                  />
+                  <label 
+                    htmlFor="bto-apply-on-behalf" 
+                    className="text-sm font-medium leading-none cursor-pointer"
+                  >
+                    Apply on behalf of someone else
+                  </label>
+                </div>
+
+                {applyOnBehalf && (
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700">Select Employee</label>
+                    <Select value={selectedEmployeeId} onValueChange={setSelectedEmployeeId}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Choose an employee..." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {employees && employees.length > 0 ? (
+                          employees
+                            .filter(employee => employee?.user_id)
+                            .map((employee) => (
+                              <SelectItem key={employee.user_id} value={employee.user_id.toString()}>
+                                {employee.user_name || `Employee ${employee.user_id}`}
+                              </SelectItem>
+                            ))
+                        ) : (
+                          <SelectItem value="no-employees" disabled>No employees available</SelectItem>
+                        )}
+                      </SelectContent>
+                    </Select>
+                    {applyOnBehalf && !selectedEmployeeId && (
+                      <p className="text-sm text-red-600">Please select an employee to apply on behalf of</p>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* BTO Variant Selection */}
             <FormField
               control={form.control}
-              name="ptoVariantId"
+              name="btoVariantId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>PTO Type</FormLabel>
+                  <FormLabel>BTO Type</FormLabel>
                   <Select onValueChange={(value) => field.onChange(parseInt(value))} value={field.value?.toString()}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select PTO type" />
+                        <SelectValue placeholder="Select BTO type" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
                       {variantsLoading ? (
-                        <SelectItem value="loading" disabled>Loading PTO types...</SelectItem>
-                      ) : ptoVariants.length === 0 ? (
-                        <SelectItem value="none" disabled>No PTO types available</SelectItem>
+                        <SelectItem value="loading" disabled>Loading BTO types...</SelectItem>
+                      ) : btoVariants.length === 0 ? (
+                        <SelectItem value="none" disabled>No BTO types available</SelectItem>
                       ) : (
-                        ptoVariants.map((variant: any) => (
+                        btoVariants.map((variant: any) => (
                           <SelectItem key={variant.id} value={variant.id.toString()}>
                             {variant.name}
                           </SelectItem>
@@ -568,7 +652,7 @@ export default function PTOApplicationForm({
                       </FormControl>
                       <SelectContent>
                         {getAvailableTimeTypes().length === 0 ? (
-                          <SelectItem value="none" disabled>No time units available for this PTO type</SelectItem>
+                          <SelectItem value="none" disabled>No time units available for this BTO type</SelectItem>
                         ) : (
                           getAvailableTimeTypes().map((type) => (
                             <SelectItem key={type.value} value={type.value}>
@@ -689,7 +773,7 @@ export default function PTOApplicationForm({
                   <FormLabel>Reason</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Please provide a reason for your PTO request..."
+                      placeholder="Please provide a reason for your BTO request..."
                       className="min-h-[80px]"
                       {...field}
                     />

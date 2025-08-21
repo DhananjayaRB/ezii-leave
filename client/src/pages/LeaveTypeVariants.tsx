@@ -44,7 +44,7 @@ const SetupLayoutWrapper = ({ children }: { children: React.ReactNode }) => {
     { id: 1, name: "Effective Date", status: "completed" },
     { id: 2, name: "Leave Types", status: "current" },
     { id: 3, name: "Comp off", status: "upcoming" },
-    { id: 4, name: "PTO", status: "upcoming" },
+    { id: 4, name: "BTO", status: "upcoming" },
     { id: 5, name: "Import Leave Data", status: "upcoming" },
     { id: 6, name: "Roles", status: "upcoming" },
     { id: 7, name: "Workflow", status: "upcoming" },

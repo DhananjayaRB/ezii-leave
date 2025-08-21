@@ -110,7 +110,7 @@ export default function EffectiveDateSetup({ onNext, onPrevious, isLast, isLoadi
                 leaveApplications: { view: true, modify: true },
                 holidays: { view: true, modify: true },
                 compensatoryOff: { view: true, modify: true },
-                pto: { view: true, modify: true },
+                bto: { view: true, modify: true },
                 adminOverview: { view: true, modify: true },
                 approvals: { view: true, modify: true },
                 employees: { view: true, modify: true },
@@ -119,8 +119,8 @@ export default function EffectiveDateSetup({ onNext, onPrevious, isLast, isLoadi
                 importLeaveData: { view: true, modify: true },
                 adminLeaveTypes: { view: true, modify: true },
                 adminCompOff: { view: true, modify: true },
-                adminPTO: { view: true, modify: true },
-                allowOnBehalf: { pto: true, leave: true, compOff: true }
+                adminBTO: { view: true, modify: true },
+                allowOnBehalf: { bto: true, leave: true, compOff: true }
               }
             },
             {
@@ -131,7 +131,7 @@ export default function EffectiveDateSetup({ onNext, onPrevious, isLast, isLoadi
                 leaveApplications: { view: true, modify: true },
                 holidays: { view: true, modify: false },
                 compensatoryOff: { view: true, modify: true },
-                pto: { view: true, modify: true },
+                bto: { view: true, modify: true },
                 adminOverview: { view: true, modify: false },
                 approvals: { view: true, modify: true },
                 employees: { view: true, modify: false },
@@ -140,8 +140,8 @@ export default function EffectiveDateSetup({ onNext, onPrevious, isLast, isLoadi
                 importLeaveData: { view: false, modify: false },
                 adminLeaveTypes: { view: false, modify: false },
                 adminCompOff: { view: false, modify: false },
-                adminPTO: { view: false, modify: false },
-                allowOnBehalf: { pto: true, leave: true, compOff: true }
+                adminBTO: { view: false, modify: false },
+                allowOnBehalf: { bto: true, leave: true, compOff: true }
               }
             },
             {
@@ -152,7 +152,7 @@ export default function EffectiveDateSetup({ onNext, onPrevious, isLast, isLoadi
                 leaveApplications: { view: true, modify: true },
                 holidays: { view: true, modify: false },
                 compensatoryOff: { view: true, modify: true },
-                pto: { view: true, modify: true },
+                bto: { view: true, modify: true },
                 adminOverview: { view: false, modify: false },
                 approvals: { view: false, modify: false },
                 employees: { view: false, modify: false },
@@ -161,8 +161,8 @@ export default function EffectiveDateSetup({ onNext, onPrevious, isLast, isLoadi
                 importLeaveData: { view: false, modify: false },
                 adminLeaveTypes: { view: false, modify: false },
                 adminCompOff: { view: false, modify: false },
-                adminPTO: { view: false, modify: false },
-                allowOnBehalf: { pto: false, leave: false, compOff: false }
+                adminBTO: { view: false, modify: false },
+                allowOnBehalf: { bto: false, leave: false, compOff: false }
               }
             }
           ];

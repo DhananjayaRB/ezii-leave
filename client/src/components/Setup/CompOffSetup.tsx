@@ -16,11 +16,12 @@ interface CompOffSetupProps {
   onPrevious: () => void;
   isLast?: boolean;
   isLoading?: boolean;
+  showNavigation?: boolean; // Add prop to control navigation buttons visibility
 }
 
 
 
-export default function CompOffSetup({ onNext, onPrevious, isLast, isLoading }: CompOffSetupProps) {
+export default function CompOffSetup({ onNext, onPrevious, isLast, isLoading, showNavigation = true }: CompOffSetupProps) {
   const { toast } = useToast();
   const [compOffEnabled, setCompOffEnabled] = useState(true);
   const [showVariantForm, setShowVariantForm] = useState(false);
@@ -302,23 +303,25 @@ export default function CompOffSetup({ onNext, onPrevious, isLast, isLoading }: 
         </div>
 
         {/* Navigation buttons */}
-        <div className="flex justify-between pt-8">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={onPrevious}
-            className="text-gray-600 border-gray-300 hover:bg-gray-50"
-          >
-            Previous
-          </Button>
-          <Button
-            onClick={handleNext}
-            disabled={isLoading}
-            className="bg-primary hover:bg-primary/90"
-          >
-            {isLast ? "Complete Setup" : "Next"}
-          </Button>
-        </div>
+        {showNavigation && (
+          <div className="flex justify-between pt-8">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={onPrevious}
+              className="text-gray-600 border-gray-300 hover:bg-gray-50"
+            >
+              Previous
+            </Button>
+            <Button
+              onClick={handleNext}
+              disabled={isLoading}
+              className="bg-primary hover:bg-primary/90"
+            >
+              {isLast ? "Complete Setup" : "Next"}
+            </Button>
+          </div>
+        )}
       </div>
 
       {/* Comp Off Variant Form Overlay */}

@@ -15,6 +15,7 @@ interface RolesSetupProps {
   onPrevious: () => void;
   isLast?: boolean;
   isLoading?: boolean;
+  showNavigation?: boolean; // Add prop to control navigation buttons visibility
 }
 
 interface PermissionStructure {
@@ -23,7 +24,7 @@ interface PermissionStructure {
   leaveApplications: { view: boolean; modify: boolean };
   holidays: { view: boolean; modify: boolean };
   compensatoryOff: { view: boolean; modify: boolean };
-  pto: { view: boolean; modify: boolean };
+  bto: { view: boolean; modify: boolean };
   employeeReports: { view: boolean; modify: boolean };
   
   // Admin Screens
@@ -38,10 +39,10 @@ interface PermissionStructure {
   // Admin Configuration Screens
   adminLeaveTypes: { view: boolean; modify: boolean };
   adminCompOff: { view: boolean; modify: boolean };
-  adminPTO: { view: boolean; modify: boolean };
+  adminBTO: { view: boolean; modify: boolean };
   
   // Allow On Behalf Actions
-  allowOnBehalf: { pto: boolean; leave: boolean; compOff: boolean };
+  allowOnBehalf: { bto: boolean; leave: boolean; compOff: boolean };
 }
 
 interface FormData {
@@ -50,7 +51,7 @@ interface FormData {
   permissions: PermissionStructure;
 }
 
-export default function RolesSetup({ onNext, onPrevious, isLast, isLoading }: RolesSetupProps) {
+export default function RolesSetup({ onNext, onPrevious, isLast, isLoading, showNavigation = true }: RolesSetupProps) {
   const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState("");
   const [showRoleForm, setShowRoleForm] = useState(false);
@@ -65,7 +66,7 @@ export default function RolesSetup({ onNext, onPrevious, isLast, isLoading }: Ro
       leaveApplications: { view: false, modify: false },
       holidays: { view: false, modify: false },
       compensatoryOff: { view: false, modify: false },
-      pto: { view: false, modify: false },
+      bto: { view: false, modify: false },
       employeeReports: { view: false, modify: false },
       
       // Admin Screens
@@ -80,10 +81,10 @@ export default function RolesSetup({ onNext, onPrevious, isLast, isLoading }: Ro
       // Admin Configuration Screens
       adminLeaveTypes: { view: false, modify: false },
       adminCompOff: { view: false, modify: false },
-      adminPTO: { view: false, modify: false },
+      adminBTO: { view: false, modify: false },
       
       // Allow On Behalf Actions
-      allowOnBehalf: { pto: false, leave: false, compOff: false },
+      allowOnBehalf: { bto: false, leave: false, compOff: false },
     },
   });
 
@@ -181,7 +182,7 @@ export default function RolesSetup({ onNext, onPrevious, isLast, isLoading }: Ro
         leaveApplications: { view: false, modify: false },
         holidays: { view: false, modify: false },
         compensatoryOff: { view: false, modify: false },
-        pto: { view: false, modify: false },
+        bto: { view: false, modify: false },
         employeeReports: { view: false, modify: false },
         
         // Admin Screens
@@ -196,10 +197,10 @@ export default function RolesSetup({ onNext, onPrevious, isLast, isLoading }: Ro
         // Admin Configuration Screens
         adminLeaveTypes: { view: false, modify: false },
         adminCompOff: { view: false, modify: false },
-        adminPTO: { view: false, modify: false },
+        adminBTO: { view: false, modify: false },
         
         // Allow On Behalf Actions
-        allowOnBehalf: { pto: false, leave: false, compOff: false },
+        allowOnBehalf: { bto: false, leave: false, compOff: false },
       },
     });
     setShowRoleForm(true);
@@ -286,9 +287,9 @@ export default function RolesSetup({ onNext, onPrevious, isLast, isLoading }: Ro
   // Bulk permission updates
   const checkAllView = () => {
     const permissionKeys = [
-      'employeeOverview', 'leaveApplications', 'holidays', 'compensatoryOff', 'pto', 'employeeReports',
+      'employeeOverview', 'leaveApplications', 'holidays', 'compensatoryOff', 'bto', 'employeeReports',
       'adminOverview', 'approvals', 'employees', 'workflows', 'roles', 'importLeaveData', 'adminReports',
-      'adminLeaveTypes', 'adminCompOff', 'adminPTO'
+      'adminLeaveTypes', 'adminCompOff', 'adminBTO'
     ];
     
     setFormData(prev => {
@@ -304,9 +305,9 @@ export default function RolesSetup({ onNext, onPrevious, isLast, isLoading }: Ro
 
   const checkAllModify = () => {
     const permissionKeys = [
-      'employeeOverview', 'leaveApplications', 'holidays', 'compensatoryOff', 'pto', 'employeeReports',
+      'employeeOverview', 'leaveApplications', 'holidays', 'compensatoryOff', 'bto', 'employeeReports',
       'adminOverview', 'approvals', 'employees', 'workflows', 'roles', 'importLeaveData', 'adminReports',
-      'adminLeaveTypes', 'adminCompOff', 'adminPTO'
+      'adminLeaveTypes', 'adminCompOff', 'adminBTO'
     ];
     
     setFormData(prev => {
@@ -322,9 +323,9 @@ export default function RolesSetup({ onNext, onPrevious, isLast, isLoading }: Ro
 
   const uncheckAllView = () => {
     const permissionKeys = [
-      'employeeOverview', 'leaveApplications', 'holidays', 'compensatoryOff', 'pto', 'employeeReports',
+      'employeeOverview', 'leaveApplications', 'holidays', 'compensatoryOff', 'bto', 'employeeReports',
       'adminOverview', 'approvals', 'employees', 'workflows', 'roles', 'importLeaveData', 'adminReports',
-      'adminLeaveTypes', 'adminCompOff', 'adminPTO'
+      'adminLeaveTypes', 'adminCompOff', 'adminBTO'
     ];
     
     setFormData(prev => {
@@ -340,9 +341,9 @@ export default function RolesSetup({ onNext, onPrevious, isLast, isLoading }: Ro
 
   const uncheckAllModify = () => {
     const permissionKeys = [
-      'employeeOverview', 'leaveApplications', 'holidays', 'compensatoryOff', 'pto', 'employeeReports',
+      'employeeOverview', 'leaveApplications', 'holidays', 'compensatoryOff', 'bto', 'employeeReports',
       'adminOverview', 'approvals', 'employees', 'workflows', 'roles', 'importLeaveData', 'adminReports',
-      'adminLeaveTypes', 'adminCompOff', 'adminPTO'
+      'adminLeaveTypes', 'adminCompOff', 'adminBTO'
     ];
     
     setFormData(prev => {
@@ -460,7 +461,7 @@ export default function RolesSetup({ onNext, onPrevious, isLast, isLoading }: Ro
                       { key: "leaveApplications", label: "Leave Applications" },
                       { key: "holidays", label: "Holidays" },
                       { key: "compensatoryOff", label: "Compensatory Off" },
-                      { key: "pto", label: "PTO" },
+                      { key: "bto", label: "BTO" },
                       { key: "employeeReports", label: "Employee Reports" },
                     ].map(({ key, label }) => {
                       const permission = formData.permissions[key as keyof PermissionStructure] as { view: boolean; modify: boolean };
@@ -535,7 +536,8 @@ export default function RolesSetup({ onNext, onPrevious, isLast, isLoading }: Ro
                     {[
                       { key: "adminLeaveTypes", label: "Leave Types Configuration" },
                       { key: "adminCompOff", label: "Comp Off Configuration" },
-                      { key: "adminPTO", label: "PTO Configuration" },
+                      { key: "adminBTO", label: "BTO Configuration" },
+                      { key: "adminSettings", label: "General Settings (Black Out Periods & Features)" },
                     ].map(({ key, label }) => {
                       const permission = formData.permissions[key as keyof PermissionStructure] as { view: boolean; modify: boolean };
                       return (
@@ -568,7 +570,7 @@ export default function RolesSetup({ onNext, onPrevious, isLast, isLoading }: Ro
                   <h4 className="text-md font-medium text-gray-800 mb-3">Allow On Behalf Actions</h4>
                   <div className="space-y-2">
                     {[
-                      { key: "pto", label: "PTO Applications" },
+                      { key: "bto", label: "BTO Applications" },
                       { key: "leave", label: "Leave Applications" },
                       { key: "compOff", label: "Comp Off Applications" },
                     ].map(({ key, label }) => (
@@ -703,14 +705,16 @@ export default function RolesSetup({ onNext, onPrevious, isLast, isLoading }: Ro
       </div>
 
       {/* Navigation Buttons */}
-      <div className="flex items-center justify-between pt-6 border-t border-gray-200">
-        <Button variant="outline" onClick={onPrevious}>
-          Previous
-        </Button>
-        <Button onClick={onNext} disabled={isLoading}>
-          {isLast ? "Finish Setup" : "Next"}
-        </Button>
-      </div>
+      {showNavigation && (
+        <div className="flex items-center justify-between pt-6 border-t border-gray-200">
+          <Button variant="outline" onClick={onPrevious}>
+            Previous
+          </Button>
+          <Button onClick={onNext} disabled={isLoading}>
+            {isLast ? "Finish Setup" : "Next"}
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

@@ -193,7 +193,7 @@ export default function RolePermissionsForm({ role, onClose }: RolePermissionsFo
                 <PermissionRow title="Workflows" category="workflows" />
                 <PermissionRow title="Leave Types" category="leaveTypes" />
                 <PermissionRow title="Leave Configurations" category="leaveConfigurations" />
-                <PermissionRow title="PTO Configurations" category="ptoConfigurations" />
+                <PermissionRow title="BTO Configurations" category="ptoConfigurations" />
                 <PermissionRow title="Comp-Off Configurations" category="compOffConfigurations" />
               </div>
             </CardContent>
@@ -207,7 +207,7 @@ export default function RolePermissionsForm({ role, onClose }: RolePermissionsFo
             <CardContent>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-gray-700">PTO</span>
+                  <span className="text-sm font-medium text-gray-700">BTO</span>
                   <Switch
                     checked={permissions.allowOnBehalfOf.pto}
                     onCheckedChange={(checked) => updatePermission('allowOnBehalfOf', 'pto', checked)}

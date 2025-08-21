@@ -503,7 +503,7 @@ export default function CompOffVariantForm({ variant, onClose }: CompOffVariantF
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-Org-Id': localStorage.getItem('org_id') || '13',
+          'X-Org-Id': localStorage.getItem('org_id') || '',
         },
         body: JSON.stringify({
           leaveVariantId: variant.id,

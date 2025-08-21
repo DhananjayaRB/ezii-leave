@@ -10,6 +10,7 @@ export default function AdminCompOff() {
           onPrevious={() => {}} 
           isLast={false} 
           isLoading={false} 
+          showNavigation={false}
         />
       </div>
     </Layout>

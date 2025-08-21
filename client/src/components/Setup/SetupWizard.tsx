@@ -47,7 +47,7 @@ export default function SetupWizard({ company }: SetupWizardProps) {
     { name: "Effective Date", component: EffectiveDateSetup },
     { name: "Leave Types", component: LeaveTypesSetup },
     { name: "Comp off", component: CompOffSetup },
-    { name: "PTO", component: PTOSetup },
+    { name: "BTO", component: PTOSetup },
     { name: "Import Leave Data", component: ImportLeaveDataSetup },
     { name: "Roles", component: RolesSetup },
     { name: "Workflow", component: WorkflowsSetup },

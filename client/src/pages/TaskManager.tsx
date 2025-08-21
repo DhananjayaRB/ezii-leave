@@ -40,13 +40,6 @@ interface Task {
 
 export default function TaskManager() {
   const [currentUserId, setCurrentUserId] = useState<string>('');
-  const { orgId } = useOrgContext();
-  
-  // Initialize user ID from localStorage
-  useEffect(() => {
-    const userId = localStorage.getItem('user_id') || '';
-    setCurrentUserId(userId);
-  }, []);
   const [rejectionComment, setRejectionComment] = useState("");
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [completionComment, setCompletionComment] = useState("");
@@ -69,34 +62,32 @@ export default function TaskManager() {
     dateTo: "",
   });
   
+  const { orgId } = useOrgContext();
   const queryClient = useQueryClient();
-  // For testing collaborative leave functionality, set context to user 2161 who has assigned tasks
+
+  // Initialize user ID from localStorage
   useEffect(() => {
-    if (currentUserId !== '2161') {
-      console.log('TaskManager - Setting user context to 2161 (Ananth BS) to show collaborative tasks');
-      localStorage.setItem('user_id', '2161');
-      localStorage.setItem('org_id', '38');
-      setCurrentUserId('2161'); // Update state directly
-    }
-  }, [currentUserId]);
+    const userId = localStorage.getItem('user_id') || '';
+    setCurrentUserId(userId);
+  }, []);
+
+  // Note: User context is preserved from localStorage - no automatic overrides
   
   console.log('TaskManager - Current user ID from localStorage:', currentUserId);
 
   // Fetch tasks assigned TO current user
-  const { data: assignedToMe = [], isLoading: loadingAssignedToMe } = useQuery<Task[]>({
+  const { data: assignedToMe = [] } = useQuery<Task[]>({
     queryKey: [`/api/tasks/assigned-to-me/${currentUserId}`],
     enabled: !!currentUserId,
-    staleTime: 0,
-    refetchOnMount: true,
   });
 
-  // Fetch tasks assigned BY current user  
-  const { data: assignedByMe = [], isLoading: loadingAssignedByMe } = useQuery<Task[]>({
+  // Fetch tasks assigned BY current user
+  const { data: assignedByMe = [] } = useQuery<Task[]>({
     queryKey: [`/api/tasks/assigned-by-me/${currentUserId}`],
     enabled: !!currentUserId,
-    staleTime: 0,
-    refetchOnMount: true,
   });
+
+
   
   console.log('TaskManager - Tasks assigned to me:', assignedToMe);
   console.log('TaskManager - Tasks assigned by me:', assignedByMe);
@@ -518,13 +509,7 @@ export default function TaskManager() {
     </div>
   );
 
-  if (loadingAssignedToMe || loadingAssignedByMe) {
-    return (
-      <div className="container mx-auto p-6">
-        <div className="text-center">Loading tasks...</div>
-      </div>
-    );
-  }
+
 
   return (
     <Layout>

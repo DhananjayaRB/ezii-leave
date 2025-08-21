@@ -5,11 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Loader2, Clock, Calendar, FileText, Users, TrendingUp, CheckCircle } from "lucide-react";
-import PTOApplicationForm from "@/components/PTO/PTOApplicationForm";
+import BTOApplicationForm from "@/components/PTO/PTOApplicationForm";
 
 export default function Landing() {
   const { isLoading, isAuthenticated, user } = useAuth();
-  const [showPTOForm, setShowPTOForm] = useState(false);
+  const [showBTOForm, setShowBTOForm] = useState(false);
 
   // Get current user ID from localStorage
   const currentUserId = localStorage.getItem('user_id') || '225';
@@ -33,7 +33,7 @@ export default function Landing() {
     enabled: isAuthenticated,
   });
 
-  // Fetch available PTO variants for quick check
+  // Fetch available BTO variants for quick check
   const { data: ptoVariants = [] } = useQuery({
     queryKey: ['/api/pto-variants/available'],
     queryFn: async () => {
@@ -97,11 +97,10 @@ export default function Landing() {
     );
   }
 
-  // ===== FIX: Prevent infinite reload loop while auth is disabled =====
-  // if (isAuthenticated || true) {
-  //   window.location.href = "/";
-  //   return null;
-  // }
+  if (isAuthenticated) {
+    window.location.href = "/";
+    return null;
+  }
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-gray-50">
@@ -114,13 +113,23 @@ export default function Landing() {
               </div>
               <span className="font-semibold text-lg text-gray-900">eziileave</span>
             </div>
+            
             <div className="text-center">
               <h1 className="text-2xl font-bold text-gray-900 mb-2">Welcome to eziileave</h1>
               <p className="text-gray-600">
                 Your comprehensive leave management solution
               </p>
             </div>
-            {/* Removed sign-in button and auth references */}
+
+            <div className="w-full space-y-4">
+              <Button 
+                onClick={() => window.location.href = "/api/login"}
+                className="w-full bg-primary hover:bg-primary/90"
+              >
+                Sign In with Replit
+              </Button>
+            </div>
+
             <div className="text-center">
               <p className="text-xs text-gray-500">
                 Streamline your leave management process with automated workflows, 

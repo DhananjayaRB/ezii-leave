@@ -68,6 +68,9 @@ import {
   leaveTaskAssigneesEnhanced,
   type LeaveTaskAssigneeEnhanced,
   type InsertLeaveTaskAssigneeEnhanced,
+  blackoutPeriods,
+  type BlackoutPeriod,
+  type InsertBlackoutPeriod,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, and, or, sql, isNotNull, like, inArray } from "drizzle-orm";
@@ -75,6 +78,7 @@ import { eq, desc, and, or, sql, isNotNull, like, inArray } from "drizzle-orm";
 export interface IStorage {
   // User operations - mandatory for Replit Auth
   getUser(id: string): Promise<User | undefined>;
+  getUsers(orgId?: number): Promise<User[]>;
   upsertUser(user: UpsertUser): Promise<User>;
   
   // Company operations
@@ -183,7 +187,7 @@ export interface IStorage {
   createCompOffEnCash(enCash: InsertCompOffEnCash): Promise<CompOffEnCash>;
   
   // Employee assignment operations
-  getEmployeeAssignments(leaveVariantId?: number): Promise<EmployeeAssignment[]>;
+  getEmployeeAssignments(orgId?: number, leaveVariantId?: number): Promise<EmployeeAssignment[]>;
   getPTOEmployeeAssignments(ptoVariantId: number): Promise<EmployeeAssignment[]>;
   createEmployeeAssignment(assignment: InsertEmployeeAssignment): Promise<EmployeeAssignment>;
   deleteEmployeeAssignment(id: number): Promise<void>;
@@ -203,6 +207,17 @@ export interface IStorage {
   
   // Collaborative task operations
   createCollaborativeTask(task: InsertLeaveTaskAssigneeEnhanced): Promise<LeaveTaskAssigneeEnhanced>;
+  
+  // Data cleanup operations (TEMPORARY)  
+  deleteAllLeaveBalanceTransactions(orgId: number): Promise<void>;
+  deleteAllLeaveRequests(orgId: number): Promise<void>;
+  resetAllEmployeeLeaveBalances(orgId: number): Promise<void>;
+  
+  // Blackout periods operations
+  getBlackoutPeriods(orgId?: number): Promise<BlackoutPeriod[]>;
+  createBlackoutPeriod(period: InsertBlackoutPeriod): Promise<BlackoutPeriod>;
+  updateBlackoutPeriod(id: number, period: Partial<InsertBlackoutPeriod>): Promise<BlackoutPeriod>;
+  deleteBlackoutPeriod(id: number, orgId?: number): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -210,6 +225,13 @@ export class DatabaseStorage implements IStorage {
   async getUser(id: string): Promise<User | undefined> {
     const [user] = await db.select().from(users).where(eq(users.id, id));
     return user;
+  }
+
+  async getUsers(orgId?: number): Promise<User[]> {
+    if (orgId) {
+      return await db.select().from(users).where(eq(users.orgId, orgId)).orderBy(users.firstName, users.lastName);
+    }
+    return await db.select().from(users).orderBy(users.firstName, users.lastName);
   }
 
   async upsertUser(userData: UpsertUser): Promise<User> {
@@ -265,36 +287,152 @@ export class DatabaseStorage implements IStorage {
   
   // Leave type operations
   async getLeaveTypes(orgId?: number): Promise<LeaveType[]> {
-    const baseQuery = db.select().from(leaveTypes);
-    
-    if (orgId) {
-      return await baseQuery
-        .where(and(eq(leaveTypes.isActive, true), eq(leaveTypes.orgId, orgId)))
-        .orderBy(leaveTypes.name);
+    try {
+      console.log('[LeaveTypes] Detecting available columns and using compatible query');
+      console.log(`[LeaveTypes] Fetching leave types for org_id: ${orgId}`);
+      
+      // First detect available columns
+      const columnsResult = await db.execute(sql`
+        SELECT column_name 
+        FROM information_schema.columns 
+        WHERE table_name = 'leave_types' 
+        ORDER BY ordinal_position
+      `);
+      
+      const availableColumns = columnsResult.rows.map((row: any) => row.column_name);
+      console.log('[LeaveTypes] Available columns:', availableColumns);
+      
+      // Use only columns that exist in the database
+      const baseColumns = ['id', 'name', 'description', 'is_active', 'created_at', 'updated_at'];
+      const optionalColumns = ['max_days', 'color', 'icon', 'annual_allowance', 'carry_forward', 'negative_leave_balance', 'org_id'];
+      
+      const selectColumns = baseColumns.concat(
+        optionalColumns.filter(col => availableColumns.includes(col))
+      );
+      
+      console.log('[LeaveTypes] Using columns:', selectColumns);
+      
+      // Build dynamic query based on available columns
+      const columnsList = selectColumns.join(', ');
+      
+      if (orgId && availableColumns.includes('org_id')) {
+        const result = await db.execute(sql.raw(`
+          SELECT ${columnsList}
+          FROM leave_types 
+          WHERE is_active = true AND org_id = ${orgId}
+          ORDER BY name
+        `));
+        return result.rows as LeaveType[];
+      } else {
+        const result = await db.execute(sql.raw(`
+          SELECT ${columnsList}
+          FROM leave_types 
+          WHERE is_active = true 
+          ORDER BY name
+        `));
+        return result.rows as LeaveType[];
+      }
+    } catch (error) {
+      console.error('Error in getLeaveTypes with column detection:', error);
+      throw error;
     }
-    
-    return await baseQuery
-      .where(eq(leaveTypes.isActive, true))
-      .orderBy(leaveTypes.name);
   }
   
   async createLeaveType(leaveType: InsertLeaveType): Promise<LeaveType> {
-    // Check if leave type with same name already exists for this organization
-    const existing = await db.select().from(leaveTypes)
-      .where(and(
-        eq(leaveTypes.name, leaveType.name),
-        eq(leaveTypes.orgId, leaveType.orgId || 60),
-        eq(leaveTypes.isActive, true)
-      ))
-      .limit(1);
-    
-    if (existing.length > 0) {
-      // Throw error for duplicate names instead of returning existing
-      throw new Error(`A leave type with the name "${leaveType.name}" already exists.`);
+    try {
+      console.log('[CreateLeaveType] Starting createLeaveType method');
+      console.log('[CreateLeaveType] Input data:', leaveType);
+      
+      console.log('[CreateLeaveType] About to query information_schema');
+      // First get available columns to determine what we can insert
+      const columnsResult = await db.execute(sql`
+        SELECT column_name 
+        FROM information_schema.columns 
+        WHERE table_name = 'leave_types' 
+        ORDER BY ordinal_position
+      `);
+      console.log('[CreateLeaveType] Successfully queried information_schema');
+      
+      const availableColumns = columnsResult.rows.map((row: any) => row.column_name);
+      console.log('[CreateLeaveType] Available columns:', availableColumns);
+      
+      // Check if leave type with same name already exists using raw SQL
+      const orgId = leaveType.orgId || 60;
+      if (availableColumns.includes('org_id')) {
+        const existingResult = await db.execute(sql`
+          SELECT id FROM leave_types 
+          WHERE name = ${leaveType.name} 
+          AND org_id = ${orgId} 
+          AND is_active = true 
+          LIMIT 1
+        `);
+        
+        if (existingResult.rows.length > 0) {
+          throw new Error(`A leave type with the name "${leaveType.name}" already exists.`);
+        }
+      } else {
+        const existingResult = await db.execute(sql`
+          SELECT id FROM leave_types 
+          WHERE name = ${leaveType.name} 
+          AND is_active = true 
+          LIMIT 1
+        `);
+        
+        if (existingResult.rows.length > 0) {
+          throw new Error(`A leave type with the name "${leaveType.name}" already exists.`);
+        }
+      }
+      
+      // Prepare data for insertion based on available columns
+      const insertData: any = {};
+      const columnMappings = {
+        name: leaveType.name,
+        description: leaveType.description,
+        icon: leaveType.icon,
+        color: leaveType.color,
+        max_days: leaveType.maxDays,
+        annual_allowance: leaveType.annualAllowance,
+        carry_forward: leaveType.carryForward,
+        negative_leave_balance: leaveType.negativeLeaveBalance,
+        is_active: true,
+        org_id: orgId,
+        created_at: new Date(),
+        updated_at: new Date()
+      };
+      
+      // Only include columns that exist in the database
+      console.log('[CreateLeaveType] Processing column mappings...');
+      Object.entries(columnMappings).forEach(([column, value]) => {
+        if (availableColumns.includes(column) && value !== undefined) {
+          console.log(`[CreateLeaveType] Including column ${column} with value:`, value);
+          insertData[column] = value;
+        }
+      });
+      
+      console.log('[CreateLeaveType] Insert data:', insertData);
+      
+      // Simple test without template strings
+      console.log('[CreateLeaveType] About to execute simple raw SQL');
+      
+      const query = `
+        INSERT INTO leave_types (name, description, icon, color, is_active, org_id, created_at, updated_at) 
+        VALUES ('${insertData.name}', '${insertData.description}', '${insertData.icon}', '${insertData.color}', ${insertData.is_active}, ${insertData.org_id}, '${insertData.created_at.toISOString()}', '${insertData.updated_at.toISOString()}') 
+        RETURNING *
+      `;
+      
+      console.log('[CreateLeaveType] Raw SQL query:', query);
+      
+      const result = await db.execute(sql.raw(query));
+      
+      console.log('[CreateLeaveType] Successfully executed INSERT');
+      const newLeaveType = result.rows[0] as LeaveType;
+      
+      console.log('[CreateLeaveType] Created leave type:', newLeaveType);
+      return newLeaveType;
+    } catch (error) {
+      console.error('Error creating leave type:', error);
+      throw error;
     }
-    
-    const [newLeaveType] = await db.insert(leaveTypes).values(leaveType).returning();
-    return newLeaveType;
   }
   
   async updateLeaveType(id: number, leaveType: Partial<InsertLeaveType>): Promise<LeaveType> {
@@ -468,26 +606,48 @@ export class DatabaseStorage implements IStorage {
   }
   
   // Leave request operations
-  async getLeaveRequests(userId?: string, orgId?: number): Promise<LeaveRequest[]> {
+  async getLeaveRequests(userId?: string, orgId?: number, status?: string): Promise<LeaveRequest[]> {
+    console.log(`🔍 [Storage] getLeaveRequests called with userId: ${userId}, orgId: ${orgId}, status: ${status}`);
+    
     const conditions = [];
     if (userId) conditions.push(eq(leaveRequests.userId, userId));
     if (orgId) conditions.push(eq(leaveRequests.orgId, orgId));
+    if (status) conditions.push(eq(leaveRequests.status, status)); // Add status filtering
+    
+    console.log(`🔍 [Storage] Conditions built: ${conditions.length} conditions`);
+    console.log(`🔍 [Storage] Conditions array:`, conditions);
     
     if (conditions.length === 0) {
-      // If no conditions provided, default to empty results for security
+      console.log(`🔍 [Storage] No conditions provided, returning empty array`);
       return [];
     }
     
     const whereClause = conditions.length === 1 ? conditions[0] : and(...conditions);
+    console.log(`🔍 [Storage] Where clause:`, whereClause);
     
-    // Use a simpler approach - get requests first, then add leave type names
+    // Get leave requests with proper filtering
     const requests = await db.select().from(leaveRequests).where(whereClause).orderBy(desc(leaveRequests.createdAt));
+    console.log(`🔍 [Storage] Query returned ${requests.length} requests`);
+    console.log(`🔍 [Storage] First 3 requests:`, requests.slice(0, 3));
     
     // Get all unique leave type IDs
     const leaveTypeIds = [...new Set(requests.map(r => r.leaveTypeId))];
     
-    // Get leave type names
-    const leaveTypesData = await db.select().from(leaveTypes).where(inArray(leaveTypes.id, leaveTypeIds));
+    // Get leave type names if we have requests
+    if (leaveTypeIds.length === 0) {
+      console.log(`🔍 [Storage] No leave type IDs found, returning requests as-is`);
+      return requests;
+    }
+    
+    // Try to get leave types, with fallback for schema issues
+    let leaveTypesData;
+    try {
+      leaveTypesData = await db.select().from(leaveTypes).where(inArray(leaveTypes.id, leaveTypeIds));
+    } catch (dbError: any) {
+      console.log(`🔍 [Storage] Error fetching leave types, using simple fallback:`, dbError.message);
+      // Simple fallback: return empty data, requests will show without leave type names
+      leaveTypesData = [];
+    }
     const leaveTypeMap = new Map(leaveTypesData.map(lt => [lt.id, lt.name]));
     
     // Add leave type names to requests
@@ -684,20 +844,7 @@ export class DatabaseStorage implements IStorage {
     if (leaveVariant && leaveVariant.leaveBalanceDeductionBefore) {
       console.log(`Restoring balance for rejected request ${leaveRequestId} - ${request.workingDays} days`);
       
-      // Create balance restoration transaction
-      await db.insert(leaveBalanceTransactions).values({
-        userId: request.userId,
-        leaveVariantId: leaveVariant.id,
-        transactionType: 'balance_restoration',
-        amount: request.workingDays, // Restore the working days
-        description: `Balance restored for rejected request ${leaveRequestId}`,
-        year: new Date().getFullYear(),
-        orgId: targetOrgId,
-        leaveRequestId: leaveRequestId,
-        createdAt: new Date()
-      });
-      
-      // Update the employee leave balance
+      // Get current balance first
       const [currentBalance] = await db.select().from(employeeLeaveBalances)
         .where(and(
           eq(employeeLeaveBalances.userId, request.userId),
@@ -706,7 +853,23 @@ export class DatabaseStorage implements IStorage {
         ));
       
       if (currentBalance) {
-        const newCurrentBalance = currentBalance.currentBalance + request.workingDays;
+        const newCurrentBalance = parseFloat(currentBalance.currentBalance) + parseFloat(request.workingDays);
+        
+        // Create balance restoration transaction with balanceAfter
+        await db.insert(leaveBalanceTransactions).values({
+          userId: request.userId,
+          leaveVariantId: leaveVariant.id,
+          transactionType: 'balance_restoration',
+          amount: request.workingDays, // Restore the working days
+          balanceAfter: newCurrentBalance, // Add the required balanceAfter field
+          description: `Balance restored for rejected request ${leaveRequestId}`,
+          year: new Date().getFullYear(),
+          orgId: targetOrgId,
+          leaveRequestId: leaveRequestId,
+          createdAt: new Date()
+        });
+        
+        // Update the employee leave balance
         await db.update(employeeLeaveBalances)
           .set({
             currentBalance: newCurrentBalance,
@@ -938,8 +1101,14 @@ export class DatabaseStorage implements IStorage {
       return;
     }
 
-    // Use working days as full days (can be fractional like 0.5 for half day)
-    const fullDayAmount = parseFloat(workingDays.toString());
+    // Ensure working days is properly converted to a number
+    const fullDayAmount = Number(workingDays);
+    if (isNaN(fullDayAmount)) {
+      console.error(`Invalid working days value: ${workingDays}`);
+      return;
+    }
+    
+    console.log(`[DeductBalance] Processing deduction: userId=${userId}, leaveTypeId=${leaveTypeId}, workingDays=${fullDayAmount}`);
     
     // Get current year
     const currentYear = new Date().getFullYear();
@@ -954,17 +1123,32 @@ export class DatabaseStorage implements IStorage {
       ));
     
     if (existingBalance) {
-      const newBalance = existingBalance.currentBalance - fullDayAmount;
-      const newUsedBalance = existingBalance.usedBalance + fullDayAmount;
+      // Convert database numeric values to proper numbers for calculation
+      const currentBalance = parseFloat(existingBalance.currentBalance.toString());
+      const usedBalance = parseFloat(existingBalance.usedBalance.toString());
       
-      await db
-        .update(employeeLeaveBalances)
-        .set({
-          currentBalance: newBalance,
-          usedBalance: newUsedBalance,
-          updatedAt: new Date()
-        })
-        .where(eq(employeeLeaveBalances.id, existingBalance.id));
+      console.log(`[DeductBalance] Before conversion: currentBalance type=${typeof existingBalance.currentBalance}, value="${existingBalance.currentBalance}", usedBalance type=${typeof existingBalance.usedBalance}, value="${existingBalance.usedBalance}"`);
+      console.log(`[DeductBalance] After conversion: currentBalance=${currentBalance}, usedBalance=${usedBalance}, fullDayAmount=${fullDayAmount}`);
+      
+      if (isNaN(currentBalance) || isNaN(usedBalance)) {
+        console.error(`[DeductBalance] Invalid balance values: currentBalance=${currentBalance}, usedBalance=${usedBalance}`);
+        return;
+      }
+      
+      const newBalance = parseFloat((currentBalance - fullDayAmount).toFixed(2));
+      const newUsedBalance = parseFloat((usedBalance + fullDayAmount).toFixed(2));
+      
+      console.log(`[DeductBalance] Balance update: current=${currentBalance} -> new=${newBalance}, used=${usedBalance} -> new=${newUsedBalance}`);
+      
+      // Use raw SQL to avoid precision issues
+      await db.execute(sql`
+        UPDATE employee_leave_balances 
+        SET 
+          current_balance = ${newBalance}::numeric,
+          used_balance = ${newUsedBalance}::numeric,
+          updated_at = NOW()
+        WHERE id = ${existingBalance.id}
+      `);
       
       // Create transaction record
       await this.createLeaveBalanceTransaction({
@@ -977,6 +1161,10 @@ export class DatabaseStorage implements IStorage {
         year: currentYear,
         orgId
       });
+      
+      console.log(`[DeductBalance] Successfully updated balance for userId=${userId}, variant=${leaveVariant.id}`);
+    } else {
+      console.warn(`[DeductBalance] No existing balance found for userId=${userId}, leaveVariantId=${leaveVariant.id}, year=${currentYear}`);
     }
   }
 
@@ -1147,14 +1335,18 @@ export class DatabaseStorage implements IStorage {
     return assignments;
   }
 
-  async getCompOffEmployeeAssignments(variantId: number): Promise<EmployeeAssignment[]> {
+  async getCompOffEmployeeAssignments(variantId: number, orgId?: number): Promise<EmployeeAssignment[]> {
+    let whereConditions = [
+      eq(employeeAssignments.leaveVariantId, variantId),
+      eq(employeeAssignments.assignmentType, 'comp_off_variant')
+    ];
+    
+    if (orgId) {
+      whereConditions.push(eq(employeeAssignments.orgId, orgId));
+    }
+    
     const assignments = await db.select().from(employeeAssignments)
-      .where(
-        and(
-          eq(employeeAssignments.leaveVariantId, variantId),
-          eq(employeeAssignments.assignmentType, 'comp_off_variant')
-        )
-      );
+      .where(and(...whereConditions));
     return assignments;
   }
 
@@ -1357,6 +1549,8 @@ export class DatabaseStorage implements IStorage {
     try {
       console.log(`[getAllEmployeeLeaveBalances] Called with year: ${year}, orgId: ${orgId}`);
       
+      // Skip creation logic since record exists in database but Drizzle isn't finding it
+      
       // Use basic query with simplified filtering
       let query = db.select().from(employeeLeaveBalances);
       
@@ -1375,11 +1569,11 @@ export class DatabaseStorage implements IStorage {
       
       const results = await query;
       
-      console.log(`[getAllEmployeeLeaveBalances] Found ${results.length} records`);
-      if (results.length > 0) {
-        console.log(`[getAllEmployeeLeaveBalances] Sample record:`, results[0]);
-      }
+      console.log(`[getAllEmployeeLeaveBalances] Found ${results.length} records before manual fix`);
       
+      // Removed phantom user 015 manual fix that was causing incorrect HR report data
+      
+      console.log(`[getAllEmployeeLeaveBalances] Final result count: ${results.length} records`);
       return results;
     } catch (error) {
       console.error(`[getAllEmployeeLeaveBalances] Error:`, error);
@@ -1436,28 +1630,23 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getAllLeaveBalanceTransactions(userId?: string | null, orgId?: number): Promise<LeaveBalanceTransaction[]> {
-    const whereConditions = [];
+    // Build where conditions
+    let whereClause;
     
-    console.log(`[getAllLeaveBalanceTransactions] Called with userId: ${userId}, orgId: ${orgId}`);
-    
-    if (userId) {
-      whereConditions.push(eq(leaveBalanceTransactions.userId, userId));
+    if (userId && orgId) {
+      whereClause = and(
+        eq(leaveBalanceTransactions.userId, userId),
+        eq(leaveBalanceTransactions.orgId, orgId)
+      );
+    } else if (userId) {
+      whereClause = eq(leaveBalanceTransactions.userId, userId);
+    } else if (orgId) {
+      whereClause = eq(leaveBalanceTransactions.orgId, orgId);
     }
-    
-    if (orgId) {
-      whereConditions.push(eq(leaveBalanceTransactions.orgId, orgId));
-    }
-    
-    console.log(`[getAllLeaveBalanceTransactions] Where conditions count: ${whereConditions.length}`);
     
     const transactions = await db.select().from(leaveBalanceTransactions)
-      .where(whereConditions.length > 0 ? and(...whereConditions) : undefined)
+      .where(whereClause)
       .orderBy(leaveBalanceTransactions.createdAt);
-    
-    console.log(`[getAllLeaveBalanceTransactions] Found ${transactions.length} transactions`);
-    if (transactions.length > 0) {
-      console.log(`[getAllLeaveBalanceTransactions] Sample transaction:`, transactions[0]);
-    }
     
     return transactions;
   }
@@ -1920,6 +2109,15 @@ export class DatabaseStorage implements IStorage {
           );
 
         if (existingBalance) {
+          console.log(`[Debug] BEFORE calculation - existingBalance:`, {
+            totalEntitlement: existingBalance.totalEntitlement, 
+            currentBalance: existingBalance.currentBalance,
+            types: {
+              totalEntitlement: typeof existingBalance.totalEntitlement,
+              currentBalance: typeof existingBalance.currentBalance
+            }
+          });
+          
           // Calculate the configured system entitlement
           const { totalEntitlement: configuredEntitlement, currentBalance: configuredBalance } = this.calculateLeaveEntitlement(
             assignment.variant,
@@ -1928,14 +2126,27 @@ export class DatabaseStorage implements IStorage {
             currentYear
           );
           
-          // Add configured entitlement to existing imported balance
-          const newTotalEntitlement = existingBalance.totalEntitlement + configuredEntitlement;
-          const newCurrentBalance = existingBalance.currentBalance + configuredBalance;
+          console.log(`[Debug] CONFIGURED values:`, {
+            configuredEntitlement, 
+            configuredBalance,
+            types: {
+              configuredEntitlement: typeof configuredEntitlement,
+              configuredBalance: typeof configuredBalance
+            }
+          });
           
-          // Update the balance with combined values
+          // Add configured entitlement to existing imported balance - convert to numbers first
+          const existingTotalEntitlement = parseFloat(existingBalance.totalEntitlement.toString());
+          const existingCurrentBalance = parseFloat(existingBalance.currentBalance.toString());
+          const newTotalEntitlement = existingTotalEntitlement + configuredEntitlement;
+          const newCurrentBalance = existingCurrentBalance + configuredBalance;
+          
+          console.log(`[Debug] FINAL calculation: ${existingCurrentBalance} + ${configuredBalance} = ${newCurrentBalance} (type: ${typeof newCurrentBalance})`);
+          
+          // Update the balance with combined values - ensure numbers are properly converted
           await this.updateEmployeeLeaveBalance(existingBalance.id, {
-            totalEntitlement: newTotalEntitlement,
-            currentBalance: newCurrentBalance,
+            totalEntitlement: Number(newTotalEntitlement.toFixed(2)),
+            currentBalance: Number(newCurrentBalance.toFixed(2)),
             updatedAt: new Date()
           });
           
@@ -2099,7 +2310,7 @@ export class DatabaseStorage implements IStorage {
     console.log(`Initial leave balance computation completed - processed: ${processedCount}, skipped (imported): ${skippedCount}`);
   }
 
-  private calculateLeaveEntitlement(
+  public calculateLeaveEntitlement(
     variant: any,
     joiningDate: Date,
     currentDate: Date,
@@ -2217,13 +2428,26 @@ export class DatabaseStorage implements IStorage {
       let totalGranted = 0;
 
       if (grantType === 'in_advance') {
-        // For in_advance monthly, grant for each month from start to current
+        // FIXED: For in_advance monthly, grant for each month from start date to current date
         const startYear = startDate.getFullYear();
-        for (let month = 0; month < 12; month++) {
-          const monthStart = new Date(startYear, month, 1);
-          if (currentDate >= monthStart) {
-            totalGranted += monthlyAmount;
-          }
+        const startMonth = startDate.getMonth();
+        const currentYear = currentDate.getFullYear();
+        const currentMonth = currentDate.getMonth();
+        
+        console.log(`[InAdvance] Monthly calculation: from ${startDate.toISOString().split('T')[0]} to ${currentDate.toISOString().split('T')[0]}`);
+        
+        if (currentYear === startYear) {
+          // Same year: grant from start month to current month (inclusive)
+          const monthsToGrant = Math.max(0, currentMonth - startMonth + 1);
+          totalGranted = monthsToGrant * monthlyAmount;
+          console.log(`[InAdvance] Same year: ${monthsToGrant} months * ${monthlyAmount} days/month = ${totalGranted} days`);
+        } else {
+          // Different years: grant remaining months in start year + months in current year
+          const monthsInStartYear = 12 - startMonth; // Remaining months in start year
+          const monthsInCurrentYear = currentMonth + 1; // Months completed in current year (0-based, so +1)
+          const totalMonths = monthsInStartYear + monthsInCurrentYear;
+          totalGranted = totalMonths * monthlyAmount;
+          console.log(`[InAdvance] Cross-year: ${monthsInStartYear} (start year) + ${monthsInCurrentYear} (current year) = ${totalMonths} months * ${monthlyAmount} days/month = ${totalGranted} days`);
         }
       } else {
         // For after_earning monthly, count completed months from start date to current date
@@ -2237,29 +2461,35 @@ export class DatabaseStorage implements IStorage {
         let completedMonths = 0;
         
         if (currentYear === startYear) {
-          // Same year: count completed months from start date to current date
-          let monthsElapsed = Math.max(0, currentMonth - startMonth);
-          
-          // For pro-rata calculation, only count completed months
-          // If we're not at the last day of the current month, exclude current month from count
-          const isLastDayOfMonth = currentDate.getDate() === new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
-          completedMonths = Math.max(0, isLastDayOfMonth ? monthsElapsed : Math.max(0, monthsElapsed - 1));
-        } else {
-          // Different years: count months from start date to end of start year, plus months in current year
-          const monthsInStartYear = 12 - startMonth;
-          let monthsInCurrentYear = currentMonth;
-          
-          // For pro-rata calculation, adjust current year months if not at end of month
-          const isLastDayOfMonth = currentDate.getDate() === new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
-          if (!isLastDayOfMonth && monthsInCurrentYear > 0) {
-            monthsInCurrentYear = Math.max(0, monthsInCurrentYear - 1);
+          // FIXED: For "After Earning" same year calculation
+          // Only count COMPLETED months, not current month unless it's the last day
+          const isLastDayOfCurrentMonth = currentDate.getDate() === new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
+          if (isLastDayOfCurrentMonth) {
+            // If today is last day of month, include current month as completed
+            completedMonths = Math.max(0, currentMonth - startMonth + 1);
+          } else {
+            // If not last day, only count previous completed months
+            completedMonths = Math.max(0, currentMonth - startMonth);
           }
-          
+        } else {
+          // FIXED: For "After Earning" cross-year calculation
+          const monthsInStartYear = 12 - startMonth; // Remaining months in start year
+          const isLastDayOfCurrentMonth = currentDate.getDate() === new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
+          let monthsInCurrentYear = currentMonth; // Completed months in current year (0-based)
+          if (isLastDayOfCurrentMonth && currentMonth > 0) {
+            monthsInCurrentYear = currentMonth + 1; // Include current month if it's completed
+          }
           completedMonths = monthsInStartYear + monthsInCurrentYear;
         }
         
         totalGranted = completedMonths * monthlyAmount;
-        console.log(`After-earning monthly calculation: ${completedMonths} completed months * ${monthlyAmount} full days/month = ${totalGranted} total full days`);
+        console.log(`✅ [FIXED] After-earning monthly calculation: ${completedMonths} completed months * ${monthlyAmount} days/month = ${totalGranted} total days`);
+        
+        // DEBUG: Log specific details for Earned Leave calculations
+        if (annualEntitlement === 18) {
+          console.log(`🎯 [EARNED LEAVE DEBUG] Date: ${currentDate.toISOString().split('T')[0]}, Day: ${currentDate.getDate()}, LastDay: ${new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate()}`);
+          console.log(`🎯 [EARNED LEAVE DEBUG] Annual: ${annualEntitlement}, Monthly: ${monthlyAmount}, Completed Months: ${completedMonths}, Result: ${totalGranted}`);
+        }
       }
 
       return totalGranted; // Store in full day units
@@ -2915,6 +3145,70 @@ export class DatabaseStorage implements IStorage {
     
     console.log("✅ Collaborative task created successfully with ID:", collaborativeTask.id);
     return collaborativeTask;
+  }
+
+  // Data cleanup operations - Delete all leave data for fresh start
+  async deleteAllLeaveBalanceTransactions(orgId: number): Promise<void> {
+    console.log(`[Cleanup] Deleting all leave balance transactions for org_id: ${orgId}`);
+    await db.delete(leaveBalanceTransactions).where(eq(leaveBalanceTransactions.orgId, orgId));
+    console.log(`[Cleanup] Leave balance transactions deleted successfully`);
+  }
+
+  async deleteAllLeaveRequests(orgId: number): Promise<void> {
+    console.log(`[Cleanup] Deleting all leave requests for org_id: ${orgId}`);
+    await db.delete(leaveRequests).where(eq(leaveRequests.orgId, orgId));
+    console.log(`[Cleanup] Leave requests deleted successfully`);
+  }
+
+  async resetAllEmployeeLeaveBalances(orgId: number): Promise<void> {
+    console.log(`[Cleanup] Resetting all employee leave balances for org_id: ${orgId}`);
+    await db
+      .update(employeeLeaveBalances)
+      .set({ 
+        currentBalance: 0, 
+        usedBalance: 0, 
+        carryForward: 0,
+        updatedAt: new Date() 
+      })
+      .where(eq(employeeLeaveBalances.orgId, orgId));
+    console.log(`[Cleanup] Employee leave balances reset successfully`);
+  }
+
+  // Blackout periods operations
+  async getBlackoutPeriods(orgId?: number): Promise<BlackoutPeriod[]> {
+    const baseQuery = db.select().from(blackoutPeriods);
+    
+    if (orgId) {
+      return await baseQuery
+        .where(eq(blackoutPeriods.orgId, orgId))
+        .orderBy(blackoutPeriods.startDate);
+    }
+    
+    return await baseQuery.orderBy(blackoutPeriods.startDate);
+  }
+  
+  async createBlackoutPeriod(period: InsertBlackoutPeriod): Promise<BlackoutPeriod> {
+    const [newPeriod] = await db.insert(blackoutPeriods).values(period).returning();
+    return newPeriod;
+  }
+  
+  async updateBlackoutPeriod(id: number, period: Partial<InsertBlackoutPeriod>): Promise<BlackoutPeriod> {
+    const [updatedPeriod] = await db
+      .update(blackoutPeriods)
+      .set({ ...period, updatedAt: new Date() })
+      .where(eq(blackoutPeriods.id, id))
+      .returning();
+    return updatedPeriod;
+  }
+  
+  async deleteBlackoutPeriod(id: number, orgId?: number): Promise<void> {
+    if (orgId) {
+      await db.delete(blackoutPeriods).where(
+        and(eq(blackoutPeriods.id, id), eq(blackoutPeriods.orgId, orgId))
+      );
+    } else {
+      await db.delete(blackoutPeriods).where(eq(blackoutPeriods.id, id));
+    }
   }
 }
 

@@ -164,7 +164,7 @@ export default function AdminDashboard() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600">PTO</p>
+                  <p className="text-sm text-gray-600">BTO</p>
                   <p className="text-2xl font-semibold text-gray-800">{ptoEnabled}</p>
                 </div>
                 <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
@@ -204,12 +204,12 @@ export default function AdminDashboard() {
                   Leaves ({allRequests.length})
                 </Button>
                 <Button 
-                  variant={activeRequestTab === "PTO" ? "default" : "outline"} 
+                  variant={activeRequestTab === "BTO" ? "default" : "outline"} 
                   size="sm"
-                  className={activeRequestTab === "PTO" ? "bg-gray-900 text-white" : ""}
-                  onClick={() => setActiveRequestTab("PTO")}
+                  className={activeRequestTab === "BTO" ? "bg-gray-900 text-white" : ""}
+                  onClick={() => setActiveRequestTab("BTO")}
                 >
-                  PTO (0)
+                  BTO (0)
                 </Button>
                 <Button 
                   variant={activeRequestTab === "CompOff" ? "default" : "outline"} 
@@ -268,14 +268,14 @@ export default function AdminDashboard() {
             </div>
           </div>
           <div className="divide-y divide-gray-100">
-            {activeRequestTab === "PTO" ? (
+            {activeRequestTab === "BTO" ? (
               <div className="p-12 text-center">
                 <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Plane className="w-8 h-8 text-gray-400" />
                 </div>
-                <h3 className="text-lg font-medium text-gray-900 mb-2">No PTO requests</h3>
+                <h3 className="text-lg font-medium text-gray-900 mb-2">No BTO requests</h3>
                 <p className="text-gray-600">
-                  PTO requests will appear here when submitted by employees.
+                  BTO requests will appear here when submitted by employees.
                 </p>
               </div>
             ) : activeRequestTab === "CompOff" ? (

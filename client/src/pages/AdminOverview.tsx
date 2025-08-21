@@ -4,7 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ChevronLeft, ChevronRight, ExternalLink, AlertCircle, Calendar, Clock, Plane, Users, Plus, CheckCircle, XCircle, Timer } from "lucide-react";
+import { ChevronLeft, ChevronRight, ExternalLink, AlertCircle, Calendar, Clock, Plane, Users, Plus, CheckCircle, XCircle, Timer, FileText, BarChart3 } from "lucide-react";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import Layout from "@/components/Layout";
 import { fetchEmployeeData } from "@/lib/externalApi";
 import { getStoredJWTToken } from "@/lib/jwtUtils";
@@ -32,10 +33,55 @@ export default function AdminOverview() {
   
 
   
-  // Fetch local holidays for upcoming holidays display (fallback)
-  const { data: localHolidays = [] } = useQuery({
+  // Fetch holidays from external API (same as Holidays page)
+  const { data: allHolidaysData } = useQuery({
+    queryKey: ['/external/holidays'],
+    queryFn: async () => {
+      const jwtToken = localStorage.getItem('jwt_token');
+      console.log('🔑 [AdminOverview External Holidays] JWT token found:', !!jwtToken);
+      
+      if (!jwtToken) {
+        throw new Error('JWT token not found in localStorage');
+      }
+
+      console.log('🌐 [AdminOverview External Holidays] Calling API: https://qa-api.resolveindia.com/organization/holidays');
+      const response = await fetch('https://qa-api.resolveindia.com/organization/holidays', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${jwtToken}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      console.log('🌐 [AdminOverview External Holidays] Response status:', response.status);
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.log('🌐 [AdminOverview External Holidays] Error response:', errorText);
+        throw new Error(`Failed to fetch holidays: ${response.status} ${response.statusText}`);
+      }
+
+      const result = await response.json();
+      console.log('🌐 [AdminOverview External Holidays] Response data:', result);
+      return result.data || result || [];
+    },
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    refetchOnMount: true
+  });
+
+  // Fetch local holidays for fallback
+  const { data: dbHolidays = [] } = useQuery({
     queryKey: ["/api/holidays"],
   });
+
+  // Use external holidays if available, fallback to database holidays (same logic as Holidays page)
+  const allHolidays = allHolidaysData && allHolidaysData.length > 0 
+    ? allHolidaysData 
+    : (dbHolidays || []);
+    
+  // Filter holidays based on user's work pattern selectedHolidays (same as Holidays page)
+  const filteredHolidays = workPattern && workPattern.selectedHolidays 
+    ? allHolidays.filter((holiday: any) => workPattern.selectedHolidays.includes(holiday.id))
+    : allHolidays;
 
   // Fetch all required data
   const { data: leaveRequests = [] } = useQuery({
@@ -66,7 +112,7 @@ export default function AdminOverview() {
     queryKey: ["/api/leave-balance-transactions"],
   });
 
-  // Fetch external employee data
+  // Fetch external employee data - MUST be before conditional return
   useEffect(() => {
     const loadEmployeeData = async () => {
       try {
@@ -111,6 +157,8 @@ export default function AdminOverview() {
     }
     return name.substring(0, 2).toUpperCase();
   };
+
+
 
   // Calculate analytics data from real transactions
   const calculateAnalytics = () => {
@@ -353,7 +401,7 @@ export default function AdminOverview() {
   const requestTabs = [
     { id: "Leaves", label: "Leaves", count: (leaveRequests as any[]).length },
     { id: "Leave Plans", label: "Leave Plans", count: 7 }, // This would be from a different API
-    { id: "PTO", label: "PTO", count: (ptoRequests as any[]).length },
+    { id: "BTO", label: "BTO", count: (ptoRequests as any[]).length },
     { id: "Comp-off", label: "Comp-off", count: (compOffRequests as any[]).length }
   ];
 
@@ -361,15 +409,14 @@ export default function AdminOverview() {
     { id: "All", label: "All" },
     { id: "Pending", label: "Pending", count: analytics.pendingApprovals, highlight: true },
     { id: "Approved", label: "Approved" },
-    { id: "Rejected", label: "Rejected" },
-    { id: "Availed", label: "Availed" }
+    { id: "Rejected", label: "Rejected" }
   ];
 
   // Get current requests to display
   const getCurrentRequests = () => {
     let requests = leaveRequests as any[];
     
-    if (activeRequestTab === "PTO") {
+    if (activeRequestTab === "BTO") {
       requests = ptoRequests as any[];
     } else if (activeRequestTab === "Comp-off") {
       requests = compOffRequests as any[];
@@ -620,7 +667,7 @@ export default function AdminOverview() {
                             {getEmployeeName(request.userId || request.user_id)}
                           </p>
                           <p className="text-xs text-muted-foreground">
-                            {activeRequestTab === "PTO" ? (
+                            {activeRequestTab === "BTO" ? (
                               `${request.timeType} • ${formatDateRange(request.requestDate, request.requestDate)}`
                             ) : activeRequestTab === "Comp-off" ? (
                               `${request.actionType} • ${formatDateRange(request.workedDate || request.requestDate, request.workedDate || request.requestDate)}`
@@ -838,7 +885,7 @@ export default function AdminOverview() {
             
             {/* Analytics Type Tabs */}
             <div className="flex space-x-1 bg-muted p-1 rounded-lg">
-              {["Leaves", "PTO", "Comp-off"].map((tab) => (
+              {["Leaves", "BTO", "Comp-off"].map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setAnalyticsTab(tab)}
@@ -856,12 +903,7 @@ export default function AdminOverview() {
             {/* Analytics Sub-tabs */}
             <div className="flex space-x-6 mt-4">
               {[
-                { id: "Availed", label: "Availed", color: "text-green-600", active: true },
-                { id: "Approved", label: "Approved", color: "text-blue-600" },
-                { id: "Rejected", label: "Rejected", color: "text-red-600" },
-                { id: "Loss of Pay", label: "Loss of Pay", color: "text-gray-600" },
-                { id: "Absent", label: "Absent", color: "text-purple-600" },
-                { id: "Encashed", label: "Encashed", color: "text-yellow-600" }
+                { id: "Availed", label: "Availed", color: "text-green-600", active: true }
               ].map((tab) => (
                 <button
                   key={tab.id}
@@ -996,66 +1038,13 @@ export default function AdminOverview() {
                 </div>
               </div>
 
-              {/* Metrics Grid - Using Real Data Only */}
-              <div className="grid grid-cols-5 gap-4 pt-6 border-t">
-                <div className="text-center">
-                  <p className="text-3xl font-bold">{analytics.totalGranted}</p>
-                  <p className="text-sm text-muted-foreground">Total Granted</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-3xl font-bold text-orange-600">{analytics.pendingApprovals}</p>
-                  <p className="text-sm text-muted-foreground">Pending approvals</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-3xl font-bold text-green-600">{analytics.totalOnLeave}</p>
-                  <p className="text-sm text-muted-foreground">Total On leave</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-3xl font-bold text-blue-600">{analytics.totalAvailed}</p>
-                  <p className="text-sm text-muted-foreground">Total availed</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-3xl font-bold text-yellow-600">{analytics.totalRejected}</p>
-                  <p className="text-sm text-muted-foreground">Total Rejected</p>
-                </div>
-              </div>
 
-              <div className="grid grid-cols-4 gap-4">
-                <div className="text-center">
-                  <p className="text-3xl font-bold text-orange-600">{analytics.absent}</p>
-                  <p className="text-sm text-muted-foreground">Absent</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-3xl font-bold text-purple-600">{analytics.totalLossOfPay}</p>
-                  <p className="text-sm text-muted-foreground">Total Loss of Pay</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-3xl font-bold text-red-600">{analytics.totalLapsed}</p>
-                  <p className="text-sm text-muted-foreground">Total lapsed</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-3xl font-bold text-green-600">{analytics.totalEncashed}</p>
-                  <p className="text-sm text-muted-foreground">Total Encashed</p>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="text-center">
-                  <p className="text-3xl font-bold text-blue-600">{analytics.carryForward}</p>
-                  <p className="text-sm text-muted-foreground">Carry forward</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-3xl font-bold text-orange-600">{analytics.withdrawals}</p>
-                  <p className="text-sm text-muted-foreground">Withdrawals</p>
-                </div>
-              </div>
             </div>
           </CardContent>
         </Card>
 
-        {/* Additional sections for holidays, employees */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Holidays */}
+        {/* Upcoming Holidays Section Only */}
+        <div className="mt-6">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
@@ -1066,32 +1055,38 @@ export default function AdminOverview() {
             <CardContent>
               <div className="space-y-3">
                 {(() => {
-                  console.log('[AdminOverview] Work Pattern Holidays data:', workPatternHolidays);
-                  console.log('[AdminOverview] First work pattern holiday:', workPatternHolidays?.[0]);
+                  console.log('[AdminOverview] External holidays data:', allHolidaysData);
+                  console.log('[AdminOverview] DB holidays data:', dbHolidays);
+                  console.log('[AdminOverview] All holidays:', allHolidays);
+                  console.log('[AdminOverview] Filtered holidays:', filteredHolidays);
+                  console.log('[AdminOverview] Work pattern selected holidays:', workPattern?.selectedHolidays);
                   
-                  if (!workPatternHolidays || workPatternHolidays.length === 0) {
+                  // Use the same logic as Holidays page
+                  const holidaysToDisplay = filteredHolidays;
+                  
+                  if (!holidaysToDisplay || holidaysToDisplay.length === 0) {
                     return (
                       <div className="text-center py-4 text-muted-foreground">
-                        No upcoming holidays configured in work pattern
+                        No upcoming holidays configured
                       </div>
                     );
                   }
                   
                   // Filter to show only upcoming holidays (future dates)
                   const now = new Date();
-                  const upcomingHolidays = workPatternHolidays
+                  const upcomingHolidays = holidaysToDisplay
                     .filter((holiday: any) => {
                       try {
-                        // Check both date and selectedDate fields (as used in useWorkPattern)
-                        const holidayDate = new Date(holiday.selectedDate || holiday.date);
+                        // Check both date and selectedDate fields (same as Holidays page)
+                        const holidayDate = new Date(holiday.date || holiday.selectedDate);
                         return holidayDate >= now;
                       } catch {
                         return false;
                       }
                     })
                     .sort((a: any, b: any) => {
-                      const dateA = new Date(a.selectedDate || a.date);
-                      const dateB = new Date(b.selectedDate || b.date);
+                      const dateA = new Date(a.date || a.selectedDate);
+                      const dateB = new Date(b.date || b.selectedDate);
                       return dateA.getTime() - dateB.getTime();
                     })
                     .slice(0, 5);
@@ -1107,12 +1102,12 @@ export default function AdminOverview() {
                   return upcomingHolidays.map((holiday: any, index: number) => (
                     <div key={index} className="flex items-center justify-between">
                       <div>
-                        <p className="font-medium text-sm">{holiday.holidayName || holiday.name}</p>
+                        <p className="font-medium text-sm">{holiday.name || holiday.holidayName}</p>
                         <p className="text-xs text-muted-foreground">
                           {(() => {
                             try {
-                              // Use selectedDate or date field (same logic as useWorkPattern)
-                              const dateString = holiday.selectedDate || holiday.date;
+                              // Use date or selectedDate field (same as Holidays page)
+                              const dateString = holiday.date || holiday.selectedDate;
                               const date = new Date(dateString);
                               
                               if (isNaN(date.getTime())) {
@@ -1121,7 +1116,8 @@ export default function AdminOverview() {
                               return date.toLocaleDateString('en-US', { 
                                 weekday: 'short', 
                                 month: 'short', 
-                                day: 'numeric' 
+                                day: 'numeric',
+                                year: 'numeric'
                               });
                             } catch (error) {
                               return 'Date not available';
@@ -1136,58 +1132,10 @@ export default function AdminOverview() {
               </div>
             </CardContent>
           </Card>
-
-          {/* Leave Analytics Summary */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <Users className="h-5 w-5" />
-                <span>Leave Analytics</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="text-center">
-                    <p className="text-2xl font-bold">{analytics.totalLapsed}</p>
-                    <p className="text-xs text-muted-foreground">Lapsed</p>
-                  </div>
-                  <div className="text-center">
-                    <p className="text-2xl font-bold">{analytics.totalEncashed}</p>
-                    <p className="text-xs text-muted-foreground">Encashed</p>
-                  </div>
-                  <div className="text-center">
-                    <p className="text-2xl font-bold">{analytics.carryForward}</p>
-                    <p className="text-xs text-muted-foreground">Carry Forward</p>
-                  </div>
-                  <div className="text-center">
-                    <p className="text-2xl font-bold">{analytics.withdrawals}</p>
-                    <p className="text-xs text-muted-foreground">Withdrawals</p>
-                  </div>
-                </div>
-                
-                {/* Top Leave Reasons */}
-                <div className="pt-4 border-t">
-                  <p className="text-sm font-medium mb-3">Top Leave Reasons</p>
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between text-sm">
-                      <span>Imported leave transaction for Johnson Jeyakumar</span>
-                      <span className="font-medium">3</span>
-                    </div>
-                    <div className="flex items-center justify-between text-sm">
-                      <span>Imported leave transaction for Pradeep Reddy</span>
-                      <span className="font-medium">3</span>
-                    </div>
-                    <div className="flex items-center justify-between text-sm">
-                      <span>Imported leave transaction for Raghav Rohila</span>
-                      <span className="font-medium">4</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
         </div>
+
+
+
       </div>
     </Layout>
   );

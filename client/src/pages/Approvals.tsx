@@ -34,20 +34,20 @@ export default function Approvals() {
   // Check current view mode to prevent data fetching in employee view
   const currentView = localStorage.getItem('currentView') || 'admin';
 
-  // Fetch real data - only when in admin view
+  // Fetch ALL leave requests for 3-tab interface (Pending, Approved, Rejected) - when in admin view OR when user is a reporting manager
   const { data: leaveRequests = [] } = useQuery({
     queryKey: ["/api/leave-requests"],
-    enabled: currentView === 'admin', // Only fetch when in admin view
+    enabled: currentView === 'admin' || reportingManagerData.isReportingManager, // Fetch for admin or reporting managers
   });
 
   const { data: ptoRequests = [] } = useQuery({
     queryKey: ["/api/pto-requests"],
-    enabled: currentView === 'admin', // Only fetch when in admin view
+    enabled: currentView === 'admin' || reportingManagerData.isReportingManager, // Fetch for admin or reporting managers
   });
 
   const { data: compOffRequests = [] } = useQuery({
     queryKey: ["/api/comp-off-requests"],
-    enabled: currentView === 'admin', // Only fetch when in admin view
+    enabled: currentView === 'admin' || reportingManagerData.isReportingManager, // Fetch for admin or reporting managers
   });
 
   const { data: leaveTypes = [] } = useQuery({
@@ -63,6 +63,12 @@ export default function Approvals() {
     queryKey: ["external-employees"],
     queryFn: fetchEmployeeData,
     staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+
+  // Fetch blackout periods for checking leave conflicts
+  const { data: blackoutPeriods = [] } = useQuery({
+    queryKey: ["/api/blackout-periods"],
+    enabled: currentView === 'admin' || reportingManagerData.isReportingManager, // Fetch for admin or reporting managers
   });
 
   // Helper function to get employee name
@@ -96,13 +102,57 @@ export default function Approvals() {
     return `Employee ID: ${userId}`;
   };
 
+  // Function to check if a leave request overlaps with any blackout period
+  const checkBlackoutPeriodConflict = (userId: string, startDate: string, endDate: string): { hasConflict: boolean, periodName?: string } => {
+    if (!blackoutPeriods || blackoutPeriods.length === 0) {
+      return { hasConflict: false };
+    }
+    
+    const requestStart = new Date(startDate);
+    const requestEnd = new Date(endDate);
+    
+    for (const period of blackoutPeriods as any[]) {
+      // Check if user is assigned to this blackout period (check both string and number formats)
+      const isUserAssigned = period.assignedEmployees && (
+        period.assignedEmployees.includes(userId.toString()) || 
+        period.assignedEmployees.includes(parseInt(userId))
+      );
+      
+      if (!isUserAssigned) {
+        continue; // User not assigned to this blackout period
+      }
+      
+      // Check if leave dates overlap with blackout period
+      const blackoutStart = new Date(period.startDate);
+      const blackoutEnd = new Date(period.endDate);
+      
+      // Check for date overlap: (startA <= endB) && (startB <= endA)
+      const hasOverlap = (requestStart <= blackoutEnd) && (blackoutStart <= requestEnd);
+      
+      if (hasOverlap) {
+        return { hasConflict: true, periodName: period.title };
+      }
+    }
+    
+    return { hasConflict: false };
+  };
+
   // Apply reporting manager filtering to all request types
   let filteredLeaveRequests = leaveRequests as any[];
   let filteredPtoRequests = ptoRequests as any[];
   let filteredCompOffRequests = compOffRequests as any[];
   
+  console.log('🔍 [Approvals] Pre-filter comp-off requests:', filteredCompOffRequests.length);
+  console.log('🔍 [Approvals] Reporting manager data:', {
+    isReportingManager: reportingManagerData.isReportingManager,
+    reporteesCount: reportingManagerData.reportees.length,
+    currentView: currentView
+  });
+  
   if (reportingManagerData.isReportingManager && reportingManagerData.reportees.length > 0) {
     const reporteeIds = reportingManagerData.reportees.map(r => r.user_id.toString());
+    console.log('🔍 [Approvals] Filtering for reportees:', reporteeIds);
+    
     filteredLeaveRequests = filteredLeaveRequests.filter(req => 
       reporteeIds.includes(req.userId?.toString())
     );
@@ -112,12 +162,16 @@ export default function Approvals() {
     filteredCompOffRequests = filteredCompOffRequests.filter(req => 
       reporteeIds.includes(req.userId?.toString())
     );
+    
+    console.log('🔍 [Approvals] Post-filter comp-off requests:', filteredCompOffRequests.length);
+  } else {
+    console.log('🔍 [Approvals] No filtering applied - showing all requests');
   }
 
   // Get current tab data based on selected request type
   const getCurrentTabData = () => {
     switch (activeRequestTab) {
-      case "PTO": return filteredPtoRequests;
+      case "BTO": return filteredPtoRequests;
       case "CompOff": return filteredCompOffRequests;
       default: return filteredLeaveRequests;
     }
@@ -130,7 +184,7 @@ export default function Approvals() {
 
   const requestTabs = [
     { id: "Leaves", label: "Leaves", count: filteredLeaveRequests.length, active: activeRequestTab === "Leaves" },
-    { id: "PTO", label: "PTO", count: filteredPtoRequests.length, active: activeRequestTab === "PTO" },
+    { id: "BTO", label: "BTO", count: filteredPtoRequests.length, active: activeRequestTab === "BTO" },
     { id: "CompOff", label: "CompOff", count: filteredCompOffRequests.length, active: activeRequestTab === "CompOff" }
   ];
 
@@ -162,8 +216,8 @@ export default function Approvals() {
         
         // Search by leave type
         let leaveType = '';
-        if (activeRequestTab === "PTO") {
-          leaveType = "PTO";
+        if (activeRequestTab === "BTO") {
+          leaveType = "BTO";
         } else if (activeRequestTab === "CompOff") {
           leaveType = `Comp-off (${request.type})`;
         } else {
@@ -280,7 +334,7 @@ export default function Approvals() {
   // Helper function to get the correct API endpoint
   const getApprovalEndpoint = () => {
     switch (activeRequestTab) {
-      case "PTO": return "/api/pto-requests";
+      case "BTO": return "/api/pto-requests";
       case "CompOff": return "/api/comp-off-requests";
       default: return "/api/leave-requests";
     }
@@ -400,6 +454,7 @@ export default function Approvals() {
                         <th className="text-left py-3 px-4 text-sm font-medium text-gray-500 uppercase tracking-wider">Leave Period</th>
                         <th className="text-left py-3 px-4 text-sm font-medium text-gray-500 uppercase tracking-wider">Days</th>
                         <th className="text-left py-3 px-4 text-sm font-medium text-gray-500 uppercase tracking-wider">Documents</th>
+                        <th className="text-left py-3 px-4 text-sm font-medium text-gray-500 uppercase tracking-wider">Blackout Period</th>
                         <th className="text-left py-3 px-4 text-sm font-medium text-gray-500 uppercase tracking-wider">Status</th>
                         <th className="text-left py-3 px-4 text-sm font-medium text-gray-500 uppercase tracking-wider w-32">Actions</th>
                       </tr>
@@ -408,9 +463,9 @@ export default function Approvals() {
                       {paginatedRequests().map((request: any) => {
                       // Handle different request types
                       let displayInfo;
-                      if (activeRequestTab === "PTO") {
+                      if (activeRequestTab === "BTO") {
                         displayInfo = {
-                          type: "PTO",
+                          type: "BTO",
                           startDate: new Date(request.requestDate).toLocaleDateString(),
                           endDate: new Date(request.requestDate).toLocaleDateString(),
                           days: request.timeType === 'half_day' ? '0.5' : request.timeType === 'quarter_day' ? '0.25' : request.totalHours ? `${request.totalHours}h` : '1',
@@ -450,7 +505,7 @@ export default function Approvals() {
                             {displayInfo.startDate === displayInfo.endDate ? displayInfo.startDate : `${displayInfo.startDate} - ${displayInfo.endDate}`}
                           </td>
                           <td className="py-3 px-4 text-gray-700">
-                            {displayInfo.days} {activeRequestTab === "PTO" && request.timeType === 'hours' ? '' : 'days'}
+                            {displayInfo.days} {activeRequestTab === "BTO" && request.timeType === 'hours' ? '' : 'days'}
                           </td>
                           <td className="py-3 px-4">
                             {displayInfo.hasDocuments ? (
@@ -465,6 +520,33 @@ export default function Approvals() {
                             ) : (
                               <span className="text-gray-400 text-sm">No documents</span>
                             )}
+                          </td>
+                          <td className="py-3 px-4">
+                            {(() => {
+                              // Only check blackout conflicts for leave requests, not BTO or CompOff
+                              if (activeRequestTab === "Leaves") {
+                                const blackoutCheck = checkBlackoutPeriodConflict(
+                                  request.userId,
+                                  request.startDate,
+                                  request.endDate
+                                );
+                                
+                                if (blackoutCheck.hasConflict) {
+                                  return (
+                                    <div className="text-sm">
+                                      <span className="text-red-600 font-medium">Yes</span>
+                                      <div className="text-xs text-gray-600 mt-1">
+                                        {blackoutCheck.periodName}
+                                      </div>
+                                    </div>
+                                  );
+                                } else {
+                                  return <span className="text-gray-500 text-sm">No</span>;
+                                }
+                              } else {
+                                return <span className="text-gray-400 text-sm">N/A</span>;
+                              }
+                            })()}
                           </td>
                           <td className="py-3 px-4">
                             <Badge 

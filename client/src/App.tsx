@@ -10,6 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { isUnauthorizedError } from "@/lib/authUtils";
 import { initializeUserId } from "@/lib/localStorage";
 import { ReportingManagerProvider } from "@/hooks/useReportingManager";
+import { useJWTTokenCheck } from "@/hooks/useJWTTokenCheck";
 
 import NotFound from "@/pages/not-found";
 import Landing from "@/pages/Landing";
@@ -18,7 +19,7 @@ import ImportLeaveData from "@/pages/ImportLeaveData";
 import LeaveApplications from "@/pages/LeaveApplications";
 import Holidays from "@/pages/Holidays";
 import CompensatoryOff from "@/pages/CompensatoryOff";
-import PTO from "@/pages/PTO";
+import BTO from "@/pages/PTO";
 import TaskManager from "@/pages/TaskManager";
 import AdminOverview from "@/pages/AdminOverview";
 import Approvals from "@/pages/Approvals";
@@ -34,6 +35,7 @@ import AdminReports from "@/pages/AdminReports";
 import EmployeeReports from "@/pages/EmployeeReports";
 import HRLeaveBalanceReport from "@/pages/HRLeaveBalanceReport";
 import AdminFeatureSettings from "@/pages/AdminFeatureSettings";
+import AdminBlackoutPeriods from "@/pages/AdminBlackoutPeriods";
 import LoaderDemo from "@/pages/LoaderDemo";
 import TokenHandler from "@/pages/TokenHandler";
 import TimeBasedApprovalTest from "@/pages/TimeBasedApprovalTest";
@@ -45,6 +47,9 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
+  
+  // Check JWT token expiration
+  useJWTTokenCheck();
 
   // Initialize user_id in localStorage on app startup
   useEffect(() => {
@@ -142,7 +147,7 @@ function Router() {
             <Route path="/applications" component={LeaveApplications} />
             <Route path="/holidays" component={Holidays} />
             <Route path="/compensatory-off" component={CompensatoryOff} />
-            <Route path="/pto" component={PTO} />
+            <Route path="/pto" component={BTO} />
             <Route path="/task-manager" component={TaskManager} />
             <Route path="/overview" component={AdminOverview} />
             <Route path="/approvals" component={Approvals} />
@@ -152,6 +157,11 @@ function Router() {
             <Route path="/admin/leave-types" component={AdminLeaveTypes} />
             <Route path="/admin/comp-off" component={AdminCompOff} />
             <Route path="/admin/pto" component={AdminPTO} />
+            <Route path="/admin/blackout-periods" component={() => 
+              <ProtectedRoute permission="adminSettings">
+                <AdminBlackoutPeriods />
+              </ProtectedRoute>
+            } />
             <Route path="/admin/feature-settings" component={() => 
               <ProtectedRoute permission="adminSettings">
                 <Layout><AdminFeatureSettings /></Layout>
