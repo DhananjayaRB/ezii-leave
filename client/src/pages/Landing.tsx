@@ -4,38 +4,27 @@ import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import {
-  Loader2,
-  Clock,
-  Calendar,
-  FileText,
-  Users,
-  TrendingUp,
-  CheckCircle,
-} from "lucide-react";
-import PTOApplicationForm from "@/components/PTO/PTOApplicationForm";
+import { Loader2, Clock, Calendar, FileText, Users, TrendingUp, CheckCircle } from "lucide-react";
+import BTOApplicationForm from "@/components/PTO/PTOApplicationForm";
 
 export default function Landing() {
   const { isLoading, isAuthenticated, user } = useAuth();
-  const [showPTOForm, setShowPTOForm] = useState(false);
+  const [showBTOForm, setShowBTOForm] = useState(false);
 
   // Get current user ID from localStorage
-  const currentUserId = localStorage.getItem("user_id") || "225";
+  const currentUserId = localStorage.getItem('user_id') || '225';
 
   // Fetch user's data for quick actions
   const { data: ptoRequests = [] } = useQuery({
-    queryKey: ["/api/pto-requests", currentUserId],
+    queryKey: ['/api/pto-requests', currentUserId],
     queryFn: async () => {
       try {
-        const response = await fetch(
-          `/api/pto-requests?userId=${currentUserId}`,
-          {
-            credentials: "include",
-            headers: {
-              "X-Org-Id": localStorage.getItem("org_id") || "60",
-            },
-          },
-        );
+        const response = await fetch(`/api/pto-requests?userId=${currentUserId}`, {
+          credentials: 'include',
+          headers: {
+            'X-Org-Id': localStorage.getItem('org_id') || '60'
+          }
+        });
         return response.ok ? response.json() : [];
       } catch (error) {
         return [];
@@ -44,47 +33,39 @@ export default function Landing() {
     enabled: isAuthenticated,
   });
 
-  // Fetch available PTO variants for quick check
+  // Fetch available BTO variants for quick check
   const { data: ptoVariants = [] } = useQuery({
-    queryKey: ["/api/pto-variants/available"],
+    queryKey: ['/api/pto-variants/available'],
     queryFn: async () => {
       try {
-        const variants = await fetch("/api/pto-variants", {
-          credentials: "include",
+        const variants = await fetch('/api/pto-variants', {
+          credentials: 'include',
           headers: {
-            "X-Org-Id": localStorage.getItem("org_id") || "60",
-          },
-        }).then((res) => res.json());
+            'X-Org-Id': localStorage.getItem('org_id') || '60'
+          }
+        }).then(res => res.json());
 
         // Check which variants user has access to
         const userVariants = [];
         for (const variant of variants) {
           try {
-            const assignmentsResponse = await fetch(
-              `/api/employee-assignments/pto/${variant.id}`,
-              {
-                credentials: "include",
-                headers: {
-                  "X-Org-Id": localStorage.getItem("org_id") || "60",
-                },
-              },
-            );
+            const assignmentsResponse = await fetch(`/api/employee-assignments/pto/${variant.id}`, {
+              credentials: 'include',
+              headers: {
+                'X-Org-Id': localStorage.getItem('org_id') || '60'
+              }
+            });
             if (assignmentsResponse.ok) {
               const assignments = await assignmentsResponse.json();
-              const isAssigned = assignments.some(
-                (assignment: any) =>
-                  assignment.userId === currentUserId ||
-                  assignment.userId === currentUserId.toString(),
+              const isAssigned = assignments.some((assignment: any) => 
+                assignment.userId === currentUserId || assignment.userId === currentUserId.toString()
               );
               if (isAssigned) {
                 userVariants.push(variant);
               }
             }
           } catch (error) {
-            console.error(
-              `Error checking assignments for variant ${variant.id}:`,
-              error,
-            );
+            console.error(`Error checking assignments for variant ${variant.id}:`, error);
           }
         }
         return userVariants;
@@ -130,23 +111,19 @@ export default function Landing() {
               <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">ez</span>
               </div>
-              <span className="font-semibold text-lg text-gray-900">
-                eziileave
-              </span>
+              <span className="font-semibold text-lg text-gray-900">eziileave</span>
             </div>
 
             <div className="text-center">
-              <h1 className="text-2xl font-bold text-gray-900 mb-2">
-                Welcome to eziileave
-              </h1>
+              <h1 className="text-2xl font-bold text-gray-900 mb-2">Welcome to eziileave</h1>
               <p className="text-gray-600">
                 Your comprehensive leave management solution
               </p>
             </div>
 
             <div className="w-full space-y-4">
-              <Button
-                onClick={() => (window.location.href = "/api/login")}
+              <Button 
+                onClick={() => window.location.href = "/api/login"}
                 className="w-full bg-primary hover:bg-primary/90"
               >
                 Sign In with Replit
@@ -155,8 +132,8 @@ export default function Landing() {
 
             <div className="text-center">
               <p className="text-xs text-gray-500">
-                Streamline your leave management process with automated
-                workflows, real-time approvals, and comprehensive reporting.
+                Streamline your leave management process with automated workflows, 
+                real-time approvals, and comprehensive reporting.
               </p>
             </div>
           </div>

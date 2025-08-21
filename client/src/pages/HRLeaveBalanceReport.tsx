@@ -32,7 +32,7 @@ export default function HRLeaveBalanceReport() {
   const [selectedLeaveType, setSelectedLeaveType] = useState("all");
 
   // Get org_id from localStorage - use current org from JWT token
-  const currentOrgId = localStorage.getItem("org_id") || "13";
+  const currentOrgId = localStorage.getItem("org_id");
 
   console.log("[HR Report] Current org_id:", currentOrgId);
 

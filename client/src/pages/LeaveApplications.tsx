@@ -2250,7 +2250,7 @@ export default function LeaveApplications() {
                           totalEntitlementInDays,
                           currentBalanceInDays,
                           openingBalance,
-                          annualLeaveAllocation: variant.annualLeaveAllocation,
+                          paidDaysInYear: variant.paidDaysInYear,
                         },
                       );
 
@@ -2259,17 +2259,13 @@ export default function LeaveApplications() {
                         const currentMonth = new Date().getMonth() + 1; // July = 7
                         const monthsCompleted = currentMonth - 1; // 6 months completed (Jan-June)
                         const annualEntitlement =
-                          totalEntitlementInDays ||
-                          variant.annualLeaveAllocation ||
-                          0;
+                          totalEntitlementInDays || variant.paidDaysInYear || 0;
                         eligibility =
                           (annualEntitlement / 12) * monthsCompleted;
                       } else {
                         // "In Advance" - check grant frequency
                         const annualEntitlement =
-                          totalEntitlementInDays ||
-                          variant.annualLeaveAllocation ||
-                          0;
+                          totalEntitlementInDays || variant.paidDaysInYear || 0;
 
                         if (variant.grantFrequency === "per_year") {
                           // Annual grants like Paternity Leave - full entitlement available immediately
@@ -2533,17 +2529,13 @@ export default function LeaveApplications() {
                         const currentMonth = new Date().getMonth() + 1; // July = 7
                         const monthsCompleted = currentMonth - 1; // 6 months completed (Jan-June)
                         const annualEntitlement =
-                          totalEntitlementInDays ||
-                          variant.annualLeaveAllocation ||
-                          0;
+                          totalEntitlementInDays || variant.paidDaysInYear || 0;
                         eligibility =
                           (annualEntitlement / 12) * monthsCompleted;
                       } else {
                         // "In Advance" - check grant frequency
                         const annualEntitlement =
-                          totalEntitlementInDays ||
-                          variant.annualLeaveAllocation ||
-                          0;
+                          totalEntitlementInDays || variant.paidDaysInYear || 0;
 
                         if (variant.grantFrequency === "per_year") {
                           // Annual grants like Paternity Leave - full entitlement available immediately
@@ -2870,17 +2862,13 @@ export default function LeaveApplications() {
                         const currentMonth = new Date().getMonth() + 1; // July = 7
                         const monthsCompleted = currentMonth - 1; // 6 months completed (Jan-June)
                         const annualEntitlement =
-                          totalEntitlementInDays ||
-                          variant.annualLeaveAllocation ||
-                          0;
+                          totalEntitlementInDays || variant.paidDaysInYear || 0;
                         eligibility =
                           (annualEntitlement / 12) * monthsCompleted;
                       } else {
                         // "In Advance" - check grant frequency
                         const annualEntitlement =
-                          totalEntitlementInDays ||
-                          variant.annualLeaveAllocation ||
-                          0;
+                          totalEntitlementInDays || variant.paidDaysInYear || 0;
 
                         if (variant.grantFrequency === "per_year") {
                           // Annual grants like Paternity Leave - full entitlement available immediately
@@ -3257,7 +3245,7 @@ export default function LeaveApplications() {
                           const monthsCompleted = currentMonth - 1; // 6 months completed (Jan-June)
                           const annualEntitlement =
                             totalEntitlementInDays ||
-                            variant.annualLeaveAllocation ||
+                            variant.paidDaysInYear ||
                             0;
                           eligibility =
                             (annualEntitlement / 12) * monthsCompleted;
@@ -3265,7 +3253,7 @@ export default function LeaveApplications() {
                           // "In Advance" - check grant frequency
                           const annualEntitlement =
                             totalEntitlementInDays ||
-                            variant.annualLeaveAllocation ||
+                            variant.paidDaysInYear ||
                             0;
 
                           if (variant.grantFrequency === "per_year") {

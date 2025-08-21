@@ -5,11 +5,12 @@ export default function AdminPTO() {
   return (
     <Layout>
       <div className="p-6">
-        <PTOSetup 
-          onNext={() => {}} 
-          onPrevious={() => {}} 
-          isLast={false} 
-          isLoading={false} 
+        <PTOSetup
+          onNext={() => {}}
+          onPrevious={() => {}}
+          isLast={false}
+          isLoading={false}
+          showNavigation={false}
         />
       </div>
     </Layout>

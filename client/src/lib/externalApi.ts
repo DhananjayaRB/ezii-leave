@@ -56,15 +56,28 @@ export async function fetchEmployeeData(): Promise<ExternalEmployee[]> {
   console.log("[ExternalAPI] Token preview:", token?.substring(0, 50) + "...");
   console.log("[ExternalAPI] Full Authorization header:", `Bearer ${token}`);
 
-  if (!token) {
-    console.error("[ExternalAPI] No JWT token found in localStorage");
+  // Check if we're currently on the token setup route
+  const isTokenSetupRoute = window.location.pathname.startsWith("/id/");
+
+  if (
+    !token ||
+    token.trim() === "" ||
+    token === "null" ||
+    token === "undefined"
+  ) {
+    if (isTokenSetupRoute) {
+      console.log("[ExternalAPI] On token setup route, skipping redirect");
+      throw new Error("JWT token being processed. Please wait...");
+    }
+    console.error(
+      "[ExternalAPI] Invalid or missing JWT token, redirecting to authentication...",
+    );
     console.log(
       "[ExternalAPI] Available localStorage keys:",
       Object.keys(localStorage),
     );
-    throw new Error(
-      "Authentication required. JWT token not found in localStorage.",
-    );
+    window.location.href = "https://services.resolvepay.in";
+    throw new Error("JWT token required. Redirecting to authentication...");
   }
 
   const payload = {

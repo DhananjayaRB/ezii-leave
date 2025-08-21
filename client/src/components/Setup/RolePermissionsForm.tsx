@@ -33,35 +33,58 @@ interface RolePermissions {
   allowOnBehalfOf: OnBehalfPermissions;
 }
 
-export default function RolePermissionsForm({ role, onClose }: RolePermissionsFormProps) {
+export default function RolePermissionsForm({
+  role,
+  onClose,
+}: RolePermissionsFormProps) {
   const { toast } = useToast();
   const isEditing = !!role;
 
-  const { register, handleSubmit, formState: { errors } } = useForm({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
     defaultValues: {
       name: role?.name || "",
       description: role?.description || "",
-    }
+    },
   });
 
   // Initialize permissions state
   const [permissions, setPermissions] = useState<RolePermissions>({
-    leaveApproval: role?.permissions?.leaveApproval || { view: false, modify: false },
+    leaveApproval: role?.permissions?.leaveApproval || {
+      view: false,
+      modify: false,
+    },
     workflows: role?.permissions?.workflows || { view: false, modify: false },
     leaveTypes: role?.permissions?.leaveTypes || { view: false, modify: false },
-    leaveConfigurations: role?.permissions?.leaveConfigurations || { view: false, modify: false },
-    ptoConfigurations: role?.permissions?.ptoConfigurations || { view: false, modify: false },
-    compOffConfigurations: role?.permissions?.compOffConfigurations || { view: false, modify: false },
-    allowOnBehalfOf: role?.permissions?.allowOnBehalfOf || { pto: false, leave: false, compOff: false },
+    leaveConfigurations: role?.permissions?.leaveConfigurations || {
+      view: false,
+      modify: false,
+    },
+    ptoConfigurations: role?.permissions?.ptoConfigurations || {
+      view: false,
+      modify: false,
+    },
+    compOffConfigurations: role?.permissions?.compOffConfigurations || {
+      view: false,
+      modify: false,
+    },
+    allowOnBehalfOf: role?.permissions?.allowOnBehalfOf || {
+      pto: false,
+      leave: false,
+      compOff: false,
+    },
   });
 
   const createMutation = useMutation({
     mutationFn: async (data: any) => {
       const payload = {
         ...data,
-        permissions
+        permissions,
       };
-      
+
       if (isEditing) {
         return await apiRequest("PATCH", `/api/roles/${role.id}`, payload);
       } else {
@@ -72,36 +95,40 @@ export default function RolePermissionsForm({ role, onClose }: RolePermissionsFo
       queryClient.invalidateQueries({ queryKey: ["/api/roles"] });
       toast({
         title: "Success",
-        description: `Role ${isEditing ? 'updated' : 'created'} successfully.`,
+        description: `Role ${isEditing ? "updated" : "created"} successfully.`,
       });
       onClose();
     },
     onError: () => {
       toast({
         title: "Error",
-        description: `Failed to ${isEditing ? 'update' : 'create'} role.`,
+        description: `Failed to ${isEditing ? "update" : "create"} role.`,
         variant: "destructive",
       });
     },
   });
 
-  const updatePermission = (category: keyof RolePermissions, field: string, value: boolean) => {
-    setPermissions(prev => ({
+  const updatePermission = (
+    category: keyof RolePermissions,
+    field: string,
+    value: boolean,
+  ) => {
+    setPermissions((prev) => ({
       ...prev,
       [category]: {
         ...prev[category],
-        [field]: value
-      }
+        [field]: value,
+      },
     }));
   };
 
-  const PermissionRow = ({ 
-    title, 
-    category, 
-    hasViewModify = true 
-  }: { 
-    title: string; 
-    category: keyof RolePermissions; 
+  const PermissionRow = ({
+    title,
+    category,
+    hasViewModify = true,
+  }: {
+    title: string;
+    category: keyof RolePermissions;
     hasViewModify?: boolean;
   }) => (
     <div className="flex items-center justify-between py-3 border-b border-gray-100 last:border-b-0">
@@ -112,14 +139,18 @@ export default function RolePermissionsForm({ role, onClose }: RolePermissionsFo
             <span className="text-xs text-gray-500">View</span>
             <Switch
               checked={(permissions[category] as PermissionSet).view}
-              onCheckedChange={(checked) => updatePermission(category, 'view', checked)}
+              onCheckedChange={(checked) =>
+                updatePermission(category, "view", checked)
+              }
             />
           </div>
           <div className="flex items-center space-x-2">
             <span className="text-xs text-gray-500">Modify</span>
             <Switch
               checked={(permissions[category] as PermissionSet).modify}
-              onCheckedChange={(checked) => updatePermission(category, 'modify', checked)}
+              onCheckedChange={(checked) =>
+                updatePermission(category, "modify", checked)
+              }
             />
           </div>
         </div>
@@ -136,7 +167,7 @@ export default function RolePermissionsForm({ role, onClose }: RolePermissionsFo
       <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4">
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-semibold text-gray-900">
-            {isEditing ? 'Edit Role' : 'Create New Role'}
+            {isEditing ? "Edit Role" : "Create New Role"}
           </h2>
           <Button
             variant="outline"
@@ -167,12 +198,16 @@ export default function RolePermissionsForm({ role, onClose }: RolePermissionsFo
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 {errors.name && (
-                  <p className="text-xs text-red-500 mt-1">{errors.name.message as string}</p>
+                  <p className="text-xs text-red-500 mt-1">
+                    {errors.name.message as string}
+                  </p>
                 )}
               </div>
 
               <div>
-                <label className="text-sm font-medium text-gray-700 block mb-2">Description</label>
+                <label className="text-sm font-medium text-gray-700 block mb-2">
+                  Description
+                </label>
                 <textarea
                   {...register("description")}
                   placeholder="Enter role description"
@@ -189,12 +224,24 @@ export default function RolePermissionsForm({ role, onClose }: RolePermissionsFo
             </CardHeader>
             <CardContent>
               <div className="space-y-1">
-                <PermissionRow title="Leave Approval" category="leaveApproval" />
+                <PermissionRow
+                  title="Leave Approval"
+                  category="leaveApproval"
+                />
                 <PermissionRow title="Workflows" category="workflows" />
                 <PermissionRow title="Leave Types" category="leaveTypes" />
-                <PermissionRow title="Leave Configurations" category="leaveConfigurations" />
-                <PermissionRow title="PTO Configurations" category="ptoConfigurations" />
-                <PermissionRow title="Comp-Off Configurations" category="compOffConfigurations" />
+                <PermissionRow
+                  title="Leave Configurations"
+                  category="leaveConfigurations"
+                />
+                <PermissionRow
+                  title="BTO Configurations"
+                  category="ptoConfigurations"
+                />
+                <PermissionRow
+                  title="Comp-Off Configurations"
+                  category="compOffConfigurations"
+                />
               </div>
             </CardContent>
           </Card>
@@ -207,24 +254,34 @@ export default function RolePermissionsForm({ role, onClose }: RolePermissionsFo
             <CardContent>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-gray-700">PTO</span>
+                  <span className="text-sm font-medium text-gray-700">BTO</span>
                   <Switch
                     checked={permissions.allowOnBehalfOf.pto}
-                    onCheckedChange={(checked) => updatePermission('allowOnBehalfOf', 'pto', checked)}
+                    onCheckedChange={(checked) =>
+                      updatePermission("allowOnBehalfOf", "pto", checked)
+                    }
                   />
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-gray-700">Leave</span>
+                  <span className="text-sm font-medium text-gray-700">
+                    Leave
+                  </span>
                   <Switch
                     checked={permissions.allowOnBehalfOf.leave}
-                    onCheckedChange={(checked) => updatePermission('allowOnBehalfOf', 'leave', checked)}
+                    onCheckedChange={(checked) =>
+                      updatePermission("allowOnBehalfOf", "leave", checked)
+                    }
                   />
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-gray-700">Comp-Off</span>
+                  <span className="text-sm font-medium text-gray-700">
+                    Comp-Off
+                  </span>
                   <Switch
                     checked={permissions.allowOnBehalfOf.compOff}
-                    onCheckedChange={(checked) => updatePermission('allowOnBehalfOf', 'compOff', checked)}
+                    onCheckedChange={(checked) =>
+                      updatePermission("allowOnBehalfOf", "compOff", checked)
+                    }
                   />
                 </div>
               </div>
@@ -246,7 +303,11 @@ export default function RolePermissionsForm({ role, onClose }: RolePermissionsFo
               disabled={createMutation.isPending}
               className="bg-blue-600 hover:bg-blue-700 text-white"
             >
-              {createMutation.isPending ? "Processing..." : (isEditing ? "Update Role" : "Create Role")}
+              {createMutation.isPending
+                ? "Processing..."
+                : isEditing
+                  ? "Update Role"
+                  : "Create Role"}
             </Button>
           </div>
         </div>

@@ -44,7 +44,7 @@ const SetupLayoutWrapper = ({ children }: { children: React.ReactNode }) => {
     { id: 1, name: "Effective Date", status: "completed" },
     { id: 2, name: "Leave Types", status: "current" },
     { id: 3, name: "Comp off", status: "upcoming" },
-    { id: 4, name: "PTO", status: "upcoming" },
+    { id: 4, name: "BTO", status: "upcoming" },
     { id: 5, name: "Import Leave Data", status: "upcoming" },
     { id: 6, name: "Roles", status: "upcoming" },
     { id: 7, name: "Workflow", status: "upcoming" },
@@ -111,7 +111,7 @@ export default function LeaveTypeVariants() {
 
   const leaveTypeName = params?.leaveTypeName || "";
   const decodedLeaveTypeName = decodeURIComponent(leaveTypeName);
-  
+
   // Check if we're in setup mode
   const isSetupMode = location.includes('?setup=true');
 
@@ -239,7 +239,7 @@ export default function LeaveTypeVariants() {
       {/* Variants Section */}
       <div className="mb-8">
         <h2 className="text-xl font-semibold mb-4">Variants</h2>
-        
+
         {typeVariants.length === 0 ? (
           <Card className="p-8 text-center">
             <div className="text-gray-500 mb-4">
@@ -297,7 +297,7 @@ export default function LeaveTypeVariants() {
                 </CardContent>
               </Card>
             ))}
-            
+
             {/* Create Another Variant Button */}
             <Button
               variant="outline"

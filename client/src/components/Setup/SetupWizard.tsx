@@ -24,7 +24,7 @@ export default function SetupWizard({ company }: SetupWizardProps) {
       localStorage.removeItem('setupWizardStep');
       return 0;
     }
-    
+
     const saved = localStorage.getItem('setupWizardStep');
     return saved ? parseInt(saved, 10) : 0;
   });
@@ -47,7 +47,7 @@ export default function SetupWizard({ company }: SetupWizardProps) {
     { name: "Effective Date", component: EffectiveDateSetup },
     { name: "Leave Types", component: LeaveTypesSetup },
     { name: "Comp off", component: CompOffSetup },
-    { name: "PTO", component: PTOSetup },
+    { name: "BTO", component: PTOSetup },
     { name: "Import Leave Data", component: ImportLeaveDataSetup },
     { name: "Roles", component: RolesSetup },
     { name: "Workflow", component: WorkflowsSetup },
@@ -64,7 +64,7 @@ export default function SetupWizard({ company }: SetupWizardProps) {
     console.log("nextStep called, currentStep:", currentStep, "steps.length:", steps.length);
     const newStep = currentStep + 1;
     console.log("Setting currentStep to:", newStep);
-    
+
     if (newStep <= steps.length) {
       setCurrentStep(newStep);
     } else {
@@ -83,17 +83,17 @@ export default function SetupWizard({ company }: SetupWizardProps) {
       // Get company from cache since it's already queried in Home component
       const company = queryClient.getQueryData(["/api/company"]);
       const orgId = localStorage.getItem('org_id');
-      
+
       if (company && (company as any).id) {
         const headers: Record<string, string> = {
           "Content-Type": "application/json",
         };
-        
+
         // Add org_id header for multi-tenancy
         if (orgId) {
           headers["X-Org-Id"] = orgId;
         }
-        
+
         const response = await fetch(`/api/company/${(company as any).id}`, {
           method: "PATCH",
           headers,
@@ -148,7 +148,7 @@ export default function SetupWizard({ company }: SetupWizardProps) {
   }
 
   const CurrentStepComponent = steps[currentStep - 1]?.component;
-  
+
   console.log("SetupWizard render - currentStep:", currentStep);
   console.log("CurrentStepComponent:", CurrentStepComponent);
   console.log("steps array:", steps);
@@ -165,7 +165,7 @@ export default function SetupWizard({ company }: SetupWizardProps) {
               className="h-6 w-auto"
             />
           </div>
-          
+
           <div className="mb-6">
             <div className="flex items-center space-x-2 text-white mb-4">
               <div className="w-5 h-5 bg-white rounded flex items-center justify-center">
@@ -207,7 +207,7 @@ export default function SetupWizard({ company }: SetupWizardProps) {
         <div className="bg-white border-b border-gray-200 p-6">
           <h1 className="text-2xl font-semibold text-gray-900">Leave Management</h1>
         </div>
-        
+
         <div className="flex-1 overflow-auto">
           <div className="p-6">
             {currentStep === 0 ? (

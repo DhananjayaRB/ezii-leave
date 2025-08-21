@@ -13,9 +13,10 @@ interface PTOSetupProps {
   onPrevious: () => void;
   isLast?: boolean;
   isLoading?: boolean;
+  showNavigation?: boolean; // Add prop to control navigation buttons visibility
 }
 
-export default function PTOSetup({ onNext, onPrevious, isLast, isLoading }: PTOSetupProps) {
+export default function PTOSetup({ onNext, onPrevious, isLast, isLoading, showNavigation = true }: PTOSetupProps) {
   const { toast } = useToast();
   const [ptoEnabled, setPtoEnabled] = useState(true);
   const [showVariantForm, setShowVariantForm] = useState(false);
@@ -45,13 +46,13 @@ export default function PTOSetup({ onNext, onPrevious, isLast, isLoading }: PTOS
       queryClient.invalidateQueries({ queryKey: ["/api/pto-config"] });
       toast({
         title: "Success",
-        description: ptoEnabled ? "PTO enabled successfully." : "PTO disabled successfully.",
+        description: ptoEnabled ? "BTO enabled successfully." : "BTO disabled successfully.",
       });
     },
     onError: (error) => {
       toast({
         title: "Error",
-        description: "Failed to update PTO configuration.",
+        description: "Failed to update BTO configuration.",
         variant: "destructive",
       });
     },
@@ -66,7 +67,7 @@ export default function PTOSetup({ onNext, onPrevious, isLast, isLoading }: PTOS
       queryClient.invalidateQueries({ queryKey: ["/api/pto-variants"] });
       toast({
         title: "Success",
-        description: "PTO variant deleted successfully.",
+        description: "BTO variant deleted successfully.",
       });
     },
   });
@@ -101,10 +102,10 @@ export default function PTOSetup({ onNext, onPrevious, isLast, isLoading }: PTOS
   return (
     <>
       <div className="w-full">
-        {/* Header with PTO toggle */}
+        {/* Header with BTO toggle */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
-            <h2 className="text-2xl font-semibold text-gray-900">PTO (Paid Time Off)</h2>
+            <h2 className="text-2xl font-semibold text-gray-900">BTO (Break Time Off)</h2>
             <Switch
               checked={ptoEnabled}
               onCheckedChange={handleToggleChange}
@@ -116,15 +117,15 @@ export default function PTOSetup({ onNext, onPrevious, isLast, isLoading }: PTOS
         {/* Variants Section */}
         <div className="mb-8">
           <h3 className="text-lg font-medium text-gray-800 mb-4">Variants</h3>
-          
-          {/* Display real PTO variants */}
+
+          {/* Display real BTO variants */}
           {Array.isArray(ptoVariants) && ptoVariants.map((variant: any) => (
             <Card key={variant.id} className="mb-4">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <h4 className="font-medium text-gray-900">{variant.name}</h4>
-                    <p className="text-sm text-gray-500">PTO Variant</p>
+                    <p className="text-sm text-gray-500">BTO Variant</p>
                   </div>
                   <div className="flex items-center gap-2">
                     <Button
@@ -154,43 +155,45 @@ export default function PTOSetup({ onNext, onPrevious, isLast, isLoading }: PTOS
           {/* Show message when no variants exist */}
           {(!Array.isArray(ptoVariants) || ptoVariants.length === 0) && (
             <div className="text-center py-8 text-gray-500">
-              <p>No PTO variants created yet.</p>
-              <p className="text-sm">Click "Create PTO variant" to get started.</p>
+              <p>No BTO variants created yet.</p>
+              <p className="text-sm">Click "Create BTO variant" to get started.</p>
             </div>
           )}
 
-          {/* Create PTO variant button */}
+          {/* Create BTO variant button */}
           <Button
             variant="outline"
             onClick={handleCreateVariant}
             className="text-green-600 border-green-600 hover:bg-green-50"
           >
             <Plus className="w-4 h-4 mr-2" />
-            Create PTO variant
+            Create BTO variant
           </Button>
         </div>
 
         {/* Navigation buttons */}
-        <div className="flex justify-between pt-8">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={onPrevious}
-            className="text-gray-600 border-gray-300 hover:bg-gray-50"
-          >
-            Previous
-          </Button>
-          <Button
-            onClick={handleNext}
-            disabled={isLoading}
-            className="bg-primary hover:bg-primary/90"
-          >
-            {isLast ? "Complete Setup" : "Next"}
-          </Button>
-        </div>
+        {showNavigation && (
+          <div className="flex justify-between pt-8">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={onPrevious}
+              className="text-gray-600 border-gray-300 hover:bg-gray-50"
+            >
+              Previous
+            </Button>
+            <Button
+              onClick={handleNext}
+              disabled={isLoading}
+              className="bg-primary hover:bg-primary/90"
+            >
+              {isLast ? "Complete Setup" : "Next"}
+            </Button>
+          </div>
+        )}
       </div>
 
-      {/* PTO Variant Form Overlay */}
+      {/* BTO Variant Form Overlay */}
       {showVariantForm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <PTOVariantForm

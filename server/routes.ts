@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./replitAuth";
-import { db } from "./db";
+import { db, pool } from "./db";
 import {
   leaveRequests,
   collaborativeLeaveSettingsEnhanced,
@@ -122,6 +122,131 @@ import {
 export async function registerRoutes(app: Express): Promise<Server> {
   // Auth middleware
   await setupAuth(app);
+
+  // Debug endpoint to manually create RH balance
+  app.post("/api/debug-create-rh-balance", async (req, res) => {
+    try {
+      const orgId = getOrgIdFromHeaders(req);
+      console.log(`[DebugRH] Creating RH balance for user 193 in org ${orgId}`);
+
+      // Create balance record directly using upsert
+      const balance = await storage.upsertLeaveBalance({
+        userId: "193",
+        leaveVariantId: 70,
+        totalEntitlement: "12.00",
+        currentBalance: "12.00",
+        usedBalance: "0.00",
+        carryForward: 0,
+        year: 2025,
+        orgId: orgId,
+      });
+
+      console.log(`[DebugRH] Created balance:`, balance);
+
+      // Verify it was created by querying
+      const allBalances = await storage.getEmployeeLeaveBalances(
+        "193",
+        2025,
+        orgId,
+      );
+      console.log(`[DebugRH] All balances for user 193:`, allBalances);
+
+      res.json({
+        success: true,
+        message: "RH balance created",
+        createdBalance: balance,
+        allBalances: allBalances,
+      });
+    } catch (error) {
+      console.error("[DebugRH] Error:", error);
+      res
+        .status(500)
+        .json({ message: "Failed to create RH balance", error: error.message });
+    }
+  });
+
+  // Fix existing balance records with incorrect totalEntitlement (due to previous ×2 bug)
+  app.post("/api/fix-balance-calculations", async (req, res) => {
+    try {
+      const orgId = getOrgIdFromHeaders(req);
+      console.log(`[FixBalances] Starting balance fix for org ${orgId}`);
+
+      // Get all balance records for this org
+      const allBalances = await storage.getAllEmployeeLeaveBalances(
+        undefined,
+        orgId,
+      );
+      console.log(
+        `[FixBalances] Found ${allBalances.length} balance records to check`,
+      );
+
+      let fixedCount = 0;
+      let skippedCount = 0;
+
+      for (const balance of allBalances) {
+        // Get the variant to check configuration
+        const variants = await storage.getLeaveVariants(orgId);
+        const variant = variants.find((v) => v.id === balance.leaveVariantId);
+
+        if (!variant) {
+          console.log(
+            `[FixBalances] Skipping balance ${balance.id} - variant not found`,
+          );
+          skippedCount++;
+          continue;
+        }
+
+        const configuredDays = variant.paidDaysInYear;
+        const currentTotalEntitlement = parseFloat(
+          balance.totalEntitlement || "0",
+        );
+
+        // Check if this balance has multiplication bugs (×2, ×3, etc.) or needs correction
+        const isMultiplicationBug =
+          Math.abs(currentTotalEntitlement - configuredDays * 2) < 0.1 || // ×2 bug
+          Math.abs(currentTotalEntitlement - configuredDays * 3) < 0.1 || // ×3 bug
+          Math.abs(currentTotalEntitlement - configuredDays * 4) < 0.1; // ×4 bug
+
+        const isIncorrectValue =
+          Math.abs(currentTotalEntitlement - configuredDays) > 0.1;
+
+        if (isMultiplicationBug || isIncorrectValue) {
+          console.log(
+            `[FixBalances] Fixing balance ${balance.id}: ${currentTotalEntitlement} -> ${configuredDays}`,
+          );
+
+          // Update with correct value
+          await storage.updateEmployeeLeaveBalance(balance.id, {
+            totalEntitlement: configuredDays,
+            currentBalance: Math.min(
+              parseFloat(balance.currentBalance || "0"),
+              configuredDays,
+            ), // Don't exceed entitlement
+          });
+
+          fixedCount++;
+        } else {
+          console.log(
+            `[FixBalances] Balance ${balance.id} appears correct: configured=${configuredDays}, stored=${currentTotalEntitlement}`,
+          );
+          skippedCount++;
+        }
+      }
+
+      console.log(
+        `[FixBalances] Completed: fixed ${fixedCount}, skipped ${skippedCount}`,
+      );
+      res.json({
+        success: true,
+        message: `Fixed ${fixedCount} balance records, skipped ${skippedCount}`,
+        fixedCount,
+        skippedCount,
+      });
+    } catch (error) {
+      console.error("[FixBalances] Error:", error);
+      res.status(500).json({ message: "Failed to fix balance calculations" });
+    }
+  });
 
   // Auth routes with first-login balance calculation
   app.get("/api/auth/user", isAuthenticated, async (req: any, res) => {
@@ -249,7 +374,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           if (!variant || !variant.paidDaysInYear) continue;
 
           let calculatedBalance = 0;
-          const entitlement = variant.paidDaysInYear * 2; // Convert to half-days
+          const entitlement = variant.paidDaysInYear; // Keep as full days
 
           if (
             employeeData?.date_of_joining &&
@@ -269,13 +394,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
             calculatedBalance = Math.floor(monthsWorked * monthlyAllocation);
 
             console.log(
-              `[FirstLogin] Pro-rata calculation: ${monthsWorked} months worked = ${calculatedBalance / 2} days`,
+              `[FirstLogin] Pro-rata calculation: ${monthsWorked} months worked = ${calculatedBalance} days`,
+            );
+          } else if (
+            employeeData?.date_of_joining &&
+            variant.grantLeaves === "in_advance"
+          ) {
+            // Pro-rata calculation for "in advance" policies
+            const joiningDate = new Date(employeeData.date_of_joining);
+            const currentDate = new Date();
+
+            // For "in advance" per month: calculate months from joining to end of year
+            const monthsRemaining = 12 - joiningDate.getMonth();
+            const monthlyAllocation = entitlement / 12;
+            calculatedBalance = Math.floor(monthsRemaining * monthlyAllocation);
+
+            console.log(
+              `[FirstLogin] In advance calculation: ${monthsRemaining} months remaining = ${calculatedBalance} days`,
             );
           } else {
-            // Full entitlement for "in advance" or when no joining date
+            // Full entitlement when no joining date or other grant method
             calculatedBalance = entitlement;
             console.log(
-              `[FirstLogin] Full allocation: ${calculatedBalance / 2} days`,
+              `[FirstLogin] Full allocation: ${calculatedBalance} days`,
             );
           }
 
@@ -299,12 +440,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
             transactionType: "credit",
             amount: calculatedBalance,
             balanceAfter: calculatedBalance,
-            description: `First login auto-calculation for ${variant.leaveTypeName} (${calculatedBalance / 2} days)`,
+            description: `First login auto-calculation for ${variant.leaveTypeName} (${calculatedBalance} days)`,
             orgId,
           });
 
           console.log(
-            `[FirstLogin] Created ${variant.leaveTypeName} balance: ${calculatedBalance / 2} days`,
+            `[FirstLogin] Created ${variant.leaveTypeName} balance: ${calculatedBalance} days`,
           );
         }
       }
@@ -724,8 +865,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     async (req, res) => {
       try {
         const variantId = parseInt(req.params.variantId);
-        const assignments =
-          await storage.getCompOffEmployeeAssignments(variantId);
+        const orgId = getOrgIdFromHeaders(req);
+        const assignments = await storage.getCompOffEmployeeAssignments(
+          variantId,
+          orgId,
+        );
         res.json(assignments);
       } catch (error) {
         console.error("Error fetching comp-off employee assignments:", error);
@@ -3844,16 +3988,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
     async (req: any, res) => {
       try {
         const id = parseInt(req.params.id);
-        const rejectedBy = req.user.claims.sub;
+        const rejectedBy = req.user?.claims?.sub || "system";
         const orgId = getOrgIdFromHeaders(req);
         const { rejectionReason } = req.body;
+
+        console.log(
+          `Rejecting PTO request ${id} by ${rejectedBy} in org ${orgId}`,
+        );
+        console.log("Rejection reason:", rejectionReason);
 
         // Check if request has workflow
         const requests = await storage.getPTORequests(orgId);
         const request = requests.find((r) => r.id === id);
 
+        if (!request) {
+          return res.status(404).json({ message: "PTO request not found" });
+        }
+
+        console.log(`Found PTO request for rejection:`, request);
+
         if (request?.workflowId) {
           // Process workflow rejection
+          console.log("Processing workflow rejection for PTO request");
           const rejectedRequest = await storage.rejectPTOWorkflowRequest(
             id,
             rejectedBy,
@@ -3863,6 +4019,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           res.json(rejectedRequest);
         } else {
           // Direct rejection for non-workflow requests
+          console.log("Direct rejection for PTO request");
           const rejectedRequest = await storage.updatePTORequest(id, {
             status: "rejected",
             rejectionReason: rejectionReason,
@@ -3871,7 +4028,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       } catch (error) {
         console.error("Error rejecting PTO request:", error);
-        res.status(400).json({ message: "Failed to reject PTO request" });
+        console.error("Error stack:", error.stack);
+        res
+          .status(400)
+          .json({
+            message: "Failed to reject PTO request",
+            error: error.message,
+          });
       }
     },
   );
@@ -5355,7 +5518,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 },
               );
 
-              // Check for existing balance to prevent duplicates
+              // Check for existing balance - UPDATE instead of skipping
               const existingBalances = await storage.getEmployeeLeaveBalances(
                 userId,
                 currentYear,
@@ -5367,9 +5530,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
               if (existingBalance) {
                 console.log(
-                  `[BalanceImport] DUPLICATE PREVENTION: Balance already exists for user ${userId}, variant ${variant.id} - SKIPPING`,
+                  `[BalanceImport] UPDATING EXISTING: Balance found for user ${userId}, variant ${variant.id} - UPDATING with new values`,
                 );
-                continue;
+              } else {
+                console.log(
+                  `[BalanceImport] CREATING NEW: No existing balance found for user ${userId}, variant ${variant.id} - CREATING new balance`,
+                );
               }
 
               // Create leave balance with Excel data (store in full-day units)
@@ -6321,24 +6487,51 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const orgId = getOrgIdFromHeaders(req);
 
-      const allTasks = await db
-        .select()
-        .from(leaveTaskAssigneesEnhanced)
-        .leftJoin(
-          leaveRequests,
-          eq(leaveTaskAssigneesEnhanced.leaveRequestId, leaveRequests.id),
-        )
-        .where(eq(leaveTaskAssigneesEnhanced.orgId, orgId))
-        .orderBy(desc(leaveTaskAssigneesEnhanced.createdAt));
+      // Use direct PostgreSQL connection to avoid Drizzle issues
+      const client = await pool.connect();
 
-      // Transform the result to include leave requester information
-      const transformedTasks = allTasks.map((row) => ({
-        ...row.leave_task_assignees_enhanced,
-        leaveRequesterId: row.leave_requests?.userId || null,
-        leaveRequesterName: row.leave_requests?.employeeName || null,
-      }));
+      try {
+        // Check if collaborative tables exist
+        const tableCheckResult = await client.query(`
+          SELECT table_name 
+          FROM information_schema.tables 
+          WHERE table_schema = 'public' 
+          AND table_name = 'leave_task_assignees'
+        `);
 
-      res.json(transformedTasks);
+        if (tableCheckResult.rows.length === 0) {
+          // Tables don't exist yet, return empty array with message
+          console.log(
+            `[Server] Collaborative task tables not yet created for org_id ${orgId}`,
+          );
+          res.json([]);
+          return;
+        }
+
+        // Use raw SQL to fetch tasks with leave request data
+        const result = await client.query(
+          `
+          SELECT 
+            lta.*,
+            lr.user_id as "leaveRequesterId"
+          FROM leave_task_assignees lta
+          LEFT JOIN leave_requests lr ON lta.leave_request_id = lr.id
+          WHERE lta.org_id = $1
+          ORDER BY lta.created_at DESC
+        `,
+          [orgId],
+        );
+
+        const tasks = result.rows || [];
+
+        console.log(
+          `[Server] Found ${tasks.length} collaborative tasks for org_id ${orgId}`,
+        );
+
+        res.json(tasks);
+      } finally {
+        client.release();
+      }
     } catch (error) {
       console.error("Error fetching all collaborative tasks:", error);
       res.status(500).json({

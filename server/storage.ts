@@ -1791,16 +1791,21 @@ export class DatabaseStorage implements IStorage {
 
   async getCompOffEmployeeAssignments(
     variantId: number,
+    orgId?: number,
   ): Promise<EmployeeAssignment[]> {
+    let whereConditions = [
+      eq(employeeAssignments.leaveVariantId, variantId),
+      eq(employeeAssignments.assignmentType, "comp_off_variant"),
+    ];
+
+    if (orgId) {
+      whereConditions.push(eq(employeeAssignments.orgId, orgId));
+    }
+
     const assignments = await db
       .select()
       .from(employeeAssignments)
-      .where(
-        and(
-          eq(employeeAssignments.leaveVariantId, variantId),
-          eq(employeeAssignments.assignmentType, "comp_off_variant"),
-        ),
-      );
+      .where(and(...whereConditions));
     return assignments;
   }
 

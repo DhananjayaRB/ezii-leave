@@ -15,6 +15,7 @@ interface RolesSetupProps {
   onPrevious: () => void;
   isLast?: boolean;
   isLoading?: boolean;
+  showNavigation?: boolean; // Add prop to control navigation buttons visibility
 }
 
 interface PermissionStructure {
@@ -23,7 +24,7 @@ interface PermissionStructure {
   leaveApplications: { view: boolean; modify: boolean };
   holidays: { view: boolean; modify: boolean };
   compensatoryOff: { view: boolean; modify: boolean };
-  pto: { view: boolean; modify: boolean };
+  bto: { view: boolean; modify: boolean };
   employeeReports: { view: boolean; modify: boolean };
 
   // Admin Screens
@@ -38,10 +39,10 @@ interface PermissionStructure {
   // Admin Configuration Screens
   adminLeaveTypes: { view: boolean; modify: boolean };
   adminCompOff: { view: boolean; modify: boolean };
-  adminPTO: { view: boolean; modify: boolean };
+  adminBTO: { view: boolean; modify: boolean };
 
   // Allow On Behalf Actions
-  allowOnBehalf: { pto: boolean; leave: boolean; compOff: boolean };
+  allowOnBehalf: { bto: boolean; leave: boolean; compOff: boolean };
 }
 
 interface FormData {
@@ -50,12 +51,7 @@ interface FormData {
   permissions: PermissionStructure;
 }
 
-export default function RolesSetup({
-  onNext,
-  onPrevious,
-  isLast,
-  isLoading,
-}: RolesSetupProps) {
+export default function RolesSetup({ onNext, onPrevious, isLast, isLoading, showNavigation = true }: RolesSetupProps) {
   const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState("");
   const [showRoleForm, setShowRoleForm] = useState(false);
@@ -70,7 +66,7 @@ export default function RolesSetup({
       leaveApplications: { view: false, modify: false },
       holidays: { view: false, modify: false },
       compensatoryOff: { view: false, modify: false },
-      pto: { view: false, modify: false },
+      bto: { view: false, modify: false },
       employeeReports: { view: false, modify: false },
 
       // Admin Screens
@@ -85,19 +81,14 @@ export default function RolesSetup({
       // Admin Configuration Screens
       adminLeaveTypes: { view: false, modify: false },
       adminCompOff: { view: false, modify: false },
-      adminPTO: { view: false, modify: false },
+      adminBTO: { view: false, modify: false },
 
       // Allow On Behalf Actions
-      allowOnBehalf: { pto: false, leave: false, compOff: false },
+      allowOnBehalf: { bto: false, leave: false, compOff: false },
     },
   });
 
-  const {
-    data: dbRoles = [],
-    isLoading: isLoadingRoles,
-    error: rolesError,
-    isFetching,
-  } = useQuery<Role[]>({
+  const { data: dbRoles = [], isLoading: isLoadingRoles, error: rolesError, isFetching } = useQuery<Role[]>({
     queryKey: ["/api/roles"],
     staleTime: 0,
     gcTime: 0,
@@ -110,7 +101,7 @@ export default function RolesSetup({
   // Show database roles if they exist
   const rolesArray = Array.isArray(dbRoles) ? dbRoles : [];
   const displayRoles = rolesArray.filter((role: Role) =>
-    role.name.toLowerCase().includes(searchTerm.toLowerCase()),
+    role.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // Check if we should show empty state - simplified logic
@@ -118,33 +109,23 @@ export default function RolesSetup({
 
   // Debug logging
   useEffect(() => {
-    const orgId = localStorage.getItem("org_id");
-    console.log("[RolesSetup] Debug state:", {
+    const orgId = localStorage.getItem('org_id');
+    console.log('[RolesSetup] Debug state:', {
       orgId,
       isLoadingRoles,
       isFetching,
       dbRolesLength: dbRoles?.length,
       displayRolesLength: displayRoles.length,
       showEmptyState,
-      rolesData: dbRoles?.map((r) => r.name),
+      rolesData: dbRoles?.map(r => r.name)
     });
-  }, [
-    isLoadingRoles,
-    isFetching,
-    dbRoles,
-    displayRoles.length,
-    showEmptyState,
-  ]);
+  }, [isLoadingRoles, isFetching, dbRoles, displayRoles.length, showEmptyState]);
 
   // Role creation mutation
   const createRoleMutation = useMutation({
     mutationFn: async (roleData: any) => {
       if (editingRole) {
-        return await apiRequest(
-          "PATCH",
-          `/api/roles/${editingRole.id}`,
-          roleData,
-        );
+        return await apiRequest("PATCH", `/api/roles/${editingRole.id}`, roleData);
       } else {
         return await apiRequest("POST", "/api/roles", roleData);
       }
@@ -201,7 +182,7 @@ export default function RolesSetup({
         leaveApplications: { view: false, modify: false },
         holidays: { view: false, modify: false },
         compensatoryOff: { view: false, modify: false },
-        pto: { view: false, modify: false },
+        bto: { view: false, modify: false },
         employeeReports: { view: false, modify: false },
 
         // Admin Screens
@@ -216,10 +197,10 @@ export default function RolesSetup({
         // Admin Configuration Screens
         adminLeaveTypes: { view: false, modify: false },
         adminCompOff: { view: false, modify: false },
-        adminPTO: { view: false, modify: false },
+        adminBTO: { view: false, modify: false },
 
         // Allow On Behalf Actions
-        allowOnBehalf: { pto: false, leave: false, compOff: false },
+        allowOnBehalf: { bto: false, leave: false, compOff: false },
       },
     });
     setShowRoleForm(true);
@@ -231,12 +212,11 @@ export default function RolesSetup({
     // Parse permissions from database
     let permissions: PermissionStructure;
     try {
-      permissions =
-        typeof role.permissions === "string"
-          ? JSON.parse(role.permissions)
-          : (role.permissions as PermissionStructure);
+      permissions = typeof role.permissions === 'string' 
+        ? JSON.parse(role.permissions) 
+        : role.permissions as PermissionStructure;
     } catch (error) {
-      console.error("Error parsing role permissions:", error);
+      console.error('Error parsing role permissions:', error);
       permissions = formData.permissions; // fallback to default
     }
 
@@ -258,7 +238,7 @@ export default function RolesSetup({
       toast({
         title: "Error",
         description: "Please provide a role name and permissions",
-        variant: "destructive",
+        variant: "destructive"
       });
       return;
     }
@@ -279,15 +259,12 @@ export default function RolesSetup({
   };
 
   const updatePermission = (category: string, type: string, value: boolean) => {
-    setFormData((prev) => ({
+    setFormData(prev => ({
       ...prev,
       permissions: {
         ...prev.permissions,
         [category]: {
-          ...(prev.permissions[category as keyof PermissionStructure] as {
-            view: boolean;
-            modify: boolean;
-          }),
+          ...(prev.permissions[category as keyof PermissionStructure] as { view: boolean; modify: boolean }),
           [type]: value,
         },
       },
@@ -295,7 +272,7 @@ export default function RolesSetup({
   };
 
   const updateAllowOnBehalf = (type: string, value: boolean) => {
-    setFormData((prev) => ({
+    setFormData(prev => ({
       ...prev,
       permissions: {
         ...prev.permissions,
@@ -310,34 +287,16 @@ export default function RolesSetup({
   // Bulk permission updates
   const checkAllView = () => {
     const permissionKeys = [
-      "employeeOverview",
-      "leaveApplications",
-      "holidays",
-      "compensatoryOff",
-      "pto",
-      "employeeReports",
-      "adminOverview",
-      "approvals",
-      "employees",
-      "workflows",
-      "roles",
-      "importLeaveData",
-      "adminReports",
-      "adminLeaveTypes",
-      "adminCompOff",
-      "adminPTO",
+      'employeeOverview', 'leaveApplications', 'holidays', 'compensatoryOff', 'bto', 'employeeReports',
+      'adminOverview', 'approvals', 'employees', 'workflows', 'roles', 'importLeaveData', 'adminReports',
+      'adminLeaveTypes', 'adminCompOff', 'adminBTO'
     ];
 
-    setFormData((prev) => {
+    setFormData(prev => {
       const updatedPermissions = { ...prev.permissions };
-      permissionKeys.forEach((key) => {
+      permissionKeys.forEach(key => {
         if (updatedPermissions[key as keyof PermissionStructure]) {
-          (
-            updatedPermissions[key as keyof PermissionStructure] as {
-              view: boolean;
-              modify: boolean;
-            }
-          ).view = true;
+          (updatedPermissions[key as keyof PermissionStructure] as { view: boolean; modify: boolean }).view = true;
         }
       });
       return { ...prev, permissions: updatedPermissions };
@@ -346,34 +305,16 @@ export default function RolesSetup({
 
   const checkAllModify = () => {
     const permissionKeys = [
-      "employeeOverview",
-      "leaveApplications",
-      "holidays",
-      "compensatoryOff",
-      "pto",
-      "employeeReports",
-      "adminOverview",
-      "approvals",
-      "employees",
-      "workflows",
-      "roles",
-      "importLeaveData",
-      "adminReports",
-      "adminLeaveTypes",
-      "adminCompOff",
-      "adminPTO",
+      'employeeOverview', 'leaveApplications', 'holidays', 'compensatoryOff', 'bto', 'employeeReports',
+      'adminOverview', 'approvals', 'employees', 'workflows', 'roles', 'importLeaveData', 'adminReports',
+      'adminLeaveTypes', 'adminCompOff', 'adminBTO'
     ];
 
-    setFormData((prev) => {
+    setFormData(prev => {
       const updatedPermissions = { ...prev.permissions };
-      permissionKeys.forEach((key) => {
+      permissionKeys.forEach(key => {
         if (updatedPermissions[key as keyof PermissionStructure]) {
-          (
-            updatedPermissions[key as keyof PermissionStructure] as {
-              view: boolean;
-              modify: boolean;
-            }
-          ).modify = true;
+          (updatedPermissions[key as keyof PermissionStructure] as { view: boolean; modify: boolean }).modify = true;
         }
       });
       return { ...prev, permissions: updatedPermissions };
@@ -382,34 +323,16 @@ export default function RolesSetup({
 
   const uncheckAllView = () => {
     const permissionKeys = [
-      "employeeOverview",
-      "leaveApplications",
-      "holidays",
-      "compensatoryOff",
-      "pto",
-      "employeeReports",
-      "adminOverview",
-      "approvals",
-      "employees",
-      "workflows",
-      "roles",
-      "importLeaveData",
-      "adminReports",
-      "adminLeaveTypes",
-      "adminCompOff",
-      "adminPTO",
+      'employeeOverview', 'leaveApplications', 'holidays', 'compensatoryOff', 'bto', 'employeeReports',
+      'adminOverview', 'approvals', 'employees', 'workflows', 'roles', 'importLeaveData', 'adminReports',
+      'adminLeaveTypes', 'adminCompOff', 'adminBTO'
     ];
 
-    setFormData((prev) => {
+    setFormData(prev => {
       const updatedPermissions = { ...prev.permissions };
-      permissionKeys.forEach((key) => {
+      permissionKeys.forEach(key => {
         if (updatedPermissions[key as keyof PermissionStructure]) {
-          (
-            updatedPermissions[key as keyof PermissionStructure] as {
-              view: boolean;
-              modify: boolean;
-            }
-          ).view = false;
+          (updatedPermissions[key as keyof PermissionStructure] as { view: boolean; modify: boolean }).view = false;
         }
       });
       return { ...prev, permissions: updatedPermissions };
@@ -418,34 +341,16 @@ export default function RolesSetup({
 
   const uncheckAllModify = () => {
     const permissionKeys = [
-      "employeeOverview",
-      "leaveApplications",
-      "holidays",
-      "compensatoryOff",
-      "pto",
-      "employeeReports",
-      "adminOverview",
-      "approvals",
-      "employees",
-      "workflows",
-      "roles",
-      "importLeaveData",
-      "adminReports",
-      "adminLeaveTypes",
-      "adminCompOff",
-      "adminPTO",
+      'employeeOverview', 'leaveApplications', 'holidays', 'compensatoryOff', 'bto', 'employeeReports',
+      'adminOverview', 'approvals', 'employees', 'workflows', 'roles', 'importLeaveData', 'adminReports',
+      'adminLeaveTypes', 'adminCompOff', 'adminBTO'
     ];
 
-    setFormData((prev) => {
+    setFormData(prev => {
       const updatedPermissions = { ...prev.permissions };
-      permissionKeys.forEach((key) => {
+      permissionKeys.forEach(key => {
         if (updatedPermissions[key as keyof PermissionStructure]) {
-          (
-            updatedPermissions[key as keyof PermissionStructure] as {
-              view: boolean;
-              modify: boolean;
-            }
-          ).modify = false;
+          (updatedPermissions[key as keyof PermissionStructure] as { view: boolean; modify: boolean }).modify = false;
         }
       });
       return { ...prev, permissions: updatedPermissions };
@@ -479,9 +384,7 @@ export default function RolesSetup({
               <div className="flex space-x-2">
                 <Input
                   value={formData.name}
-                  onChange={(e) =>
-                    setFormData((prev) => ({ ...prev, name: e.target.value }))
-                  }
+                  onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                   placeholder="Enter role name"
                   className="flex-1"
                 />
@@ -504,12 +407,7 @@ export default function RolesSetup({
               </label>
               <Input
                 value={formData.description}
-                onChange={(e) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    description: e.target.value,
-                  }))
-                }
+                onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
                 placeholder="Enter role description"
               />
             </div>
@@ -517,9 +415,7 @@ export default function RolesSetup({
             {/* Role Permissions */}
             <div className="mb-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-900">
-                  Role Permissions
-                </h3>
+                <h3 className="text-lg font-semibold text-gray-900">Role Permissions</h3>
                 <div className="flex space-x-2">
                   <Button
                     variant="outline"
@@ -558,57 +454,34 @@ export default function RolesSetup({
               <div className="space-y-6">
                 {/* Employee Screens */}
                 <div>
-                  <h4 className="text-md font-medium text-gray-800 mb-3">
-                    Employee Screens
-                  </h4>
+                  <h4 className="text-md font-medium text-gray-800 mb-3">Employee Screens</h4>
                   <div className="space-y-2">
                     {[
                       { key: "employeeOverview", label: "Employee Overview" },
                       { key: "leaveApplications", label: "Leave Applications" },
                       { key: "holidays", label: "Holidays" },
                       { key: "compensatoryOff", label: "Compensatory Off" },
-                      { key: "pto", label: "PTO" },
+                      { key: "bto", label: "BTO" },
                       { key: "employeeReports", label: "Employee Reports" },
                     ].map(({ key, label }) => {
-                      const permission = formData.permissions[
-                        key as keyof PermissionStructure
-                      ] as { view: boolean; modify: boolean };
+                      const permission = formData.permissions[key as keyof PermissionStructure] as { view: boolean; modify: boolean };
                       return (
-                        <div
-                          key={key}
-                          className="flex items-center justify-between py-2 border-b border-gray-100"
-                        >
+                        <div key={key} className="flex items-center justify-between py-2 border-b border-gray-100">
                           <span className="text-sm text-gray-700">{label}</span>
                           <div className="flex space-x-6">
                             <div className="flex items-center space-x-2">
                               <Checkbox
                                 checked={permission?.view || false}
-                                onCheckedChange={(checked) =>
-                                  updatePermission(
-                                    key,
-                                    "view",
-                                    checked as boolean,
-                                  )
-                                }
+                                onCheckedChange={(checked) => updatePermission(key, "view", checked as boolean)}
                               />
-                              <span className="text-sm text-gray-600">
-                                View
-                              </span>
+                              <span className="text-sm text-gray-600">View</span>
                             </div>
                             <div className="flex items-center space-x-2">
                               <Checkbox
                                 checked={permission?.modify || false}
-                                onCheckedChange={(checked) =>
-                                  updatePermission(
-                                    key,
-                                    "modify",
-                                    checked as boolean,
-                                  )
-                                }
+                                onCheckedChange={(checked) => updatePermission(key, "modify", checked as boolean)}
                               />
-                              <span className="text-sm text-gray-600">
-                                Modify
-                              </span>
+                              <span className="text-sm text-gray-600">Modify</span>
                             </div>
                           </div>
                         </div>
@@ -619,9 +492,7 @@ export default function RolesSetup({
 
                 {/* Admin Screens */}
                 <div>
-                  <h4 className="text-md font-medium text-gray-800 mb-3">
-                    Admin Screens
-                  </h4>
+                  <h4 className="text-md font-medium text-gray-800 mb-3">Admin Screens</h4>
                   <div className="space-y-2">
                     {[
                       { key: "adminOverview", label: "Admin Overview" },
@@ -632,45 +503,24 @@ export default function RolesSetup({
                       { key: "importLeaveData", label: "Import Leave Data" },
                       { key: "adminReports", label: "Admin Reports" },
                     ].map(({ key, label }) => {
-                      const permission = formData.permissions[
-                        key as keyof PermissionStructure
-                      ] as { view: boolean; modify: boolean };
+                      const permission = formData.permissions[key as keyof PermissionStructure] as { view: boolean; modify: boolean };
                       return (
-                        <div
-                          key={key}
-                          className="flex items-center justify-between py-2 border-b border-gray-100"
-                        >
+                        <div key={key} className="flex items-center justify-between py-2 border-b border-gray-100">
                           <span className="text-sm text-gray-700">{label}</span>
                           <div className="flex space-x-6">
                             <div className="flex items-center space-x-2">
                               <Checkbox
                                 checked={permission?.view || false}
-                                onCheckedChange={(checked) =>
-                                  updatePermission(
-                                    key,
-                                    "view",
-                                    checked as boolean,
-                                  )
-                                }
+                                onCheckedChange={(checked) => updatePermission(key, "view", checked as boolean)}
                               />
-                              <span className="text-sm text-gray-600">
-                                View
-                              </span>
+                              <span className="text-sm text-gray-600">View</span>
                             </div>
                             <div className="flex items-center space-x-2">
                               <Checkbox
                                 checked={permission?.modify || false}
-                                onCheckedChange={(checked) =>
-                                  updatePermission(
-                                    key,
-                                    "modify",
-                                    checked as boolean,
-                                  )
-                                }
+                                onCheckedChange={(checked) => updatePermission(key, "modify", checked as boolean)}
                               />
-                              <span className="text-sm text-gray-600">
-                                Modify
-                              </span>
+                              <span className="text-sm text-gray-600">Modify</span>
                             </div>
                           </div>
                         </div>
@@ -681,62 +531,32 @@ export default function RolesSetup({
 
                 {/* Admin Configuration Screens */}
                 <div>
-                  <h4 className="text-md font-medium text-gray-800 mb-3">
-                    Admin Configuration
-                  </h4>
+                  <h4 className="text-md font-medium text-gray-800 mb-3">Admin Configuration</h4>
                   <div className="space-y-2">
                     {[
-                      {
-                        key: "adminLeaveTypes",
-                        label: "Leave Types Configuration",
-                      },
+                      { key: "adminLeaveTypes", label: "Leave Types Configuration" },
                       { key: "adminCompOff", label: "Comp Off Configuration" },
-                      { key: "adminPTO", label: "PTO Configuration" },
-                      {
-                        key: "adminSettings",
-                        label:
-                          "General Settings (Black Out Periods & Features)",
-                      },
+                      { key: "adminBTO", label: "BTO Configuration" },
+                      { key: "adminSettings", label: "General Settings (Black Out Periods & Features)" },
                     ].map(({ key, label }) => {
-                      const permission = formData.permissions[
-                        key as keyof PermissionStructure
-                      ] as { view: boolean; modify: boolean };
+                      const permission = formData.permissions[key as keyof PermissionStructure] as { view: boolean; modify: boolean };
                       return (
-                        <div
-                          key={key}
-                          className="flex items-center justify-between py-2 border-b border-gray-100"
-                        >
+                        <div key={key} className="flex items-center justify-between py-2 border-b border-gray-100">
                           <span className="text-sm text-gray-700">{label}</span>
                           <div className="flex space-x-6">
                             <div className="flex items-center space-x-2">
                               <Checkbox
                                 checked={permission?.view || false}
-                                onCheckedChange={(checked) =>
-                                  updatePermission(
-                                    key,
-                                    "view",
-                                    checked as boolean,
-                                  )
-                                }
+                                onCheckedChange={(checked) => updatePermission(key, "view", checked as boolean)}
                               />
-                              <span className="text-sm text-gray-600">
-                                View
-                              </span>
+                              <span className="text-sm text-gray-600">View</span>
                             </div>
                             <div className="flex items-center space-x-2">
                               <Checkbox
                                 checked={permission?.modify || false}
-                                onCheckedChange={(checked) =>
-                                  updatePermission(
-                                    key,
-                                    "modify",
-                                    checked as boolean,
-                                  )
-                                }
+                                onCheckedChange={(checked) => updatePermission(key, "modify", checked as boolean)}
                               />
-                              <span className="text-sm text-gray-600">
-                                Modify
-                              </span>
+                              <span className="text-sm text-gray-600">Modify</span>
                             </div>
                           </div>
                         </div>
@@ -747,30 +567,19 @@ export default function RolesSetup({
 
                 {/* Allow On Behalf Actions */}
                 <div>
-                  <h4 className="text-md font-medium text-gray-800 mb-3">
-                    Allow On Behalf Actions
-                  </h4>
+                  <h4 className="text-md font-medium text-gray-800 mb-3">Allow On Behalf Actions</h4>
                   <div className="space-y-2">
                     {[
-                      { key: "pto", label: "PTO Applications" },
+                      { key: "bto", label: "BTO Applications" },
                       { key: "leave", label: "Leave Applications" },
                       { key: "compOff", label: "Comp Off Applications" },
                     ].map(({ key, label }) => (
-                      <div
-                        key={key}
-                        className="flex items-center justify-between py-2 border-b border-gray-100"
-                      >
+                      <div key={key} className="flex items-center justify-between py-2 border-b border-gray-100">
                         <span className="text-sm text-gray-700">{label}</span>
                         <div className="flex items-center space-x-2">
                           <Checkbox
-                            checked={
-                              formData.permissions.allowOnBehalf?.[
-                                key as keyof typeof formData.permissions.allowOnBehalf
-                              ] || false
-                            }
-                            onCheckedChange={(checked) =>
-                              updateAllowOnBehalf(key, checked as boolean)
-                            }
+                            checked={formData.permissions.allowOnBehalf?.[key as keyof typeof formData.permissions.allowOnBehalf] || false}
+                            onCheckedChange={(checked) => updateAllowOnBehalf(key, checked as boolean)}
                           />
                           <span className="text-sm text-gray-600">Allow</span>
                         </div>
@@ -786,17 +595,11 @@ export default function RolesSetup({
               <Button variant="outline" onClick={handleCloseForm}>
                 Cancel
               </Button>
-              <Button
+              <Button 
                 onClick={handleSaveRole}
-                disabled={
-                  createRoleMutation.isPending || deleteRoleMutation.isPending
-                }
+                disabled={createRoleMutation.isPending || deleteRoleMutation.isPending}
               >
-                {createRoleMutation.isPending
-                  ? "Saving..."
-                  : editingRole
-                    ? "Update Role"
-                    : "Create Role"}
+                {createRoleMutation.isPending ? "Saving..." : (editingRole ? "Update Role" : "Create Role")}
               </Button>
             </div>
           </CardContent>
@@ -842,9 +645,7 @@ export default function RolesSetup({
           <Card>
             <CardContent className="p-8 text-center">
               <div className="text-red-500 mb-4">
-                <h3 className="text-lg font-semibold mb-2">
-                  Error loading roles
-                </h3>
+                <h3 className="text-lg font-semibold mb-2">Error loading roles</h3>
                 <p className="text-sm">{rolesError.message}</p>
               </div>
             </CardContent>
@@ -856,17 +657,9 @@ export default function RolesSetup({
           <Card>
             <CardContent className="p-8 text-center">
               <div className="text-gray-500 mb-4">
-                <h3 className="text-lg font-semibold mb-2">
-                  No roles created yet
-                </h3>
-                <p>
-                  Create your first role to get started with permission
-                  management.
-                </p>
-                <p className="text-sm mt-2">
-                  Default roles (Admin, Manager, Employee) will be created
-                  automatically when you complete the setup.
-                </p>
+                <h3 className="text-lg font-semibold mb-2">No roles created yet</h3>
+                <p>Create your first role to get started with permission management.</p>
+                <p className="text-sm mt-2">Default roles (Admin, Manager, Employee) will be created automatically when you complete the setup.</p>
               </div>
               <Button
                 onClick={handleCreateRole}
@@ -886,9 +679,7 @@ export default function RolesSetup({
               <Card key={role.id} className="hover:shadow-md transition-shadow">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-gray-900">
-                      {role.name}
-                    </h3>
+                    <h3 className="text-lg font-semibold text-gray-900">{role.name}</h3>
                     <Button
                       variant="ghost"
                       size="sm"
@@ -900,16 +691,11 @@ export default function RolesSetup({
                   </div>
 
                   {role.description && (
-                    <p className="text-sm text-gray-600 mb-3">
-                      {role.description}
-                    </p>
+                    <p className="text-sm text-gray-600 mb-3">{role.description}</p>
                   )}
 
                   <div className="text-xs text-gray-500">
-                    Created:{" "}
-                    {(role as any).createdAt
-                      ? new Date((role as any).createdAt).toLocaleDateString()
-                      : "Unknown"}
+                    Created: {(role as any).createdAt ? new Date((role as any).createdAt).toLocaleDateString() : "Unknown"}
                   </div>
                 </CardContent>
               </Card>
@@ -919,14 +705,16 @@ export default function RolesSetup({
       </div>
 
       {/* Navigation Buttons */}
-      <div className="flex items-center justify-between pt-6 border-t border-gray-200">
-        <Button variant="outline" onClick={onPrevious}>
-          Previous
-        </Button>
-        <Button onClick={onNext} disabled={isLoading}>
-          {isLast ? "Finish Setup" : "Next"}
-        </Button>
-      </div>
+      {showNavigation && (
+        <div className="flex items-center justify-between pt-6 border-t border-gray-200">
+          <Button variant="outline" onClick={onPrevious}>
+            Previous
+          </Button>
+          <Button onClick={onNext} disabled={isLoading}>
+            {isLast ? "Finish Setup" : "Next"}
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

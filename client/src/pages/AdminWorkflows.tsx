@@ -7,9 +7,28 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
 import { Plus, Calendar, Settings, Trash2, Search } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -21,12 +40,18 @@ const workflowSchema = z.object({
   name: z.string().min(1, "Workflow name is required"),
   effectiveDate: z.string().min(1, "Effective date is required"),
   process: z.string().min(1, "Process is required"),
-  subProcesses: z.array(z.string()).min(1, "At least one sub-process is required"),
-  reviewSteps: z.array(z.object({
-    title: z.string(),
-    roleIds: z.array(z.number()),
-    autoApproval: z.boolean()
-  })).optional()
+  subProcesses: z
+    .array(z.string())
+    .min(1, "At least one sub-process is required"),
+  reviewSteps: z
+    .array(
+      z.object({
+        title: z.string(),
+        roleIds: z.array(z.number()),
+        autoApproval: z.boolean(),
+      }),
+    )
+    .optional(),
 });
 
 type WorkflowForm = z.infer<typeof workflowSchema>;
@@ -60,8 +85,8 @@ export default function AdminWorkflows() {
       effectiveDate: "",
       process: "",
       subProcesses: [],
-      reviewSteps: []
-    }
+      reviewSteps: [],
+    },
   });
 
   const { data: workflows = [] } = useQuery<any[]>({
@@ -72,7 +97,7 @@ export default function AdminWorkflows() {
     queryKey: ["/api/roles"],
   });
 
-  const { data: company } = useQuery<{effectiveDate?: string} | null>({
+  const { data: company } = useQuery<{ effectiveDate?: string } | null>({
     queryKey: ["/api/company"],
   });
 
@@ -80,17 +105,23 @@ export default function AdminWorkflows() {
   useEffect(() => {
     if (editingWorkflow && isCreateDialogOpen) {
       console.log("Editing workflow data:", editingWorkflow);
-      
+
       const formValues = {
         name: editingWorkflow.name || "",
-        effectiveDate: editingWorkflow.effectiveDate ? new Date(editingWorkflow.effectiveDate).toISOString().split('T')[0] : "",
+        effectiveDate: editingWorkflow.effectiveDate
+          ? new Date(editingWorkflow.effectiveDate).toISOString().split("T")[0]
+          : "",
         process: editingWorkflow.process || "application",
-        subProcesses: editingWorkflow.subProcesses ? (Array.isArray(editingWorkflow.subProcesses) ? editingWorkflow.subProcesses : [editingWorkflow.subProcess || "apply-leave"]) : ["apply-leave"]
+        subProcesses: editingWorkflow.subProcesses
+          ? Array.isArray(editingWorkflow.subProcesses)
+            ? editingWorkflow.subProcesses
+            : [editingWorkflow.subProcess || "apply-leave"]
+          : ["apply-leave"],
       };
-      
+
       console.log("Form values being set:", formValues);
       form.reset(formValues);
-      
+
       // Set review steps if they exist
       if (editingWorkflow.steps && Array.isArray(editingWorkflow.steps)) {
         const steps = editingWorkflow.steps.map((step: any, index: number) => ({
@@ -99,7 +130,7 @@ export default function AdminWorkflows() {
           roleIds: step.roleIds || [],
           autoApproval: step.autoApproval || false,
           days: step.days || 0,
-          hours: step.hours || 0
+          hours: step.hours || 0,
         }));
         setReviewSteps(steps);
       } else {
@@ -110,8 +141,11 @@ export default function AdminWorkflows() {
 
   const createWorkflowMutation = useMutation({
     mutationFn: async (data: WorkflowForm) => {
-      const orgId = localStorage.getItem('org_id') || '60';
-      return apiRequest("POST", "/api/workflows", { ...data, orgId: parseInt(orgId) });
+      const orgId = localStorage.getItem("org_id") || "60";
+      return apiRequest("POST", "/api/workflows", {
+        ...data,
+        orgId: parseInt(orgId),
+      });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/workflows"] });
@@ -183,26 +217,32 @@ export default function AdminWorkflows() {
       roleIds: [],
       autoApproval: false,
       days: 0,
-      hours: 0
+      hours: 0,
     };
-    setReviewSteps(prev => [...prev, newStep]);
+    setReviewSteps((prev) => [...prev, newStep]);
   };
 
   const removeReviewStep = (stepId: string) => {
-    setReviewSteps(prev => prev.filter(step => step.id !== stepId));
+    setReviewSteps((prev) => prev.filter((step) => step.id !== stepId));
   };
 
   const updateReviewStep = (stepId: string, updates: Partial<ReviewStep>) => {
-    setReviewSteps(prev => 
-      prev.map(step => 
-        step.id === stepId ? { ...step, ...updates } : step
-      )
+    setReviewSteps((prev) =>
+      prev.map((step) => (step.id === stepId ? { ...step, ...updates } : step)),
     );
   };
 
   const handleAssignRoles = (stepIndex: number) => {
-    console.log("[handleAssignRoles] stepIndex:", stepIndex, "reviewSteps:", reviewSteps);
-    console.log("[handleAssignRoles] step roleIds:", reviewSteps[stepIndex]?.roleIds);
+    console.log(
+      "[handleAssignRoles] stepIndex:",
+      stepIndex,
+      "reviewSteps:",
+      reviewSteps,
+    );
+    console.log(
+      "[handleAssignRoles] step roleIds:",
+      reviewSteps[stepIndex]?.roleIds,
+    );
     setCurrentStepIndex(stepIndex);
     setAssignDialogOpen(true);
   };
@@ -217,7 +257,10 @@ export default function AdminWorkflows() {
   const openAssignRolesDialog = (stepIndex: number) => {
     console.log("[openAssignRolesDialog] Opening for step:", stepIndex);
     console.log("[openAssignRolesDialog] Current reviewSteps:", reviewSteps);
-    console.log("[openAssignRolesDialog] Step roleIds:", reviewSteps[stepIndex]?.roleIds);
+    console.log(
+      "[openAssignRolesDialog] Step roleIds:",
+      reviewSteps[stepIndex]?.roleIds,
+    );
     setCurrentStepIndex(stepIndex);
     setAssignDialogOpen(true);
   };
@@ -227,10 +270,10 @@ export default function AdminWorkflows() {
     if (company?.effectiveDate && data.effectiveDate) {
       const companyDate = new Date(company.effectiveDate);
       const selectedDate = new Date(data.effectiveDate);
-      
+
       if (selectedDate < companyDate) {
         form.setError("effectiveDate", {
-          message: "Effective date cannot be before company setup date"
+          message: "Effective date cannot be before company setup date",
         });
         return;
       }
@@ -238,13 +281,13 @@ export default function AdminWorkflows() {
 
     const formData = {
       ...data,
-      steps: reviewSteps.map(step => ({
+      steps: reviewSteps.map((step) => ({
         title: step.title,
         roleIds: step.roleIds,
         autoApproval: step.autoApproval,
         days: step.days || 0,
-        hours: step.hours || 0
-      }))
+        hours: step.hours || 0,
+      })),
     };
 
     if (editingWorkflow) {
@@ -266,7 +309,9 @@ export default function AdminWorkflows() {
   };
 
   const getRoleNames = (roleIds: number[]) => {
-    return roleIds.map(id => roles.find(role => role.id === id)?.name || id.toString()).join(", ");
+    return roleIds
+      .map((id) => roles.find((role) => role.id === id)?.name || id.toString())
+      .join(", ");
   };
 
   return (
@@ -279,14 +324,17 @@ export default function AdminWorkflows() {
               Manage approval workflows for your organization
             </p>
           </div>
-          <Dialog open={isCreateDialogOpen} onOpenChange={(open) => {
-            setIsCreateDialogOpen(open);
-            if (!open) {
-              setEditingWorkflow(null);
-              form.reset();
-              setReviewSteps([]);
-            }
-          }}>
+          <Dialog
+            open={isCreateDialogOpen}
+            onOpenChange={(open) => {
+              setIsCreateDialogOpen(open);
+              if (!open) {
+                setEditingWorkflow(null);
+                form.reset();
+                setReviewSteps([]);
+              }
+            }}
+          >
             <DialogTrigger asChild>
               <Button className="bg-blue-600 hover:bg-blue-700">
                 <Plus className="h-4 w-4 mr-2" />
@@ -295,11 +343,16 @@ export default function AdminWorkflows() {
             </DialogTrigger>
             <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto">
               <DialogHeader>
-                <DialogTitle className="text-xl font-semibold text-gray-900">{editingWorkflow ? "Edit Workflow" : "New Workflow"}</DialogTitle>
+                <DialogTitle className="text-xl font-semibold text-gray-900">
+                  {editingWorkflow ? "Edit Workflow" : "New Workflow"}
+                </DialogTitle>
               </DialogHeader>
-              
+
               <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className="space-y-8"
+                >
                   {/* Basic Information */}
                   <div className="grid grid-cols-2 gap-6">
                     <FormField
@@ -307,10 +360,12 @@ export default function AdminWorkflows() {
                       name="name"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-sm font-medium text-gray-700">Workflow Name</FormLabel>
+                          <FormLabel className="text-sm font-medium text-gray-700">
+                            Workflow Name
+                          </FormLabel>
                           <FormControl>
-                            <Input 
-                              placeholder="eg. Leave Approval for Factory Employees" 
+                            <Input
+                              placeholder="eg. Leave Approval for Factory Employees"
                               {...field}
                               className="mt-1"
                             />
@@ -319,20 +374,28 @@ export default function AdminWorkflows() {
                         </FormItem>
                       )}
                     />
-                    
+
                     <FormField
                       control={form.control}
                       name="effectiveDate"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-sm font-medium text-gray-700">Effective Date</FormLabel>
+                          <FormLabel className="text-sm font-medium text-gray-700">
+                            Effective Date
+                          </FormLabel>
                           <FormControl>
                             <div className="relative mt-1">
-                              <Input 
-                                type="date" 
+                              <Input
+                                type="date"
                                 placeholder="Pick a date"
                                 {...field}
-                                min={company?.effectiveDate ? new Date(company.effectiveDate).toISOString().split('T')[0] : undefined}
+                                min={
+                                  company?.effectiveDate
+                                    ? new Date(company.effectiveDate)
+                                        .toISOString()
+                                        .split("T")[0]
+                                    : undefined
+                                }
                                 className="pl-10"
                               />
                               <Calendar className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
@@ -350,16 +413,25 @@ export default function AdminWorkflows() {
                       name="process"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-sm font-medium text-gray-700">Select Process</FormLabel>
+                          <FormLabel className="text-sm font-medium text-gray-700">
+                            Select Process
+                          </FormLabel>
                           <FormControl>
-                            <Select onValueChange={field.onChange} value={field.value}>
+                            <Select
+                              onValueChange={field.onChange}
+                              value={field.value}
+                            >
                               <SelectTrigger className="mt-1">
                                 <SelectValue placeholder="Select Process" />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectItem value="application">Application</SelectItem>
-                                <SelectItem value="pto">PTO</SelectItem>
-                                <SelectItem value="comp-off">Comp-off</SelectItem>
+                                <SelectItem value="application">
+                                  Application
+                                </SelectItem>
+                                <SelectItem value="pto">BTO</SelectItem>
+                                <SelectItem value="comp-off">
+                                  Comp-off
+                                </SelectItem>
                               </SelectContent>
                             </Select>
                           </FormControl>
@@ -367,13 +439,15 @@ export default function AdminWorkflows() {
                         </FormItem>
                       )}
                     />
-                    
+
                     <FormField
                       control={form.control}
                       name="subProcesses"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-sm font-medium text-gray-700">Select sub-process</FormLabel>
+                          <FormLabel className="text-sm font-medium text-gray-700">
+                            Select sub-process
+                          </FormLabel>
                           <FormControl>
                             <div className="space-y-2">
                               {form.watch("process") === "application" && (
@@ -381,32 +455,63 @@ export default function AdminWorkflows() {
                                   <div className="flex items-center space-x-2">
                                     <Checkbox
                                       id="apply-leave"
-                                      checked={field.value?.includes("apply-leave") || false}
+                                      checked={
+                                        field.value?.includes("apply-leave") ||
+                                        false
+                                      }
                                       onCheckedChange={(checked) => {
                                         const currentValues = field.value || [];
                                         if (checked) {
-                                          field.onChange([...currentValues, "apply-leave"]);
+                                          field.onChange([
+                                            ...currentValues,
+                                            "apply-leave",
+                                          ]);
                                         } else {
-                                          field.onChange(currentValues.filter(v => v !== "apply-leave"));
+                                          field.onChange(
+                                            currentValues.filter(
+                                              (v) => v !== "apply-leave",
+                                            ),
+                                          );
                                         }
                                       }}
                                     />
-                                    <Label htmlFor="apply-leave" className="text-sm">Apply Leave</Label>
+                                    <Label
+                                      htmlFor="apply-leave"
+                                      className="text-sm"
+                                    >
+                                      Apply Leave
+                                    </Label>
                                   </div>
                                   <div className="flex items-center space-x-2">
                                     <Checkbox
                                       id="withdraw-leave"
-                                      checked={field.value?.includes("withdraw-leave") || false}
+                                      checked={
+                                        field.value?.includes(
+                                          "withdraw-leave",
+                                        ) || false
+                                      }
                                       onCheckedChange={(checked) => {
                                         const currentValues = field.value || [];
                                         if (checked) {
-                                          field.onChange([...currentValues, "withdraw-leave"]);
+                                          field.onChange([
+                                            ...currentValues,
+                                            "withdraw-leave",
+                                          ]);
                                         } else {
-                                          field.onChange(currentValues.filter(v => v !== "withdraw-leave"));
+                                          field.onChange(
+                                            currentValues.filter(
+                                              (v) => v !== "withdraw-leave",
+                                            ),
+                                          );
                                         }
                                       }}
                                     />
-                                    <Label htmlFor="withdraw-leave" className="text-sm">Withdraw Leave</Label>
+                                    <Label
+                                      htmlFor="withdraw-leave"
+                                      className="text-sm"
+                                    >
+                                      Withdraw Leave
+                                    </Label>
                                   </div>
                                 </>
                               )}
@@ -414,17 +519,32 @@ export default function AdminWorkflows() {
                                 <div className="flex items-center space-x-2">
                                   <Checkbox
                                     id="apply-pto"
-                                    checked={field.value?.includes("apply-pto") || false}
+                                    checked={
+                                      field.value?.includes("apply-pto") ||
+                                      false
+                                    }
                                     onCheckedChange={(checked) => {
                                       const currentValues = field.value || [];
                                       if (checked) {
-                                        field.onChange([...currentValues, "apply-pto"]);
+                                        field.onChange([
+                                          ...currentValues,
+                                          "apply-pto",
+                                        ]);
                                       } else {
-                                        field.onChange(currentValues.filter(v => v !== "apply-pto"));
+                                        field.onChange(
+                                          currentValues.filter(
+                                            (v) => v !== "apply-pto",
+                                          ),
+                                        );
                                       }
                                     }}
                                   />
-                                  <Label htmlFor="apply-pto" className="text-sm">Apply PTO</Label>
+                                  <Label
+                                    htmlFor="apply-pto"
+                                    className="text-sm"
+                                  >
+                                    Apply BTO
+                                  </Label>
                                 </div>
                               )}
                               {form.watch("process") === "comp-off" && (
@@ -432,62 +552,126 @@ export default function AdminWorkflows() {
                                   <div className="flex items-center space-x-2">
                                     <Checkbox
                                       id="bank-comp-off"
-                                      checked={field.value?.includes("bank-comp-off") || false}
+                                      checked={
+                                        field.value?.includes(
+                                          "bank-comp-off",
+                                        ) || false
+                                      }
                                       onCheckedChange={(checked) => {
                                         const currentValues = field.value || [];
                                         if (checked) {
-                                          field.onChange([...currentValues, "bank-comp-off"]);
+                                          field.onChange([
+                                            ...currentValues,
+                                            "bank-comp-off",
+                                          ]);
                                         } else {
-                                          field.onChange(currentValues.filter(v => v !== "bank-comp-off"));
+                                          field.onChange(
+                                            currentValues.filter(
+                                              (v) => v !== "bank-comp-off",
+                                            ),
+                                          );
                                         }
                                       }}
                                     />
-                                    <Label htmlFor="bank-comp-off" className="text-sm">Bank Comp-off</Label>
+                                    <Label
+                                      htmlFor="bank-comp-off"
+                                      className="text-sm"
+                                    >
+                                      Bank Comp-off
+                                    </Label>
                                   </div>
                                   <div className="flex items-center space-x-2">
                                     <Checkbox
                                       id="avail-comp-off"
-                                      checked={field.value?.includes("avail-comp-off") || false}
+                                      checked={
+                                        field.value?.includes(
+                                          "avail-comp-off",
+                                        ) || false
+                                      }
                                       onCheckedChange={(checked) => {
                                         const currentValues = field.value || [];
                                         if (checked) {
-                                          field.onChange([...currentValues, "avail-comp-off"]);
+                                          field.onChange([
+                                            ...currentValues,
+                                            "avail-comp-off",
+                                          ]);
                                         } else {
-                                          field.onChange(currentValues.filter(v => v !== "avail-comp-off"));
+                                          field.onChange(
+                                            currentValues.filter(
+                                              (v) => v !== "avail-comp-off",
+                                            ),
+                                          );
                                         }
                                       }}
                                     />
-                                    <Label htmlFor="avail-comp-off" className="text-sm">Avail Comp-off</Label>
+                                    <Label
+                                      htmlFor="avail-comp-off"
+                                      className="text-sm"
+                                    >
+                                      Avail Comp-off
+                                    </Label>
                                   </div>
                                   <div className="flex items-center space-x-2">
                                     <Checkbox
                                       id="transfer-comp-off"
-                                      checked={field.value?.includes("transfer-comp-off") || false}
+                                      checked={
+                                        field.value?.includes(
+                                          "transfer-comp-off",
+                                        ) || false
+                                      }
                                       onCheckedChange={(checked) => {
                                         const currentValues = field.value || [];
                                         if (checked) {
-                                          field.onChange([...currentValues, "transfer-comp-off"]);
+                                          field.onChange([
+                                            ...currentValues,
+                                            "transfer-comp-off",
+                                          ]);
                                         } else {
-                                          field.onChange(currentValues.filter(v => v !== "transfer-comp-off"));
+                                          field.onChange(
+                                            currentValues.filter(
+                                              (v) => v !== "transfer-comp-off",
+                                            ),
+                                          );
                                         }
                                       }}
                                     />
-                                    <Label htmlFor="transfer-comp-off" className="text-sm">Transfer to Leaves</Label>
+                                    <Label
+                                      htmlFor="transfer-comp-off"
+                                      className="text-sm"
+                                    >
+                                      Transfer to Leaves
+                                    </Label>
                                   </div>
                                   <div className="flex items-center space-x-2">
                                     <Checkbox
                                       id="encash-comp-off"
-                                      checked={field.value?.includes("encash-comp-off") || false}
+                                      checked={
+                                        field.value?.includes(
+                                          "encash-comp-off",
+                                        ) || false
+                                      }
                                       onCheckedChange={(checked) => {
                                         const currentValues = field.value || [];
                                         if (checked) {
-                                          field.onChange([...currentValues, "encash-comp-off"]);
+                                          field.onChange([
+                                            ...currentValues,
+                                            "encash-comp-off",
+                                          ]);
                                         } else {
-                                          field.onChange(currentValues.filter(v => v !== "encash-comp-off"));
+                                          field.onChange(
+                                            currentValues.filter(
+                                              (v) => v !== "encash-comp-off",
+                                            ),
+                                          );
                                         }
                                       }}
                                     />
-                                    <Label htmlFor="encash-comp-off" className="text-sm">En-Cash Comp</Label>
+                                    <Label
+                                      htmlFor="encash-comp-off"
+                                      className="text-sm"
+                                    >
+                                      En-Cash Comp
+                                    </Label>
                                   </div>
                                 </>
                               )}
@@ -501,32 +685,52 @@ export default function AdminWorkflows() {
 
                   {/* Review Steps Section */}
                   <div className="space-y-6">
-                    <h3 className="text-lg font-medium text-gray-900">Review Steps</h3>
-                    
+                    <h3 className="text-lg font-medium text-gray-900">
+                      Review Steps
+                    </h3>
+
                     {/* Vertical Workflow Flow */}
-                    <div className="bg-gray-50 p-6 rounded-lg space-y-4" key="workflow-flow-updated">
+                    <div
+                      className="bg-gray-50 p-6 rounded-lg space-y-4"
+                      key="workflow-flow-updated"
+                    >
                       {/* Workflow Name Box */}
                       <div className="bg-white px-4 py-2 rounded border border-gray-200 text-center">
-                        <div className="text-sm font-medium text-gray-700">Workflow Name</div>
+                        <div className="text-sm font-medium text-gray-700">
+                          Workflow Name
+                        </div>
                       </div>
-                      
+
                       {/* Review Steps Vertically */}
                       {reviewSteps.map((step, index) => (
-                        <div key={step.id} className="bg-white border border-gray-200 rounded-lg p-4">
-                          <div className="text-sm font-medium text-gray-900 mb-3">Review {index + 1}</div>
-                          
+                        <div
+                          key={step.id}
+                          className="bg-white border border-gray-200 rounded-lg p-4"
+                        >
+                          <div className="text-sm font-medium text-gray-900 mb-3">
+                            Review {index + 1}
+                          </div>
+
                           <div className="mb-3">
-                            <label className="block text-xs font-medium text-gray-700 mb-1">Title</label>
+                            <label className="block text-xs font-medium text-gray-700 mb-1">
+                              Title
+                            </label>
                             <Input
                               placeholder="eg. Leave Approval for Factory Employees"
                               value={step.title}
-                              onChange={(e) => updateReviewStep(step.id, { title: e.target.value })}
+                              onChange={(e) =>
+                                updateReviewStep(step.id, {
+                                  title: e.target.value,
+                                })
+                              }
                               className="text-sm"
                             />
                           </div>
-                          
+
                           <div className="text-xs text-gray-400 mb-3">
-                            {step.roleIds.length === 0 ? "No roles assigned" : `${step.roleIds.length} role(s) assigned`}
+                            {step.roleIds.length === 0
+                              ? "No roles assigned"
+                              : `${step.roleIds.length} role(s) assigned`}
                           </div>
                           <Button
                             type="button"
@@ -537,40 +741,52 @@ export default function AdminWorkflows() {
                           >
                             Assign Roles
                           </Button>
-                          
+
                           {/* Auto-approval checkbox - conditional text based on step position */}
                           <div className="space-y-3">
                             <div className="flex items-center space-x-2">
                               <Checkbox
                                 id={`auto-approval-${step.id}`}
                                 checked={step.autoApproval}
-                                onCheckedChange={(checked) => 
-                                  updateReviewStep(step.id, { autoApproval: !!checked })
+                                onCheckedChange={(checked) =>
+                                  updateReviewStep(step.id, {
+                                    autoApproval: !!checked,
+                                  })
                                 }
                               />
-                              <Label htmlFor={`auto-approval-${step.id}`} className="text-xs">
-                                {index === reviewSteps.length - 1 
+                              <Label
+                                htmlFor={`auto-approval-${step.id}`}
+                                className="text-xs"
+                              >
+                                {index === reviewSteps.length - 1
                                   ? "Enable auto-approval if all conditions are met"
-                                  : "Forward to the next review"
-                                }
+                                  : "Forward to the next review"}
                               </Label>
                             </div>
-                            
+
                             {/* Time-based auto-approval fields */}
                             {step.autoApproval && (
                               <div className="ml-6 space-y-2">
-                                <div className="text-xs text-gray-500 font-medium">Auto-approve after:</div>
+                                <div className="text-xs text-gray-500 font-medium">
+                                  Auto-approve after:
+                                </div>
                                 <div className="flex items-center space-x-3">
                                   <div className="flex items-center space-x-1">
                                     <Input
                                       type="number"
                                       min="0"
                                       placeholder="0"
-                                      value={step.days || ''}
-                                      onChange={(e) => updateReviewStep(step.id, { days: parseInt(e.target.value) || 0 })}
+                                      value={step.days || ""}
+                                      onChange={(e) =>
+                                        updateReviewStep(step.id, {
+                                          days: parseInt(e.target.value) || 0,
+                                        })
+                                      }
                                       className="w-16 h-8 text-xs"
                                     />
-                                    <span className="text-xs text-gray-500">days</span>
+                                    <span className="text-xs text-gray-500">
+                                      days
+                                    </span>
                                   </div>
                                   <div className="flex items-center space-x-1">
                                     <Input
@@ -578,11 +794,17 @@ export default function AdminWorkflows() {
                                       min="0"
                                       max="23"
                                       placeholder="0"
-                                      value={step.hours || ''}
-                                      onChange={(e) => updateReviewStep(step.id, { hours: parseInt(e.target.value) || 0 })}
+                                      value={step.hours || ""}
+                                      onChange={(e) =>
+                                        updateReviewStep(step.id, {
+                                          hours: parseInt(e.target.value) || 0,
+                                        })
+                                      }
                                       className="w-16 h-8 text-xs"
                                     />
-                                    <span className="text-xs text-gray-500">hours</span>
+                                    <span className="text-xs text-gray-500">
+                                      hours
+                                    </span>
                                   </div>
                                 </div>
                               </div>
@@ -591,8 +813,6 @@ export default function AdminWorkflows() {
                         </div>
                       ))}
                     </div>
-
-
 
                     {/* Add Review Step Button */}
                     <div className="flex justify-center">
@@ -610,18 +830,28 @@ export default function AdminWorkflows() {
 
                   {/* Form Actions */}
                   <div className="flex justify-end space-x-3 pt-6 border-t">
-                    <Button type="button" variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => setIsCreateDialogOpen(false)}
+                    >
                       Discard
                     </Button>
-                    <Button 
-                      type="submit" 
-                      disabled={createWorkflowMutation.isPending || updateWorkflowMutation.isPending}
+                    <Button
+                      type="submit"
+                      disabled={
+                        createWorkflowMutation.isPending ||
+                        updateWorkflowMutation.isPending
+                      }
                       className="bg-teal-600 hover:bg-teal-700"
                     >
-                      {editingWorkflow 
-                        ? (updateWorkflowMutation.isPending ? "Updating..." : "Update Workflow")
-                        : (createWorkflowMutation.isPending ? "Creating..." : "Create Workflow")
-                      }
+                      {editingWorkflow
+                        ? updateWorkflowMutation.isPending
+                          ? "Updating..."
+                          : "Update Workflow"
+                        : createWorkflowMutation.isPending
+                          ? "Creating..."
+                          : "Create Workflow"}
                     </Button>
                   </div>
                 </form>
@@ -636,9 +866,16 @@ export default function AdminWorkflows() {
             <Card>
               <CardContent className="p-8 text-center">
                 <Settings className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">No workflows created yet</h3>
-                <p className="text-gray-600 mb-4">Create your first workflow to manage approval processes</p>
-                <Button onClick={() => setIsCreateDialogOpen(true)} className="bg-blue-600 hover:bg-blue-700">
+                <h3 className="text-lg font-medium text-gray-900 mb-2">
+                  No workflows created yet
+                </h3>
+                <p className="text-gray-600 mb-4">
+                  Create your first workflow to manage approval processes
+                </p>
+                <Button
+                  onClick={() => setIsCreateDialogOpen(true)}
+                  className="bg-blue-600 hover:bg-blue-700"
+                >
                   <Plus className="h-4 w-4 mr-2" />
                   Create Workflow
                 </Button>
@@ -651,13 +888,18 @@ export default function AdminWorkflows() {
                   <div className="flex items-center justify-between">
                     <div className="flex-1">
                       <h3 className="font-medium">{workflow.name}</h3>
-                      <p className="text-sm text-gray-600">{workflow.description}</p>
+                      <p className="text-sm text-gray-600">
+                        {workflow.description}
+                      </p>
                       <div className="text-xs text-gray-500 mt-1">
-                        Process: {workflow.process} | Sub-process: {workflow.subProcess}
+                        Process: {workflow.process} | Sub-process:{" "}
+                        {workflow.subProcess}
                       </div>
                     </div>
                     <div className="flex items-center space-x-3">
-                      <Badge variant={workflow.isActive ? "default" : "secondary"}>
+                      <Badge
+                        variant={workflow.isActive ? "default" : "secondary"}
+                      >
                         {workflow.isActive ? "Active" : "Inactive"}
                       </Badge>
                       <div className="flex space-x-2">
@@ -692,7 +934,11 @@ export default function AdminWorkflows() {
           open={assignDialogOpen}
           onOpenChange={setAssignDialogOpen}
           onAssign={handleRoleAssignment}
-          selectedRoleIds={currentStepIndex !== null ? reviewSteps[currentStepIndex]?.roleIds || [] : []}
+          selectedRoleIds={
+            currentStepIndex !== null
+              ? reviewSteps[currentStepIndex]?.roleIds || []
+              : []
+          }
         />
       </div>
     </Layout>
@@ -707,22 +953,40 @@ interface AssignRolesDialogProps {
   selectedRoleIds: number[];
 }
 
-function AssignRolesDialog({ open, onOpenChange, onAssign, selectedRoleIds }: AssignRolesDialogProps) {
-  const [tempSelectedRoles, setTempSelectedRoles] = useState<number[]>(selectedRoleIds);
+function AssignRolesDialog({
+  open,
+  onOpenChange,
+  onAssign,
+  selectedRoleIds,
+}: AssignRolesDialogProps) {
+  const [tempSelectedRoles, setTempSelectedRoles] =
+    useState<number[]>(selectedRoleIds);
   const [searchQuery, setSearchQuery] = useState("");
 
   // Sync tempSelectedRoles with selectedRoleIds prop when it changes
   useEffect(() => {
-    console.log("[AssignRolesDialog] selectedRoleIds prop changed:", selectedRoleIds);
-    console.log("[AssignRolesDialog] typeof selectedRoleIds:", typeof selectedRoleIds);
-    console.log("[AssignRolesDialog] Array.isArray(selectedRoleIds):", Array.isArray(selectedRoleIds));
+    console.log(
+      "[AssignRolesDialog] selectedRoleIds prop changed:",
+      selectedRoleIds,
+    );
+    console.log(
+      "[AssignRolesDialog] typeof selectedRoleIds:",
+      typeof selectedRoleIds,
+    );
+    console.log(
+      "[AssignRolesDialog] Array.isArray(selectedRoleIds):",
+      Array.isArray(selectedRoleIds),
+    );
     setTempSelectedRoles(selectedRoleIds || []);
   }, [selectedRoleIds]);
 
   // Reset tempSelectedRoles when dialog opens
   useEffect(() => {
     if (open) {
-      console.log("[AssignRolesDialog] Dialog opened, setting tempSelectedRoles to:", selectedRoleIds);
+      console.log(
+        "[AssignRolesDialog] Dialog opened, setting tempSelectedRoles to:",
+        selectedRoleIds,
+      );
       setTempSelectedRoles(selectedRoleIds || []);
     }
   }, [open, selectedRoleIds]);
@@ -732,10 +996,13 @@ function AssignRolesDialog({ open, onOpenChange, onAssign, selectedRoleIds }: As
   });
 
   console.log("[AssignRolesDialog] Available roles from API:", roles);
-  console.log("[AssignRolesDialog] Current tempSelectedRoles:", tempSelectedRoles);
+  console.log(
+    "[AssignRolesDialog] Current tempSelectedRoles:",
+    tempSelectedRoles,
+  );
 
-  const filteredRoles = roles.filter(role =>
-    role.name.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredRoles = roles.filter((role) =>
+    role.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   const handleAssign = () => {
@@ -744,10 +1011,10 @@ function AssignRolesDialog({ open, onOpenChange, onAssign, selectedRoleIds }: As
   };
 
   const toggleRole = (roleId: number) => {
-    setTempSelectedRoles(prev =>
+    setTempSelectedRoles((prev) =>
       prev.includes(roleId)
-        ? prev.filter(id => id !== roleId)
-        : [...prev, roleId]
+        ? prev.filter((id) => id !== roleId)
+        : [...prev, roleId],
     );
   };
 
@@ -757,7 +1024,7 @@ function AssignRolesDialog({ open, onOpenChange, onAssign, selectedRoleIds }: As
         <DialogHeader>
           <DialogTitle>Assign Roles</DialogTitle>
         </DialogHeader>
-        
+
         <div className="space-y-4">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
@@ -768,10 +1035,13 @@ function AssignRolesDialog({ open, onOpenChange, onAssign, selectedRoleIds }: As
               className="pl-10"
             />
           </div>
-          
+
           <div className="max-h-64 overflow-y-auto space-y-2">
             {filteredRoles.map((role) => (
-              <div key={role.id} className="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded">
+              <div
+                key={role.id}
+                className="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded"
+              >
                 <Checkbox
                   checked={tempSelectedRoles.includes(role.id)}
                   onCheckedChange={() => toggleRole(role.id)}
@@ -782,7 +1052,7 @@ function AssignRolesDialog({ open, onOpenChange, onAssign, selectedRoleIds }: As
               </div>
             ))}
           </div>
-          
+
           <div className="flex justify-end space-x-2">
             <Button variant="outline" onClick={() => onOpenChange(false)}>
               Cancel

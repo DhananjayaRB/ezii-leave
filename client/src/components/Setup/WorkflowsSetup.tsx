@@ -90,7 +90,7 @@ function AssignRolesDialog({ open, onOpenChange, onAssign, selectedRoleIds }: As
         <DialogHeader>
           <DialogTitle>Assign Roles</DialogTitle>
         </DialogHeader>
-        
+
         <div className="space-y-4">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
@@ -172,17 +172,17 @@ export default function WorkflowsSetup({ onNext, onPrevious, onComplete, isLast,
   useEffect(() => {
     if (editingWorkflow && isCreateDialogOpen) {
       console.log("Editing workflow data:", editingWorkflow);
-      
+
       const formValues = {
         name: editingWorkflow.name || "",
         effectiveDate: editingWorkflow.effectiveDate ? new Date(editingWorkflow.effectiveDate).toISOString().split('T')[0] : "",
         process: editingWorkflow.process || "application",
         subProcesses: editingWorkflow.subProcesses ? (Array.isArray(editingWorkflow.subProcesses) ? editingWorkflow.subProcesses : [editingWorkflow.subProcess || "apply-leave"]) : ["apply-leave"]
       };
-      
+
       console.log("Form values being set:", formValues);
       form.reset(formValues);
-      
+
       // Set review steps if they exist
       if (editingWorkflow.steps && Array.isArray(editingWorkflow.steps)) {
         const steps = editingWorkflow.steps.map((step: any, index: number) => ({
@@ -319,7 +319,7 @@ export default function WorkflowsSetup({ onNext, onPrevious, onComplete, isLast,
     if (company?.effectiveDate && data.effectiveDate) {
       const companyDate = new Date(company.effectiveDate);
       const selectedDate = new Date(data.effectiveDate);
-      
+
       if (selectedDate < companyDate) {
         form.setError("effectiveDate", {
           message: "Effective date cannot be before company setup date"
@@ -399,7 +399,7 @@ export default function WorkflowsSetup({ onNext, onPrevious, onComplete, isLast,
               <DialogHeader>
                 <DialogTitle className="text-xl font-semibold text-gray-900">{editingWorkflow ? "Edit Workflow" : "New Workflow"}</DialogTitle>
               </DialogHeader>
-              
+
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                   {/* Basic Information */}
@@ -417,7 +417,7 @@ export default function WorkflowsSetup({ onNext, onPrevious, onComplete, isLast,
                         </FormItem>
                       )}
                     />
-                    
+
                     <FormField
                       control={form.control}
                       name="effectiveDate"
@@ -448,7 +448,7 @@ export default function WorkflowsSetup({ onNext, onPrevious, onComplete, isLast,
                             </FormControl>
                             <SelectContent>
                               <SelectItem value="application">Application</SelectItem>
-                              <SelectItem value="pto">PTO</SelectItem>
+                              <SelectItem value="pto">BTO</SelectItem>
                               <SelectItem value="comp-off">Comp-off</SelectItem>
                             </SelectContent>
                           </Select>
@@ -456,7 +456,7 @@ export default function WorkflowsSetup({ onNext, onPrevious, onComplete, isLast,
                         </FormItem>
                       )}
                     />
-                    
+
                     <FormField
                       control={form.control}
                       name="subProcesses"
@@ -514,7 +514,7 @@ export default function WorkflowsSetup({ onNext, onPrevious, onComplete, isLast,
                                         }
                                       }}
                                     />
-                                    <Label htmlFor="apply-pto" className="text-sm">Apply PTO</Label>
+                                    <Label htmlFor="apply-pto" className="text-sm">Apply BTO</Label>
                                   </div>
                                 </>
                               )}
@@ -634,7 +634,7 @@ export default function WorkflowsSetup({ onNext, onPrevious, onComplete, isLast,
                               </Button>
                             )}
                           </div>
-                          
+
                           <div className="space-y-3">
                             <div>
                               <Label className="text-sm font-medium text-gray-700">Assigned Roles</Label>
@@ -660,7 +660,7 @@ export default function WorkflowsSetup({ onNext, onPrevious, onComplete, isLast,
                                 </Button>
                               </div>
                             </div>
-                            
+
                             <div className="space-y-3">
                               <div className="flex items-center space-x-2">
                                 <Checkbox
@@ -677,7 +677,7 @@ export default function WorkflowsSetup({ onNext, onPrevious, onComplete, isLast,
                                   }
                                 </Label>
                               </div>
-                              
+
                               {/* Time-based auto-approval fields */}
                               {step.autoApproval && (
                                 <div className="ml-6 space-y-2">
@@ -756,14 +756,14 @@ export default function WorkflowsSetup({ onNext, onPrevious, onComplete, isLast,
                         {workflow.process} - {workflow.subProcess}
                       </Badge>
                     </div>
-                    
+
                     <div className="text-sm text-gray-600 mb-3">
                       <span className="flex items-center gap-1">
                         <Calendar className="h-4 w-4" />
                         Effective from: {new Date(workflow.effectiveDate).toLocaleDateString()}
                       </span>
                     </div>
-                    
+
                     <div className="space-y-2">
                       <h4 className="font-medium text-gray-900">Review Steps:</h4>
                       {workflow.steps && workflow.steps.length > 0 ? (
@@ -787,7 +787,7 @@ export default function WorkflowsSetup({ onNext, onPrevious, onComplete, isLast,
                       )}
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center gap-2 ml-4">
                     <Button
                       variant="outline"
@@ -821,7 +821,7 @@ export default function WorkflowsSetup({ onNext, onPrevious, onComplete, isLast,
         >
           Previous
         </Button>
-        
+
         <div className="flex items-center gap-3">
           {workflows.length > 0 && (
             <div className="flex items-center gap-2 text-green-600">

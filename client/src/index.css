@@ -23,14 +23,14 @@
   --destructive-foreground: hsl(60, 9.1%, 97.8%);
   --ring: hsl(20, 14.3%, 4.1%);
   --radius: 0.5rem;
-  --sidebar-background: hsl(210, 24%, 16%);
-  --sidebar-foreground: hsl(0, 0%, 100%);
+  --sidebar-background: hsl(210, 10%, 92%);
+  --sidebar-foreground: hsl(210, 15%, 20%);
   --sidebar-primary: hsl(158, 64%, 52%);
   --sidebar-primary-foreground: hsl(0, 0%, 100%);
-  --sidebar-accent: hsl(210, 20%, 25%);
-  --sidebar-accent-foreground: hsl(0, 0%, 100%);
-  --sidebar-border: hsl(210, 20%, 25%);
-  --sidebar-ring: hsl(210, 20%, 25%);
+  --sidebar-accent: hsl(210, 8%, 85%);
+  --sidebar-accent-foreground: hsl(210, 15%, 20%);
+  --sidebar-border: hsl(210, 8%, 85%);
+  --sidebar-ring: hsl(210, 8%, 85%);
 }
 
 .dark {
@@ -54,14 +54,14 @@
   --destructive-foreground: hsl(0, 0%, 98%);
   --ring: hsl(240, 4.9%, 83.9%);
   --radius: 0.5rem;
-  --sidebar-background: hsl(210, 24%, 16%);
-  --sidebar-foreground: hsl(0, 0%, 100%);
+  --sidebar-background: hsl(210, 10%, 92%);
+  --sidebar-foreground: hsl(210, 15%, 20%);
   --sidebar-primary: hsl(158, 64%, 52%);
   --sidebar-primary-foreground: hsl(0, 0%, 100%);
-  --sidebar-accent: hsl(210, 20%, 25%);
-  --sidebar-accent-foreground: hsl(0, 0%, 100%);
-  --sidebar-border: hsl(210, 20%, 25%);
-  --sidebar-ring: hsl(210, 20%, 25%);
+  --sidebar-accent: hsl(210, 8%, 85%);
+  --sidebar-accent-foreground: hsl(210, 15%, 20%);
+  --sidebar-border: hsl(210, 8%, 85%);
+  --sidebar-ring: hsl(210, 8%, 85%);
 }
 
 @layer base {
@@ -76,40 +76,95 @@
 
 /* Dancing Loader Animations */
 @keyframes dance {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  25% { transform: translateY(-5px) rotate(-2deg); }
-  50% { transform: translateY(-8px) rotate(0deg); }
-  75% { transform: translateY(-5px) rotate(2deg); }
+
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+
+  25% {
+    transform: translateY(-5px) rotate(-2deg);
+  }
+
+  50% {
+    transform: translateY(-8px) rotate(0deg);
+  }
+
+  75% {
+    transform: translateY(-5px) rotate(2deg);
+  }
 }
 
 @keyframes wave-left {
-  0%, 100% { transform: rotate(0deg); }
-  50% { transform: rotate(-45deg); }
+
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+
+  50% {
+    transform: rotate(-45deg);
+  }
 }
 
 @keyframes wave-right {
-  0%, 100% { transform: rotate(0deg); }
-  50% { transform: rotate(45deg); }
+
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+
+  50% {
+    transform: rotate(45deg);
+  }
 }
 
 @keyframes kick-left {
-  0%, 100% { transform: rotate(0deg) translateX(0px); }
-  50% { transform: rotate(-15deg) translateX(-3px); }
+
+  0%,
+  100% {
+    transform: rotate(0deg) translateX(0px);
+  }
+
+  50% {
+    transform: rotate(-15deg) translateX(-3px);
+  }
 }
 
 @keyframes kick-right {
-  0%, 100% { transform: rotate(0deg) translateX(0px); }
-  50% { transform: rotate(15deg) translateX(3px); }
+
+  0%,
+  100% {
+    transform: rotate(0deg) translateX(0px);
+  }
+
+  50% {
+    transform: rotate(15deg) translateX(3px);
+  }
 }
 
 @keyframes step-left {
-  0%, 100% { transform: translateX(0px) translateY(0px); }
-  50% { transform: translateX(-4px) translateY(-2px); }
+
+  0%,
+  100% {
+    transform: translateX(0px) translateY(0px);
+  }
+
+  50% {
+    transform: translateX(-4px) translateY(-2px);
+  }
 }
 
 @keyframes step-right {
-  0%, 100% { transform: translateX(0px) translateY(0px); }
-  50% { transform: translateX(4px) translateY(-2px); }
+
+  0%,
+  100% {
+    transform: translateX(0px) translateY(0px);
+  }
+
+  50% {
+    transform: translateX(4px) translateY(-2px);
+  }
 }
 
 .animate-dance {

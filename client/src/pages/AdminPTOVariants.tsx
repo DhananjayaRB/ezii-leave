@@ -2,12 +2,30 @@ import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -72,7 +90,12 @@ interface PTOEmployeeAssignmentDialogProps {
   onComplete: () => void;
 }
 
-function PTOEmployeeAssignmentDialog({ open, onOpenChange, variantId, onComplete }: PTOEmployeeAssignmentDialogProps) {
+function PTOEmployeeAssignmentDialog({
+  open,
+  onOpenChange,
+  variantId,
+  onComplete,
+}: PTOEmployeeAssignmentDialogProps) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [assignedEmployees, setAssignedEmployees] = useState<any[]>([]);
@@ -94,12 +117,14 @@ function PTOEmployeeAssignmentDialog({ open, onOpenChange, variantId, onComplete
   useEffect(() => {
     const loadEmployees = async () => {
       try {
-        const { fetchEmployeeData, transformEmployeeData } = await import('@/lib/externalApi');
+        const { fetchEmployeeData, transformEmployeeData } = await import(
+          "@/lib/externalApi"
+        );
         const employeeData = await fetchEmployeeData();
         const transformedEmployees = employeeData.map(transformEmployeeData);
         setAllEmployees(transformedEmployees);
       } catch (error) {
-        console.error('Error loading employees:', error);
+        console.error("Error loading employees:", error);
       }
     };
 
@@ -113,65 +138,71 @@ function PTOEmployeeAssignmentDialog({ open, onOpenChange, variantId, onComplete
     if (Array.isArray(existingAssignments) && existingAssignments.length > 0) {
       console.log("PTO Edit - Existing assignments:", existingAssignments);
       console.log("PTO Edit - All employees count:", allEmployees.length);
-      
+
       if (allEmployees.length > 0) {
         // Try to match with external API employee data
-        const assignedUserIds = existingAssignments.map((assignment: any) => assignment.userId);
-        const assignedEmployeeData = allEmployees.filter(emp => {
+        const assignedUserIds = existingAssignments.map(
+          (assignment: any) => assignment.userId,
+        );
+        const assignedEmployeeData = allEmployees.filter((emp) => {
           const userIdMatch = assignedUserIds.includes(emp.user_id);
           const idMatch = assignedUserIds.includes(emp.id);
           return userIdMatch || idMatch;
         });
-        console.log("PTO Edit - Matched employees from external API:", assignedEmployeeData);
+        console.log(
+          "PTO Edit - Matched employees from external API:",
+          assignedEmployeeData,
+        );
         setAssignedEmployees(assignedEmployeeData);
       } else {
         // Fallback: Create robust employee objects from assignments when external API fails
-        const fallbackEmployees = existingAssignments.map((assignment: any) => ({
-          user_id: assignment.userId,
-          id: assignment.userId,
-          user_name: `Employee ${assignment.userId}`,
-          name: `Employee ${assignment.userId}`,
-          first_name: "Employee",
-          last_name: assignment.userId,
-          email: `employee${assignment.userId}@company.com`,
-          employeeNumber: assignment.userId,
-          designation: "Employee",
-          dateOfJoining: new Date().toISOString(),
-          userRole: "employee",
-          workerType: "regular",
-          profilePhoto: null,
-          phoneNumber: null,
-          dateOfBirth: new Date().toISOString(),
-          gender: "Other",
-          reportingManager: null,
-          leaveId: assignment.userId,
-          isDifferentlyAbled: false,
-          lastWorkingDay: null,
-          employee_number: assignment.userId
-        }));
+        const fallbackEmployees = existingAssignments.map(
+          (assignment: any) => ({
+            user_id: assignment.userId,
+            id: assignment.userId,
+            user_name: `Employee ${assignment.userId}`,
+            name: `Employee ${assignment.userId}`,
+            first_name: "Employee",
+            last_name: assignment.userId,
+            email: `employee${assignment.userId}@company.com`,
+            employeeNumber: assignment.userId,
+            designation: "Employee",
+            dateOfJoining: new Date().toISOString(),
+            userRole: "employee",
+            workerType: "regular",
+            profilePhoto: null,
+            phoneNumber: null,
+            dateOfBirth: new Date().toISOString(),
+            gender: "Other",
+            reportingManager: null,
+            leaveId: assignment.userId,
+            isDifferentlyAbled: false,
+            lastWorkingDay: null,
+            employee_number: assignment.userId,
+          }),
+        );
         console.log("PTO Edit - Using fallback employees:", fallbackEmployees);
         setAssignedEmployees(fallbackEmployees);
       }
-    } else if (Array.isArray(existingAssignments) && existingAssignments.length === 0) {
+    } else if (
+      Array.isArray(existingAssignments) &&
+      existingAssignments.length === 0
+    ) {
       setAssignedEmployees([]);
     }
   }, [existingAssignments, allEmployees, variantId]);
 
-
-
   // Save assignments mutation
   const saveAssignmentsMutation = useMutation({
     mutationFn: async (employees: any[]) => {
-
-      
       // Delete existing assignments
       if (existingAssignments.length > 0) {
         await Promise.all(
           existingAssignments.map((assignment: any) =>
             apiRequest(`/api/employee-assignments/${assignment.id}`, {
-              method: 'DELETE',
-            })
-          )
+              method: "DELETE",
+            }),
+          ),
         );
       }
 
@@ -180,18 +211,20 @@ function PTOEmployeeAssignmentDialog({ open, onOpenChange, variantId, onComplete
         const assignments = employees.map((employee: any) => ({
           userId: employee.user_id,
           leaveVariantId: variantId,
-          assignmentType: 'pto_variant',
+          assignmentType: "pto_variant",
         }));
-        
-        await apiRequest('/api/employee-assignments/bulk', {
-          method: 'POST',
+
+        await apiRequest("/api/employee-assignments/bulk", {
+          method: "POST",
           body: JSON.stringify(assignments),
         });
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`/api/employee-assignments/pto/${variantId}`] });
-      queryClient.invalidateQueries({ queryKey: ['/api/pto-variants'] });
+      queryClient.invalidateQueries({
+        queryKey: [`/api/employee-assignments/pto/${variantId}`],
+      });
+      queryClient.invalidateQueries({ queryKey: ["/api/pto-variants"] });
       toast({
         title: "Success",
         description: "Employee assignments updated successfully",
@@ -209,21 +242,23 @@ function PTOEmployeeAssignmentDialog({ open, onOpenChange, variantId, onComplete
 
   const handleAssign = async (selectedEmployees: any[]) => {
     try {
-      const assignments = selectedEmployees.map(emp => ({
+      const assignments = selectedEmployees.map((emp) => ({
         userId: emp.user_id || emp.id,
         leaveVariantId: variantId,
-        assignmentType: "pto_variant"
+        assignmentType: "pto_variant",
       }));
-      
-      await apiRequest("POST", "/api/employee-assignments/bulk", { assignments });
-      
+
+      await apiRequest("POST", "/api/employee-assignments/bulk", {
+        assignments,
+      });
+
       setAssignedEmployees(selectedEmployees);
-      
+
       toast({
         title: "Success",
-        description: `${selectedEmployees.length} employee${selectedEmployees.length > 1 ? 's' : ''} assigned successfully.`,
+        description: `${selectedEmployees.length} employee${selectedEmployees.length > 1 ? "s" : ""} assigned successfully.`,
       });
-      
+
       onComplete();
     } catch (error) {
       toast({
@@ -234,20 +269,16 @@ function PTOEmployeeAssignmentDialog({ open, onOpenChange, variantId, onComplete
     }
   };
 
+  // Use the same pattern as CompOffVariantForm - render EmployeeAssignment directly as full-screen overlay
+  if (!open) return null;
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>Assign Employees to PTO Variant</DialogTitle>
-        </DialogHeader>
-        <EmployeeAssignment
-          onClose={() => onOpenChange(false)}
-          onAssign={handleAssign}
-          preSelectedEmployees={assignedEmployees}
-          applicableGenders={[]}
-        />
-      </DialogContent>
-    </Dialog>
+    <EmployeeAssignment
+      onClose={() => onOpenChange(false)}
+      onAssign={handleAssign}
+      preSelectedEmployees={assignedEmployees}
+      applicableGenders={[]} // PTO variants don't use gender filtering
+    />
   );
 }
 
@@ -255,26 +286,32 @@ export default function AdminPTOVariants() {
   const [showDialog, setShowDialog] = useState(false);
   const [editingVariant, setEditingVariant] = useState<PTOVariant | null>(null);
   const [showEmployeeAssignment, setShowEmployeeAssignment] = useState(false);
-  const [selectedVariantId, setSelectedVariantId] = useState<number | null>(null);
-  const [variantAssignments, setVariantAssignments] = useState<Record<string, any[]>>({});
+  const [selectedVariantId, setSelectedVariantId] = useState<number | null>(
+    null,
+  );
+  const [variantAssignments, setVariantAssignments] = useState<
+    Record<string, any[]>
+  >({});
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
   // Fetch PTO variants
   const { data: ptoVariants = [], isLoading } = useQuery<PTOVariant[]>({
-    queryKey: ['/api/pto-variants'],
+    queryKey: ["/api/pto-variants"],
   });
 
   // Fetch external employee data
   const { data: allEmployees = [], isLoading: employeesLoading } = useQuery({
-    queryKey: ['/api/external-employees'],
+    queryKey: ["/api/external-employees"],
     queryFn: async () => {
-      const { fetchEmployeeData, transformEmployeeData } = await import('@/lib/externalApi');
+      const { fetchEmployeeData, transformEmployeeData } = await import(
+        "@/lib/externalApi"
+      );
       try {
         const externalEmployees = await fetchEmployeeData();
         return externalEmployees.map(transformEmployeeData);
       } catch (error) {
-        console.error('Failed to fetch external employees:', error);
+        console.error("Failed to fetch external employees:", error);
         return [];
       }
     },
@@ -285,21 +322,31 @@ export default function AdminPTOVariants() {
     if (ptoVariants && ptoVariants.length > 0 && allEmployees.length > 0) {
       const loadAssignments = async () => {
         const assignments: Record<string, any[]> = {};
-        
+
         for (const variant of ptoVariants) {
           try {
-            const response = await fetch(`/api/employee-assignments/pto/${variant.id}`, {
-              credentials: 'include',
-              headers: {
-                'X-Org-Id': localStorage.getItem('org_id') || '60'
-              }
-            });
+            const response = await fetch(
+              `/api/employee-assignments/pto/${variant.id}`,
+              {
+                credentials: "include",
+                headers: {
+                  "X-Org-Id": localStorage.getItem("org_id") || "60",
+                },
+              },
+            );
             if (response.ok) {
               const variantAssignments = await response.json();
-              if (Array.isArray(variantAssignments) && variantAssignments.length > 0) {
-                const assignedUserIds = variantAssignments.map((assignment: any) => assignment.userId);
-                const assignedEmployeeData = allEmployees.filter(emp => 
-                  assignedUserIds.includes(emp.user_id) || assignedUserIds.includes(emp.id)
+              if (
+                Array.isArray(variantAssignments) &&
+                variantAssignments.length > 0
+              ) {
+                const assignedUserIds = variantAssignments.map(
+                  (assignment: any) => assignment.userId,
+                );
+                const assignedEmployeeData = allEmployees.filter(
+                  (emp) =>
+                    assignedUserIds.includes(emp.user_id) ||
+                    assignedUserIds.includes(emp.id),
                 );
                 assignments[variant.id] = assignedEmployeeData;
               } else {
@@ -307,11 +354,14 @@ export default function AdminPTOVariants() {
               }
             }
           } catch (error) {
-            console.error(`Error loading assignments for PTO variant ${variant.id}:`, error);
+            console.error(
+              `Error loading assignments for PTO variant ${variant.id}:`,
+              error,
+            );
             assignments[variant.id] = [];
           }
         }
-        
+
         setVariantAssignments(assignments);
       };
 
@@ -346,13 +396,13 @@ export default function AdminPTOVariants() {
   // Create mutation
   const createMutation = useMutation({
     mutationFn: async (data: PTOVariantForm) => {
-      return await apiRequest('/api/pto-variants', {
-        method: 'POST',
+      return await apiRequest("/api/pto-variants", {
+        method: "POST",
         body: JSON.stringify(data),
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/pto-variants'] });
+      queryClient.invalidateQueries({ queryKey: ["/api/pto-variants"] });
       setShowDialog(false);
       form.reset();
       toast({
@@ -374,12 +424,12 @@ export default function AdminPTOVariants() {
     mutationFn: async (data: PTOVariantForm) => {
       if (!editingVariant) throw new Error("No variant to update");
       return await apiRequest(`/api/pto-variants/${editingVariant.id}`, {
-        method: 'PATCH',
+        method: "PATCH",
         body: JSON.stringify(data),
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/pto-variants'] });
+      queryClient.invalidateQueries({ queryKey: ["/api/pto-variants"] });
       setShowDialog(false);
       setEditingVariant(null);
       form.reset();
@@ -401,11 +451,11 @@ export default function AdminPTOVariants() {
   const deleteMutation = useMutation({
     mutationFn: async (id: number) => {
       return await apiRequest(`/api/pto-variants/${id}`, {
-        method: 'DELETE',
+        method: "DELETE",
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/pto-variants'] });
+      queryClient.invalidateQueries({ queryKey: ["/api/pto-variants"] });
       toast({
         title: "Success",
         description: "PTO variant deleted successfully",
@@ -425,9 +475,9 @@ export default function AdminPTOVariants() {
     console.log("PTO Variant Submit - Time units:", {
       halfDay: data.halfDay,
       quarterDay: data.quarterDay,
-      hours: data.hours
+      hours: data.hours,
     });
-    
+
     if (editingVariant) {
       updateMutation.mutate(data);
     } else {
@@ -438,7 +488,7 @@ export default function AdminPTOVariants() {
   const handleEdit = (variant: PTOVariant) => {
     console.log("PTO Variant Edit - Current variant data:", variant);
     setEditingVariant(variant);
-    
+
     const formData = {
       name: variant.name,
       description: variant.description || "",
@@ -449,7 +499,8 @@ export default function AdminPTOVariants() {
       workflowRequired: variant.workflowRequired,
       noticePeriodAllowed: variant.noticePeriodAllowed,
       documentsRequired: variant.documentsRequired,
-      applicableAfterType: (variant as any).applicableAfterType || "date_of_joining",
+      applicableAfterType:
+        (variant as any).applicableAfterType || "date_of_joining",
       applicableAfter: variant.applicableAfter,
       approvalDays: variant.approvalDays,
       minimumHours: variant.minimumHours,
@@ -458,7 +509,7 @@ export default function AdminPTOVariants() {
       maxInstancesPeriod: variant.maxInstancesPeriod,
       grantingPeriod: variant.grantingPeriod,
     };
-    
+
     console.log("PTO Variant Edit - Setting form data:", formData);
     form.reset(formData);
     setShowDialog(true);
@@ -493,10 +544,17 @@ export default function AdminPTOVariants() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-semibold text-gray-900">PTO Variants</h1>
-            <p className="text-sm text-gray-600">Manage PTO variant configurations</p>
+            <h1 className="text-2xl font-semibold text-gray-900">
+              PTO Variants
+            </h1>
+            <p className="text-sm text-gray-600">
+              Manage PTO variant configurations
+            </p>
           </div>
-          <Button onClick={handleCreateNew} className="bg-blue-600 hover:bg-blue-700">
+          <Button
+            onClick={handleCreateNew}
+            className="bg-blue-600 hover:bg-blue-700"
+          >
             <Plus className="w-4 h-4 mr-2" />
             Create PTO Variant
           </Button>
@@ -515,55 +573,81 @@ export default function AdminPTOVariants() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {ptoVariants.map((variant) => (
-              <Card key={variant.id} className="hover:shadow-lg transition-shadow">
+              <Card
+                key={variant.id}
+                className="hover:shadow-lg transition-shadow"
+              >
                 <CardHeader className="pb-3">
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-lg">{variant.name}</CardTitle>
                     <div className="flex items-center space-x-2">
-                      <Badge variant={variant.enabled ? "default" : "secondary"}>
+                      <Badge
+                        variant={variant.enabled ? "default" : "secondary"}
+                      >
                         {variant.enabled ? "Active" : "Inactive"}
                       </Badge>
                     </div>
                   </div>
                   {variant.description && (
-                    <p className="text-sm text-gray-600">{variant.description}</p>
+                    <p className="text-sm text-gray-600">
+                      {variant.description}
+                    </p>
                   )}
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {/* Features */}
                   <div className="space-y-2">
-                    <h4 className="text-sm font-medium text-gray-700">Features</h4>
+                    <h4 className="text-sm font-medium text-gray-700">
+                      Features
+                    </h4>
                     <div className="flex flex-wrap gap-1">
                       {variant.halfDay && (
-                        <Badge variant="outline" className="text-xs">Half Day</Badge>
+                        <Badge variant="outline" className="text-xs">
+                          Half Day
+                        </Badge>
                       )}
                       {variant.quarterDay && (
-                        <Badge variant="outline" className="text-xs">Quarter Day</Badge>
+                        <Badge variant="outline" className="text-xs">
+                          Quarter Day
+                        </Badge>
                       )}
                       {variant.hours && (
-                        <Badge variant="outline" className="text-xs">Hours</Badge>
+                        <Badge variant="outline" className="text-xs">
+                          Hours
+                        </Badge>
                       )}
                       {variant.workflowRequired && (
-                        <Badge variant="outline" className="text-xs">Workflow Required</Badge>
+                        <Badge variant="outline" className="text-xs">
+                          Workflow Required
+                        </Badge>
                       )}
                       {variant.documentsRequired && (
-                        <Badge variant="outline" className="text-xs">Documents Required</Badge>
+                        <Badge variant="outline" className="text-xs">
+                          Documents Required
+                        </Badge>
                       )}
                     </div>
                   </div>
 
                   {/* Configuration Details */}
                   <div className="space-y-2">
-                    <h4 className="text-sm font-medium text-gray-700">Configuration</h4>
+                    <h4 className="text-sm font-medium text-gray-700">
+                      Configuration
+                    </h4>
                     <div className="text-xs text-gray-600 space-y-1">
                       {variant.applicableAfter > 0 && (
-                        <div>Applicable after: {variant.applicableAfter} days</div>
+                        <div>
+                          Applicable after: {variant.applicableAfter} days
+                        </div>
                       )}
                       {variant.approvalDays > 0 && (
                         <div>Approval days: {variant.approvalDays}</div>
                       )}
                       {variant.maxInstances > 0 && (
-                        <div>Max instances: {variant.maxInstances} per {variant.maxInstancesPeriod}</div>
+                        <div>
+                          Max instances: {variant.maxInstances} per{" "}
+                          {variant.maxInstancesPeriod}
+                        </div>
                       )}
                       {variant.hours && variant.maxHours > 0 && (
                         <div>Max hours: {variant.maxHours}</div>
@@ -626,11 +710,14 @@ export default function AdminPTOVariants() {
             </DialogHeader>
 
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+              <form
+                onSubmit={form.handleSubmit(handleSubmit)}
+                className="space-y-6"
+              >
                 {/* Basic Information */}
                 <div className="space-y-4">
                   <h3 className="text-lg font-medium">Basic Information</h3>
-                  
+
                   <FormField
                     control={form.control}
                     name="name"
@@ -638,7 +725,10 @@ export default function AdminPTOVariants() {
                       <FormItem>
                         <FormLabel>Name *</FormLabel>
                         <FormControl>
-                          <Input {...field} placeholder="Enter PTO variant name" />
+                          <Input
+                            {...field}
+                            placeholder="Enter PTO variant name"
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -652,7 +742,10 @@ export default function AdminPTOVariants() {
                       <FormItem>
                         <FormLabel>Description</FormLabel>
                         <FormControl>
-                          <Textarea {...field} placeholder="Enter description (optional)" />
+                          <Textarea
+                            {...field}
+                            placeholder="Enter description (optional)"
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -681,7 +774,7 @@ export default function AdminPTOVariants() {
                 {/* Time Unit Options */}
                 <div className="space-y-4">
                   <h3 className="text-lg font-medium">Time Unit Options</h3>
-                  
+
                   <div className="grid grid-cols-3 gap-4">
                     <FormField
                       control={form.control}
@@ -694,7 +787,9 @@ export default function AdminPTOVariants() {
                               onCheckedChange={field.onChange}
                             />
                           </FormControl>
-                          <FormLabel className="text-sm font-normal">Half Day</FormLabel>
+                          <FormLabel className="text-sm font-normal">
+                            Half Day
+                          </FormLabel>
                         </FormItem>
                       )}
                     />
@@ -710,7 +805,9 @@ export default function AdminPTOVariants() {
                               onCheckedChange={field.onChange}
                             />
                           </FormControl>
-                          <FormLabel className="text-sm font-normal">Quarter Day</FormLabel>
+                          <FormLabel className="text-sm font-normal">
+                            Quarter Day
+                          </FormLabel>
                         </FormItem>
                       )}
                     />
@@ -726,7 +823,9 @@ export default function AdminPTOVariants() {
                               onCheckedChange={field.onChange}
                             />
                           </FormControl>
-                          <FormLabel className="text-sm font-normal">Hours</FormLabel>
+                          <FormLabel className="text-sm font-normal">
+                            Hours
+                          </FormLabel>
                         </FormItem>
                       )}
                     />
@@ -737,7 +836,7 @@ export default function AdminPTOVariants() {
                 {form.watch("hours") && (
                   <div className="space-y-4">
                     <h3 className="text-lg font-medium">Hours Configuration</h3>
-                    
+
                     <div className="grid grid-cols-2 gap-4">
                       <FormField
                         control={form.control}
@@ -749,7 +848,9 @@ export default function AdminPTOVariants() {
                               <Input
                                 type="number"
                                 {...field}
-                                onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
+                                onChange={(e) =>
+                                  field.onChange(parseInt(e.target.value) || 0)
+                                }
                                 placeholder="0"
                               />
                             </FormControl>
@@ -768,7 +869,9 @@ export default function AdminPTOVariants() {
                               <Input
                                 type="number"
                                 {...field}
-                                onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
+                                onChange={(e) =>
+                                  field.onChange(parseInt(e.target.value) || 0)
+                                }
                                 placeholder="0"
                               />
                             </FormControl>
@@ -782,8 +885,10 @@ export default function AdminPTOVariants() {
 
                 {/* Approval & Workflow Settings */}
                 <div className="space-y-4">
-                  <h3 className="text-lg font-medium">Approval & Workflow Settings</h3>
-                  
+                  <h3 className="text-lg font-medium">
+                    Approval & Workflow Settings
+                  </h3>
+
                   <div className="grid grid-cols-2 gap-4">
                     <FormField
                       control={form.control}
@@ -796,7 +901,9 @@ export default function AdminPTOVariants() {
                               onCheckedChange={field.onChange}
                             />
                           </FormControl>
-                          <FormLabel className="text-sm font-normal">Workflow Required</FormLabel>
+                          <FormLabel className="text-sm font-normal">
+                            Workflow Required
+                          </FormLabel>
                         </FormItem>
                       )}
                     />
@@ -812,7 +919,9 @@ export default function AdminPTOVariants() {
                               onCheckedChange={field.onChange}
                             />
                           </FormControl>
-                          <FormLabel className="text-sm font-normal">Documents Required</FormLabel>
+                          <FormLabel className="text-sm font-normal">
+                            Documents Required
+                          </FormLabel>
                         </FormItem>
                       )}
                     />
@@ -828,7 +937,9 @@ export default function AdminPTOVariants() {
                               onCheckedChange={field.onChange}
                             />
                           </FormControl>
-                          <FormLabel className="text-sm font-normal">Notice Period Allowed</FormLabel>
+                          <FormLabel className="text-sm font-normal">
+                            Notice Period Allowed
+                          </FormLabel>
                         </FormItem>
                       )}
                     />
@@ -858,7 +969,10 @@ export default function AdminPTOVariants() {
                                   }}
                                   className="w-4 h-4"
                                 />
-                                <label htmlFor="probation_end" className="text-sm font-medium">
+                                <label
+                                  htmlFor="probation_end"
+                                  className="text-sm font-medium"
+                                >
                                   Probation period ends
                                 </label>
                               </div>
@@ -877,7 +991,10 @@ export default function AdminPTOVariants() {
                                   }}
                                   className="w-4 h-4"
                                 />
-                                <label htmlFor="date_of_joining" className="text-sm font-medium">
+                                <label
+                                  htmlFor="date_of_joining"
+                                  className="text-sm font-medium"
+                                >
                                   On date of joining
                                 </label>
                               </div>
@@ -893,7 +1010,10 @@ export default function AdminPTOVariants() {
                                   onChange={() => field.onChange("days")}
                                   className="w-4 h-4"
                                 />
-                                <label htmlFor="days" className="text-sm font-medium">
+                                <label
+                                  htmlFor="days"
+                                  className="text-sm font-medium"
+                                >
                                   Specified number of days:
                                 </label>
                                 <FormField
@@ -903,20 +1023,31 @@ export default function AdminPTOVariants() {
                                     <FormItem className="flex-1">
                                       <FormControl>
                                         <div className="flex items-center space-x-2">
-                                          <Input 
-                                            type="number" 
+                                          <Input
+                                            type="number"
                                             min="0"
                                             {...daysField}
                                             onChange={(e) => {
-                                              const value = Number(e.target.value);
-                                              daysField.onChange(value >= 0 ? value : 0);
+                                              const value = Number(
+                                                e.target.value,
+                                              );
+                                              daysField.onChange(
+                                                value >= 0 ? value : 0,
+                                              );
                                             }}
                                             className="w-24"
-                                            disabled={form.watch("applicableAfterType") !== "days"}
+                                            disabled={
+                                              form.watch(
+                                                "applicableAfterType",
+                                              ) !== "days"
+                                            }
                                             placeholder="0"
                                           />
                                           <span className="text-gray-500 text-sm">
-                                            (days) from date of joining {form.watch("applicableAfter") === 0 ? "(immediate applicability)" : ""}
+                                            (days) from date of joining{" "}
+                                            {form.watch("applicableAfter") === 0
+                                              ? "(immediate applicability)"
+                                              : ""}
                                           </span>
                                         </div>
                                       </FormControl>
@@ -934,7 +1065,6 @@ export default function AdminPTOVariants() {
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
-
                     <FormField
                       control={form.control}
                       name="approvalDays"
@@ -945,7 +1075,9 @@ export default function AdminPTOVariants() {
                             <Input
                               type="number"
                               {...field}
-                              onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
+                              onChange={(e) =>
+                                field.onChange(parseInt(e.target.value) || 0)
+                              }
                               placeholder="0"
                             />
                           </FormControl>
@@ -959,7 +1091,7 @@ export default function AdminPTOVariants() {
                 {/* Limits & Periods */}
                 <div className="space-y-4">
                   <h3 className="text-lg font-medium">Limits & Periods</h3>
-                  
+
                   <div className="grid grid-cols-3 gap-4">
                     <FormField
                       control={form.control}
@@ -971,7 +1103,9 @@ export default function AdminPTOVariants() {
                             <Input
                               type="number"
                               {...field}
-                              onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
+                              onChange={(e) =>
+                                field.onChange(parseInt(e.target.value) || 0)
+                              }
                               placeholder="0"
                             />
                           </FormControl>
@@ -986,7 +1120,10 @@ export default function AdminPTOVariants() {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Max Instances Period</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
                             <FormControl>
                               <SelectTrigger>
                                 <SelectValue placeholder="Select period" />
@@ -1011,7 +1148,10 @@ export default function AdminPTOVariants() {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Granting Period</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
                             <FormControl>
                               <SelectTrigger>
                                 <SelectValue placeholder="Select period" />
@@ -1019,8 +1159,12 @@ export default function AdminPTOVariants() {
                             </FormControl>
                             <SelectContent>
                               <SelectItem value="Monthly">Monthly</SelectItem>
-                              <SelectItem value="Quarterly">Quarterly</SelectItem>
-                              <SelectItem value="Half yearly">Half yearly</SelectItem>
+                              <SelectItem value="Quarterly">
+                                Quarterly
+                              </SelectItem>
+                              <SelectItem value="Half yearly">
+                                Half yearly
+                              </SelectItem>
                               <SelectItem value="Yearly">Yearly</SelectItem>
                             </SelectContent>
                           </Select>
@@ -1042,14 +1186,16 @@ export default function AdminPTOVariants() {
                   </Button>
                   <Button
                     type="submit"
-                    disabled={createMutation.isPending || updateMutation.isPending}
+                    disabled={
+                      createMutation.isPending || updateMutation.isPending
+                    }
                     className="bg-blue-600 hover:bg-blue-700"
                   >
                     {createMutation.isPending || updateMutation.isPending
                       ? "Saving..."
                       : editingVariant
-                      ? "Update Variant"
-                      : "Create Variant"}
+                        ? "Update Variant"
+                        : "Create Variant"}
                   </Button>
                 </div>
               </form>
@@ -1066,24 +1212,38 @@ export default function AdminPTOVariants() {
             onComplete={() => {
               setShowEmployeeAssignment(false);
               // Reload assignments after saving
-              if (ptoVariants && ptoVariants.length > 0 && allEmployees.length > 0) {
+              if (
+                ptoVariants &&
+                ptoVariants.length > 0 &&
+                allEmployees.length > 0
+              ) {
                 const loadAssignments = async () => {
                   const assignments: Record<string, any[]> = {};
-                  
+
                   for (const variant of ptoVariants) {
                     try {
-                      const response = await fetch(`/api/employee-assignments/pto/${variant.id}`, {
-                        credentials: 'include',
-                        headers: {
-                          'X-Org-Id': localStorage.getItem('org_id') || '60'
-                        }
-                      });
+                      const response = await fetch(
+                        `/api/employee-assignments/pto/${variant.id}`,
+                        {
+                          credentials: "include",
+                          headers: {
+                            "X-Org-Id": localStorage.getItem("org_id") || "60",
+                          },
+                        },
+                      );
                       if (response.ok) {
                         const variantAssignments = await response.json();
-                        if (Array.isArray(variantAssignments) && variantAssignments.length > 0) {
-                          const assignedUserIds = variantAssignments.map((assignment: any) => assignment.userId);
-                          const assignedEmployeeData = allEmployees.filter(emp => 
-                            assignedUserIds.includes(emp.user_id) || assignedUserIds.includes(emp.id)
+                        if (
+                          Array.isArray(variantAssignments) &&
+                          variantAssignments.length > 0
+                        ) {
+                          const assignedUserIds = variantAssignments.map(
+                            (assignment: any) => assignment.userId,
+                          );
+                          const assignedEmployeeData = allEmployees.filter(
+                            (emp) =>
+                              assignedUserIds.includes(emp.user_id) ||
+                              assignedUserIds.includes(emp.id),
                           );
                           assignments[variant.id] = assignedEmployeeData;
                         } else {
@@ -1094,7 +1254,7 @@ export default function AdminPTOVariants() {
                       assignments[variant.id] = [];
                     }
                   }
-                  
+
                   setVariantAssignments(assignments);
                 };
                 loadAssignments();

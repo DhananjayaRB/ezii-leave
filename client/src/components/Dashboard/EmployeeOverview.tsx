@@ -1,42 +1,19 @@
-import React, { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  ChevronLeft,
-  ChevronRight,
-  Calendar,
-  Clock,
-  CheckCircle,
-  XCircle,
-  TrendingUp,
-  BarChart3,
-} from "lucide-react";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  ResponsiveContainer,
-  Cell,
-} from "recharts";
+import React, { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { ChevronLeft, ChevronRight, Calendar, Clock, CheckCircle, XCircle, TrendingUp, BarChart3 } from 'lucide-react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Cell } from 'recharts';
 
 interface LeaveRequest {
   id: number;
   userId: string;
   startDate: string;
   endDate: string;
-  status: "pending" | "approved" | "rejected";
+  status: 'pending' | 'approved' | 'rejected';
   leaveTypeId: number;
   workingDays: number;
   reason: string;
@@ -54,48 +31,43 @@ interface LeaveBalance {
 }
 
 export default function EmployeeOverview() {
-  const [selectedYear, setSelectedYear] = useState("2024");
-  const [selectedPeriod, setSelectedPeriod] = useState("Yearly");
+  const [selectedYear, setSelectedYear] = useState('2024');
+  const [selectedPeriod, setSelectedPeriod] = useState('Yearly');
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
 
   // Debug logging to verify component is loading
-  console.log(
-    "[EmployeeOverview] Component rendered with new analytics design",
-  );
+  console.log('[EmployeeOverview] Component rendered with new analytics design');
 
   // Get current user ID from localStorage - MUST match current session
-  const currentUserId = localStorage.getItem("user_id") || "241";
+  const currentUserId = localStorage.getItem('user_id') || '241';
 
   // Debug current user ID
-  console.log(
-    "🔍 [EmployeeOverview] Current user ID from localStorage:",
-    currentUserId,
-  );
+  console.log('🔍 [EmployeeOverview] Current user ID from localStorage:', currentUserId);
 
   // Fetch leave requests
   const { data: leaveRequests = [], isLoading: leaveLoading } = useQuery({
     queryKey: [`/api/leave-requests?userId=${currentUserId}`],
     staleTime: 0,
-    refetchOnMount: true,
+    refetchOnMount: true
   });
 
   // Fetch leave balances
   const { data: leaveBalances = [], isLoading: balanceLoading } = useQuery({
     queryKey: [`/api/employee-leave-balances/${currentUserId}`],
     staleTime: 0,
-    refetchOnMount: true,
+    refetchOnMount: true
   });
 
-  // Fetch PTO and Comp-off data
+  // Fetch BTO and Comp-off data
   const { data: ptoRequests = [] } = useQuery({
     queryKey: [`/api/pto-requests?userId=${currentUserId}`],
-    staleTime: 0,
+    staleTime: 0
   });
 
   const { data: compOffRequests = [] } = useQuery({
     queryKey: [`/api/comp-off-requests?userId=${currentUserId}`],
-    staleTime: 0,
+    staleTime: 0
   });
 
   // Fetch additional data needed for exact same calculations as LeaveApplications
@@ -119,47 +91,35 @@ export default function EmployeeOverview() {
   const requestsArray = Array.isArray(leaveRequests) ? leaveRequests : [];
 
   // CRITICAL FIX: The old cards work because they use balancesArray directly!
-  // So instead of complex assignment filtering, use the leave balances directly
+  // So instead of complex assignment filtering, use the leave balances directly 
   // which already contain the variants the user can access
   const availableLeaveVariants = balancesArray.map((balance: any) => ({
     id: balance.leaveVariantId,
     leaveTypeName: balance.leaveTypeName,
     leaveVariantName: balance.leaveVariantName,
-    leaveTypeId: balance.leaveTypeId || null,
+    leaveTypeId: balance.leaveTypeId || null
   }));
 
-  console.log(
-    "🔍 [EmployeeOverview] SIMPLIFIED APPROACH - Using balances directly:",
-    {
-      balancesCount: balancesArray.length,
-      availableVariantsFromBalances: availableLeaveVariants.length,
-      sampleBalance: balancesArray[0],
-      sampleVariant: availableLeaveVariants[0],
-    },
-  );
+  console.log('🔍 [EmployeeOverview] SIMPLIFIED APPROACH - Using balances directly:', {
+    balancesCount: balancesArray.length,
+    availableVariantsFromBalances: availableLeaveVariants.length,
+    sampleBalance: balancesArray[0],
+    sampleVariant: availableLeaveVariants[0]
+  });
 
   // EXACT SAME CALCULATION AS LEAVE APPLICATIONS - Total Leaves (Eligibility)
   const totalEligibility = (() => {
     let totalEligibilitySum = 0;
 
     availableLeaveVariants.forEach((variant: any) => {
-      const balance = balancesArray.find(
-        (b: any) => b.leaveVariantId === variant.id,
-      );
-      const transactions = Array.isArray(leaveTransactions)
-        ? leaveTransactions.filter((t: any) => t.leaveVariantId === variant.id)
-        : [];
+      const balance = balancesArray.find((b: any) => b.leaveVariantId === variant.id);
+      const transactions = Array.isArray(leaveTransactions) ? leaveTransactions.filter((t: any) => t.leaveVariantId === variant.id) : [];
 
       // Calculate opening balance from imported Excel data transactions
-      const openingBalanceTransactions = transactions.filter(
-        (t: any) =>
-          t.transactionType === "opening_balance" ||
-          t.transactionType === "system",
+      const openingBalanceTransactions = transactions.filter((t: any) => 
+        t.transactionType === 'opening_balance' || t.transactionType === 'system'
       );
-      const openingBalance = openingBalanceTransactions.reduce(
-        (sum: number, t: any) => sum + parseFloat(t.amount || 0),
-        0,
-      );
+      const openingBalance = openingBalanceTransactions.reduce((sum: number, t: any) => sum + parseFloat(t.amount || 0), 0);
 
       // Get eligibility (entitlement)
       const eligibility = balance ? parseFloat(balance.entitlement || 0) : 0;
@@ -175,36 +135,24 @@ export default function EmployeeOverview() {
 
   // EXACT SAME CALCULATION AS LEAVE APPLICATIONS - Total Availed
   const totalAvailed = (() => {
-    const allUserTransactions = (leaveTransactions as any[]).filter(
-      (t: any) => t.userId === currentUserId,
-    );
+    const allUserTransactions = (leaveTransactions as any[]).filter((t: any) => t.userId === currentUserId);
 
     let totalAvailedfromTxn = 0;
 
     availableLeaveVariants.forEach((variant: any) => {
       const transactionsForVariant = allUserTransactions.filter((t: any) => {
         if (t.leaveVariantId === variant.id) return true;
-        const transactionVariant = availableLeaveVariants.find(
-          (v: any) => v.id === t.leaveVariantId,
-        );
-        if (transactionVariant?.leaveTypeName === variant.leaveTypeName)
-          return true;
-        if (transactionVariant?.leaveTypeId === variant.leaveTypeId)
-          return true;
+        const transactionVariant = availableLeaveVariants.find((v: any) => v.id === t.leaveVariantId);
+        if (transactionVariant?.leaveTypeName === variant.leaveTypeName) return true;
+        if (transactionVariant?.leaveTypeId === variant.leaveTypeId) return true;
         return false;
       });
 
-      const leaveTakenTransactions = transactionsForVariant.filter(
-        (t: any) =>
-          ["leave_taken", "imported", "manual_deduction"].includes(
-            t.transactionType,
-          ) && parseFloat(t.amount || 0) < 0,
+      const leaveTakenTransactions = transactionsForVariant.filter((t: any) => 
+        ['leave_taken', 'imported', 'manual_deduction'].includes(t.transactionType) && parseFloat(t.amount || 0) < 0
       );
 
-      const variantAvailed = leaveTakenTransactions.reduce(
-        (sum: number, t: any) => sum + Math.abs(parseFloat(t.amount || 0)),
-        0,
-      );
+      const variantAvailed = leaveTakenTransactions.reduce((sum: number, t: any) => sum + Math.abs(parseFloat(t.amount || 0)), 0);
       totalAvailedfromTxn += variantAvailed;
     });
 
@@ -216,9 +164,7 @@ export default function EmployeeOverview() {
     let totalClosingBalance = 0;
 
     availableLeaveVariants.forEach((variant: any) => {
-      const balance = balancesArray.find(
-        (b: any) => b.leaveVariantId === variant.id,
-      );
+      const balance = balancesArray.find((b: any) => b.leaveVariantId === variant.id);
       if (balance) {
         totalClosingBalance += parseFloat(balance.currentBalance || 0);
       }
@@ -227,13 +173,11 @@ export default function EmployeeOverview() {
     return totalClosingBalance;
   })();
 
-  // EXACT SAME CALCULATION AS LEAVE APPLICATIONS - Pending Approvals
-  const pendingApprovals = requestsArray.filter(
-    (req: any) => req.status === "pending",
-  ).length;
+  // EXACT SAME CALCULATION AS LEAVE APPLICATIONS - Pending Approvals  
+  const pendingApprovals = requestsArray.filter((req: any) => req.status === "pending").length;
 
   // Debug logging - should match Leave Applications exactly
-  console.log("🧮 [EmployeeOverview] FIXED CALCULATION RESULTS:", {
+  console.log('🧮 [EmployeeOverview] FIXED CALCULATION RESULTS:', {
     currentUserId,
     availableVariantsCount: availableLeaveVariants.length,
     totalEligibility: totalEligibility.toFixed(1),
@@ -243,58 +187,31 @@ export default function EmployeeOverview() {
     balancesCount: balancesArray.length,
     transactionsCount: leaveTransactions.length,
     sampleVariant: availableLeaveVariants[0],
-    sampleBalance: balancesArray[0],
+    sampleBalance: balancesArray[0]
   });
 
   // Legacy calculations for other metrics
   const totalRequests = leaveRequests.length;
-  const approvedLeaves = leaveRequests.filter(
-    (req: LeaveRequest) => req.status === "approved",
-  );
+  const approvedLeaves = leaveRequests.filter((req: LeaveRequest) => req.status === 'approved');
   const approvedCount = approvedLeaves.length;
-  const pendingCount = leaveRequests.filter(
-    (req: LeaveRequest) => req.status === "pending",
-  ).length;
-  const rejectedCount = leaveRequests.filter(
-    (req: LeaveRequest) => req.status === "rejected",
-  ).length;
+  const pendingCount = leaveRequests.filter((req: LeaveRequest) => req.status === 'pending').length;
+  const rejectedCount = leaveRequests.filter((req: LeaveRequest) => req.status === 'rejected').length;
 
   // Generate chart data for monthly breakdown
   const generateMonthlyData = () => {
-    const months = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     return months.map((month, index) => {
       const monthRequests = leaveRequests.filter((req: any) => {
         const requestDate = new Date(req.startDate);
-        return (
-          requestDate.getMonth() === index &&
-          requestDate.getFullYear() === parseInt(selectedYear)
-        );
+        return requestDate.getMonth() === index && requestDate.getFullYear() === parseInt(selectedYear);
       });
 
       const monthlyData: any = { month };
 
       // Count by leave type
       leaveBalances.forEach((balance: LeaveBalance) => {
-        const typeRequests = monthRequests.filter(
-          (req: any) => req.leaveTypeName === balance.leaveTypeName,
-        );
-        const totalDays = typeRequests.reduce(
-          (sum, req) => sum + parseFloat(req.workingDays?.toString() || "0"),
-          0,
-        );
+        const typeRequests = monthRequests.filter((req: any) => req.leaveTypeName === balance.leaveTypeName);
+        const totalDays = typeRequests.reduce((sum, req) => sum + (parseFloat(req.workingDays?.toString() || '0')), 0);
         if (totalDays > 0) {
           monthlyData[balance.leaveTypeName] = totalDays;
         }
@@ -305,30 +222,13 @@ export default function EmployeeOverview() {
   };
 
   const monthlyData = generateMonthlyData();
-  const colors = [
-    "#3B82F6",
-    "#10B981",
-    "#F59E0B",
-    "#EF4444",
-    "#8B5CF6",
-    "#06B6D4",
-  ];
+  const colors = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#06B6D4'];
 
   // Helper functions
   const getMonthName = (month: number) => {
     const months = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
     ];
     return months[month];
   };
@@ -342,10 +242,10 @@ export default function EmployeeOverview() {
   };
 
   const hasLeaveOnDate = (day: number) => {
-    const checkDate = `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+    const checkDate = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
     return approvedLeaves.some((leave: LeaveRequest) => {
-      const startDate = leave.startDate.split("T")[0];
-      const endDate = leave.endDate.split("T")[0];
+      const startDate = leave.startDate.split('T')[0];
+      const endDate = leave.endDate.split('T')[0];
       return checkDate >= startDate && checkDate <= endDate;
     });
   };
@@ -371,7 +271,7 @@ export default function EmployeeOverview() {
   const renderCalendar = () => {
     const daysInMonth = getDaysInMonth(currentMonth, currentYear);
     const firstDay = getFirstDayOfMonth(currentMonth, currentYear);
-    const dayHeaders = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+    const dayHeaders = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 
     return (
       <div className="space-y-4">
@@ -380,9 +280,7 @@ export default function EmployeeOverview() {
           <Button variant="ghost" size="sm" onClick={previousMonth}>
             <ChevronLeft className="h-4 w-4" />
           </Button>
-          <h3 className="font-semibold">
-            {getMonthName(currentMonth)} {currentYear}
-          </h3>
+          <h3 className="font-semibold">{getMonthName(currentMonth)} {currentYear}</h3>
           <Button variant="ghost" size="sm" onClick={nextMonth}>
             <ChevronRight className="h-4 w-4" />
           </Button>
@@ -392,10 +290,7 @@ export default function EmployeeOverview() {
         <div className="grid grid-cols-7 gap-1">
           {/* Day headers */}
           {dayHeaders.map((day) => (
-            <div
-              key={day}
-              className="p-2 text-center text-xs font-medium text-gray-500"
-            >
+            <div key={day} className="p-2 text-center text-xs font-medium text-gray-500">
               {day}
             </div>
           ))}
@@ -411,15 +306,10 @@ export default function EmployeeOverview() {
             }
 
             return (
-              <div
-                key={i}
-                className="relative h-8 flex items-center justify-center"
-              >
-                <div
-                  className={`w-6 h-6 flex items-center justify-center text-sm rounded ${
-                    hasLeave ? "bg-red-100 text-red-800" : "text-gray-700"
-                  }`}
-                >
+              <div key={i} className="relative h-8 flex items-center justify-center">
+                <div className={`w-6 h-6 flex items-center justify-center text-sm rounded ${
+                  hasLeave ? 'bg-red-100 text-red-800' : 'text-gray-700'
+                }`}>
                   {dayNumber}
                 </div>
                 {hasLeave && (
@@ -462,37 +352,19 @@ export default function EmployeeOverview() {
           <h2 className="text-2xl font-bold">Applications</h2>
           <div className="flex gap-2">
             <Badge variant="secondary">Leaves ({totalRequests})</Badge>
-            <Badge variant="secondary">PTO ({ptoRequests.length})</Badge>
-            <Badge variant="secondary">
-              Comp-off ({compOffRequests.length})
-            </Badge>
+            <Badge variant="secondary">BTO ({ptoRequests.length})</Badge>
+            <Badge variant="secondary">Comp-off ({compOffRequests.length})</Badge>
           </div>
         </div>
 
         {/* Tab filters */}
         <div className="flex gap-2 mb-4 text-sm">
-          <Button
-            variant="ghost"
-            size="sm"
-            className="text-blue-600 border-b-2 border-blue-600"
-          >
-            All
-          </Button>
-          <Button variant="ghost" size="sm">
-            Pending ({pendingCount})
-          </Button>
-          <Button variant="ghost" size="sm">
-            Approved ({approvedCount})
-          </Button>
-          <Button variant="ghost" size="sm">
-            Rejected ({rejectedCount})
-          </Button>
-          <Button variant="ghost" size="sm">
-            Availed
-          </Button>
-          <Button variant="link" size="sm" className="ml-auto text-blue-600">
-            View All →
-          </Button>
+          <Button variant="ghost" size="sm" className="text-blue-600 border-b-2 border-blue-600">All</Button>
+          <Button variant="ghost" size="sm">Pending ({pendingCount})</Button>
+          <Button variant="ghost" size="sm">Approved ({approvedCount})</Button>
+          <Button variant="ghost" size="sm">Rejected ({rejectedCount})</Button>
+          <Button variant="ghost" size="sm">Availed</Button>
+          <Button variant="link" size="sm" className="ml-auto text-blue-600">View All →</Button>
         </div>
 
         {/* Applications Table */}
@@ -503,38 +375,22 @@ export default function EmployeeOverview() {
                 <thead>
                   <tr className="border-b bg-gray-50">
                     <th className="text-left p-4 font-medium">Leave type</th>
-                    <th className="text-left p-4 font-medium">
-                      Date of request
-                    </th>
+                    <th className="text-left p-4 font-medium">Date of request</th>
                     <th className="text-left p-4 font-medium">Leave period</th>
                     <th className="text-left p-4 font-medium">Reason</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {leaveRequests
-                    .slice(0, 3)
-                    .map((request: LeaveRequest, index) => (
-                      <tr key={index} className="border-b">
-                        <td className="p-4">
-                          {request.leaveTypeId || "Casual"}
-                        </td>
-                        <td className="p-4">
-                          {new Date(request.createdAt).toLocaleDateString(
-                            "en-GB",
-                          )}
-                        </td>
-                        <td className="p-4">
-                          {new Date(request.startDate).toLocaleDateString(
-                            "en-GB",
-                          )}{" "}
-                          -{" "}
-                          {new Date(request.endDate).toLocaleDateString(
-                            "en-GB",
-                          )}
-                        </td>
-                        <td className="p-4">{request.reason || "Wedding"}</td>
-                      </tr>
-                    ))}
+                  {leaveRequests.slice(0, 3).map((request: LeaveRequest, index) => (
+                    <tr key={index} className="border-b">
+                      <td className="p-4">{request.leaveTypeId || 'Casual'}</td>
+                      <td className="p-4">{new Date(request.createdAt).toLocaleDateString('en-GB')}</td>
+                      <td className="p-4">
+                        {new Date(request.startDate).toLocaleDateString('en-GB')} - {new Date(request.endDate).toLocaleDateString('en-GB')}
+                      </td>
+                      <td className="p-4">{request.reason || 'Wedding'}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
@@ -548,32 +404,18 @@ export default function EmployeeOverview() {
           <h2 className="text-2xl font-bold">Analytics</h2>
           <div className="flex gap-2">
             <Badge variant="secondary">Leaves</Badge>
-            <Badge variant="outline">PTO</Badge>
+            <Badge variant="outline">BTO</Badge>
             <Badge variant="outline">Comp-off</Badge>
           </div>
         </div>
 
         {/* Analytics Tabs */}
         <div className="flex gap-2 mb-4 text-sm border-b">
-          <Button
-            variant="ghost"
-            size="sm"
-            className="text-blue-600 border-b-2 border-blue-600"
-          >
-            Availed
-          </Button>
-          <Button variant="ghost" size="sm">
-            Rejected
-          </Button>
-          <Button variant="ghost" size="sm">
-            Loss of Pay
-          </Button>
-          <Button variant="ghost" size="sm">
-            Absent
-          </Button>
-          <Button variant="ghost" size="sm">
-            Encashment
-          </Button>
+          <Button variant="ghost" size="sm" className="text-blue-600 border-b-2 border-blue-600">Availed</Button>
+          <Button variant="ghost" size="sm">Rejected</Button>
+          <Button variant="ghost" size="sm">Loss of Pay</Button>
+          <Button variant="ghost" size="sm">Absent</Button>
+          <Button variant="ghost" size="sm">Encashment</Button>
         </div>
 
         {/* Chart and Stats */}
@@ -581,14 +423,9 @@ export default function EmployeeOverview() {
           {/* Chart */}
           <div className="col-span-8">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold">
-                Leaves availed: {totalAvailed.toFixed(1)}
-              </h3>
+              <h3 className="font-semibold">Leaves availed: {totalAvailed.toFixed(1)}</h3>
               <div className="flex gap-2">
-                <Select
-                  value={selectedPeriod}
-                  onValueChange={setSelectedPeriod}
-                >
+                <Select value={selectedPeriod} onValueChange={setSelectedPeriod}>
                   <SelectTrigger className="w-32">
                     <SelectValue />
                   </SelectTrigger>
@@ -616,7 +453,7 @@ export default function EmployeeOverview() {
                   <XAxis dataKey="month" />
                   <YAxis />
                   {leaveBalances.map((balance: LeaveBalance, index) => (
-                    <Bar
+                    <Bar 
                       key={balance.leaveTypeName}
                       dataKey={balance.leaveTypeName}
                       stackId="leaves"
@@ -630,11 +467,8 @@ export default function EmployeeOverview() {
             {/* Legend */}
             <div className="flex flex-wrap gap-4 mt-4 text-sm">
               {leaveBalances.map((balance: LeaveBalance, index) => (
-                <div
-                  key={balance.leaveTypeName}
-                  className="flex items-center gap-2"
-                >
-                  <div
+                <div key={balance.leaveTypeName} className="flex items-center gap-2">
+                  <div 
                     className="w-3 h-3 rounded"
                     style={{ backgroundColor: colors[index % colors.length] }}
                   ></div>
@@ -648,33 +482,23 @@ export default function EmployeeOverview() {
           <div className="col-span-4 space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <Card className="text-center p-4">
-                <div className="text-2xl font-bold text-blue-600">
-                  {totalEligibility.toFixed(1)}
-                </div>
+                <div className="text-2xl font-bold text-blue-600">{totalEligibility.toFixed(1)}</div>
                 <div className="text-sm text-gray-600">Total Leaves</div>
               </Card>
               <Card className="text-center p-4">
-                <div className="text-2xl font-bold text-red-600">
-                  {totalAvailed.toFixed(1)}
-                </div>
+                <div className="text-2xl font-bold text-red-600">{totalAvailed.toFixed(1)}</div>
                 <div className="text-sm text-gray-600">Total Availed</div>
               </Card>
               <Card className="text-center p-4">
-                <div className="text-2xl font-bold text-green-600">
-                  {totalBalance.toFixed(1)}
-                </div>
+                <div className="text-2xl font-bold text-green-600">{totalBalance.toFixed(1)}</div>
                 <div className="text-sm text-gray-600">Balance</div>
               </Card>
               <Card className="text-center p-4">
-                <div className="text-2xl font-bold text-orange-600">
-                  {pendingApprovals}
-                </div>
+                <div className="text-2xl font-bold text-orange-600">{pendingApprovals}</div>
                 <div className="text-sm text-gray-600">Pending Approvals</div>
               </Card>
               <Card className="text-center p-4">
-                <div className="text-2xl font-bold text-red-600">
-                  {rejectedCount}
-                </div>
+                <div className="text-2xl font-bold text-red-600">{rejectedCount}</div>
                 <div className="text-sm text-gray-600">Total Rejected</div>
               </Card>
             </div>
@@ -697,9 +521,7 @@ export default function EmployeeOverview() {
                 <div className="text-sm text-gray-600">Total Encashed</div>
               </Card>
               <Card className="text-center p-4">
-                <div className="text-2xl font-bold text-pink-600">
-                  {Math.round(totalBalance)}
-                </div>
+                <div className="text-2xl font-bold text-pink-600">{Math.round(totalBalance)}</div>
                 <div className="text-sm text-gray-600">Carry forward</div>
               </Card>
             </div>
@@ -712,7 +534,9 @@ export default function EmployeeOverview() {
         <CardHeader>
           <CardTitle>Calendar</CardTitle>
         </CardHeader>
-        <CardContent>{renderCalendar()}</CardContent>
+        <CardContent>
+          {renderCalendar()}
+        </CardContent>
       </Card>
     </div>
   );
